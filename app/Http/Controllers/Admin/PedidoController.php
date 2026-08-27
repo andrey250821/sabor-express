@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+
+use App\Http\Controllers\Controller;
+use App\Models\Pedido;
+use Illuminate\Http\Request;
+
+
+class PedidoController extends Controller
+{
+
+
+    public function index()
+    {
+        // Obtener todos los pedidos
+        // incluyendo cliente y delivery asignado
+        $pedidos = Pedido::with([
+            'user',
+            'asignacionDelivery.delivery'
+        ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
+        // Obtener los deliverys activos
+        $deliverys = \App\Models\User::where('role_id', 3)
+            ->where('estado', 'activo')
+            ->get();
+
+
+        return view(
+            'admin.pedidos.index',
+            compact(
+                'pedidos',
+                'deliverys'
+            )
+        );
+    }
+
+    public function show($id)
+    {
+
+        $pedido = Pedido::with([
+            'user',
+            'detallePedidos.producto',
+            'comprobantePago'
+        ])
+            ->findOrFail($id);
+
+
+
+        return view(
+            'admin.pedidos.show',
+            compact('pedido')
+        );
+    }
+
+
+    public function cambiarEstado(Request $request, $id)
+    {
+
+
+        $pedido = Pedido::findOrFail($id);
+
+
+
+        $pedido->estado = $request->estado;
+
+
+        $pedido->save();
+
+
+
+        return back()
+            ->with(
+                'success',
+                'Estado actualizado correctamente'
+            );
+    }
+}

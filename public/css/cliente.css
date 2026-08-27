@@ -1,0 +1,1477 @@
+/* =========================================================
+   SABOR EXPRESS
+   NAVBAR CLIENTE
+   ========================================================= */
+
+.cliente-navbar {
+    width: 100%;
+    background: #17181d !important;
+    border-bottom: 1px solid #292b33;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, .45);
+    position: relative;
+    z-index: 1000;
+}
+
+/* =========================================================
+   CONTENEDOR NAVBAR
+   ========================================================= */
+
+.cliente-navbar-container {
+    width: 100%;
+    max-width: 1400px;
+    min-height: 76px;
+
+    margin: 0 auto;
+
+    padding: 0 35px;
+
+    display: flex;
+    align-items: center;
+}
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.cliente-logo {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+
+    color: #fff !important;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    text-decoration: none !important;
+
+    white-space: nowrap;
+
+    transition: .3s ease;
+}
+
+.cliente-logo i {
+    color: #ff2f76;
+    font-size: 28px;
+
+    transition: .3s ease;
+}
+
+.cliente-logo:hover {
+    color: #ff4d88 !important;
+    transform: translateY(-1px);
+}
+
+.cliente-logo:hover i {
+    color: #ff4d88;
+}
+
+/* =========================================================
+   MENÚ
+   ========================================================= */
+
+.cliente-navbar-links {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    margin-left: 55px;
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.cliente-nav-link {
+    position: relative;
+
+    display: flex !important;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 11px 15px !important;
+
+    border-radius: 10px;
+
+    color: #d6d6d6 !important;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none !important;
+
+    transition: all .3s ease;
+}
+
+.cliente-nav-link i {
+    color: #e52b69;
+
+    font-size: 17px;
+
+    transition: .3s ease;
+}
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.cliente-nav-link:hover {
+    background: #8b1e45 !important;
+
+    color: #fff !important;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 15px rgba(139, 30, 69, .30);
+}
+
+.cliente-nav-link:hover i {
+    color: #fff;
+}
+
+/* =========================================================
+   LINK ACTIVO
+   ========================================================= */
+
+.cliente-nav-link.active {
+    background: linear-gradient(
+        135deg,
+        #8b1e45,
+        #b3235a
+    ) !important;
+
+    color: #fff !important;
+
+    box-shadow:
+        0 6px 18px rgba(139, 30, 69, .35);
+}
+
+.cliente-nav-link.active i {
+    color: #fff;
+}
+
+/* =========================================================
+   USUARIO
+   ========================================================= */
+
+.cliente-navbar-user {
+    display: flex;
+    align-items: center;
+
+    margin-left: auto;
+}
+
+/* =========================================================
+   INFORMACIÓN USUARIO
+   ========================================================= */
+
+.cliente-user-info {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+/* =========================================================
+   NOMBRE USUARIO
+   ========================================================= */
+
+.cliente-user-name {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #fff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.cliente-user-name i {
+    color: #ff2f76;
+
+    font-size: 20px;
+}
+
+/* =========================================================
+   BOTÓN CERRAR SESIÓN
+   ========================================================= */
+
+.cliente-btn-logout {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    background: linear-gradient(
+        135deg,
+        #8b1e45,
+        #b3235a
+    );
+
+    border: 1px solid #b3235a;
+
+    border-radius: 10px;
+
+    color: #fff !important;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all .3s ease;
+
+    box-shadow:
+        0 5px 15px rgba(139, 30, 69, .25);
+}
+
+.cliente-btn-logout:hover {
+    background: linear-gradient(
+        135deg,
+        #b3235a,
+        #e52b69
+    );
+
+    border-color: #e52b69;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 22px rgba(229, 43, 105, .35);
+}
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+.cliente-login-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 15px;
+
+    background: #8b1e45;
+
+    border-radius: 10px;
+
+    color: #fff !important;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none !important;
+
+    transition: .3s ease;
+}
+
+.cliente-login-link:hover {
+    background: #e52b69;
+
+    color: #fff !important;
+
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   HAMBURGUESA
+   ========================================================= */
+
+.cliente-navbar-toggler {
+    width: 44px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #8b1e45 !important;
+
+    border-radius: 10px;
+
+    background: #240b14 !important;
+
+    color: #fff !important;
+}
+
+.cliente-navbar-toggler i {
+    color: #ff4d88;
+
+    font-size: 23px;
+}
+
+.cliente-navbar-toggler:hover {
+    background: #8b1e45 !important;
+}
+
+.cliente-navbar-toggler:focus {
+    box-shadow:
+        0 0 0 3px rgba(139, 30, 69, .25);
+}
+/* =========================================================
+   GENERAL CLIENTE
+   ========================================================= */
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(139, 30, 69, .18),
+            transparent 40%
+        ),
+        #0c0d11 !important;
+
+    color: #fff;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.cliente-main {
+    width: 100%;
+
+    min-height: calc(100vh - 140px);
+
+    background: transparent !important;
+
+    color: #fff;
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.cliente-dashboard-page {
+    width: 100%;
+    min-height: calc(100vh - 140px);
+
+    padding: 45px 25px 60px;
+
+    color: #fff !important;
+}
+
+/* =========================================================
+   CONTENEDOR CENTRAL
+   ========================================================= */
+
+.cliente-dashboard-page > .container,
+.cliente-dashboard-container {
+    width: 100%;
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+}
+/* =========================================================
+   HEADER DASHBOARD
+   ========================================================= */
+
+.cliente-dashboard-header {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    padding: 35px 40px;
+
+    margin-bottom: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #191a20,
+            #21131a
+        ) !important;
+
+    border: 1px solid #38232d !important;
+
+    border-radius: 20px !important;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, .35);
+}
+
+/* brillo decorativo */
+
+.cliente-dashboard-header::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    right: -120px;
+    top: -150px;
+
+    background: #8b1e45;
+
+    border-radius: 50%;
+
+    opacity: .15;
+
+    filter: blur(5px);
+
+    pointer-events: none;
+}
+
+/* línea izquierda */
+
+.cliente-dashboard-header::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 5px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #ff2f76,
+            #8b1e45
+        );
+}
+
+/* =========================================================
+   CONTENIDO HEADER
+   ========================================================= */
+
+.cliente-dashboard-header-content {
+    position: relative;
+
+    z-index: 2;
+}
+
+/* pequeño texto */
+
+.cliente-dashboard-welcome {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #ff3f7c !important;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+}
+
+/* título */
+
+.cliente-dashboard-title {
+    margin: 0 0 10px;
+
+    color: #fff !important;
+
+    font-size: 38px;
+
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    text-shadow:
+        0 3px 15px rgba(0, 0, 0, .4);
+}
+
+/* subtítulo */
+
+.cliente-dashboard-subtitle {
+    margin: 0;
+
+    max-width: 700px;
+
+    color: #b7b7b7 !important;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   ICONO HEADER
+   ========================================================= */
+
+.cliente-dashboard-header-icon {
+    position: relative;
+
+    z-index: 2;
+
+    width: 80px;
+    height: 80px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e45,
+            #d42668
+        ) !important;
+
+    color: #fff !important;
+
+    font-size: 34px;
+
+    box-shadow:
+        0 12px 30px rgba(139, 30, 69, .40);
+
+    transform: rotate(3deg);
+}
+/* =========================================================
+   TARJETAS PRINCIPALES
+   ========================================================= */
+
+.cliente-dashboard-card {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 285px;
+
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #191a20,
+            #14151a
+        ) !important;
+
+    border: 1px solid #292b33 !important;
+
+    border-radius: 20px !important;
+
+    color: #fff !important;
+
+    text-decoration: none !important;
+
+    overflow: hidden;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+/* =========================================================
+   BRILLO DECORATIVO
+   ========================================================= */
+
+.cliente-dashboard-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -80px;
+    top: -80px;
+
+    background: #8b1e45;
+
+    border-radius: 50%;
+
+    opacity: .08;
+
+    transition: .3s ease;
+
+    pointer-events: none;
+}
+
+/* línea superior */
+
+.cliente-dashboard-card::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8b1e45,
+            #ff3f7c,
+            transparent
+        );
+
+    opacity: .35;
+
+    transition: .3s ease;
+}
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.cliente-dashboard-card:hover {
+    transform: translateY(-8px);
+
+    background:
+        linear-gradient(
+            145deg,
+            #21151c,
+            #18191f
+        ) !important;
+
+    border-color: #b3235a !important;
+
+    color: #fff !important;
+
+    box-shadow:
+        0 15px 35px rgba(139, 30, 69, .28);
+}
+
+.cliente-dashboard-card:hover::before {
+    opacity: .22;
+
+    transform: scale(1.2);
+}
+
+.cliente-dashboard-card:hover::after {
+    opacity: 1;
+}
+
+/* =========================================================
+   ICONOS
+   ========================================================= */
+
+.cliente-card-icon {
+    position: relative;
+
+    z-index: 2;
+
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 25px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e45,
+            #c52c63
+        ) !important;
+
+    color: #fff !important;
+
+    font-size: 27px;
+
+    box-shadow:
+        0 8px 22px rgba(139, 30, 69, .30);
+
+    transition: .3s ease;
+}
+
+.cliente-dashboard-card:hover .cliente-card-icon {
+    transform: scale(1.08) rotate(-3deg);
+
+    box-shadow:
+        0 10px 28px rgba(229, 43, 105, .40);
+}
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.cliente-card-content {
+    position: relative;
+
+    z-index: 2;
+
+    flex: 1;
+}
+
+.cliente-card-content h3 {
+    margin: 0 0 12px;
+
+    color: #fff !important;
+
+    font-size: 23px;
+
+    font-weight: 750;
+}
+
+.cliente-card-content p {
+    margin: 0;
+
+    color: #a7a7a7 !important;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+/* =========================================================
+   FOOTER CARD
+   ========================================================= */
+
+.cliente-card-footer {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 25px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #2c2d34 !important;
+
+    color: #ff3f7c !important;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.cliente-card-footer span {
+    color: #ff3f7c !important;
+}
+
+.cliente-card-footer i {
+    color: #ff3f7c !important;
+
+    font-size: 18px;
+
+    transition: .3s ease;
+}
+
+.cliente-dashboard-card:hover
+.cliente-card-footer i {
+    color: #ff75a4 !important;
+
+    transform: translateX(6px);
+}
+/* =========================================================
+   FEATURE
+   ========================================================= */
+
+.cliente-dashboard-feature {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+    width: 100%;
+
+    min-height: 280px;
+
+    padding: 35px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #191a20,
+            #21131a
+        ) !important;
+
+    border: 1px solid #38232d !important;
+
+    border-radius: 20px !important;
+
+    color: #fff !important;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .30);
+}
+
+/* decoración */
+
+.cliente-dashboard-feature::after {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -100px;
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background: #c52c63;
+
+    opacity: .12;
+
+    filter: blur(5px);
+}
+
+/* línea */
+
+.cliente-dashboard-feature::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 5px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #ff2f76,
+            #8b1e45
+        );
+}
+
+/* =========================================================
+   ICONO
+   ========================================================= */
+
+.cliente-feature-icon {
+    position: relative;
+
+    z-index: 2;
+
+    width: 82px;
+    height: 82px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background: #24121b !important;
+
+    border: 1px solid #8b1e45;
+
+    color: #ff3f7c !important;
+
+    font-size: 36px;
+
+    box-shadow:
+        0 8px 25px rgba(139, 30, 69, .25);
+}
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.cliente-feature-content {
+    position: relative;
+
+    z-index: 2;
+}
+
+.cliente-feature-label {
+    color: #ff3f7c !important;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.cliente-feature-content h2 {
+    margin: 8px 0 12px;
+
+    color: #fff !important;
+
+    font-size: 29px;
+
+    font-weight: 800;
+}
+
+.cliente-feature-content p {
+    max-width: 720px;
+
+    margin: 0 0 23px;
+
+    color: #aaa !important;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+/* =========================================================
+   BOTÓN
+   ========================================================= */
+
+.cliente-btn-primary {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e45,
+            #c52c63
+        ) !important;
+
+    border: none !important;
+
+    border-radius: 10px;
+
+    color: #fff !important;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-decoration: none !important;
+
+    box-shadow:
+        0 7px 20px rgba(139, 30, 69, .30);
+
+    transition: .3s ease;
+}
+
+.cliente-btn-primary:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #c52c63,
+            #ff3f7c
+        ) !important;
+
+    color: #fff !important;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(229, 43, 105, .35);
+}
+/* =========================================================
+   ¿CÓMO COMPRAR?
+   ========================================================= */
+
+.cliente-how-card {
+    width: 100%;
+    height: 100%;
+
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #191a20,
+            #15161b
+        ) !important;
+
+    border: 1px solid #292b33 !important;
+
+    border-radius: 20px !important;
+
+    color: #fff !important;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .28);
+}
+
+/* encabezado */
+
+.cliente-how-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-bottom: 23px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #2c2d34 !important;
+}
+
+.cliente-how-icon {
+    color: #ff3f7c !important;
+
+    font-size: 23px;
+}
+
+.cliente-how-header h3 {
+    margin: 0;
+
+    color: #fff !important;
+
+    font-size: 21px;
+
+    font-weight: 750;
+}
+
+/* =========================================================
+   PASOS
+   ========================================================= */
+
+.cliente-step {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin-bottom: 21px;
+}
+
+.cliente-step:last-child {
+    margin-bottom: 0;
+}
+
+/* número */
+
+.cliente-step-number {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e45,
+            #c52c63
+        ) !important;
+
+    color: #fff !important;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 5px 15px rgba(139, 30, 69, .30);
+}
+
+.cliente-step strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #fff !important;
+
+    font-size: 14px;
+}
+
+.cliente-step p {
+    margin: 0;
+
+    color: #999 !important;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+} 
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.cliente-footer {
+    width: 100%;
+
+    padding: 22px 15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #17181d,
+            #111217
+        ) !important;
+
+    border-top: 1px solid #292b33 !important;
+
+    color: #888 !important;
+}
+
+.cliente-footer p {
+    margin: 0;
+
+    color: #888 !important;
+
+    font-size: 13px;
+
+    text-align: center;
+} 
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .cliente-navbar-container {
+        padding: 12px 20px;
+    }
+
+    .cliente-navbar-links {
+        width: 100%;
+
+        margin: 15px 0 0;
+
+        padding-top: 15px;
+
+        border-top: 1px solid #292b33;
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .cliente-nav-link {
+        width: 100%;
+    }
+
+    .cliente-navbar-user {
+        width: 100%;
+
+        margin: 15px 0 5px;
+
+        padding-top: 15px;
+
+        border-top: 1px solid #292b33;
+
+        justify-content: center;
+    }
+
+    .cliente-dashboard-page {
+        padding: 35px 20px 50px;
+    }
+
+    .cliente-dashboard-title {
+        font-size: 32px;
+    }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .cliente-dashboard-page {
+        padding: 25px 15px 40px;
+    }
+
+    .cliente-dashboard-header {
+        padding: 28px 25px;
+    }
+
+    .cliente-dashboard-title {
+        font-size: 28px;
+    }
+
+    .cliente-dashboard-subtitle {
+        font-size: 14px;
+    }
+
+    .cliente-dashboard-header-icon {
+        width: 65px;
+        height: 65px;
+
+        font-size: 27px;
+    }
+
+    .cliente-dashboard-card {
+        min-height: 250px;
+
+        padding: 25px;
+    }
+
+    .cliente-dashboard-feature {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 28px;
+    }
+
+    .cliente-feature-content h2 {
+        font-size: 25px;
+    }
+
+    .cliente-how-card {
+        padding: 25px;
+    }
+}
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+    .cliente-navbar-container {
+        padding: 10px 15px;
+    }
+
+    .cliente-logo {
+        font-size: 18px;
+    }
+
+    .cliente-logo i {
+        font-size: 23px;
+    }
+
+    .cliente-user-info {
+        width: 100%;
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+    .cliente-user-name {
+        justify-content: center;
+    }
+
+    .cliente-btn-logout {
+        width: 100%;
+    }
+
+    .cliente-dashboard-header {
+        padding: 25px 20px;
+    }
+
+    .cliente-dashboard-header-icon {
+        display: none;
+    }
+
+    .cliente-dashboard-title {
+        font-size: 25px;
+    }
+
+    .cliente-dashboard-subtitle {
+        font-size: 14px;
+    }
+
+    .cliente-dashboard-card {
+        min-height: 230px;
+
+        padding: 23px;
+    }
+
+    .cliente-card-icon {
+        width: 56px;
+        height: 56px;
+
+        font-size: 23px;
+    }
+
+    .cliente-card-content h3 {
+        font-size: 20px;
+    }
+
+    .cliente-card-content p {
+        font-size: 14px;
+    }
+
+    .cliente-dashboard-feature {
+        padding: 25px 22px;
+    }
+
+    .cliente-feature-icon {
+        width: 65px;
+        height: 65px;
+
+        font-size: 28px;
+    }
+
+    .cliente-feature-content h2 {
+        font-size: 22px;
+    }
+
+    .cliente-how-card {
+        padding: 22px;
+    }
+}
+/* =========================================================
+   LOGO DINÁMICO DEL RESTAURANTE
+========================================================= */
+
+.cliente-logo {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff !important;
+    font-size: 21px;
+    font-weight: 700;
+    text-decoration: none !important;
+    white-space: nowrap;
+}
+
+/* Imagen del logo */
+
+.cliente-logo-image {
+    width: 42px;
+    height: 42px;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+
+    display: block;
+
+    transition: all .3s ease;
+}
+
+/* Efecto */
+
+.cliente-logo:hover .cliente-logo-image {
+    transform: scale(1.08);
+}
+
+/* Si no existe logo */
+
+.cliente-logo > i {
+    color: #ff4d88;
+    font-size: 27px;
+}
+
+/* Nombre */
+
+.cliente-logo span {
+    color: #ffffff;
+}
+/* =========================================================
+   LOGO DEL HEADER DEL DASHBOARD
+========================================================= */
+
+.cliente-dashboard-header-logo {
+
+    width: 90px;
+    height: 90px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background: linear-gradient(
+        135deg,
+        #8b1e45,
+        #c42b63
+    );
+
+    padding: 8px;
+
+    box-shadow:
+        0 10px 30px rgba(139, 30, 69, .35);
+
+    overflow: hidden;
+}
+
+
+.cliente-dashboard-header-logo img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+}
+
+
+.cliente-dashboard-header-logo i {
+
+    font-size: 40px;
+
+    color: #ffffff;
+
+}
