@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Pedido;
-use App\Models\AsignacionDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -28,7 +26,6 @@ class DeliveryController extends Controller
         );
     }
 
-
     /**
      * Mostrar formulario para crear delivery
      */
@@ -36,7 +33,6 @@ class DeliveryController extends Controller
     {
         return view('admin.deliverys.create');
     }
-
 
     /**
      * Guardar nuevo delivery
@@ -83,7 +79,6 @@ class DeliveryController extends Controller
 
         ]);
 
-
         User::create([
 
             'role_id' => 3,
@@ -102,17 +97,13 @@ class DeliveryController extends Controller
 
         ]);
 
-
         return redirect()
-
             ->route('admin.deliverys.index')
-
             ->with(
                 'success',
                 'Repartidor creado correctamente.'
             );
     }
-
 
     /**
      * Mostrar formulario de edición
@@ -128,7 +119,6 @@ class DeliveryController extends Controller
         );
     }
 
-
     /**
      * Actualizar delivery
      */
@@ -136,7 +126,6 @@ class DeliveryController extends Controller
     {
         $delivery = User::where('role_id', 3)
             ->findOrFail($id);
-
 
         $request->validate([
 
@@ -178,7 +167,6 @@ class DeliveryController extends Controller
 
         ]);
 
-
         $delivery->name = $request->name;
 
         $delivery->email = $request->email;
@@ -189,13 +177,9 @@ class DeliveryController extends Controller
 
         $delivery->estado = $request->estado;
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Solo cambiar contraseña si se escribió una nueva
-        |--------------------------------------------------------------------------
-        */
-
+        /**
+         * Solo cambiar contraseña si se escribió una nueva
+         */
         if ($request->filled('password')) {
 
             $delivery->password = Hash::make(
@@ -203,20 +187,15 @@ class DeliveryController extends Controller
             );
         }
 
-
         $delivery->save();
 
-
         return redirect()
-
             ->route('admin.deliverys.index')
-
             ->with(
                 'success',
                 'Repartidor actualizado correctamente.'
             );
     }
-
 
     /**
      * Desactivar delivery
@@ -226,18 +205,15 @@ class DeliveryController extends Controller
         $delivery = User::where('role_id', 3)
             ->findOrFail($id);
 
-
         $delivery->estado = 'inactivo';
 
         $delivery->save();
-
 
         return back()->with(
             'success',
             'Repartidor desactivado correctamente.'
         );
     }
-
 
     /**
      * Activar delivery nuevamente
@@ -247,68 +223,13 @@ class DeliveryController extends Controller
         $delivery = User::where('role_id', 3)
             ->findOrFail($id);
 
-
         $delivery->estado = 'activo';
 
         $delivery->save();
 
-
         return back()->with(
             'success',
             'Repartidor activado correctamente.'
-        );
-    }
-
-
-    /**
-     * Asignar delivery a un pedido
-     */
-    public function asignar(Request $request, $pedido_id)
-    {
-        $request->validate([
-
-            'delivery_id' => [
-                'required',
-                Rule::exists('users', 'id')
-                    ->where(function ($query) {
-
-                        $query->where('role_id', 3)
-                            ->where('estado', 'activo');
-                    })
-            ]
-
-        ]);
-
-
-        $pedido = Pedido::findOrFail($pedido_id);
-
-
-        AsignacionDelivery::updateOrCreate(
-
-            [
-                'pedido_id' => $pedido_id,
-            ],
-
-            [
-                'delivery_id' => $request->delivery_id,
-
-                'estado' => 'pendiente',
-
-                'fecha_asignacion' => now(),
-
-            ]
-
-        );
-
-
-        $pedido->estado = 'asignado';
-
-        $pedido->save();
-
-
-        return back()->with(
-            'success',
-            'Delivery asignado correctamente.'
         );
     }
 }
