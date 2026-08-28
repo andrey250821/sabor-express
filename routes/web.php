@@ -33,6 +33,7 @@ use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
 |--------------------------------------------------------------------------
 */
 use App\Http\Controllers\Cocinero\DashboardController as CocineroDashboardController;
+use App\Http\Controllers\Cocinero\PedidoController as CocineroPedidoController;
 /*
 |--------------------------------------------------------------------------
 | BREEZE
@@ -396,13 +397,39 @@ Route::patch(
 
 Route::middleware('auth')->group(function () {
 
+    // DASHBOARD
     Route::get(
         '/cocinero/dashboard',
-        function () {
-            return view('cocinero.dashboard');
-        }
+        [CocineroDashboardController::class, 'index']
     )->name('cocinero.dashboard');
 
+
+    // LISTA DE PEDIDOS
+    Route::get(
+        '/cocinero/pedidos',
+        [CocineroPedidoController::class, 'index']
+    )->name('cocinero.pedidos.index');
+
+
+    // DETALLE DEL PEDIDO
+    Route::get(
+        '/cocinero/pedidos/{id}',
+        [CocineroPedidoController::class, 'show']
+    )->name('cocinero.pedidos.show');
+
+
+    // COMENZAR PREPARACIÓN
+    Route::put(
+        '/cocinero/pedidos/{id}/preparar',
+        [CocineroPedidoController::class, 'preparar']
+    )->name('cocinero.pedidos.preparar');
+
+
+    // MARCAR PEDIDO COMO LISTO
+    Route::put(
+        '/cocinero/pedidos/{id}/listo',
+        [CocineroPedidoController::class, 'listo']
+    )->name('cocinero.pedidos.listo');
 });
 /*
 |--------------------------------------------------------------------------
