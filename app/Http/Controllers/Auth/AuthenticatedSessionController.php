@@ -61,7 +61,13 @@ class AuthenticatedSessionController extends Controller
                 ->route('delivery.dashboard');
         }
 
+        // COCINERO
 
+        if ($user->role->nombre == 'Cocinero') {
+
+            return redirect()
+                ->route('cocinero.dashboard');
+        }
 
         Auth::logout();
 

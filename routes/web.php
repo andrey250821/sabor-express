@@ -27,8 +27,12 @@ use App\Http\Controllers\Cliente\DashboardController as ClienteDashboardControll
 use App\Http\Controllers\Cliente\ProductoController as ClienteProductoController;
 use App\Http\Controllers\Cliente\CarritoController;
 use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
-
-
+/*
+|--------------------------------------------------------------------------
+| CONTROLADORES cocinero
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\Cocinero\DashboardController as CocineroDashboardController;
 /*
 |--------------------------------------------------------------------------
 | BREEZE
@@ -384,7 +388,22 @@ Route::patch(
     [DeliveryController::class, 'activar']
 )->name('admin.deliverys.activar');
 
+/*
+|--------------------------------------------------------------------------
+| COCINERO
+|--------------------------------------------------------------------------
+*/
 
+Route::middleware('auth')->group(function () {
+
+    Route::get(
+        '/cocinero/dashboard',
+        function () {
+            return view('cocinero.dashboard');
+        }
+    )->name('cocinero.dashboard');
+
+});
 /*
 |--------------------------------------------------------------------------
 | AUTH BREEZE
