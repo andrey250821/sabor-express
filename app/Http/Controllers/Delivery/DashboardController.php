@@ -55,7 +55,7 @@ class DashboardController extends Controller
             ->count();
 
         return view(
-            'delivery.dashboard',
+            'delivery.dashboard.index',
             compact(
                 'pedidosDisponibles',
                 'misPedidos',
