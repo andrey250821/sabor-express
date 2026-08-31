@@ -18,8 +18,12 @@ class PedidoController extends Controller
         // incluyendo cliente y delivery asignado
         $pedidos = Pedido::with([
             'user',
-            'asignacionDelivery.delivery'
+            'asignacionDelivery.delivery',
+            'comprobantePago'
         ])
+            ->whereHas('comprobantePago', function ($query) {
+                $query->where('estado', 'aprobado');
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -55,28 +59,5 @@ class PedidoController extends Controller
             'admin.pedidos.show',
             compact('pedido')
         );
-    }
-
-
-    public function cambiarEstado(Request $request, $id)
-    {
-
-
-        $pedido = Pedido::findOrFail($id);
-
-
-
-        $pedido->estado = $request->estado;
-
-
-        $pedido->save();
-
-
-
-        return back()
-            ->with(
-                'success',
-                'Estado actualizado correctamente'
-            );
     }
 }

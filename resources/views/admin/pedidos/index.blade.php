@@ -357,101 +357,7 @@
                                     Ver detalles
 
                                 </a>
-
-
-                                {{-- CAMBIAR ESTADO --}}
-
-                                <form
-                                    action="{{ route('admin.pedidos.estado', $pedido->id) }}"
-                                    method="POST">
-
-                                    @csrf
-                                    @method('PUT')
-
-
-                                    <label class="form-label small text-muted mb-1">
-
-                                        Estado
-
-                                    </label>
-
-
-                                    <select
-                                        name="estado"
-                                        class="form-select form-select-sm mb-2">
-
-                                        <option value="pagado"
-                                            @selected($pedido->estado == 'pagado')>
-
-                                            Pagado
-
-                                        </option>
-
-
-                                        <option value="preparando"
-                                            @selected($pedido->estado == 'preparando')>
-
-                                            Preparando
-
-                                        </option>
-
-
-                                        <option value="listo"
-                                            @selected($pedido->estado == 'listo')>
-
-                                            Listo
-
-                                        </option>
-
-
-                                        <option value="asignado"
-                                            @selected($pedido->estado == 'asignado')>
-
-                                            Asignado a Delivery
-
-                                        </option>
-
-
-                                        <option value="en_camino"
-                                            @selected($pedido->estado == 'en_camino')>
-
-                                            En camino
-
-                                        </option>
-
-
-                                        <option value="entregado"
-                                            @selected($pedido->estado == 'entregado')>
-
-                                            Entregado
-
-                                        </option>
-
-
-                                        <option value="cancelado"
-                                            @selected($pedido->estado == 'cancelado')>
-
-                                            Cancelado
-
-                                        </option>
-
-                                    </select>
-
-
-                                    {{-- MISMO TAMAÑO QUE VER DETALLES --}}
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-success btn-sm w-100">
-
-                                        <i class="bi bi-check-circle"></i>
-
-                                        Actualizar
-
-                                    </button>
-
-                                </form>
-
+                                
 
                                 {{-- INFORMACIÓN DEL DELIVERY --}}
 
@@ -481,72 +387,24 @@
                                     </div>
 
                                     @endif
-
-
-                                    {{-- ASIGNAR / CAMBIAR DELIVERY --}}
-
-                                    <form
-                                        action="{{ route('admin.pedidos.asignar', $pedido->id) }}"
-                                        method="POST">
-
-                                        @csrf
-
-
+                                    <div class="mt-2">
                                         <label class="form-label small fw-bold">
-
                                             <i class="bi bi-bicycle"></i>
-
-                                            {{ $pedido->asignacionDelivery
-                    ? 'Cambiar Delivery'
-                    : 'Asignar Delivery' }}
-
+                                            Delivery
                                         </label>
 
-
-                                        <select
-                                            name="delivery_id"
-                                            class="form-select form-select-sm mb-2"
-                                            required>
-
-                                            <option value="">
-
-                                                Seleccionar Delivery
-
-                                            </option>
-
-
-                                            @foreach($deliverys as $delivery)
-
-                                            <option
-                                                value="{{ $delivery->id }}"
-                                                @selected(
-                                                $pedido->asignacionDelivery &&
-                                                $pedido->asignacionDelivery->delivery_id == $delivery->id
-                                                )>
-
-                                                {{ $delivery->name }}
-
-                                            </option>
-
-                                            @endforeach
-
-                                        </select>
-
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-warning btn-sm w-100">
-
-                                            <i class="bi bi-bicycle"></i>
-
-                                            {{ $pedido->asignacionDelivery
-                    ? 'Cambiar Delivery'
-                    : 'Asignar Delivery' }}
-
-                                        </button>
-
-                                    </form>
-
+                                        @if($pedido->asignacionDelivery && $pedido->asignacionDelivery->delivery)
+                                        <div class="alert alert-success py-2 mb-0">
+                                            <i class="bi bi-person-check"></i>
+                                            {{ $pedido->asignacionDelivery->delivery->name }}
+                                        </div>
+                                        @else
+                                        <div class="alert alert-secondary py-2 mb-0">
+                                            <i class="bi bi-hourglass-split"></i>
+                                            Sin delivery asignado
+                                        </div>
+                                        @endif
+                                    </div>
 
                                 </div>
 
