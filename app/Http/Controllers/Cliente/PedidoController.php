@@ -11,6 +11,8 @@ use App\Models\DetallePedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class PedidoController extends Controller
 {
@@ -33,6 +35,69 @@ class PedidoController extends Controller
         $configuracion = Configuracion::first();
 
         return view('cliente.pedidos.create', compact('total', 'configuracion'));
+    }
+
+    /**
+     * Convierte coordenadas GPS en una dirección usando OpenStreetMap/Nominatim.
+     * Se hace desde Laravel para evitar depender de Google Geocoding y de CORS.
+     */
+    public function direccion(Request $request)
+    {
+        $datos = $request->validate([
+            'latitud' => 'required|numeric|between:-90,90',
+            'longitud' => 'required|numeric|between:-180,180',
+        ]);
+
+        $latitud = round((float) $datos['latitud'], 7);
+        $longitud = round((float) $datos['longitud'], 7);
+        $cacheKey = 'nominatim_reverse_' . md5($latitud . ',' . $longitud);
+
+        $direccion = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($latitud, $longitud) {
+            $respuesta = Http::timeout(10)
+                ->withHeaders([
+                    'User-Agent' => 'SaborExpress/1.0 (aplicacion web de pedidos)',
+                    'Accept-Language' => 'es',
+                ])
+                ->get('https://nominatim.openstreetmap.org/reverse', [
+                    'format' => 'jsonv2',
+                    'lat' => $latitud,
+                    'lon' => $longitud,
+                    'addressdetails' => 1,
+                    'zoom' => 18,
+                ]);
+
+            if (!$respuesta->successful()) {
+                return null;
+            }
+
+            $resultado = $respuesta->json();
+            $address = $resultado['address'] ?? [];
+
+            $partes = array_filter([
+                $address['house_number'] ?? null,
+                $address['road'] ?? null,
+                $address['neighbourhood'] ?? ($address['suburb'] ?? null),
+                $address['city'] ?? ($address['town'] ?? ($address['municipality'] ?? null)),
+                $address['state'] ?? null,
+                $address['country'] ?? null,
+            ]);
+
+            return !empty($partes)
+                ? implode(', ', $partes)
+                : ($resultado['display_name'] ?? null);
+        });
+
+        if (!$direccion) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'No se pudo obtener la dirección para estas coordenadas.',
+            ], 422);
+        }
+
+        return response()->json([
+            'ok' => true,
+            'direccion' => $direccion,
+        ]);
     }
 
     public function store(Request $request)
