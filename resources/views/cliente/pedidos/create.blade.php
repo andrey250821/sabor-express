@@ -120,7 +120,8 @@
 <script>
     let mapaPedido = null;
     let marcadorPedido = null;
-    let geocoderPedido = null;
+    let ultimaConsultaDireccion = 0;
+    let consultaDireccionEnCurso = false;
     const cochabamba = { lat: -17.3935, lng: -66.1570 };
 
     function mostrarEstado(mensaje, error = false) {
@@ -133,37 +134,104 @@
     function actualizarCoordenadas(posicion, obtenerDireccion = true) {
         document.getElementById('latitud').value = posicion.lat().toFixed(7);
         document.getElementById('longitud').value = posicion.lng().toFixed(7);
-        if (obtenerDireccion) obtenerDireccionPedido(posicion);
+
+        if (obtenerDireccion) {
+            obtenerDireccionPedido(posicion);
+        }
     }
 
-    function obtenerDireccionPedido(posicion) {
-        if (!geocoderPedido) return;
+    async function obtenerDireccionPedido(posicion) {
+        const latitud = Number(posicion.lat());
+        const longitud = Number(posicion.lng());
+
+        if (!Number.isFinite(latitud) || !Number.isFinite(longitud)) {
+            mostrarEstado('Coordenadas no válidas.', true);
+            return;
+        }
+
+        // Nominatim (OpenStreetMap) recomienda no realizar consultas demasiado seguidas.
+        const ahora = Date.now();
+        const espera = Math.max(0, 1100 - (ahora - ultimaConsultaDireccion));
+
+        if (consultaDireccionEnCurso) {
+            return;
+        }
+
+        if (espera > 0) {
+            mostrarEstado('Esperando para actualizar la dirección...');
+            setTimeout(() => obtenerDireccionPedido(posicion), espera);
+            return;
+        }
+
+        ultimaConsultaDireccion = Date.now();
+        consultaDireccionEnCurso = true;
         mostrarEstado('Obteniendo dirección...');
-        geocoderPedido.geocode({ location: posicion }, function(resultados, estado) {
-            if (estado === 'OK' && resultados && resultados.length > 0) {
-                document.getElementById('direccion_entrega').value = resultados[0].formatted_address;
+
+        try {
+            const url = new URL('https://nominatim.openstreetmap.org/reverse');
+            url.searchParams.set('format', 'jsonv2');
+            url.searchParams.set('lat', latitud.toString());
+            url.searchParams.set('lon', longitud.toString());
+            url.searchParams.set('zoom', '18');
+            url.searchParams.set('addressdetails', '1');
+            url.searchParams.set('accept-language', 'es');
+
+            const respuesta = await fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!respuesta.ok) {
+                throw new Error('Nominatim respondió con HTTP ' + respuesta.status);
+            }
+
+            const datos = await respuesta.json();
+
+            if (datos && datos.display_name) {
+                document.getElementById('direccion_entrega').value = datos.display_name;
                 mostrarEstado('Ubicación y dirección actualizadas correctamente.');
             } else {
-                mostrarEstado('No se pudo obtener la dirección automáticamente. Puedes escribirla manualmente.', true);
+                mostrarEstado('No se encontró una dirección para ese punto. Puedes escribirla manualmente.', true);
             }
-        });
+        } catch (error) {
+            console.error('Error al obtener dirección con OpenStreetMap/Nominatim:', error);
+            mostrarEstado('No se pudo obtener la dirección automáticamente. Puedes escribirla manualmente.', true);
+        } finally {
+            consultaDireccionEnCurso = false;
+        }
     }
 
-    function colocarMarcador(posicion, centrar = true) {
+    function colocarMarcador(posicion, centrar = true, obtenerDireccion = true) {
         if (!marcadorPedido) {
-            marcadorPedido = new google.maps.Marker({ position: posicion, map: mapaPedido, draggable: true, title: 'Ubicación de entrega' });
-            marcadorPedido.addListener('dragend', function(evento) { actualizarCoordenadas(evento.latLng, true); });
+            marcadorPedido = new google.maps.Marker({
+                position: posicion,
+                map: mapaPedido,
+                draggable: true,
+                title: 'Ubicación de entrega'
+            });
+
+            marcadorPedido.addListener('dragend', function(evento) {
+                actualizarCoordenadas(evento.latLng, true);
+            });
         } else {
             marcadorPedido.setPosition(posicion);
         }
-        if (centrar) mapaPedido.setCenter(posicion);
-        actualizarCoordenadas(marcadorPedido.getPosition(), true);
+
+        if (centrar) {
+            mapaPedido.setCenter(posicion);
+        }
+
+        actualizarCoordenadas(marcadorPedido.getPosition(), obtenerDireccion);
     }
 
     function inicializarMapaPedido() {
         const latGuardada = parseFloat(document.getElementById('latitud').value);
         const lngGuardada = parseFloat(document.getElementById('longitud').value);
-        const centroInicial = Number.isFinite(latGuardada) && Number.isFinite(lngGuardada) ? { lat: latGuardada, lng: lngGuardada } : cochabamba;
+        const centroInicial = Number.isFinite(latGuardada) && Number.isFinite(lngGuardada)
+            ? { lat: latGuardada, lng: lngGuardada }
+            : cochabamba;
 
         mapaPedido = new google.maps.Map(document.getElementById('mapa-pedido'), {
             center: centroInicial,
@@ -173,24 +241,36 @@
             fullscreenControl: true
         });
 
-        geocoderPedido = new google.maps.Geocoder();
-        colocarMarcador(centroInicial, false);
+        // El mapa sigue siendo Google Maps; la conversión coordenadas -> dirección
+        // se realiza gratuitamente mediante OpenStreetMap/Nominatim.
+        colocarMarcador(centroInicial, false, true);
 
         document.getElementById('btn-mi-ubicacion').addEventListener('click', function() {
             if (!navigator.geolocation) {
                 mostrarEstado('Tu navegador no permite obtener la ubicación.', true);
                 return;
             }
+
             mostrarEstado('Obteniendo tu ubicación...');
+
             navigator.geolocation.getCurrentPosition(function(posicion) {
-                colocarMarcador({ lat: posicion.coords.latitude, lng: posicion.coords.longitude }, true);
+                colocarMarcador({
+                    lat: posicion.coords.latitude,
+                    lng: posicion.coords.longitude
+                }, true, true);
             }, function() {
                 mostrarEstado('No se pudo obtener tu ubicación. Revisa los permisos del navegador.', true);
-            }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+            }, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
         });
 
         document.getElementById('btn-direccion-mapa').addEventListener('click', function() {
-            if (marcadorPedido) obtenerDireccionPedido(marcadorPedido.getPosition());
+            if (marcadorPedido) {
+                obtenerDireccionPedido(marcadorPedido.getPosition());
+            }
         });
     }
 
