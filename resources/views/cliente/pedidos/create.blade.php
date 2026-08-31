@@ -6,324 +6,279 @@
 
 <div class="cliente-pedido-page">
 
-    {{-- ENCABEZADO --}}
     <div class="cliente-pedido-header">
-
-        <h1>
-            <i class="bi bi-bag-check"></i>
-            Realizar Pedido
-        </h1>
-
-        <p>
-            Completa los datos para confirmar tu pedido.
-        </p>
-
+        <h1><i class="bi bi-bag-check"></i> Realizar Pedido</h1>
+        <p>Completa los datos para confirmar tu pedido.</p>
     </div>
 
-
-    {{-- MENSAJES --}}
     @if(session('error'))
-
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-
+        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
-
 
     @if(session('success'))
-
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-
-    {{-- ERRORES DE VALIDACIÓN --}}
     @if($errors->any())
-
-    <div class="alert alert-danger">
-
-        <strong>Por favor corrige los siguientes errores:</strong>
-
-        <ul class="mb-0 mt-2">
-
-            @foreach($errors->all() as $error)
-
-            <li>{{ $error }}</li>
-
-            @endforeach
-
-        </ul>
-
-    </div>
-
+        <div class="alert alert-danger">
+            <strong>Por favor corrige los siguientes errores:</strong>
+            <ul class="mb-0 mt-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
-
-    {{-- FORMULARIO --}}
-    <form
-        action="{{ route('cliente.pedidos.store') }}"
-        method="POST"
-        enctype="multipart/form-data">
-
+    <form action="{{ route('cliente.pedidos.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-
 
         {{-- DATOS DE ENTREGA --}}
         <div class="cliente-pedido-section">
-
-            <h2>
-                <i class="bi bi-geo-alt"></i>
-                Datos de entrega
-            </h2>
-
+            <h2><i class="bi bi-geo-alt"></i> Datos de entrega</h2>
 
             <div class="mb-3">
-
-                <label for="direccion_entrega">
-                    Dirección de entrega
-                </label>
-
-                <textarea
-                    name="direccion_entrega"
-                    id="direccion_entrega"
-                    class="form-control"
-                    rows="3"
-                    placeholder="Ingresa la dirección donde deseas recibir tu pedido"
-                    required>{{ old('direccion_entrega') }}</textarea>
-
+                <label for="direccion_entrega" class="form-label">Dirección de entrega</label>
+                <textarea name="direccion_entrega" id="direccion_entrega" class="form-control" rows="2" placeholder="La dirección se obtendrá automáticamente desde el mapa. También puedes corregirla manualmente." required>{{ old('direccion_entrega') }}</textarea>
+                <small class="text-muted">Mueve el marcador para ajustar el punto exacto de entrega.</small>
             </div>
-
 
             <div class="mb-3">
-
-                <label for="referencia_delivery">
-                    Referencia para el delivery
-                </label>
-
-                <textarea
-                    name="referencia_delivery"
-                    id="referencia_delivery"
-                    class="form-control"
-                    rows="2"
-                    placeholder="Ej.: casa de color azul, frente a la plaza...">{{ old('referencia_delivery') }}</textarea>
-
+                <label for="referencia_delivery" class="form-label">Referencia para el delivery</label>
+                <textarea name="referencia_delivery" id="referencia_delivery" class="form-control" rows="2" placeholder="Ej.: puerta verde, frente a la farmacia, al lado de la plaza...">{{ old('referencia_delivery') }}</textarea>
+                <small class="text-muted">Indica referencias que ayuden al repartidor a encontrar tu domicilio.</small>
             </div>
-
 
             <div class="mb-3">
-
-                <label for="observacion_cliente">
-                    Observaciones
-                </label>
-
-                <textarea
-                    name="observacion_cliente"
-                    id="observacion_cliente"
-                    class="form-control"
-                    rows="2"
-                    maxlength="500"
-                    placeholder="Alguna indicación adicional para tu pedido...">{{ old('observacion_cliente') }}</textarea>
-
+                <label for="observacion_cliente" class="form-label">Observaciones del pedido</label>
+                <textarea name="observacion_cliente" id="observacion_cliente" class="form-control" rows="2" maxlength="500" placeholder="Ej.: 1 hamburguesa sin cebolla, agregar poca salsa...">{{ old('observacion_cliente') }}</textarea>
+                <small class="text-muted">Indica modificaciones o instrucciones sobre la comida.</small>
             </div>
-
         </div>
 
-
-        {{-- UBICACIÓN --}}
+        {{-- MAPA --}}
         <div class="cliente-pedido-section">
+            <h2><i class="bi bi-map"></i> Ubicación de entrega</h2>
+            <p class="text-muted">Selecciona tu ubicación en el mapa. Puedes mover el marcador si la ubicación automática no es exacta.</p>
 
-            <h2>
-                <i class="bi bi-map"></i>
-                Ubicación
-            </h2>
-
-            <p>
-                Si deseas, puedes registrar las coordenadas de tu ubicación.
-            </p>
-
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-
-                    <label for="latitud">
-                        Latitud
-                    </label>
-
-                    <input
-                        type="text"
-                        name="latitud"
-                        id="latitud"
-                        class="form-control"
-                        value="{{ old('latitud') }}"
-                        placeholder="-17.3895">
-
+            @if(empty(env('GOOGLE_MAPS_API_KEY')))
+                <div class="alert alert-warning">
+                    <strong>Mapa no configurado.</strong>
+                    Agrega <code>GOOGLE_MAPS_API_KEY</code> en tu archivo <code>.env</code> para activar Google Maps.
                 </div>
+            @endif
 
-
-                <div class="col-md-6 mb-3">
-
-                    <label for="longitud">
-                        Longitud
-                    </label>
-
-                    <input
-                        type="text"
-                        name="longitud"
-                        id="longitud"
-                        class="form-control"
-                        value="{{ old('longitud') }}"
-                        placeholder="-66.1568">
-
-                </div>
-
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <button type="button" id="btn-mi-ubicacion" class="btn btn-primary">
+                    <i class="bi bi-crosshair"></i> Usar mi ubicación actual
+                </button>
+                <button type="button" id="btn-direccion-mapa" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-repeat"></i> Actualizar dirección
+                </button>
             </div>
 
+            <div id="mapa-pedido" style="width:100%; height:380px; border-radius:12px; overflow:hidden; border:1px solid #ddd; background:#f3f3f3;"></div>
+
+            <div class="row mt-3">
+                <div class="col-md-6 mb-3">
+                    <label for="latitud" class="form-label">Latitud</label>
+                    <input type="text" name="latitud" id="latitud" class="form-control" value="{{ old('latitud') }}" placeholder="-17.3895" readonly>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="longitud" class="form-label">Longitud</label>
+                    <input type="text" name="longitud" id="longitud" class="form-control" value="{{ old('longitud') }}" placeholder="-66.1568" readonly>
+                </div>
+            </div>
+
+            <div id="estado-ubicacion" class="small text-muted" aria-live="polite"></div>
         </div>
 
-
-        {{-- CONFIGURACIÓN DE PAGO --}}
+        {{-- PAGO --}}
         <div class="cliente-pedido-section">
-
-            <h2>
-                <i class="bi bi-credit-card"></i>
-                Pago
-            </h2>
-
+            <h2><i class="bi bi-credit-card"></i> Pago</h2>
 
             @if($configuracion)
+                <p>Realiza el pago utilizando los datos proporcionados por el restaurante.</p>
 
-            <p>
-                Realiza el pago utilizando los datos proporcionados por el restaurante.
-            </p>
+                @if(!empty($configuracion->qr_pago))
+                    <div class="mb-3">
+                        <p><strong>QR de pago:</strong></p>
+                        <img src="{{ asset('storage/' . $configuracion->qr_pago) }}" alt="QR de pago" style="max-width:300px;">
+                    </div>
+                @endif
 
-
-            @if(!empty($configuracion->qr_pago))
-
-            <div class="mb-3">
-
-                <p>
-                    <strong>QR de pago:</strong>
-                </p>
-
-                <img
-                    src="{{ asset('storage/' . $configuracion->qr_pago) }}"
-                    alt="QR de pago"
-                    style="max-width: 300px;">
-
-            </div>
-
-            @endif
-
-
-            @if(!empty($configuracion->numero_cuenta))
-
-            <p>
-                <strong>Número de cuenta:</strong>
-                {{ $configuracion->numero_cuenta }}
-            </p>
-
-            @endif
-
-
+                @if(!empty($configuracion->numero_cuenta))
+                    <p><strong>Número de cuenta:</strong> {{ $configuracion->numero_cuenta }}</p>
+                @endif
             @else
-
-            <div class="alert alert-warning">
-
-                Los datos de pago todavía no han sido configurados.
-
-            </div>
-
+                <div class="alert alert-warning">Los datos de pago todavía no han sido configurados.</div>
             @endif
-
         </div>
-
 
         {{-- COMPROBANTE --}}
         <div class="cliente-pedido-section">
-
-            <h2>
-                <i class="bi bi-image"></i>
-                Comprobante de pago
-            </h2>
-
-
+            <h2><i class="bi bi-image"></i> Comprobante de pago</h2>
             <div class="mb-3">
-
-                <label for="comprobante">
-                    Selecciona una imagen del comprobante
-                </label>
-
-                <input
-                    type="file"
-                    name="comprobante"
-                    id="comprobante"
-                    class="form-control"
-                    accept=".jpg,.jpeg,.png"
-                    required>
-
-                <small>
-                    Formatos permitidos: JPG, JPEG y PNG. Máximo 2 MB.
-                </small>
-
+                <label for="comprobante" class="form-label">Selecciona una imagen del comprobante</label>
+                <input type="file" name="comprobante" id="comprobante" class="form-control" accept=".jpg,.jpeg,.png" required>
+                <small>Formatos permitidos: JPG, JPEG y PNG. Máximo 2 MB.</small>
             </div>
-
         </div>
-
 
         {{-- RESUMEN --}}
         <div class="cliente-pedido-section">
-
-            <h2>
-                <i class="bi bi-receipt"></i>
-                Resumen del pedido
-            </h2>
-
-
+            <h2><i class="bi bi-receipt"></i> Resumen del pedido</h2>
             <div class="cliente-pedido-total">
-
-                <span>
-                    Total a pagar:
-                </span>
-
-                <strong>
-                    Bs {{ number_format($total, 2) }}
-                </strong>
-
+                <span>Total a pagar:</span>
+                <strong>Bs {{ number_format($total, 2) }}</strong>
             </div>
-
         </div>
 
-
-        {{-- BOTONES --}}
         <div class="cliente-pedido-actions">
-
-            <a
-                href="{{ route('cliente.carrito.index') }}"
-                class="btn btn-secondary">
-
-                <i class="bi bi-arrow-left"></i>
-                Volver al carrito
-
+            <a href="{{ route('cliente.carrito.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver al carrito
             </a>
-
-
-            <button
-                type="submit"
-                class="btn btn-primary">
-
-                <i class="bi bi-check-circle"></i>
-                Confirmar pedido
-
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle"></i> Confirmar pedido
             </button>
-
         </div>
-
     </form>
-
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    let mapaPedido = null;
+    let marcadorPedido = null;
+    let geocoderPedido = null;
+
+    const cochabamba = { lat: -17.3935, lng: -66.1570 };
+
+    function mostrarEstado(mensaje, error = false) {
+        const estado = document.getElementById('estado-ubicacion');
+        estado.textContent = mensaje;
+        estado.classList.toggle('text-danger', error);
+        estado.classList.toggle('text-muted', !error);
+    }
+
+    function actualizarCoordenadas(posicion, obtenerDireccion = true) {
+        const lat = posicion.lat();
+        const lng = posicion.lng();
+
+        document.getElementById('latitud').value = lat.toFixed(7);
+        document.getElementById('longitud').value = lng.toFixed(7);
+
+        if (obtenerDireccion) {
+            obtenerDireccionPedido(posicion);
+        }
+    }
+
+    function obtenerDireccionPedido(posicion) {
+        if (!geocoderPedido) return;
+
+        mostrarEstado('Obteniendo dirección...');
+
+        geocoderPedido.geocode({ location: posicion }, function(resultados, estado) {
+            if (estado === 'OK' && resultados && resultados.length > 0) {
+                document.getElementById('direccion_entrega').value = resultados[0].formatted_address;
+                mostrarEstado('Ubicación y dirección actualizadas correctamente.');
+            } else {
+                mostrarEstado('No se pudo obtener la dirección automáticamente. Puedes escribirla manualmente.', true);
+            }
+        });
+    }
+
+    function colocarMarcador(posicion, centrar = true) {
+        if (!marcadorPedido) {
+            marcadorPedido = new google.maps.Marker({
+                position: posicion,
+                map: mapaPedido,
+                draggable: true,
+                title: 'Ubicación de entrega'
+            });
+
+            marcadorPedido.addListener('dragend', function(evento) {
+                actualizarCoordenadas(evento.latLng, true);
+            });
+        } else {
+            marcadorPedido.setPosition(posicion);
+        }
+
+        if (centrar) {
+            mapaPedido.setCenter(posicion);
+        }
+
+        actualizarCoordenadas(marcadorPedido.getPosition(), true);
+    }
+
+    function inicializarMapaPedido() {
+        const latGuardada = parseFloat(document.getElementById('latitud').value);
+        const lngGuardada = parseFloat(document.getElementById('longitud').value);
+
+        const centroInicial = Number.isFinite(latGuardada) && Number.isFinite(lngGuardada)
+            ? { lat: latGuardada, lng: lngGuardada }
+            : cochabamba;
+
+        mapaPedido = new google.maps.Map(document.getElementById('mapa-pedido'), {
+            center: centroInicial,
+            zoom: 16,
+            mapTypeControl: true,
+            streetViewControl: false,
+            fullscreenControl: true
+        });
+
+        geocoderPedido = new google.maps.Geocoder();
+        colocarMarcador(centroInicial, false);
+
+        document.getElementById('btn-mi-ubicacion').addEventListener('click', function() {
+            if (!navigator.geolocation) {
+                mostrarEstado('Tu navegador no permite obtener la ubicación.', true);
+                return;
+            }
+
+            mostrarEstado('Obteniendo tu ubicación...');
+
+            navigator.geolocation.getCurrentPosition(
+                function(posicion) {
+                    const ubicacion = {
+                        lat: posicion.coords.latitude,
+                        lng: posicion.coords.longitude
+                    };
+                    colocarMarcador(ubicacion, true);
+                },
+                function() {
+                    mostrarEstado('No se pudo obtener tu ubicación. Revisa los permisos del navegador.', true);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        });
+
+        document.getElementById('btn-direccion-mapa').addEventListener('click', function() {
+            if (marcadorPedido) {
+                obtenerDireccionPedido(marcadorPedido.getPosition());
+            }
+        });
+    }
+
+    function mapaNoDisponible() {
+        const mapa = document.getElementById('mapa-pedido');
+        mapa.innerHTML = '<div class="d-flex h-100 align-items-center justify-content-center text-muted p-4 text-center">Google Maps no está disponible. Puedes configurar GOOGLE_MAPS_API_KEY en .env o ingresar la dirección manualmente.</div>';
+        document.getElementById('btn-mi-ubicacion').disabled = true;
+        document.getElementById('btn-direccion-mapa').disabled = true;
+        mostrarEstado('Mapa no disponible.', true);
+    }
+</script>
+
+@if(!empty(env('GOOGLE_MAPS_API_KEY')))
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ urlencode(env('GOOGLE_MAPS_API_KEY')) }}&callback=inicializarMapaPedido&libraries=geometry"></script>
+@else
+<script>
+    document.addEventListener('DOMContentLoaded', mapaNoDisponible);
+</script>
+@endif
 @endsection
