@@ -1,182 +1,71 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.delivery')
 
-<head>
-    <meta charset="UTF-8">
+@section('content')
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<div class="container-fluid px-0">
 
-    <title>Dashboard - Delivery</title>
+    {{-- ENCABEZADO --}}
+    <div class="d-flex justify-content-between align-items-center mb-5">
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+        <div>
 
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
+            <h1 class="fw-bold">
+                Panel del Delivery
+            </h1>
 
-<body class="bg-light">
-
-    <div class="container py-5">
-
-        {{-- ENCABEZADO --}}
-        <div class="d-flex justify-content-between align-items-center mb-5">
-
-            <div>
-                <h1 class="fw-bold">
-                    Panel del Delivery
-                </h1>
-
-                <p class="text-muted mb-0">
-                    Bienvenido, {{ $delivery->name }}
-                </p>
-            </div>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <button type="submit"
-                    class="btn btn-outline-danger">
-
-                    <i class="bi bi-box-arrow-right"></i>
-
-                    Salir
-
-                </button>
-            </form>
+            <p class="text-muted mb-0">
+                Bienvenido, {{ $delivery->name }}
+            </p>
 
         </div>
 
-
-        {{-- TARJETAS --}}
-        <div class="row g-4">
+    </div>
 
 
-            {{-- PEDIDOS DISPONIBLES --}}
-            <div class="col-md-4">
+    {{-- TARJETAS --}}
+    <div class="row g-4">
 
-                <div class="card shadow-sm h-100">
 
-                    <div class="card-body">
+        {{-- PEDIDOS DISPONIBLES --}}
+        <div class="col-md-4">
 
-                        <div class="d-flex justify-content-between">
+            <div class="card shadow-sm h-100">
 
-                            <div>
+                <div class="card-body">
 
-                                <h6 class="text-muted">
-                                    Pedidos disponibles
-                                </h6>
+                    <div class="d-flex justify-content-between">
 
-                                <h2 class="fw-bold">
-                                    {{ $pedidosDisponibles }}
-                                </h2>
+                        <div>
 
-                            </div>
+                            <h6 class="text-muted">
+                                Pedidos disponibles
+                            </h6>
 
-                            <div class="text-primary fs-1">
-                                <i class="bi bi-bag-check"></i>
-                            </div>
+                            <h2 class="fw-bold">
+                                {{ $pedidosDisponibles }}
+                            </h2>
 
                         </div>
 
-                        <p class="text-muted">
-                            Pedidos listos para ser tomados.
-                        </p>
+                        <div class="text-primary fs-1">
 
-                        <a href="{{ route('delivery.pedidos.index') }}"
-                            class="btn btn-primary">
-
-                            Ver pedidos
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            {{-- MIS PEDIDOS --}}
-            <div class="col-md-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <h6 class="text-muted">
-                                    Mis pedidos
-                                </h6>
-
-                                <h2 class="fw-bold">
-                                    {{ $misPedidos }}
-                                </h2>
-
-                            </div>
-
-                            <div class="text-warning fs-1">
-                                <i class="bi bi-bicycle"></i>
-                            </div>
+                            <i class="bi bi-bag-check"></i>
 
                         </div>
 
-                        <p class="text-muted">
-                            Pedidos que estás gestionando actualmente.
-                        </p>
-
-                        <a href="{{ route('delivery.pedidos.mis') }}"
-                            class="btn btn-warning">
-
-                            Mis pedidos
-
-                        </a>
-
                     </div>
 
-                </div>
+                    <p class="text-muted">
+                        Pedidos listos para ser tomados.
+                    </p>
 
-            </div>
+                    <a
+                        href="{{ route('delivery.pedidos.index') }}"
+                        class="btn btn-primary">
 
+                        Ver pedidos
 
-            {{-- ENTREGADOS --}}
-            <div class="col-md-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between">
-
-                            <div>
-
-                                <h6 class="text-muted">
-                                    Pedidos entregados
-                                </h6>
-
-                                <h2 class="fw-bold">
-                                    {{ $pedidosEntregados }}
-                                </h2>
-
-                            </div>
-
-                            <div class="text-success fs-1">
-                                <i class="bi bi-check-circle"></i>
-                            </div>
-
-                        </div>
-
-                        <p class="text-muted">
-                            Total de pedidos entregados por ti.
-                        </p>
-
-                    </div>
+                    </a>
 
                 </div>
 
@@ -185,68 +74,86 @@
         </div>
 
 
-        {{-- INFORMACIÓN DEL DELIVERY --}}
-        <div class="card shadow-sm mt-5">
+        {{-- MIS PEDIDOS --}}
+        <div class="col-md-4">
 
-            <div class="card-body">
+            <div class="card shadow-sm h-100">
 
-                <h4 class="fw-bold mb-4">
+                <div class="card-body">
 
-                    <i class="bi bi-person-circle"></i>
+                    <div class="d-flex justify-content-between">
 
-                    Mi información
+                        <div>
 
-                </h4>
+                            <h6 class="text-muted">
+                                Mis pedidos
+                            </h6>
 
+                            <h2 class="fw-bold">
+                                {{ $misPedidos }}
+                            </h2>
 
-                <div class="row">
+                        </div>
 
-                    <div class="col-md-6 mb-3">
+                        <div class="text-warning fs-1">
 
-                        <strong>Nombre:</strong>
+                            <i class="bi bi-bicycle"></i>
 
-                        <br>
-
-                        {{ $delivery->name }}
-
-                    </div>
-
-
-                    <div class="col-md-6 mb-3">
-
-                        <strong>Correo:</strong>
-
-                        <br>
-
-                        {{ $delivery->email }}
+                        </div>
 
                     </div>
 
+                    <p class="text-muted">
+                        Pedidos que estás gestionando actualmente.
+                    </p>
 
-                    <div class="col-md-6 mb-3">
+                    <a
+                        href="{{ route('delivery.pedidos.mis') }}"
+                        class="btn btn-warning">
 
-                        <strong>Estado:</strong>
+                        Mis pedidos
 
-                        <br>
+                    </a>
 
-                        <span class="badge bg-success">
+                </div>
 
-                            {{ ucfirst($delivery->estado) }}
+            </div>
 
-                        </span>
+        </div>
+
+
+        {{-- ENTREGADOS --}}
+        <div class="col-md-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+                                Pedidos entregados
+                            </h6>
+
+                            <h2 class="fw-bold">
+                                {{ $pedidosEntregados }}
+                            </h2>
+
+                        </div>
+
+                        <div class="text-success fs-1">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
 
                     </div>
 
-
-                    <div class="col-md-6 mb-3">
-
-                        <strong>Rol:</strong>
-
-                        <br>
-
-                        Delivery
-
-                    </div>
+                    <p class="text-muted">
+                        Total de pedidos entregados por ti.
+                    </p>
 
                 </div>
 
@@ -258,10 +165,90 @@
     </div>
 
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-    </script>
+    {{-- INFORMACIÓN DEL DELIVERY --}}
+    <div class="card shadow-sm mt-5">
 
-</body>
+        <div class="card-body">
 
-</html>
+            <h4 class="fw-bold mb-4">
+
+                <i class="bi bi-person-circle"></i>
+
+                Mi información
+
+            </h4>
+
+
+            <div class="row">
+
+
+                {{-- NOMBRE --}}
+                <div class="col-md-6 mb-3">
+
+                    <strong>
+                        Nombre:
+                    </strong>
+
+                    <br>
+
+                    {{ $delivery->name }}
+
+                </div>
+
+
+                {{-- CORREO --}}
+                <div class="col-md-6 mb-3">
+
+                    <strong>
+                        Correo:
+                    </strong>
+
+                    <br>
+
+                    {{ $delivery->email }}
+
+                </div>
+
+
+                {{-- ESTADO --}}
+                <div class="col-md-6 mb-3">
+
+                    <strong>
+                        Estado:
+                    </strong>
+
+                    <br>
+
+                    <span class="badge bg-success">
+
+                        {{ ucfirst($delivery->estado) }}
+
+                    </span>
+
+                </div>
+
+
+                {{-- ROL --}}
+                <div class="col-md-6 mb-3">
+
+                    <strong>
+                        Rol:
+                    </strong>
+
+                    <br>
+
+                    Delivery
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+@endsection

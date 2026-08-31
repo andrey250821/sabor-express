@@ -4,39 +4,65 @@
 
 <div class="container-fluid px-0">
 
-    {{-- ENCABEZADO --}}
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    {{-- ==========================================
+        ENCABEZADO
+    =========================================== --}}
+
+    <div class="d-flex flex-column flex-md-row
+                justify-content-between
+                align-items-md-center
+                gap-3
+                mb-4">
 
         <div>
+
             <h2 class="fw-bold mb-1">
-                <i class="bi bi-box-seam me-2"></i>
-                Pedidos disponibles
+
+                <i class="bi bi-bicycle me-2"></i>
+
+                Mis pedidos
+
             </h2>
 
             <p class="text-muted mb-0">
-                Pedidos listos para ser tomados y entregados.
+
+                Pedidos que tienes asignados para realizar la entrega.
+
             </p>
+
         </div>
 
+
         <div>
+
             <span class="badge text-bg-primary fs-6 px-3 py-2">
+
                 <i class="bi bi-bag-check me-1"></i>
-                {{ $pedidos->count() }} disponibles
+
+                {{ $asignaciones->count() }} pedidos
+
             </span>
+
         </div>
 
     </div>
 
 
-    {{-- MENSAJE DE ÉXITO --}}
+
+    {{-- ==========================================
+        MENSAJES
+    =========================================== --}}
+
     @if(session('success'))
 
-    <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
+    <div class="alert alert-success d-flex align-items-center gap-2">
 
         <i class="bi bi-check-circle-fill"></i>
 
         <span>
+
             {{ session('success') }}
+
         </span>
 
     </div>
@@ -44,15 +70,16 @@
     @endif
 
 
-    {{-- MENSAJE DE ERROR --}}
     @if(session('error'))
 
-    <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+    <div class="alert alert-danger d-flex align-items-center gap-2">
 
         <i class="bi bi-exclamation-triangle-fill"></i>
 
         <span>
+
             {{ session('error') }}
+
         </span>
 
     </div>
@@ -60,37 +87,41 @@
     @endif
 
 
-    {{-- TARJETA PRINCIPAL --}}
+
+    {{-- ==========================================
+        LISTA DE PEDIDOS
+    =========================================== --}}
+
     <div class="card shadow-sm border-0">
 
         {{-- CABECERA --}}
+
         <div class="card-header bg-white py-3">
 
             <h5 class="fw-bold mb-1">
 
-                <i class="bi bi-list-ul me-2"></i>
+                <i class="bi bi-list-check me-2"></i>
 
-                Pedidos listos
+                Pedidos asignados
 
             </h5>
 
             <small class="text-muted">
 
-                Selecciona un pedido para consultar sus detalles antes de tomarlo.
+                Aquí puedes consultar y gestionar tus entregas.
 
             </small>
 
         </div>
 
 
-        {{-- CONTENIDO --}}
+
         <div class="card-body p-0">
 
             <div class="table-responsive">
 
                 <table class="table table-hover align-middle mb-0">
 
-                    {{-- ENCABEZADO DE TABLA --}}
                     <thead class="table-light">
 
                         <tr>
@@ -111,6 +142,10 @@
                                 Dirección
                             </th>
 
+                            <th class="text-center">
+                                Estado
+                            </th>
+
                             <th>
                                 Fecha
                             </th>
@@ -124,14 +159,22 @@
                     </thead>
 
 
-                    {{-- PEDIDOS --}}
                     <tbody>
 
-                        @forelse($pedidos as $pedido)
+                        @forelse($asignaciones as $asignacion)
+
+                        @php
+
+                        $pedido = $asignacion->pedido;
+
+                        @endphp
+
 
                         <tr>
 
+
                             {{-- ID --}}
+
                             <td class="text-center">
 
                                 <span class="fw-bold">
@@ -143,7 +186,9 @@
                             </td>
 
 
+
                             {{-- CLIENTE --}}
+
                             <td>
 
                                 <div class="d-flex align-items-center gap-2">
@@ -179,7 +224,9 @@
                             </td>
 
 
+
                             {{-- TOTAL --}}
+
                             <td>
 
                                 <strong class="text-success">
@@ -192,7 +239,9 @@
                             </td>
 
 
+
                             {{-- DIRECCIÓN --}}
+
                             <td>
 
                                 <div class="d-flex align-items-start gap-2">
@@ -210,7 +259,57 @@
                             </td>
 
 
+
+                            {{-- ESTADO --}}
+
+                            <td class="text-center">
+
+                                @if($asignacion->estado === 'aceptado')
+
+                                <span class="badge bg-primary">
+
+                                    <i class="bi bi-bicycle me-1"></i>
+
+                                    Aceptado
+
+                                </span>
+
+                                @elseif($asignacion->estado === 'en_camino')
+
+                                <span class="badge bg-warning text-dark">
+
+                                    <i class="bi bi-truck me-1"></i>
+
+                                    En camino
+
+                                </span>
+
+                                @elseif($asignacion->estado === 'entregado')
+
+                                <span class="badge bg-success">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    Entregado
+
+                                </span>
+
+                                @else
+
+                                <span class="badge bg-secondary">
+
+                                    {{ ucfirst($asignacion->estado) }}
+
+                                </span>
+
+                                @endif
+
+                            </td>
+
+
+
                             {{-- FECHA --}}
+
                             <td>
 
                                 <strong class="d-block">
@@ -228,18 +327,76 @@
                             </td>
 
 
-                            {{-- ACCIÓN --}}
+
+                            {{-- ACCIONES --}}
+
                             <td class="text-center">
+
+
+                                {{-- VER DETALLES --}}
 
                                 <a
                                     href="{{ route('delivery.pedidos.show', $pedido->id) }}"
-                                    class="btn btn-primary btn-sm">
+                                    class="btn btn-primary btn-sm mb-2">
 
                                     <i class="bi bi-eye me-1"></i>
 
                                     Ver detalles
 
                                 </a>
+
+
+
+                                {{-- INICIAR ENTREGA --}}
+
+                                @if($asignacion->estado === 'aceptado')
+
+                                <form
+                                    action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}"
+                                    method="POST">
+
+                                    @csrf
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-warning btn-sm">
+
+                                        <i class="bi bi-truck me-1"></i>
+
+                                        Iniciar entrega
+
+                                    </button>
+
+                                </form>
+
+                                @endif
+
+
+
+                                {{-- MARCAR COMO ENTREGADO --}}
+
+                                @if($asignacion->estado === 'en_camino')
+
+                                <form
+                                    action="{{ route('delivery.pedidos.entregar', $pedido->id) }}"
+                                    method="POST">
+
+                                    @csrf
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success btn-sm">
+
+                                        <i class="bi bi-check-circle me-1"></i>
+
+                                        Marcar entregado
+
+                                    </button>
+
+                                </form>
+
+                                @endif
+
 
                             </td>
 
@@ -248,28 +405,42 @@
 
                         @empty
 
-                        {{-- SIN PEDIDOS --}}
+                        {{-- ==========================================
+                                SIN PEDIDOS
+                            =========================================== --}}
+
                         <tr>
 
-                            <td colspan="6" class="py-5">
+                            <td colspan="7" class="py-5">
 
                                 <div class="text-center text-muted">
 
-                                    <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                                    <i class="bi bi-bicycle display-4 d-block mb-3"></i>
 
 
                                     <h5 class="fw-bold">
 
-                                        No hay pedidos disponibles
+                                        No tienes pedidos asignados
 
                                     </h5>
 
 
-                                    <p class="mb-0">
+                                    <p class="mb-3">
 
-                                        Actualmente no existen pedidos listos para entregar.
+                                        Cuando tomes un pedido, aparecerá aquí.
 
                                     </p>
+
+
+                                    <a
+                                        href="{{ route('delivery.pedidos.index') }}"
+                                        class="btn btn-primary">
+
+                                        <i class="bi bi-box-seam me-1"></i>
+
+                                        Ver pedidos disponibles
+
+                                    </a>
 
                                 </div>
 
