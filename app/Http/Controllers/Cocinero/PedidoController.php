@@ -12,21 +12,37 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        $pedidos = Pedido::with([
+        $pedidosPendientes = Pedido::with([
             'user',
             'detallePedidos.producto'
         ])
-            ->whereIn('estado', [
-                'pagado',
-                'preparando',
-                'listo'
-            ])
+            ->where('estado', 'pagado')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $pedidosPreparando = Pedido::with([
+            'user',
+            'detallePedidos.producto'
+        ])
+            ->where('estado', 'preparando')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $pedidosListos = Pedido::with([
+            'user',
+            'detallePedidos.producto'
+        ])
+            ->where('estado', 'listo')
             ->orderBy('created_at', 'asc')
             ->get();
 
         return view(
             'cocinero.pedidos.index',
-            compact('pedidos')
+            compact(
+                'pedidosPendientes',
+                'pedidosPreparando',
+                'pedidosListos'
+            )
         );
     }
 

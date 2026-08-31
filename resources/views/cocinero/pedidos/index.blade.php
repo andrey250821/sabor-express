@@ -16,12 +16,13 @@
             </h1>
 
             <p class="text-muted mb-0">
-                Pedidos disponibles para preparación
+                Gestión y preparación de pedidos
             </p>
         </div>
 
         <span class="badge bg-dark fs-6">
-            {{ $pedidos->count() }} pedidos
+            {{ $pedidosPendientes->count() + $pedidosPreparando->count() + $pedidosListos->count() }}
+            pedidos
         </span>
 
     </div>
@@ -30,7 +31,6 @@
     {{-- MENSAJES --}}
 
     @if(session('success'))
-
     <div class="alert alert-success alert-dismissible fade show">
 
         <i class="bi bi-check-circle"></i>
@@ -44,12 +44,10 @@
         </button>
 
     </div>
-
     @endif
 
 
     @if(session('error'))
-
     <div class="alert alert-danger alert-dismissible fade show">
 
         <i class="bi bi-exclamation-triangle"></i>
@@ -63,218 +61,264 @@
         </button>
 
     </div>
-
     @endif
 
 
-    {{-- SIN PEDIDOS --}}
+    {{-- ==========================================================
+         PEDIDOS PENDIENTES
+         Estado: PAGADO
+         ========================================================== --}}
 
-    @if($pedidos->isEmpty())
+    <div class="mb-5">
 
-    <div class="card shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <div class="card-body text-center py-5">
+            <div>
+                <h3 class="fw-bold mb-1">
+                    <i class="bi bi-hourglass-split text-warning"></i>
+                    Pedidos pendientes
+                </h3>
 
-            <i class="bi bi-inbox fs-1 text-muted"></i>
+                <p class="text-muted mb-0">
+                    Pedidos pagados que todavía no comenzaron a prepararse.
+                </p>
+            </div>
 
-            <h4 class="mt-3">
-                No hay pedidos
-            </h4>
-
-            <p class="text-muted mb-0">
-                Actualmente no existen pedidos pendientes de preparación.
-            </p>
+            <span class="badge bg-warning text-dark fs-6">
+                {{ $pedidosPendientes->count() }}
+            </span>
 
         </div>
 
-    </div>
 
-    @else
+        @if($pedidosPendientes->isEmpty())
 
+        <div class="card shadow-sm">
 
-    {{-- PEDIDOS --}}
+            <div class="card-body text-center py-4">
 
-    <div class="row g-4">
+                <i class="bi bi-check2-circle fs-1 text-success"></i>
 
-        @foreach($pedidos as $pedido)
+                <h5 class="mt-3">
+                    No hay pedidos pendientes
+                </h5>
 
-        <div class="col-12 col-lg-6 col-xl-4">
-
-            <div class="card shadow-sm h-100">
-
-
-                {{-- CABECERA --}}
-
-                <div class="card-header bg-white">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <strong>
-                            Pedido #{{ $pedido->id }}
-                        </strong>
-
-
-                        @if($pedido->estado === 'pagado')
-
-                        <span class="badge bg-warning text-dark">
-                            Pagado
-                        </span>
-
-                        @elseif($pedido->estado === 'preparando')
-
-                        <span class="badge bg-primary">
-                            Preparando
-                        </span>
-
-                        @elseif($pedido->estado === 'listo')
-
-                        <span class="badge bg-success">
-                            Listo
-                        </span>
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-
-                {{-- CONTENIDO --}}
-
-                <div class="card-body">
-
-
-                    {{-- CLIENTE --}}
-
-                    <div class="mb-3">
-
-                        <small class="text-muted">
-                            Cliente
-                        </small>
-
-                        <div class="fw-semibold">
-
-                            <i class="bi bi-person"></i>
-
-                            {{ $pedido->user->name ?? 'Cliente' }}
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- FECHA --}}
-
-                    <div class="mb-3">
-
-                        <small class="text-muted">
-                            Fecha del pedido
-                        </small>
-
-                        <div>
-
-                            <i class="bi bi-calendar3"></i>
-
-                            {{ $pedido->created_at->format('d/m/Y H:i') }}
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- PRODUCTOS --}}
-
-                    <div class="mb-3">
-
-                        <small class="text-muted">
-                            Productos
-                        </small>
-
-                        <ul class="list-group list-group-flush mt-2">
-
-                            @foreach($pedido->detallePedidos as $detalle)
-
-                            <li class="list-group-item px-0">
-
-                                <div class="d-flex justify-content-between">
-
-                                    <span>
-
-                                        {{ $detalle->cantidad }} ×
-
-                                        {{ $detalle->producto->nombre ?? 'Producto' }}
-
-                                    </span>
-
-                                    <strong>
-
-                                        Bs.
-                                        {{ number_format($detalle->subtotal, 2) }}
-
-                                    </strong>
-
-                                </div>
-
-                            </li>
-
-                            @endforeach
-
-                        </ul>
-
-                    </div>
-
-
-                    {{-- TOTAL --}}
-
-                    <div class="border-top pt-3">
-
-                        <div class="d-flex justify-content-between">
-
-                            <span class="fw-semibold">
-                                Total
-                            </span>
-
-                            <strong class="fs-5">
-
-                                Bs.
-                                {{ number_format($pedido->total, 2) }}
-
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-                {{-- FOOTER --}}
-
-                <div class="card-footer bg-white">
-
-                    <a
-                        href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
-                        class="btn btn-dark w-100">
-
-                        <i class="bi bi-eye"></i>
-
-                        Ver pedido
-
-                    </a>
-
-                </div>
-
+                <p class="text-muted mb-0">
+                    Todos los pedidos pagados están siendo preparados o ya están listos.
+                </p>
 
             </div>
 
         </div>
 
+        @else
+
+        @php
+        $fechasPendientes = $pedidosPendientes->groupBy(
+        fn($pedido) => $pedido->created_at->format('Y-m-d')
+        );
+        @endphp
+
+        @foreach($fechasPendientes as $fecha => $pedidosFecha)
+
+        <h6 class="fw-bold text-muted mt-4 mb-3">
+
+            <i class="bi bi-calendar3"></i>
+
+            {{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}
+
+        </h6>
+
+        <div class="row g-4">
+
+            @foreach($pedidosFecha as $pedido)
+
+            @include('cocinero.pedidos.partials.card', [
+            'pedido' => $pedido,
+            'tipo' => 'pendiente'
+            ])
+
+            @endforeach
+
+        </div>
+
         @endforeach
+
+        @endif
 
     </div>
 
-    @endif
+
+
+    {{-- ==========================================================
+         PEDIDOS EN PREPARACIÓN
+         Estado: PREPARANDO
+         ========================================================== --}}
+
+    <div class="mb-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+                <h3 class="fw-bold mb-1">
+                    <i class="bi bi-fire text-primary"></i>
+                    Pedidos en preparación
+                </h3>
+
+                <p class="text-muted mb-0">
+                    Pedidos que actualmente están siendo preparados.
+                </p>
+            </div>
+
+            <span class="badge bg-primary fs-6">
+                {{ $pedidosPreparando->count() }}
+            </span>
+
+        </div>
+
+
+        @if($pedidosPreparando->isEmpty())
+
+        <div class="card shadow-sm">
+
+            <div class="card-body text-center py-4">
+
+                <i class="bi bi-fire fs-1 text-muted"></i>
+
+                <h5 class="mt-3">
+                    No hay pedidos en preparación
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Actualmente no se está preparando ningún pedido.
+                </p>
+
+            </div>
+
+        </div>
+
+        @else
+
+        @php
+        $fechasPreparando = $pedidosPreparando->groupBy(
+        fn($pedido) => $pedido->created_at->format('Y-m-d')
+        );
+        @endphp
+
+        @foreach($fechasPreparando as $fecha => $pedidosFecha)
+
+        <h6 class="fw-bold text-muted mt-4 mb-3">
+
+            <i class="bi bi-calendar3"></i>
+
+            {{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}
+
+        </h6>
+
+        <div class="row g-4">
+
+            @foreach($pedidosFecha as $pedido)
+
+            @include('cocinero.pedidos.partials.card', [
+            'pedido' => $pedido,
+            'tipo' => 'preparando'
+            ])
+
+            @endforeach
+
+        </div>
+
+        @endforeach
+
+        @endif
+
+    </div>
+
+
+
+    {{-- ==========================================================
+         PEDIDOS LISTOS
+         Estado: LISTO
+         ========================================================== --}}
+
+    <div class="mb-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+                <h3 class="fw-bold mb-1">
+                    <i class="bi bi-check-circle text-success"></i>
+                    Pedidos listos
+                </h3>
+
+                <p class="text-muted mb-0">
+                    Pedidos preparados y disponibles para delivery.
+                </p>
+            </div>
+
+            <span class="badge bg-success fs-6">
+                {{ $pedidosListos->count() }}
+            </span>
+
+        </div>
+
+
+        @if($pedidosListos->isEmpty())
+
+        <div class="card shadow-sm">
+
+            <div class="card-body text-center py-4">
+
+                <i class="bi bi-check-circle fs-1 text-muted"></i>
+
+                <h5 class="mt-3">
+                    No hay pedidos listos
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Los pedidos aparecerán aquí cuando la cocina los termine.
+                </p>
+
+            </div>
+
+        </div>
+
+        @else
+
+        @php
+        $fechasListos = $pedidosListos->groupBy(
+        fn($pedido) => $pedido->created_at->format('Y-m-d')
+        );
+        @endphp
+
+        @foreach($fechasListos as $fecha => $pedidosFecha)
+
+        <h6 class="fw-bold text-muted mt-4 mb-3">
+
+            <i class="bi bi-calendar3"></i>
+
+            {{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}
+
+        </h6>
+
+        <div class="row g-4">
+
+            @foreach($pedidosFecha as $pedido)
+
+            @include('cocinero.pedidos.partials.card', [
+            'pedido' => $pedido,
+            'tipo' => 'listo'
+            ])
+
+            @endforeach
+
+        </div>
+
+        @endforeach
+
+        @endif
+
+    </div>
 
 </div>
 

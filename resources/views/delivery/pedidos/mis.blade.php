@@ -351,9 +351,9 @@
 
                                 @if($asignacion->estado === 'aceptado')
 
-                                <form
-                                    action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}"
-                                    method="POST">
+                                <form action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
 
                                     @csrf
 
@@ -377,22 +377,14 @@
 
                                 @if($asignacion->estado === 'en_camino')
 
-                                <form
-                                    action="{{ route('delivery.pedidos.entregar', $pedido->id) }}"
-                                    method="POST">
-
+                                <form method="POST" action="{{ route('delivery.pedidos.entregar', $pedido->id) }}">
                                     @csrf
+                                    @method('PUT')
 
-                                    <button
-                                        type="submit"
-                                        class="btn btn-success btn-sm">
-
-                                        <i class="bi bi-check-circle me-1"></i>
-
-                                        Marcar entregado
-
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="bi bi-check-circle"></i>
+                                        Marcar como entregado
                                     </button>
-
                                 </form>
 
                                 @endif
