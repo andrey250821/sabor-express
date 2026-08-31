@@ -5,7 +5,6 @@
 @section('content')
 
 <div class="cliente-pedido-page">
-
     <div class="cliente-pedido-header">
         <h1><i class="bi bi-bag-check"></i> Realizar Pedido</h1>
         <p>Completa los datos para confirmar tu pedido.</p>
@@ -14,18 +13,14 @@
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
-
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-
     @if($errors->any())
         <div class="alert alert-danger">
             <strong>Por favor corrige los siguientes errores:</strong>
             <ul class="mb-0 mt-2">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
+                @foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach
             </ul>
         </div>
     @endif
@@ -33,7 +28,6 @@
     <form action="{{ route('cliente.pedidos.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        {{-- DATOS DE ENTREGA --}}
         <div class="cliente-pedido-section">
             <h2><i class="bi bi-geo-alt"></i> Datos de entrega</h2>
 
@@ -56,12 +50,11 @@
             </div>
         </div>
 
-        {{-- MAPA --}}
         <div class="cliente-pedido-section">
             <h2><i class="bi bi-map"></i> Ubicación de entrega</h2>
             <p class="text-muted">Selecciona tu ubicación en el mapa. Puedes mover el marcador si la ubicación automática no es exacta.</p>
 
-            @if(empty(env('GOOGLE_MAPS_API_KEY')))
+            @if(empty(config('services.google_maps.key')))
                 <div class="alert alert-warning">
                     <strong>Mapa no configurado.</strong>
                     Agrega <code>GOOGLE_MAPS_API_KEY</code> en tu archivo <code>.env</code> para activar Google Maps.
@@ -69,12 +62,8 @@
             @endif
 
             <div class="d-flex flex-wrap gap-2 mb-3">
-                <button type="button" id="btn-mi-ubicacion" class="btn btn-primary">
-                    <i class="bi bi-crosshair"></i> Usar mi ubicación actual
-                </button>
-                <button type="button" id="btn-direccion-mapa" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-repeat"></i> Actualizar dirección
-                </button>
+                <button type="button" id="btn-mi-ubicacion" class="btn btn-primary"><i class="bi bi-crosshair"></i> Usar mi ubicación actual</button>
+                <button type="button" id="btn-direccion-mapa" class="btn btn-outline-secondary"><i class="bi bi-arrow-repeat"></i> Actualizar dirección</button>
             </div>
 
             <div id="mapa-pedido" style="width:100%; height:380px; border-radius:12px; overflow:hidden; border:1px solid #ddd; background:#f3f3f3;"></div>
@@ -89,33 +78,22 @@
                     <input type="text" name="longitud" id="longitud" class="form-control" value="{{ old('longitud') }}" placeholder="-66.1568" readonly>
                 </div>
             </div>
-
             <div id="estado-ubicacion" class="small text-muted" aria-live="polite"></div>
         </div>
 
-        {{-- PAGO --}}
         <div class="cliente-pedido-section">
             <h2><i class="bi bi-credit-card"></i> Pago</h2>
-
             @if($configuracion)
                 <p>Realiza el pago utilizando los datos proporcionados por el restaurante.</p>
-
                 @if(!empty($configuracion->qr_pago))
-                    <div class="mb-3">
-                        <p><strong>QR de pago:</strong></p>
-                        <img src="{{ asset('storage/' . $configuracion->qr_pago) }}" alt="QR de pago" style="max-width:300px;">
-                    </div>
+                    <div class="mb-3"><p><strong>QR de pago:</strong></p><img src="{{ asset('storage/' . $configuracion->qr_pago) }}" alt="QR de pago" style="max-width:300px;"></div>
                 @endif
-
-                @if(!empty($configuracion->numero_cuenta))
-                    <p><strong>Número de cuenta:</strong> {{ $configuracion->numero_cuenta }}</p>
-                @endif
+                @if(!empty($configuracion->numero_cuenta))<p><strong>Número de cuenta:</strong> {{ $configuracion->numero_cuenta }}</p>@endif
             @else
                 <div class="alert alert-warning">Los datos de pago todavía no han sido configurados.</div>
             @endif
         </div>
 
-        {{-- COMPROBANTE --}}
         <div class="cliente-pedido-section">
             <h2><i class="bi bi-image"></i> Comprobante de pago</h2>
             <div class="mb-3">
@@ -125,26 +103,17 @@
             </div>
         </div>
 
-        {{-- RESUMEN --}}
         <div class="cliente-pedido-section">
             <h2><i class="bi bi-receipt"></i> Resumen del pedido</h2>
-            <div class="cliente-pedido-total">
-                <span>Total a pagar:</span>
-                <strong>Bs {{ number_format($total, 2) }}</strong>
-            </div>
+            <div class="cliente-pedido-total"><span>Total a pagar:</span><strong>Bs {{ number_format($total, 2) }}</strong></div>
         </div>
 
         <div class="cliente-pedido-actions">
-            <a href="{{ route('cliente.carrito.index') }}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Volver al carrito
-            </a>
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-check-circle"></i> Confirmar pedido
-            </button>
+            <a href="{{ route('cliente.carrito.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver al carrito</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Confirmar pedido</button>
         </div>
     </form>
 </div>
-
 @endsection
 
 @section('scripts')
@@ -152,7 +121,6 @@
     let mapaPedido = null;
     let marcadorPedido = null;
     let geocoderPedido = null;
-
     const cochabamba = { lat: -17.3935, lng: -66.1570 };
 
     function mostrarEstado(mensaje, error = false) {
@@ -163,22 +131,14 @@
     }
 
     function actualizarCoordenadas(posicion, obtenerDireccion = true) {
-        const lat = posicion.lat();
-        const lng = posicion.lng();
-
-        document.getElementById('latitud').value = lat.toFixed(7);
-        document.getElementById('longitud').value = lng.toFixed(7);
-
-        if (obtenerDireccion) {
-            obtenerDireccionPedido(posicion);
-        }
+        document.getElementById('latitud').value = posicion.lat().toFixed(7);
+        document.getElementById('longitud').value = posicion.lng().toFixed(7);
+        if (obtenerDireccion) obtenerDireccionPedido(posicion);
     }
 
     function obtenerDireccionPedido(posicion) {
         if (!geocoderPedido) return;
-
         mostrarEstado('Obteniendo dirección...');
-
         geocoderPedido.geocode({ location: posicion }, function(resultados, estado) {
             if (estado === 'OK' && resultados && resultados.length > 0) {
                 document.getElementById('direccion_entrega').value = resultados[0].formatted_address;
@@ -191,34 +151,19 @@
 
     function colocarMarcador(posicion, centrar = true) {
         if (!marcadorPedido) {
-            marcadorPedido = new google.maps.Marker({
-                position: posicion,
-                map: mapaPedido,
-                draggable: true,
-                title: 'Ubicación de entrega'
-            });
-
-            marcadorPedido.addListener('dragend', function(evento) {
-                actualizarCoordenadas(evento.latLng, true);
-            });
+            marcadorPedido = new google.maps.Marker({ position: posicion, map: mapaPedido, draggable: true, title: 'Ubicación de entrega' });
+            marcadorPedido.addListener('dragend', function(evento) { actualizarCoordenadas(evento.latLng, true); });
         } else {
             marcadorPedido.setPosition(posicion);
         }
-
-        if (centrar) {
-            mapaPedido.setCenter(posicion);
-        }
-
+        if (centrar) mapaPedido.setCenter(posicion);
         actualizarCoordenadas(marcadorPedido.getPosition(), true);
     }
 
     function inicializarMapaPedido() {
         const latGuardada = parseFloat(document.getElementById('latitud').value);
         const lngGuardada = parseFloat(document.getElementById('longitud').value);
-
-        const centroInicial = Number.isFinite(latGuardada) && Number.isFinite(lngGuardada)
-            ? { lat: latGuardada, lng: lngGuardada }
-            : cochabamba;
+        const centroInicial = Number.isFinite(latGuardada) && Number.isFinite(lngGuardada) ? { lat: latGuardada, lng: lngGuardada } : cochabamba;
 
         mapaPedido = new google.maps.Map(document.getElementById('mapa-pedido'), {
             center: centroInicial,
@@ -236,49 +181,31 @@
                 mostrarEstado('Tu navegador no permite obtener la ubicación.', true);
                 return;
             }
-
             mostrarEstado('Obteniendo tu ubicación...');
-
-            navigator.geolocation.getCurrentPosition(
-                function(posicion) {
-                    const ubicacion = {
-                        lat: posicion.coords.latitude,
-                        lng: posicion.coords.longitude
-                    };
-                    colocarMarcador(ubicacion, true);
-                },
-                function() {
-                    mostrarEstado('No se pudo obtener tu ubicación. Revisa los permisos del navegador.', true);
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                }
-            );
+            navigator.geolocation.getCurrentPosition(function(posicion) {
+                colocarMarcador({ lat: posicion.coords.latitude, lng: posicion.coords.longitude }, true);
+            }, function() {
+                mostrarEstado('No se pudo obtener tu ubicación. Revisa los permisos del navegador.', true);
+            }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
         });
 
         document.getElementById('btn-direccion-mapa').addEventListener('click', function() {
-            if (marcadorPedido) {
-                obtenerDireccionPedido(marcadorPedido.getPosition());
-            }
+            if (marcadorPedido) obtenerDireccionPedido(marcadorPedido.getPosition());
         });
     }
 
     function mapaNoDisponible() {
         const mapa = document.getElementById('mapa-pedido');
-        mapa.innerHTML = '<div class="d-flex h-100 align-items-center justify-content-center text-muted p-4 text-center">Google Maps no está disponible. Puedes configurar GOOGLE_MAPS_API_KEY en .env o ingresar la dirección manualmente.</div>';
+        mapa.innerHTML = '<div class="d-flex h-100 align-items-center justify-content-center text-muted p-4 text-center">Google Maps no está disponible. Configura GOOGLE_MAPS_API_KEY en .env o ingresa la dirección manualmente.</div>';
         document.getElementById('btn-mi-ubicacion').disabled = true;
         document.getElementById('btn-direccion-mapa').disabled = true;
         mostrarEstado('Mapa no disponible.', true);
     }
 </script>
 
-@if(!empty(env('GOOGLE_MAPS_API_KEY')))
-<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ urlencode(env('GOOGLE_MAPS_API_KEY')) }}&callback=inicializarMapaPedido&libraries=geometry"></script>
+@if(!empty(config('services.google_maps.key')))
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ urlencode(config('services.google_maps.key')) }}&callback=inicializarMapaPedido"></script>
 @else
-<script>
-    document.addEventListener('DOMContentLoaded', mapaNoDisponible);
-</script>
+<script>document.addEventListener('DOMContentLoaded', mapaNoDisponible);</script>
 @endif
 @endsection
