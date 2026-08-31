@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use App\Models\Role;
+use App\Models\Pedido;
+use App\Models\AsignacionDelivery;
+use App\Models\Calificacion;
+use App\Models\Notificacion;
 
 class User extends Authenticatable
 {
