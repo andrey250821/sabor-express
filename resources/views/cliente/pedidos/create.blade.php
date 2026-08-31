@@ -149,7 +149,6 @@
             return;
         }
 
-        // Nominatim (OpenStreetMap) recomienda no realizar consultas demasiado seguidas.
         const ahora = Date.now();
         const espera = Math.max(0, 1100 - (ahora - ultimaConsultaDireccion));
 
@@ -165,38 +164,33 @@
 
         ultimaConsultaDireccion = Date.now();
         consultaDireccionEnCurso = true;
-        mostrarEstado('Obteniendo dirección...');
+        mostrarEstado('Obteniendo dirección desde OpenStreetMap...');
 
         try {
-            const url = new URL('https://nominatim.openstreetmap.org/reverse');
-            url.searchParams.set('format', 'jsonv2');
-            url.searchParams.set('lat', latitud.toString());
-            url.searchParams.set('lon', longitud.toString());
-            url.searchParams.set('zoom', '18');
-            url.searchParams.set('addressdetails', '1');
-            url.searchParams.set('accept-language', 'es');
+            // La consulta se hace contra Laravel. Laravel consulta Nominatim en el servidor,
+            // evitando problemas de CORS y permitiendo enviar un User-Agent identificativo.
+            const url = new URL('{{ route('cliente.pedidos.direccion') }}', window.location.origin);
+            url.searchParams.set('latitud', latitud.toString());
+            url.searchParams.set('longitud', longitud.toString());
 
             const respuesta = await fetch(url.toString(), {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             });
 
-            if (!respuesta.ok) {
-                throw new Error('Nominatim respondió con HTTP ' + respuesta.status);
-            }
-
             const datos = await respuesta.json();
 
-            if (datos && datos.display_name) {
-                document.getElementById('direccion_entrega').value = datos.display_name;
-                mostrarEstado('Ubicación y dirección actualizadas correctamente.');
-            } else {
-                mostrarEstado('No se encontró una dirección para ese punto. Puedes escribirla manualmente.', true);
+            if (!respuesta.ok || !datos.ok || !datos.direccion) {
+                throw new Error(datos.message || 'No se pudo obtener la dirección.');
             }
+
+            document.getElementById('direccion_entrega').value = datos.direccion;
+            mostrarEstado('Ubicación y dirección actualizadas correctamente.');
         } catch (error) {
-            console.error('Error al obtener dirección con OpenStreetMap/Nominatim:', error);
+            console.error('Error al obtener dirección:', error);
             mostrarEstado('No se pudo obtener la dirección automáticamente. Puedes escribirla manualmente.', true);
         } finally {
             consultaDireccionEnCurso = false;
@@ -241,8 +235,8 @@
             fullscreenControl: true
         });
 
-        // El mapa sigue siendo Google Maps; la conversión coordenadas -> dirección
-        // se realiza gratuitamente mediante OpenStreetMap/Nominatim.
+        // Google Maps se mantiene solamente para el mapa y el marcador.
+        // La conversión coordenadas -> dirección se realiza con OpenStreetMap/Nominatim.
         colocarMarcador(centroInicial, false, true);
 
         document.getElementById('btn-mi-ubicacion').addEventListener('click', function() {
