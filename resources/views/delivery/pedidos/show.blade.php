@@ -41,21 +41,37 @@
     =========================================== --}}
 
     @if(session('success'))
+
     <div class="alert alert-success d-flex align-items-center gap-2">
+
         <i class="bi bi-check-circle-fill"></i>
-        <span>{{ session('success') }}</span>
+
+        <span>
+            {{ session('success') }}
+        </span>
+
     </div>
+
     @endif
 
+
     @if(session('error'))
+
     <div class="alert alert-danger d-flex align-items-center gap-2">
+
         <i class="bi bi-exclamation-triangle-fill"></i>
-        <span>{{ session('error') }}</span>
+
+        <span>
+            {{ session('error') }}
+        </span>
+
     </div>
+
     @endif
 
 
     <div class="row g-4">
+
 
         {{-- ==========================================
             INFORMACIÓN DEL CLIENTE
@@ -68,11 +84,15 @@
                 <div class="card-header bg-white py-3">
 
                     <h5 class="fw-bold mb-0">
+
                         <i class="bi bi-person-circle me-2"></i>
+
                         Información del cliente
+
                     </h5>
 
                 </div>
+
 
                 <div class="card-body">
 
@@ -132,14 +152,20 @@
                 <div class="card-header bg-white py-3">
 
                     <h5 class="fw-bold mb-0">
+
                         <i class="bi bi-geo-alt-fill me-2"></i>
+
                         Información de entrega
+
                     </h5>
 
                 </div>
 
 
                 <div class="card-body">
+
+
+                    {{-- DIRECCIÓN --}}
 
                     <div class="mb-3">
 
@@ -161,9 +187,11 @@
                         <small class="text-muted d-block">
 
                             <i class="bi bi-signpost-2 me-1"></i>
+
                             Referencia para el delivery
 
                         </small>
+
 
                         @if(!empty($pedido->referencia_delivery))
 
@@ -178,7 +206,9 @@
                         @else
 
                         <span class="text-muted">
+
                             Sin referencia proporcionada.
+
                         </span>
 
                         @endif
@@ -195,9 +225,11 @@
                         <small class="text-muted d-block">
 
                             <i class="bi bi-chat-left-text me-1"></i>
+
                             Observaciones del pedido
 
                         </small>
+
 
                         <div class="alert alert-warning mb-0 mt-1">
 
@@ -212,6 +244,8 @@
                     @endif
 
 
+                    {{-- FECHA DEL PEDIDO --}}
+
                     <div class="mb-3">
 
                         <small class="text-muted d-block">
@@ -224,6 +258,8 @@
 
                     </div>
 
+
+                    {{-- ESTADO --}}
 
                     <div>
 
@@ -261,12 +297,15 @@
                     <h5 class="fw-bold mb-1">
 
                         <i class="bi bi-map me-2"></i>
+
                         Ubicación de entrega
 
                     </h5>
 
                     <small class="text-muted">
+
                         Ubicación seleccionada por el cliente al realizar el pedido.
+
                     </small>
 
                 </div>
@@ -274,9 +313,15 @@
 
                 <div class="card-body">
 
+                    @php
+                    $latitudMapa = $pedido['latitud'];
+                    $longitudMapa = $pedido['longitud'];
+                    @endphp
+
+
                     @if(
-                    !is_null($pedido->latitud) &&
-                    !is_null($pedido->longitud)
+                    !is_null($latitudMapa) &&
+                    !is_null($longitudMapa)
                     )
 
                     <div
@@ -303,7 +348,7 @@
                                 </small>
 
                                 <strong>
-                                    {{ $pedido->latitud }}
+                                    {{ $latitudMapa }}
                                 </strong>
 
                             </div>
@@ -316,7 +361,7 @@
                                 </small>
 
                                 <strong>
-                                    {{ $pedido->longitud }}
+                                    {{ $longitudMapa }}
                                 </strong>
 
                             </div>
@@ -357,6 +402,7 @@
                     <h5 class="fw-bold mb-0">
 
                         <i class="bi bi-basket me-2"></i>
+
                         Productos del pedido
 
                     </h5>
@@ -420,7 +466,7 @@
                                     <td class="text-end">
 
                                         Bs.
-                                        {{ number_format($detalle->precio_unitario, 2) }}
+                                        {{ number_format($detalle->precio, 2) }}
 
                                     </td>
 
@@ -430,10 +476,7 @@
                                         <strong>
 
                                             Bs.
-                                            {{ number_format(
-                                                    $detalle->cantidad * $detalle->precio_unitario,
-                                                    2
-                                                ) }}
+                                            {{ number_format($detalle->subtotal, 2) }}
 
                                         </strong>
 
@@ -491,65 +534,6 @@
 
         </div>
 
-
-        {{-- ==========================================
-            COMPROBANTE DE PAGO
-        =========================================== --}}
-
-        @if($pedido->comprobantePago)
-
-        <div class="col-lg-6">
-
-            <div class="card shadow-sm border-0 h-100">
-
-                <div class="card-header bg-white py-3">
-
-                    <h5 class="fw-bold mb-0">
-
-                        <i class="bi bi-file-earmark-image me-2"></i>
-                        Comprobante de pago
-
-                    </h5>
-
-                </div>
-
-
-                <div class="card-body">
-
-                    <p class="text-muted">
-                        Comprobante registrado para este pedido.
-                    </p>
-
-
-                    @if(!empty($pedido->comprobantePago->imagen))
-
-                    <a
-                        href="{{ asset('storage/' . $pedido->comprobantePago->imagen) }}"
-                        target="_blank"
-                        class="btn btn-outline-primary">
-
-                        <i class="bi bi-image me-1"></i>
-                        Ver comprobante
-
-                    </a>
-
-                    @else
-
-                    <span class="text-muted">
-                        No hay imagen disponible.
-                    </span>
-
-                    @endif
-
-                </div>
-
-            </div>
-
-        </div>
-
-        @endif
-
-
         {{-- ==========================================
             TOMAR PEDIDO
         =========================================== --}}
@@ -583,6 +567,7 @@
                             class="btn btn-success btn-lg px-5">
 
                             <i class="bi bi-bicycle me-2"></i>
+
                             Tomar pedido
 
                         </button>
@@ -606,11 +591,17 @@
     GOOGLE MAPS
 =========================================== --}}
 
-@section('scripts')
+@php
+$latitudMapa = $pedido['latitud'];
+$longitudMapa = $pedido['longitud'];
+@endphp
+
+
+@push('scripts')
 
 @if(
-!is_null($pedido->latitud) &&
-!is_null($pedido->longitud)
+!is_null($latitudMapa) &&
+!is_null($longitudMapa)
 )
 
 <script>
@@ -618,23 +609,16 @@
     let marcadorEntrega = null;
 
 
-    function inicializarMapaEntrega() {
+    window.inicializarMapaEntrega = function() {
 
         const posicionCliente = {
-            lat: {
-                {
-                    (float) $pedido - > latitud
-                }
-            },
-            lng: {
-                {
-                    (float) $pedido - > longitud
-                }
-            }
+            lat: Number(@json($latitudMapa)),
+            lng: Number(@json($longitudMapa))
         };
 
 
-        const elementoMapa = document.getElementById('mapa-entrega');
+        const elementoMapa =
+            document.getElementById('mapa-entrega');
 
 
         if (!elementoMapa) {
@@ -651,31 +635,25 @@
             elementoMapa, {
                 center: posicionCliente,
                 zoom: 17,
-
                 mapTypeControl: true,
-
                 streetViewControl: false,
-
                 fullscreenControl: true
             }
         );
 
 
-        marcadorEntrega = new google.maps.Marker({
+        marcadorEntrega =
+            new google.maps.Marker({
+                position: posicionCliente,
+                map: mapaEntrega,
+                title: 'Ubicación de entrega del cliente'
+            });
 
-            position: posicionCliente,
-
-            map: mapaEntrega,
-
-            title: 'Ubicación de entrega del cliente'
-
-        });
-
-    }
+    };
 </script>
 
 
-@if(!empty(config('services.google_maps.key')))
+@if(config('services.google_maps.key'))
 
 <script
     async
@@ -686,40 +664,62 @@
 @else
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener(
+        'DOMContentLoaded',
+        function() {
 
-        const mapa = document.getElementById('mapa-entrega');
+            const mapa =
+                document.getElementById('mapa-entrega');
 
 
-        if (mapa) {
+            if (mapa) {
 
-            mapa.innerHTML = `
-                <div class="d-flex h-100 align-items-center justify-content-center text-muted p-4 text-center">
+                mapa.innerHTML = `
 
-                    <div>
+                                <div
+                                    class="d-flex
+                                           h-100
+                                           align-items-center
+                                           justify-content-center
+                                           text-muted
+                                           p-4
+                                           text-center">
 
-                        <i class="bi bi-map display-5 d-block mb-3"></i>
+                                    <div>
 
-                        <strong>
-                            Google Maps no está configurado.
-                        </strong>
+                                        <i
+                                            class="bi bi-map display-5
+                                                   d-block mb-3">
+                                        </i>
 
-                        <p class="mb-0 mt-2">
-                            Configura GOOGLE_MAPS_API_KEY en el archivo .env.
-                        </p>
 
-                    </div>
+                                        <strong>
+                                            Google Maps no está configurado.
+                                        </strong>
 
-                </div>
-            `;
+
+                                        <p class="mb-0 mt-2">
+
+                                            Configura
+                                            GOOGLE_MAPS_API_KEY
+                                            en el archivo .env.
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            `;
+
+            }
 
         }
-
-    });
+    );
 </script>
 
 @endif
 
 @endif
 
-@endsection
+@endpush
