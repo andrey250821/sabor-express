@@ -351,11 +351,13 @@
 
                                 @if($asignacion->estado === 'aceptado')
 
-                                <form action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
+                                <form
+                                    action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}"
+                                    method="POST">
 
                                     @csrf
+
+                                    @method('PUT')
 
                                     <button
                                         type="submit"
@@ -377,14 +379,24 @@
 
                                 @if($asignacion->estado === 'en_camino')
 
-                                <form method="POST" action="{{ route('delivery.pedidos.entregar', $pedido->id) }}">
+                                <form
+                                    method="POST"
+                                    action="{{ route('delivery.pedidos.entregar', $pedido->id) }}">
+
                                     @csrf
+
                                     @method('PUT')
 
-                                    <button type="submit" class="btn btn-success w-100">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success w-100">
+
                                         <i class="bi bi-check-circle"></i>
+
                                         Marcar como entregado
+
                                     </button>
+
                                 </form>
 
                                 @endif
@@ -398,8 +410,8 @@
                         @empty
 
                         {{-- ==========================================
-                                SIN PEDIDOS
-                            =========================================== --}}
+                            SIN PEDIDOS
+                        =========================================== --}}
 
                         <tr>
 
