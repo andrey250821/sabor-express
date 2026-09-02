@@ -5385,8 +5385,8 @@ body {
     }
 
 }
-@media (max-width: 991.98px) {
 
+@media (max-width: 991.98px) {
     .cliente-pedido-resumen {
         position: static;
     }
