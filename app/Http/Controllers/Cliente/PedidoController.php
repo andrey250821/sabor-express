@@ -28,9 +28,17 @@ class PedidoController extends Controller
 
         $total = 0;
 
-        foreach ($carrito as $producto) {
+        foreach ($carrito as &$producto) {
+
+            $producto['subtotal'] =
+                $producto['cantidad'] * $producto['precio'];
+
             $total += $producto['subtotal'];
         }
+
+        unset($producto);
+
+        session()->put('carrito', $carrito);
 
         $configuracion = Configuracion::first();
 
@@ -124,9 +132,15 @@ class PedidoController extends Controller
         try {
             $total = 0;
 
-            foreach ($carrito as $item) {
+            foreach ($carrito as &$item) {
+
+                $item['subtotal'] =
+                    $item['cantidad'] * $item['precio'];
+
                 $total += $item['subtotal'];
             }
+
+            unset($item);
 
             $pedido = Pedido::create([
                 'user_id' => Auth::id(),

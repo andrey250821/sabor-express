@@ -19,7 +19,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * Campos asignables masivamente.
+     * Campos asignables magit add .sivamente.
      */
     protected $fillable = [
         'role_id',
