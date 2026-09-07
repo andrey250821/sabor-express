@@ -19,6 +19,8 @@ class ProductoController extends Controller
 
         // Consulta de productos
         $query = Producto::with('categoria')
+            ->withAvg('calificaciones', 'puntuacion')
+            ->withCount('calificaciones')
             ->where('estado', 'disponible')
             ->where('stock', '>', 0);
 

@@ -215,18 +215,47 @@ class PedidoController extends Controller
             ->with([
                 'detallePedidos.producto',
                 'comprobantePago',
-                'calificaciones' => function ($query) {
-                    $query->where('user_id', Auth::id());
-                },
             ])
             ->findOrFail($id);
 
-        $calificaciones = $pedido->calificaciones
+
+        /*
+    |--------------------------------------------------------------------------
+    | CALIFICACIONES DEL USUARIO PARA LOS PRODUCTOS DEL PEDIDO
+    |--------------------------------------------------------------------------
+    |
+    | No buscamos solamente las calificaciones pertenecientes a este pedido.
+    | Buscamos las calificaciones que el usuario ya realizó para cualquiera
+    | de los productos que aparecen en este pedido.
+    |
+    | Esto permite que:
+    |
+    | Pedido #1 -> compra Hamburguesa -> califica
+    | Pedido #2 -> vuelve a comprar Hamburguesa -> aparece su calificación
+    |
+    */
+
+        $productoIds = $pedido->detallePedidos
+            ->pluck('producto_id')
+            ->filter()
+            ->unique();
+
+
+        $calificaciones = \App\Models\Calificacion::where(
+            'user_id',
+            Auth::id()
+        )
+            ->whereIn('producto_id', $productoIds)
+            ->get()
             ->keyBy('producto_id');
+
 
         return view(
             'cliente.pedidos.show',
-            compact('pedido', 'calificaciones')
+            compact(
+                'pedido',
+                'calificaciones'
+            )
         );
     }
 }

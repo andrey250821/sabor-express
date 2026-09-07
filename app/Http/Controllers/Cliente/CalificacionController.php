@@ -8,20 +8,18 @@ use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 
 class CalificacionController extends Controller
 {
     /**
-     * Mostrar las calificaciones de un producto.
+     * Mostrar todas las calificaciones de un producto.
      */
     public function index($productoId)
     {
-        // Buscar el producto
         $producto = Producto::with('categoria')
             ->findOrFail($productoId);
 
-        // Obtener todas las calificaciones del producto
-        // junto con el usuario que realizó la calificación
         $calificaciones = Calificacion::where(
             'producto_id',
             $producto->id
@@ -30,13 +28,10 @@ class CalificacionController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Promedio de puntuación
         $promedio = $calificaciones->avg('puntuacion');
 
-        // Total de calificaciones
         $totalCalificaciones = $calificaciones->count();
 
-        // Cantidad de calificaciones por estrellas
         $cantidadEstrellas = [
             5 => $calificaciones->where('puntuacion', 5)->count(),
             4 => $calificaciones->where('puntuacion', 4)->count(),
@@ -45,6 +40,15 @@ class CalificacionController extends Controller
             1 => $calificaciones->where('puntuacion', 1)->count(),
         ];
 
+        /*
+         * Calificación del usuario autenticado.
+         *
+         * Como un usuario solo puede tener una calificación
+         * por producto, buscamos directamente por user_id + producto_id.
+         */
+        $miCalificacion = $calificaciones
+            ->firstWhere('user_id', Auth::id());
+
         return view(
             'cliente.calificaciones.index',
             compact(
@@ -52,7 +56,8 @@ class CalificacionController extends Controller
                 'calificaciones',
                 'promedio',
                 'totalCalificaciones',
-                'cantidadEstrellas'
+                'cantidadEstrellas',
+                'miCalificacion'
             )
         );
     }
@@ -65,54 +70,204 @@ class CalificacionController extends Controller
         $pedidoId,
         $productoId
     ) {
-        // Validar datos
         $datos = $request->validate([
-            'puntuacion' => 'required|integer|min:1|max:5',
-            'comentario' => 'nullable|string|max:1000',
+            'puntuacion' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:5',
+            ],
+            'comentario' => [
+                'nullable',
+                'string',
+                'max:1000',
+            ],
         ]);
 
-        // Buscar el pedido y comprobar que pertenece
-        // al usuario autenticado
+        /*
+         * El pedido debe pertenecer al usuario autenticado.
+         */
         $pedido = Pedido::where('id', $pedidoId)
             ->where('user_id', Auth::id())
-            ->firstOrFail();
+            ->first();
 
-        // El pedido debe estar entregado
-        if ($pedido->estado !== 'entregado') {
-
-            return back()->with(
-                'error',
-                'Solo puedes calificar productos de pedidos que ya fueron entregados.'
-            );
+        if (!$pedido) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El pedido no existe o no tienes permiso para calificarlo.',
+            ], 404);
         }
 
-        // Comprobar que el producto pertenece al pedido
+        /*
+         * Solo se pueden calificar pedidos entregados.
+         */
+        if ($pedido->estado !== 'entregado') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Solo puedes calificar productos de pedidos que ya fueron entregados.',
+            ], 422);
+        }
+
+        /*
+         * Comprobar que el producto realmente pertenece
+         * al pedido entregado.
+         */
         $productoPerteneceAlPedido = $pedido->detallePedidos()
             ->where('producto_id', $productoId)
             ->exists();
 
         if (!$productoPerteneceAlPedido) {
-
-            return back()->with(
-                'error',
-                'No puedes calificar un producto que no pertenece a este pedido.'
-            );
+            return response()->json([
+                'success' => false,
+                'message' => 'No puedes calificar un producto que no pertenece a este pedido.',
+            ], 422);
         }
 
-        // Comprobar que el producto existe
+        /*
+         * Comprobar que el producto existe.
+         */
         $producto = Producto::find($productoId);
 
         if (!$producto) {
-
-            return back()->with(
-                'error',
-                'El producto no existe.'
-            );
+            return response()->json([
+                'success' => false,
+                'message' => 'El producto no existe.',
+            ], 404);
         }
 
-        // Comprobar que el usuario no haya calificado
-        // anteriormente este producto
-        $yaCalifico = Calificacion::where(
+        /*
+         * Regla principal:
+         *
+         * Un usuario solamente puede tener UNA calificación
+         * para un producto, aunque lo compre varias veces.
+         */
+        $yaCalifico = Calificacion::where('user_id', Auth::id())
+            ->where('producto_id', $productoId)
+            ->exists();
+
+        if ($yaCalifico) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya calificaste este producto anteriormente. Puedes editar tu calificación.',
+                'already_rated' => true,
+            ], 422);
+        }
+
+        try {
+
+            $calificacion = Calificacion::create([
+                'pedido_id' => $pedido->id,
+                'user_id' => Auth::id(),
+                'producto_id' => $producto->id,
+                'puntuacion' => $datos['puntuacion'],
+                'comentario' => $datos['comentario'] ?? null,
+            ]);
+        } catch (QueryException $e) {
+
+            /*
+             * Protección adicional por si dos peticiones
+             * intentaran crear la misma calificación al mismo tiempo.
+             */
+            return response()->json([
+                'success' => false,
+                'message' => 'No fue posible registrar la calificación. Es posible que ya hayas calificado este producto.',
+            ], 422);
+        }
+
+        /*
+         * Calcular nuevamente los datos del producto
+         * después de guardar la calificación.
+         */
+        $calificaciones = Calificacion::where(
+            'producto_id',
+            $producto->id
+        )->get();
+
+        $promedio = $calificaciones->avg('puntuacion');
+
+        $totalCalificaciones = $calificaciones->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => '¡Gracias! Tu calificación fue registrada correctamente.',
+            'calificacion' => [
+                'id' => $calificacion->id,
+                'puntuacion' => $calificacion->puntuacion,
+                'comentario' => $calificacion->comentario,
+                'usuario' => Auth::user()->name,
+                'fecha' => $calificacion->created_at->format('d/m/Y'),
+            ],
+            'promedio' => round($promedio, 1),
+            'totalCalificaciones' => $totalCalificaciones,
+        ], 201);
+    }
+
+    /**
+     * Editar una calificación existente.
+     */
+    public function update(
+        Request $request,
+        $pedidoId,
+        $productoId
+    ) {
+        $datos = $request->validate([
+            'puntuacion' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:5',
+            ],
+            'comentario' => [
+                'nullable',
+                'string',
+                'max:1000',
+            ],
+        ]);
+
+        /*
+         * Verificar que el pedido pertenece al usuario.
+         */
+        $pedido = Pedido::where('id', $pedidoId)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if (!$pedido) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El pedido no existe o no tienes permiso para modificar esta calificación.',
+            ], 404);
+        }
+
+        /*
+         * El pedido utilizado para editar también debe
+         * estar entregado.
+         */
+        if ($pedido->estado !== 'entregado') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Solo puedes modificar calificaciones desde pedidos que ya fueron entregados.',
+            ], 422);
+        }
+
+        /*
+         * Comprobar que el producto pertenece al pedido.
+         */
+        $productoPerteneceAlPedido = $pedido->detallePedidos()
+            ->where('producto_id', $productoId)
+            ->exists();
+
+        if (!$productoPerteneceAlPedido) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No puedes modificar la calificación de un producto que no pertenece a este pedido.',
+            ], 422);
+        }
+
+        /*
+         * Buscar la única calificación que tiene el usuario
+         * para este producto.
+         */
+        $calificacion = Calificacion::where(
             'user_id',
             Auth::id()
         )
@@ -120,28 +275,49 @@ class CalificacionController extends Controller
                 'producto_id',
                 $productoId
             )
-            ->exists();
+            ->first();
 
-        if ($yaCalifico) {
-
-            return back()->with(
-                'error',
-                'Ya calificaste este producto anteriormente.'
-            );
+        if (!$calificacion) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Todavía no tienes una calificación para este producto.',
+            ], 404);
         }
 
-        // Crear la calificación
-        Calificacion::create([
-            'pedido_id' => $pedido->id,
-            'user_id' => Auth::id(),
-            'producto_id' => $producto->id,
+        /*
+         * Actualizar solamente la puntuación y comentario.
+         *
+         * NO cambiamos pedido_id.
+         */
+        $calificacion->update([
             'puntuacion' => $datos['puntuacion'],
             'comentario' => $datos['comentario'] ?? null,
         ]);
 
-        return back()->with(
-            'success',
-            '¡Gracias! Tu calificación fue registrada correctamente.'
-        );
+        /*
+         * Recalcular promedio.
+         */
+        $calificaciones = Calificacion::where(
+            'producto_id',
+            $productoId
+        )->get();
+
+        $promedio = $calificaciones->avg('puntuacion');
+
+        $totalCalificaciones = $calificaciones->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tu calificación fue actualizada correctamente.',
+            'calificacion' => [
+                'id' => $calificacion->id,
+                'puntuacion' => $calificacion->puntuacion,
+                'comentario' => $calificacion->comentario,
+                'usuario' => Auth::user()->name,
+                'fecha' => $calificacion->created_at->format('d/m/Y'),
+            ],
+            'promedio' => round($promedio, 1),
+            'totalCalificaciones' => $totalCalificaciones,
+        ]);
     }
 }

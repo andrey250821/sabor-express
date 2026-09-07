@@ -161,6 +161,11 @@ Route::middleware(['auth', 'role:Cliente'])
             [CalificacionController::class, 'store']
         )->name('cliente.calificaciones.store');
 
+        Route::put(
+            '/pedidos/{pedidoId}/productos/{productoId}/calificar',
+            [CalificacionController::class, 'update']
+        )->name('cliente.calificaciones.update');
+
         Route::get(
             '/productos/{productoId}/calificaciones',
             [CalificacionController::class, 'index']

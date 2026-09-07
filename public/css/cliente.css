@@ -10089,3 +10089,140 @@ body {
         width: 100%;
     }
 }
+/* =====================================================
+   CALIFICACIONES EN TARJETAS DE PRODUCTOS
+===================================================== */
+
+.cliente-producto-calificacion-resumen {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 10px 0 14px;
+    font-size: 0.9rem;
+}
+
+.cliente-producto-calificacion-estrellas {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.cliente-producto-calificacion-estrellas i {
+    font-size: 0.95rem;
+}
+
+.cliente-producto-calificacion-resumen strong {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.cliente-producto-calificacion-total {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.cliente-producto-sin-calificaciones {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0 14px;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.cliente-producto-sin-calificaciones i {
+    font-size: 0.95rem;
+}
+
+
+/* =====================================================
+   BOTÓN VER OPINIONES
+===================================================== */
+
+.cliente-producto-info .btn-outline-warning {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.cliente-producto-info .btn-outline-warning:hover {
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 576px) {
+
+    .cliente-producto-calificacion-resumen {
+        gap: 5px;
+    }
+
+    .cliente-producto-calificacion-estrellas i {
+        font-size: 0.9rem;
+    }
+
+    .cliente-producto-calificacion-resumen strong {
+        font-size: 0.85rem;
+    }
+
+    .cliente-producto-calificacion-total {
+        font-size: 0.8rem;
+    }
+
+}
+/* =========================================================
+   SELECTOR DE ESTRELLAS - DETALLE DEL PEDIDO
+   ========================================================= */
+
+.cliente-rating-selector {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Ocultar completamente los radios */
+.cliente-rating-selector input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Estrellas */
+.cliente-rating-selector label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #555761;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color .2s ease, transform .2s ease;
+}
+
+/* Hover */
+.cliente-rating-selector label:hover {
+    color: #ffc107;
+    transform: scale(1.1);
+}
+
+/* Estrella seleccionada + las anteriores visualmente */
+.cliente-rating-selector label:hover,
+.cliente-rating-selector label:hover ~ label,
+.cliente-rating-selector input[type="radio"]:checked ~ label {
+    color: #ffc107;
+}
+
+/* Evitar estilos del navegador */
+.cliente-rating-selector input[type="radio"] + label {
+    border-radius: 0;
+    box-shadow: none;
+}

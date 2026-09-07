@@ -499,117 +499,123 @@
                     @if($detalle->producto)
 
                     @php
-                    $calificacion = $calificaciones->get(
-                    $detalle->producto_id
-                    );
+                    $calificacion = $calificaciones->get($detalle->producto_id);
                     @endphp
 
-                    <div class="cliente-pedido-show-calificacion">
+                    <div
+                        class="cliente-pedido-show-calificacion"
+                        data-calificacion-container
+                        data-producto-id="{{ $detalle->producto_id }}"
+                        data-pedido-id="{{ $pedido->id }}">
 
                         @if($pedido->estado === 'entregado')
 
                         @if($calificacion)
 
+                        {{-- CALIFICACIÓN EXISTENTE --}}
                         <div class="cliente-pedido-show-calificacion-realizada">
 
-                            <div class="cliente-pedido-show-calificacion-header">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
                                 <div>
-
-                                    <span>
-                                        TU CALIFICACIÓN
-                                    </span>
-
                                     <strong>
-                                        Ya calificaste este producto
+                                        <i class="bi bi-star-fill me-1"></i>
+                                        Tu calificación
                                     </strong>
-
                                 </div>
 
-                                <div class="cliente-pedido-show-calificacion-estrellas">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-warning"
+                                    data-editar-calificacion>
+                                    <i class="bi bi-pencil me-1"></i>
+                                    Editar
+                                </button>
 
-                                    @for($i = 1; $i <= 5; $i++)
+                            </div>
 
-                                        @if($i <=$calificacion->puntuacion)
+                            <div
+                                class="cliente-pedido-show-calificacion-estrellas mt-2"
+                                data-calificacion-estrellas>
+                                @for($i = 1; $i <= 5; $i++)
 
-                                        <i class="bi bi-star-fill"></i>
+                                    @if($i <=$calificacion->puntuacion)
+                                    <i class="bi bi-star-fill"></i>
+                                    @else
+                                    <i class="bi bi-star"></i>
+                                    @endif
 
-                                        @else
+                                    @endfor
+                            </div>
 
-                                        <i class="bi bi-star"></i>
-
-                                        @endif
-
-                                        @endfor
-
-                                </div>
-
+                            <div
+                                class="cliente-pedido-show-calificacion-puntuacion"
+                                data-calificacion-puntuacion>
+                                {{ $calificacion->puntuacion }}/5
                             </div>
 
                             @if($calificacion->comentario)
 
-                            <p class="cliente-pedido-show-calificacion-comentario">
+                            <p
+                                class="cliente-pedido-show-calificacion-comentario"
+                                data-calificacion-comentario>
                                 "{{ $calificacion->comentario }}"
+                            </p>
+
+                            @else
+
+                            <p
+                                class="cliente-pedido-show-calificacion-comentario text-muted"
+                                data-calificacion-comentario>
+                                Sin comentario.
                             </p>
 
                             @endif
 
                         </div>
 
-                        @else
 
-                        <div class="cliente-pedido-show-calificacion-formulario">
-
-                            <div class="cliente-pedido-show-calificacion-header">
-
-                                <div>
-
-                                    <span>
-                                        PRODUCTO ENTREGADO
-                                    </span>
-
-                                    <strong>
-                                        ¿Qué te pareció este producto?
-                                    </strong>
-
-                                </div>
-
-                            </div>
+                        {{-- FORMULARIO PARA EDITAR --}}
+                        <div
+                            class="cliente-pedido-show-calificacion-formulario d-none"
+                            data-calificacion-formulario>
 
                             <form
-                                action="{{ route(
-                            'cliente.calificaciones.store',
-                            [
-                                'pedidoId' => $pedido->id,
-                                'productoId' => $detalle->producto_id
-                            ]
-                        ) }}"
-                                method="POST">
+                                data-calificacion-form
+                                data-method="PUT"
+                                action="{{ route('cliente.calificaciones.update', [
+                            'pedidoId' => $pedido->id,
+                            'productoId' => $detalle->producto_id
+                        ]) }}">
 
                                 @csrf
 
-                                <div class="cliente-pedido-show-rating-selector">
+                                @method('PUT')
 
-                                    <span>
-                                        Tu calificación
-                                    </span>
+                                <div class="mb-3">
 
-                                    <div class="cliente-pedido-show-rating-input">
+                                    <label class="form-label fw-semibold">
+                                        Cambia tu calificación
+                                    </label>
+
+                                    <div
+                                        class="cliente-rating-selector"
+                                        data-rating-selector>
 
                                         @for($i = 5; $i >= 1; $i--)
 
                                         <input
                                             type="radio"
-                                            id="pedido-{{ $pedido->id }}-producto-{{ $detalle->producto_id }}-estrella-{{ $i }}"
+                                            id="editar-rating-{{ $pedido->id }}-{{ $detalle->producto_id }}-{{ $i }}"
                                             name="puntuacion"
                                             value="{{ $i }}"
-                                            required>
+                                            @checked($calificacion->puntuacion == $i)
+                                        >
 
                                         <label
-                                            for="pedido-{{ $pedido->id }}-producto-{{ $detalle->producto_id }}-estrella-{{ $i }}">
-
+                                            for="editar-rating-{{ $pedido->id }}-{{ $detalle->producto_id }}-{{ $i }}"
+                                            title="{{ $i }} estrellas">
                                             <i class="bi bi-star-fill"></i>
-
                                         </label>
 
                                         @endfor
@@ -618,29 +624,124 @@
 
                                 </div>
 
-                                <div class="cliente-pedido-show-comentario">
 
-                                    <label>
+                                <div class="mb-3">
+
+                                    <label
+                                        for="editar-comentario-{{ $pedido->id }}-{{ $detalle->producto_id }}"
+                                        class="form-label fw-semibold">
                                         Comentario
-                                        <span>(opcional)</span>
                                     </label>
 
                                     <textarea
+                                        id="editar-comentario-{{ $pedido->id }}-{{ $detalle->producto_id }}"
                                         name="comentario"
+                                        class="form-control"
+                                        rows="3"
+                                        maxlength="1000"
+                                        placeholder="Cuéntanos qué te pareció...">{{ $calificacion->comentario }}</textarea>
+
+                                </div>
+
+
+                                <div class="d-flex gap-2 flex-wrap">
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-warning"
+                                        data-calificacion-submit>
+                                        <i class="bi bi-check-lg me-1"></i>
+                                        Guardar cambios
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-secondary"
+                                        data-cancelar-edicion>
+                                        Cancelar
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+
+                        @else
+
+                        {{-- NUEVA CALIFICACIÓN --}}
+                        <div class="cliente-pedido-show-calificacion-formulario">
+
+                            <form
+                                data-calificacion-form
+                                data-method="POST"
+                                action="{{ route('cliente.calificaciones.store', [
+                            'pedidoId' => $pedido->id,
+                            'productoId' => $detalle->producto_id
+                        ]) }}">
+
+                                @csrf
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-semibold">
+                                        ¿Qué te pareció este producto?
+                                    </label>
+
+                                    <div
+                                        class="cliente-rating-selector"
+                                        data-rating-selector>
+
+                                        @for($i = 5; $i >= 1; $i--)
+
+                                        <input
+                                            type="radio"
+                                            id="rating-{{ $pedido->id }}-{{ $detalle->producto_id }}-{{ $i }}"
+                                            name="puntuacion"
+                                            value="{{ $i }}">
+
+                                        <label
+                                            for="rating-{{ $pedido->id }}-{{ $detalle->producto_id }}-{{ $i }}"
+                                            title="{{ $i }} estrellas">
+                                            <i class="bi bi-star-fill"></i>
+                                        </label>
+
+                                        @endfor
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="mb-3">
+
+                                    <label
+                                        for="comentario-{{ $pedido->id }}-{{ $detalle->producto_id }}"
+                                        class="form-label fw-semibold">
+                                        Comentario
+                                        <span class="text-muted fw-normal">
+                                            (opcional)
+                                        </span>
+                                    </label>
+
+                                    <textarea
+                                        id="comentario-{{ $pedido->id }}-{{ $detalle->producto_id }}"
+                                        name="comentario"
+                                        class="form-control"
                                         rows="3"
                                         maxlength="1000"
                                         placeholder="Cuéntanos qué te pareció..."></textarea>
 
                                 </div>
 
+
                                 <button
                                     type="submit"
-                                    class="cliente-pedido-show-btn-calificar">
-
-                                    <i class="bi bi-star-fill"></i>
-
+                                    class="btn btn-warning"
+                                    data-calificacion-submit>
+                                    <i class="bi bi-star-fill me-1"></i>
                                     Enviar calificación
-
                                 </button>
 
                             </form>
@@ -1194,5 +1295,502 @@
 </div>
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
 
+        const formularios = document.querySelectorAll(
+            '[data-calificacion-form]'
+        );
+
+        formularios.forEach(function(formulario) {
+
+            formulario.addEventListener('submit', async function(event) {
+
+                event.preventDefault();
+
+                const container = formulario.closest(
+                    '[data-calificacion-container]'
+                );
+
+                if (!container) {
+                    return;
+                }
+
+                const boton = formulario.querySelector(
+                    '[data-calificacion-submit]'
+                );
+
+                const puntuacion = formulario.querySelector(
+                    'input[name="puntuacion"]:checked'
+                );
+
+                const comentario = formulario.querySelector(
+                    'textarea[name="comentario"]'
+                );
+
+                /*
+                 * Comprobar que se haya seleccionado
+                 * una puntuación.
+                 */
+                if (!puntuacion) {
+
+                    alert('Selecciona una puntuación de 1 a 5 estrellas.');
+
+                    return;
+                }
+
+                const url = formulario.action;
+
+                const metodo = formulario.dataset.method || 'POST';
+
+                const datos = new FormData();
+
+                datos.append(
+                    '_token',
+                    formulario.querySelector(
+                        'input[name="_token"]'
+                    ).value
+                );
+
+                datos.append(
+                    'puntuacion',
+                    puntuacion.value
+                );
+
+                datos.append(
+                    'comentario',
+                    comentario ? comentario.value : ''
+                );
+
+                /*
+                 * Para editar enviamos PUT.
+                 */
+                if (metodo === 'PUT') {
+                    datos.append('_method', 'PUT');
+                }
+
+                /*
+                 * Evitar doble clic.
+                 */
+                const textoOriginal = boton.innerHTML;
+
+                boton.disabled = true;
+
+                boton.innerHTML = `
+                <span
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                ></span>
+                Guardando...
+            `;
+
+                try {
+
+                    const respuesta = await fetch(url, {
+
+                        method: 'POST',
+
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+
+                        body: datos
+
+                    });
+
+                    const resultado = await respuesta.json();
+
+                    if (!respuesta.ok || !resultado.success) {
+
+                        throw new Error(
+                            resultado.message ||
+                            'No fue posible guardar la calificación.'
+                        );
+                    }
+
+                    /*
+                     * Actualizar solamente este producto.
+                     */
+                    mostrarCalificacion(
+                        container,
+                        resultado.calificacion
+                    );
+
+                    /*
+                     * Mostrar mensaje de éxito.
+                     */
+                    mostrarMensajeCalificacion(
+                        container,
+                        resultado.message,
+                        'success'
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        'Error al guardar la calificación:',
+                        error
+                    );
+
+                    mostrarMensajeCalificacion(
+                        container,
+                        error.message ||
+                        'Ocurrió un error al guardar la calificación.',
+                        'danger'
+                    );
+
+                    boton.disabled = false;
+
+                    boton.innerHTML = textoOriginal;
+                }
+
+            });
+
+        });
+
+
+        /*
+         * Botón "Editar".
+         */
+        document.addEventListener(
+            'click',
+            function(event) {
+
+                const botonEditar = event.target.closest(
+                    '[data-editar-calificacion]'
+                );
+
+                if (!botonEditar) {
+                    return;
+                }
+
+                const container = botonEditar.closest(
+                    '[data-calificacion-container]'
+                );
+
+                if (!container) {
+                    return;
+                }
+
+                const realizada = container.querySelector(
+                    '.cliente-pedido-show-calificacion-realizada'
+                );
+
+                const formulario = container.querySelector(
+                    '[data-calificacion-formulario]'
+                );
+
+                if (realizada) {
+                    realizada.classList.add('d-none');
+                }
+
+                if (formulario) {
+                    formulario.classList.remove('d-none');
+                }
+
+            }
+        );
+
+
+        /*
+         * Botón "Cancelar".
+         */
+        document.addEventListener(
+            'click',
+            function(event) {
+
+                const botonCancelar = event.target.closest(
+                    '[data-cancelar-edicion]'
+                );
+
+                if (!botonCancelar) {
+                    return;
+                }
+
+                const container = botonCancelar.closest(
+                    '[data-calificacion-container]'
+                );
+
+                if (!container) {
+                    return;
+                }
+
+                const realizada = container.querySelector(
+                    '.cliente-pedido-show-calificacion-realizada'
+                );
+
+                const formulario = container.querySelector(
+                    '[data-calificacion-formulario]'
+                );
+
+                if (formulario) {
+                    formulario.classList.add('d-none');
+                }
+
+                if (realizada) {
+                    realizada.classList.remove('d-none');
+                }
+
+            }
+        );
+
+
+        /*
+         * Mostrar la calificación recién guardada
+         * sin recargar la página.
+         */
+        function mostrarCalificacion(
+            container,
+            calificacion
+        ) {
+
+            const formularioPrincipal = container.querySelector(
+                '[data-calificacion-form]'
+            );
+
+            const formularioEdicion = container.querySelector(
+                '[data-calificacion-formulario]'
+            );
+
+            /*
+             * Crear nuevamente la sección visual
+             * de calificación realizada.
+             */
+            let realizada = container.querySelector(
+                '.cliente-pedido-show-calificacion-realizada'
+            );
+
+            if (!realizada) {
+
+                realizada = document.createElement('div');
+
+                realizada.className =
+                    'cliente-pedido-show-calificacion-realizada';
+
+                container.prepend(realizada);
+            }
+
+            let estrellas = '';
+
+            for (let i = 1; i <= 5; i++) {
+
+                if (i <= calificacion.puntuacion) {
+
+                    estrellas +=
+                        '<i class="bi bi-star-fill"></i>';
+
+                } else {
+
+                    estrellas +=
+                        '<i class="bi bi-star"></i>';
+
+                }
+
+            }
+
+            const comentario = calificacion.comentario ?
+                `"${escapeHtml(calificacion.comentario)}"` :
+                'Sin comentario.';
+
+            realizada.innerHTML = `
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <div>
+                    <strong>
+                        <i class="bi bi-star-fill me-1"></i>
+                        Tu calificación
+                    </strong>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn btn-sm btn-outline-warning"
+                    data-editar-calificacion
+                >
+                    <i class="bi bi-pencil me-1"></i>
+                    Editar
+                </button>
+
+            </div>
+
+            <div
+                class="cliente-pedido-show-calificacion-estrellas mt-2"
+                data-calificacion-estrellas
+            >
+                ${estrellas}
+            </div>
+
+            <div
+                class="cliente-pedido-show-calificacion-puntuacion"
+                data-calificacion-puntuacion
+            >
+                ${calificacion.puntuacion}/5
+            </div>
+
+            <p
+                class="cliente-pedido-show-calificacion-comentario"
+                data-calificacion-comentario
+            >
+                ${comentario}
+            </p>
+
+        `;
+
+            realizada.classList.remove('d-none');
+
+            /*
+             * Ocultar formulario de nueva calificación.
+             */
+            if (formularioPrincipal) {
+
+                const formularioContenedor =
+                    formularioPrincipal.closest(
+                        '.cliente-pedido-show-calificacion-formulario'
+                    );
+
+                if (formularioContenedor) {
+                    formularioContenedor.remove();
+                }
+            }
+
+            /*
+             * Ocultar formulario de edición.
+             */
+            if (formularioEdicion) {
+
+                formularioEdicion.classList.add('d-none');
+            }
+
+            /*
+             * Convertir el formulario actual en formulario
+             * de edición para futuras modificaciones.
+             */
+            crearFormularioEdicion(
+                container,
+                calificacion
+            );
+        }
+
+
+        /*
+         * Crear formulario de edición después de guardar
+         * una calificación nueva.
+         */
+        function crearFormularioEdicion(
+            container,
+            calificacion
+        ) {
+
+            let formularioEdicion = container.querySelector(
+                '[data-calificacion-formulario]'
+            );
+
+            if (formularioEdicion) {
+
+                actualizarFormularioEdicion(
+                    formularioEdicion,
+                    calificacion
+                );
+
+                return;
+            }
+
+            /*
+             * El formulario de edición ya viene desde Blade
+             * cuando la calificación existía.
+             */
+            console.log(
+                'Formulario de edición preparado.'
+            );
+        }
+
+
+        /*
+         * Actualizar los datos del formulario de edición.
+         */
+        function actualizarFormularioEdicion(
+            formulario,
+            calificacion
+        ) {
+
+            const radios = formulario.querySelectorAll(
+                'input[name="puntuacion"]'
+            );
+
+            radios.forEach(function(radio) {
+
+                radio.checked =
+                    Number(radio.value) ===
+                    Number(calificacion.puntuacion);
+
+            });
+
+            const comentario = formulario.querySelector(
+                'textarea[name="comentario"]'
+            );
+
+            if (comentario) {
+
+                comentario.value =
+                    calificacion.comentario || '';
+            }
+        }
+
+
+        /*
+         * Mostrar mensajes.
+         */
+        function mostrarMensajeCalificacion(
+            container,
+            mensaje,
+            tipo
+        ) {
+
+            const anterior = container.querySelector(
+                '[data-calificacion-mensaje]'
+            );
+
+            if (anterior) {
+                anterior.remove();
+            }
+
+            const alerta = document.createElement('div');
+
+            alerta.className =
+                `alert alert-${tipo} mt-3`;
+
+            alerta.setAttribute(
+                'data-calificacion-mensaje',
+                ''
+            );
+
+            alerta.innerHTML = escapeHtml(mensaje);
+
+            container.prepend(alerta);
+
+            setTimeout(function() {
+
+                alerta.remove();
+
+            }, 4000);
+        }
+
+
+        /*
+         * Evitar insertar HTML proveniente
+         * directamente del usuario.
+         */
+        function escapeHtml(texto) {
+
+            const div = document.createElement('div');
+
+            div.textContent = texto ?? '';
+
+            return div.innerHTML;
+        }
+
+    });
+</script>
 @endsection
