@@ -27,6 +27,7 @@ use App\Http\Controllers\Cliente\CarritoController;
 use App\Http\Controllers\Cliente\DashboardController as ClienteDashboardController;
 use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
 use App\Http\Controllers\Cliente\ProductoController as ClienteProductoController;
+use App\Http\Controllers\Cliente\CalificacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,7 +125,7 @@ Route::middleware(['auth', 'role:Administrador'])
 
         Route::get('/pedidos', [AdminPedidoController::class, 'index'])->name('admin.pedidos.index');
         Route::get('/pedidos/{id}', [AdminPedidoController::class, 'show'])->name('admin.pedidos.show');
-        
+
         Route::get('/comprobantes/{estado?}', [ComprobantePagoController::class, 'index'])->name('admin.comprobantes.index');
         Route::put('/comprobantes/{id}/aprobar', [ComprobantePagoController::class, 'aprobar'])->name('admin.comprobantes.aprobar');
         Route::put('/comprobantes/{id}/rechazar', [ComprobantePagoController::class, 'rechazar'])->name('admin.comprobantes.rechazar');
@@ -154,6 +155,16 @@ Route::middleware(['auth', 'role:Administrador'])
 
 Route::middleware(['auth', 'role:Cliente'])
     ->group(function () {
+
+        Route::post(
+            '/pedidos/{pedidoId}/productos/{productoId}/calificar',
+            [CalificacionController::class, 'store']
+        )->name('cliente.calificaciones.store');
+
+        Route::get(
+            '/productos/{productoId}/calificaciones',
+            [CalificacionController::class, 'index']
+        )->name('cliente.calificaciones.index');
 
         Route::get(
             '/cliente',

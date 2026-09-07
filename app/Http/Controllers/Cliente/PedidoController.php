@@ -212,9 +212,21 @@ class PedidoController extends Controller
     public function show($id)
     {
         $pedido = Pedido::where('user_id', Auth::id())
-            ->with(['detallePedidos.producto', 'comprobantePago'])
+            ->with([
+                'detallePedidos.producto',
+                'comprobantePago',
+                'calificaciones' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                },
+            ])
             ->findOrFail($id);
 
-        return view('cliente.pedidos.show', compact('pedido'));
+        $calificaciones = $pedido->calificaciones
+            ->keyBy('producto_id');
+
+        return view(
+            'cliente.pedidos.show',
+            compact('pedido', 'calificaciones')
+        );
     }
 }

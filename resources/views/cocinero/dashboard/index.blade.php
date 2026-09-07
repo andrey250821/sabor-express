@@ -1,13 +1,13 @@
-@extends('layouts.delivery')
+@extends('layouts.cocinero')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard - Cocinero')
 
 @section('content')
 
 <div class="container-fluid">
 
     {{-- =====================================================
-        ENCABEZADO
+         ENCABEZADO
     ====================================================== --}}
 
     <div class="d-flex flex-column flex-md-row
@@ -17,13 +17,28 @@
 
         <div>
 
-            <h1 class="mb-1">
+            <h1 class="fw-bold mb-1">
+                <i class="bi bi-speedometer2"></i>
                 Dashboard
             </h1>
 
             <p class="text-muted mb-0">
-                Bienvenido, {{ $delivery->name }}
+                Bienvenido, {{ auth()->user()->name }}
             </p>
+
+        </div>
+
+        <div>
+
+            <a
+                href="{{ route('cocinero.pedidos.index') }}"
+                class="btn btn-primary">
+
+                <i class="bi bi-bag-check"></i>
+
+                Ver pedidos
+
+            </a>
 
         </div>
 
@@ -31,17 +46,18 @@
 
 
     {{-- =====================================================
-        TARJETAS PRINCIPALES
+         TARJETAS PRINCIPALES
     ====================================================== --}}
 
     <div class="row g-4">
 
 
-        {{-- PEDIDOS DISPONIBLES --}}
+        {{-- PEDIDOS PENDIENTES --}}
 
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-6 col-xl-3">
 
-            <a href="{{ route('delivery.pedidos.index') }}"
+            <a
+                href="{{ route('cocinero.pedidos.index') }}"
                 class="text-decoration-none">
 
                 <div class="card shadow-sm h-100">
@@ -55,30 +71,85 @@
                             <div>
 
                                 <h6 class="text-muted">
-                                    Pedidos disponibles
+                                    Pendientes
                                 </h6>
 
                                 <h2 class="fw-bold mb-0">
-                                    {{ $pedidosDisponibles }}
+
+                                    {{ $pedidosPendientes->count() }}
+
+                                </h2>
+
+                            </div>
+
+                            <div class="fs-1 text-warning">
+
+                                <i class="bi bi-hourglass-split"></i>
+
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <small class="text-muted">
+
+                            Pedidos pagados esperando preparación
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        {{-- EN PREPARACIÓN --}}
+
+        <div class="col-12 col-md-6 col-xl-3">
+
+            <a
+                href="{{ route('cocinero.pedidos.index') }}"
+                class="text-decoration-none">
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <div class="d-flex
+                                    justify-content-between
+                                    align-items-center">
+
+                            <div>
+
+                                <h6 class="text-muted">
+                                    En preparación
+                                </h6>
+
+                                <h2 class="fw-bold mb-0">
+
+                                    {{ $pedidosPreparando->count() }}
+
                                 </h2>
 
                             </div>
 
                             <div class="fs-1 text-primary">
 
-                                <i class="bi bi-box-seam"></i>
+                                <i class="bi bi-fire"></i>
 
                             </div>
 
                         </div>
 
-
                         <hr>
-
 
                         <small class="text-muted">
 
-                            Pedidos listos para recoger
+                            Pedidos que se están preparando
 
                         </small>
 
@@ -91,12 +162,12 @@
         </div>
 
 
+        {{-- LISTOS --}}
 
-        {{-- MIS PEDIDOS --}}
+        <div class="col-12 col-md-6 col-xl-3">
 
-        <div class="col-12 col-md-4">
-
-            <a href="{{ route('delivery.pedidos.mis') }}"
+            <a
+                href="{{ route('cocinero.pedidos.index') }}"
                 class="text-decoration-none">
 
                 <div class="card shadow-sm h-100">
@@ -110,31 +181,30 @@
                             <div>
 
                                 <h6 class="text-muted">
-                                    Mis pedidos
+                                    Pedidos listos
                                 </h6>
 
                                 <h2 class="fw-bold mb-0">
-                                    {{ $misPedidos }}
+
+                                    {{ $pedidosListos->count() }}
+
                                 </h2>
 
                             </div>
 
+                            <div class="fs-1 text-success">
 
-                            <div class="fs-1 text-warning">
-
-                                <i class="bi bi-bicycle"></i>
+                                <i class="bi bi-check-circle"></i>
 
                             </div>
 
                         </div>
 
-
                         <hr>
-
 
                         <small class="text-muted">
 
-                            Pedidos que estás entregando
+                            Listos para ser recogidos por Delivery
 
                         </small>
 
@@ -147,10 +217,9 @@
         </div>
 
 
+        {{-- TOTAL --}}
 
-        {{-- ENTREGADOS --}}
-
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-6 col-xl-3">
 
             <div class="card shadow-sm h-100">
 
@@ -163,31 +232,30 @@
                         <div>
 
                             <h6 class="text-muted">
-                                Pedidos entregados
+                                Total activos
                             </h6>
 
                             <h2 class="fw-bold mb-0">
-                                {{ $pedidosEntregados }}
+
+                                {{ $totalPedidos }}
+
                             </h2>
 
                         </div>
 
+                        <div class="fs-1 text-dark">
 
-                        <div class="fs-1 text-success">
-
-                            <i class="bi bi-check-circle"></i>
+                            <i class="bi bi-clipboard-check"></i>
 
                         </div>
 
                     </div>
 
-
                     <hr>
-
 
                     <small class="text-muted">
 
-                        Total de pedidos entregados
+                        Pedidos actualmente en cocina
 
                     </small>
 
@@ -200,9 +268,148 @@
     </div>
 
 
+    {{-- =====================================================
+         ESTADO DEL FLUJO
+    ====================================================== --}}
+
+    <div class="row mt-4">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-arrow-repeat"></i>
+
+                        Flujo de preparación
+
+                    </h5>
+
+
+                    <div class="row g-4">
+
+
+                        {{-- PASO 1 --}}
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-center">
+
+                                <div class="fs-1 text-warning">
+
+                                    <i class="bi bi-hourglass-split"></i>
+
+                                </div>
+
+                                <h6 class="fw-bold mt-2">
+
+                                    1. Pedido pagado
+
+                                </h6>
+
+                                <p class="text-muted small mb-0">
+
+                                    El pedido espera ser tomado por cocina.
+
+                                </p>
+
+                                <span class="badge bg-warning text-dark mt-2">
+
+                                    {{ $pedidosPendientes->count() }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- PASO 2 --}}
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-center">
+
+                                <div class="fs-1 text-primary">
+
+                                    <i class="bi bi-fire"></i>
+
+                                </div>
+
+                                <h6 class="fw-bold mt-2">
+
+                                    2. Preparando
+
+                                </h6>
+
+                                <p class="text-muted small mb-0">
+
+                                    El pedido está siendo preparado.
+
+                                </p>
+
+                                <span class="badge bg-primary mt-2">
+
+                                    {{ $pedidosPreparando->count() }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- PASO 3 --}}
+
+                        <div class="col-12 col-md-4">
+
+                            <div class="text-center">
+
+                                <div class="fs-1 text-success">
+
+                                    <i class="bi bi-check-circle"></i>
+
+                                </div>
+
+                                <h6 class="fw-bold mt-2">
+
+                                    3. Listo
+
+                                </h6>
+
+                                <p class="text-muted small mb-0">
+
+                                    El pedido está listo para Delivery.
+
+                                </p>
+
+                                <span class="badge bg-success mt-2">
+
+                                    {{ $pedidosListos->count() }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     {{-- =====================================================
-        ACCIONES RÁPIDAS
+         ACCIONES RÁPIDAS
     ====================================================== --}}
 
     <div class="row mt-4">
@@ -221,214 +428,35 @@
 
                     </h5>
 
-
                     <div class="row g-3">
 
-
-                        {{-- VER PEDIDOS DISPONIBLES --}}
-
                         <div class="col-12 col-md-6">
 
                             <a
-                                href="{{ route('delivery.pedidos.index') }}"
+                                href="{{ route('cocinero.pedidos.index') }}"
                                 class="btn btn-primary w-100 py-3">
 
-                                <i class="bi bi-box-seam"></i>
+                                <i class="bi bi-bag-check"></i>
 
-                                Ver pedidos disponibles
+                                Gestionar pedidos
 
                             </a>
 
                         </div>
-
-
-
-                        {{-- MIS ENTREGAS --}}
 
                         <div class="col-12 col-md-6">
 
                             <a
-                                href="{{ route('delivery.pedidos.mis') }}"
+                                href="{{ route('cocinero.pedidos.index') }}"
                                 class="btn btn-outline-primary w-100 py-3">
 
-                                <i class="bi bi-bicycle"></i>
+                                <i class="bi bi-list-check"></i>
 
-                                Ver mis entregas
+                                Ver estado de pedidos
 
                             </a>
 
                         </div>
-
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    {{-- =====================================================
-        INFORMACIÓN DEL REPARTIDOR
-    ====================================================== --}}
-
-    <div class="row mt-4">
-
-        <div class="col-12 col-lg-6">
-
-            <div class="card shadow-sm">
-
-                <div class="card-body">
-
-                    <h5 class="fw-bold mb-3">
-
-                        <i class="bi bi-person-circle"></i>
-
-                        Mi información
-
-                    </h5>
-
-
-                    <div class="mb-3">
-
-                        <strong>
-                            Nombre:
-                        </strong>
-
-                        {{ $delivery->name }}
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <strong>
-                            Correo:
-                        </strong>
-
-                        {{ $delivery->email }}
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <strong>
-                            Teléfono:
-                        </strong>
-
-                        {{ $delivery->telefono ?? 'No registrado' }}
-
-                    </div>
-
-
-                    <div>
-
-                        <strong>
-                            Estado:
-                        </strong>
-
-
-                        @if($delivery->estado === 'activo')
-
-                        <span class="badge bg-success">
-
-                            Activo
-
-                        </span>
-
-                        @else
-
-                        <span class="badge bg-danger">
-
-                            Inactivo
-
-                        </span>
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        {{-- INFORMACIÓN DEL FLUJO --}}
-
-        <div class="col-12 col-lg-6">
-
-            <div class="card shadow-sm h-100">
-
-                <div class="card-body">
-
-                    <h5 class="fw-bold mb-3">
-
-                        <i class="bi bi-info-circle"></i>
-
-                        Flujo de entrega
-
-                    </h5>
-
-
-                    <div class="mb-3">
-
-                        <span class="badge bg-primary">
-                            1
-                        </span>
-
-                        Selecciona un pedido disponible.
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <span class="badge bg-primary">
-                            2
-                        </span>
-
-                        Toma el pedido.
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <span class="badge bg-primary">
-                            3
-                        </span>
-
-                        Inicia la entrega.
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <span class="badge bg-primary">
-                            4
-                        </span>
-
-                        Dirígete a la dirección del cliente.
-
-                    </div>
-
-
-                    <div>
-
-                        <span class="badge bg-success">
-                            5
-                        </span>
-
-                        Marca el pedido como entregado.
 
                     </div>
 

@@ -492,7 +492,168 @@
                         </strong>
 
                     </div>
+                    {{-- =====================================================
+     CALIFICACIÓN DEL PRODUCTO
+====================================================== --}}
 
+                    @if($detalle->producto)
+
+                    @php
+                    $calificacion = $calificaciones->get(
+                    $detalle->producto_id
+                    );
+                    @endphp
+
+                    <div class="cliente-pedido-show-calificacion">
+
+                        @if($pedido->estado === 'entregado')
+
+                        @if($calificacion)
+
+                        <div class="cliente-pedido-show-calificacion-realizada">
+
+                            <div class="cliente-pedido-show-calificacion-header">
+
+                                <div>
+
+                                    <span>
+                                        TU CALIFICACIÓN
+                                    </span>
+
+                                    <strong>
+                                        Ya calificaste este producto
+                                    </strong>
+
+                                </div>
+
+                                <div class="cliente-pedido-show-calificacion-estrellas">
+
+                                    @for($i = 1; $i <= 5; $i++)
+
+                                        @if($i <=$calificacion->puntuacion)
+
+                                        <i class="bi bi-star-fill"></i>
+
+                                        @else
+
+                                        <i class="bi bi-star"></i>
+
+                                        @endif
+
+                                        @endfor
+
+                                </div>
+
+                            </div>
+
+                            @if($calificacion->comentario)
+
+                            <p class="cliente-pedido-show-calificacion-comentario">
+                                "{{ $calificacion->comentario }}"
+                            </p>
+
+                            @endif
+
+                        </div>
+
+                        @else
+
+                        <div class="cliente-pedido-show-calificacion-formulario">
+
+                            <div class="cliente-pedido-show-calificacion-header">
+
+                                <div>
+
+                                    <span>
+                                        PRODUCTO ENTREGADO
+                                    </span>
+
+                                    <strong>
+                                        ¿Qué te pareció este producto?
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <form
+                                action="{{ route(
+                            'cliente.calificaciones.store',
+                            [
+                                'pedidoId' => $pedido->id,
+                                'productoId' => $detalle->producto_id
+                            ]
+                        ) }}"
+                                method="POST">
+
+                                @csrf
+
+                                <div class="cliente-pedido-show-rating-selector">
+
+                                    <span>
+                                        Tu calificación
+                                    </span>
+
+                                    <div class="cliente-pedido-show-rating-input">
+
+                                        @for($i = 5; $i >= 1; $i--)
+
+                                        <input
+                                            type="radio"
+                                            id="pedido-{{ $pedido->id }}-producto-{{ $detalle->producto_id }}-estrella-{{ $i }}"
+                                            name="puntuacion"
+                                            value="{{ $i }}"
+                                            required>
+
+                                        <label
+                                            for="pedido-{{ $pedido->id }}-producto-{{ $detalle->producto_id }}-estrella-{{ $i }}">
+
+                                            <i class="bi bi-star-fill"></i>
+
+                                        </label>
+
+                                        @endfor
+
+                                    </div>
+
+                                </div>
+
+                                <div class="cliente-pedido-show-comentario">
+
+                                    <label>
+                                        Comentario
+                                        <span>(opcional)</span>
+                                    </label>
+
+                                    <textarea
+                                        name="comentario"
+                                        rows="3"
+                                        maxlength="1000"
+                                        placeholder="Cuéntanos qué te pareció..."></textarea>
+
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    class="cliente-pedido-show-btn-calificar">
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    Enviar calificación
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        @endif
+
+                        @endif
+
+                    </div>
+
+                    @endif
                 </div>
 
                 @empty

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Models\Calificacion;
+
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -56,10 +58,10 @@ class Pedido extends Model
     }
 
     /**
-     * Un pedido tiene una calificación.
+     * Un pedido puede tener muchas calificaciones.
      */
-    public function calificacion(): HasOne
+    public function calificaciones(): HasMany
     {
-        return $this->hasOne(Calificacion::class);
+        return $this->hasMany(Calificacion::class);
     }
 }
