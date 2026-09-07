@@ -1,0 +1,602 @@
+/* =========================================================
+   SABOR EXPRESS - PANEL DEL COCINERO
+   Dashboard
+   ========================================================= */
+
+:root {
+    --cocinero-bg: #101116;
+    --cocinero-surface: #17181d;
+    --cocinero-surface-2: #1d1f26;
+    --cocinero-border: #2b2d36;
+    --cocinero-text: #ffffff;
+    --cocinero-muted: #a8a8ad;
+    --cocinero-pink: #ff2f76;
+    --cocinero-pink-light: #ff4d88;
+    --cocinero-yellow: #ffc107;
+    --cocinero-blue: #5b8cff;
+    --cocinero-green: #35d07f;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.cocinero-main {
+    background: var(--cocinero-bg);
+    color: var(--cocinero-text);
+    min-height: 100vh;
+}
+
+.cocinero-content {
+    color: var(--cocinero-text);
+}
+
+.cocinero-dashboard {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 8px 0 35px;
+}
+
+.cocinero-dashboard a {
+    text-decoration: none;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.cocinero-dashboard-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    border: 1px solid rgba(255, 47, 118, .20);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 90% 15%, rgba(255, 47, 118, .18), transparent 30%),
+        linear-gradient(135deg, #1b1c23 0%, #15161b 65%, #121318 100%);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .28);
+}
+
+.cocinero-dashboard-hero::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    right: -70px;
+    bottom: -90px;
+    border-radius: 50%;
+    background: rgba(255, 47, 118, .10);
+}
+
+.cocinero-dashboard-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    color: var(--cocinero-pink);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+}
+
+.cocinero-dashboard-title {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(25px, 3vw, 36px);
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.cocinero-dashboard-subtitle {
+    max-width: 680px;
+    margin: 10px 0 0;
+    color: var(--cocinero-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.cocinero-dashboard-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 8px 12px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .035);
+    color: #c9c9ce;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.cocinero-dashboard-date i {
+    color: var(--cocinero-pink);
+}
+
+.cocinero-dashboard-hero-icon {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    border: 1px solid rgba(255, 47, 118, .25);
+    border-radius: 24px;
+    background: rgba(255, 47, 118, .10);
+    color: var(--cocinero-pink);
+    font-size: 43px;
+    box-shadow: inset 0 0 30px rgba(255, 47, 118, .06);
+}
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.cocinero-dashboard .btn-cocinero-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 17px;
+    border: 1px solid var(--cocinero-pink);
+    border-radius: 9px;
+    background: var(--cocinero-pink);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    transition: .2s ease;
+}
+
+.cocinero-dashboard .btn-cocinero-primary:hover {
+    border-color: var(--cocinero-pink-light);
+    background: var(--cocinero-pink-light);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(255, 47, 118, .20);
+}
+
+.cocinero-dashboard .btn-cocinero-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 17px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 9px;
+    background: #202127;
+    color: #d8d8dc;
+    font-size: 12px;
+    font-weight: 700;
+    transition: .2s ease;
+}
+
+.cocinero-dashboard .btn-cocinero-secondary:hover {
+    border-color: #454752;
+    background: #272932;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   TARJETAS DE ESTADÍSTICAS
+   ========================================================= */
+
+.cocinero-stat-card {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    padding: 21px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 15px;
+    background: var(--cocinero-surface);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.cocinero-stat-card:hover {
+    border-color: #41434e;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .27);
+    transform: translateY(-4px);
+}
+
+.cocinero-stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--stat-color, var(--cocinero-pink));
+}
+
+.cocinero-stat-card.is-warning { --stat-color: var(--cocinero-yellow); }
+.cocinero-stat-card.is-primary { --stat-color: var(--cocinero-blue); }
+.cocinero-stat-card.is-success { --stat-color: var(--cocinero-green); }
+.cocinero-stat-card.is-pink { --stat-color: var(--cocinero-pink); }
+
+.cocinero-stat-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.cocinero-stat-label {
+    margin-bottom: 6px;
+    color: var(--cocinero-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+}
+
+.cocinero-stat-number {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.cocinero-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    background: color-mix(in srgb, var(--stat-color) 12%, transparent);
+    color: var(--stat-color);
+    font-size: 23px;
+}
+
+.cocinero-stat-divider {
+    height: 1px;
+    margin: 18px 0 12px;
+    background: var(--cocinero-border);
+}
+
+.cocinero-stat-description {
+    margin: 0;
+    color: #85868d;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   SECCIONES
+   ========================================================= */
+
+.cocinero-dashboard-section {
+    height: 100%;
+    padding: 21px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 15px;
+    background: var(--cocinero-surface);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .16);
+}
+
+.cocinero-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.cocinero-section-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.cocinero-section-heading h2 i {
+    color: var(--cocinero-pink);
+}
+
+.cocinero-section-heading span {
+    color: #777980;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   FLUJO
+   ========================================================= */
+
+.cocinero-flow-item {
+    position: relative;
+    height: 100%;
+    padding: 18px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 12px;
+    background: #1b1c22;
+    transition: .2s ease;
+}
+
+.cocinero-flow-item:hover {
+    border-color: #41434d;
+    transform: translateY(-2px);
+}
+
+.cocinero-flow-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    margin-bottom: 14px;
+    border-radius: 9px;
+    background: rgba(255, 47, 118, .10);
+    color: var(--cocinero-pink);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.cocinero-flow-icon {
+    margin-bottom: 10px;
+    font-size: 25px;
+}
+
+.cocinero-flow-item.warning .cocinero-flow-icon { color: var(--cocinero-yellow); }
+.cocinero-flow-item.primary .cocinero-flow-icon { color: var(--cocinero-blue); }
+.cocinero-flow-item.success .cocinero-flow-icon { color: var(--cocinero-green); }
+
+.cocinero-flow-title {
+    margin: 0 0 6px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.cocinero-flow-text {
+    min-height: 34px;
+    margin: 0 0 13px;
+    color: #85868d;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.cocinero-flow-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 29px;
+    height: 25px;
+    padding: 0 9px;
+    border-radius: 999px;
+    background: #282a32;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   PEDIDOS RECIENTES
+   ========================================================= */
+
+.cocinero-order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.cocinero-order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 14px;
+    border: 1px solid #292b33;
+    border-radius: 10px;
+    background: #1b1c22;
+    transition: .2s ease;
+}
+
+.cocinero-order-item:hover {
+    border-color: #3a3c47;
+    background: #202127;
+}
+
+.cocinero-order-main {
+    min-width: 0;
+}
+
+.cocinero-order-number {
+    margin-bottom: 3px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.cocinero-order-client {
+    overflow: hidden;
+    color: #85868d;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cocinero-order-time {
+    color: #686a72;
+    font-size: 9px;
+}
+
+.cocinero-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex: 0 0 auto;
+    padding: 6px 9px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.cocinero-status-pagado {
+    background: rgba(255, 193, 7, .10);
+    color: #ffc107;
+}
+
+.cocinero-status-preparando {
+    background: rgba(91, 140, 255, .11);
+    color: #7da4ff;
+}
+
+.cocinero-status-listo {
+    background: rgba(53, 208, 127, .10);
+    color: #35d07f;
+}
+
+.cocinero-empty-state {
+    padding: 30px 15px;
+    border: 1px dashed #343640;
+    border-radius: 11px;
+    text-align: center;
+}
+
+.cocinero-empty-state i {
+    display: block;
+    margin-bottom: 8px;
+    color: #555761;
+    font-size: 30px;
+}
+
+.cocinero-empty-state p {
+    margin: 0;
+    color: #777980;
+    font-size: 11px;
+}
+
+/* =========================================================
+   ACCIONES RÁPIDAS
+   ========================================================= */
+
+.cocinero-quick-action {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    height: 100%;
+    padding: 15px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 12px;
+    background: #1b1c22;
+    transition: .2s ease;
+}
+
+.cocinero-quick-action:hover {
+    border-color: rgba(255, 47, 118, .35);
+    background: #202127;
+    transform: translateY(-2px);
+}
+
+.cocinero-quick-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 43px;
+    height: 43px;
+    border-radius: 11px;
+    background: rgba(255, 47, 118, .10);
+    color: var(--cocinero-pink);
+    font-size: 19px;
+}
+
+.cocinero-quick-title {
+    margin: 0 0 3px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.cocinero-quick-text {
+    margin: 0;
+    color: #777980;
+    font-size: 10px;
+}
+
+.cocinero-quick-arrow {
+    margin-left: auto;
+    color: #555761;
+    font-size: 14px;
+    transition: .2s ease;
+}
+
+.cocinero-quick-action:hover .cocinero-quick-arrow {
+    color: var(--cocinero-pink);
+    transform: translateX(3px);
+}
+
+/* =========================================================
+   RESPONSIVE
+   Bootstrap se encarga de la estructura; estos ajustes refinan
+   el comportamiento visual en pantallas pequeñas.
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+    .cocinero-dashboard {
+        padding-top: 0;
+    }
+
+    .cocinero-dashboard-hero {
+        padding: 21px;
+        border-radius: 14px;
+    }
+
+    .cocinero-dashboard-hero-icon {
+        display: none;
+    }
+
+    .cocinero-dashboard-title {
+        font-size: 25px;
+    }
+
+    .cocinero-dashboard-subtitle {
+        font-size: 12px;
+    }
+
+    .cocinero-stat-card,
+    .cocinero-dashboard-section {
+        padding: 17px;
+    }
+
+    .cocinero-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .cocinero-order-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cocinero-status {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cocinero-dashboard-hero .btn-cocinero-primary,
+    .cocinero-dashboard-hero .btn-cocinero-secondary {
+        width: 100%;
+    }
+
+    .cocinero-stat-number {
+        font-size: 29px;
+    }
+
+    .cocinero-flow-text {
+        min-height: auto;
+    }
+}
