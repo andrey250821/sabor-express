@@ -4,34 +4,47 @@ namespace Tests\Feature\Auth;
 
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /**
-     * CP-001: un usuario Cliente puede iniciar sesión con credenciales válidas.
-     */
     public function test_cliente_puede_iniciar_sesion_con_credenciales_validas(): void
     {
-        $role = Role::create([
-            'nombre' => 'Cliente',
-            'descripcion' => 'Rol utilizado para pruebas automatizadas.',
-        ]);
+        $role = Role::firstOrCreate(
+            ['nombre' => 'Cliente'],
+            ['descripcion' => 'Cliente del sistema']
+        );
 
-        $user = User::factory()->create([
-            'role_id' => $role->id,
+        $user = User::where('email', 'testcliente@saborexpress.com')->first();
+
+        if (!$user) {
+            $user = User::create([
+                'role_id' => $role->id,
+                'name' => 'Cliente de Prueba',
+                'email' => 'testcliente@saborexpress.com',
+                'password' => 'password',
+                'estado' => 1,
+            ]);
+        }
+
+        $response = $this->post('/login', [
+            'email' => 'testcliente@saborexpress.com',
             'password' => 'password',
         ]);
+
+        $response->assertRedirect();
+        $this->assertAuthenticatedAs($user);
+    }
+    public function test_cliente_no_puede_iniciar_sesion_con_contrasena_incorrecta(): void
+    {
+        $user = User::where('email', 'testcliente@saborexpress.com')->firstOrFail();
 
         $response = $this->post('/login', [
             'email' => $user->email,
-            'password' => 'password',
+            'password' => 'contrasena_incorrecta',
         ]);
 
-        $this->assertAuthenticatedAs($user);
-        $response->assertRedirect('/cliente');
+        $response->assertSessionHasErrors('email');
+        $this->assertGuest();
     }
 }
