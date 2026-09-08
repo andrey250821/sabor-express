@@ -1,293 +1,385 @@
 @extends('layouts.delivery')
 
+@section('title', 'Pedidos disponibles')
+@section('section', 'Gestión de pedidos')
+@section('heading', 'Pedidos disponibles')
+
 @section('content')
 
-<div class="container-fluid px-0">
+@php
+$pedidos = $pedidos ?? collect();
+
+$totalPedidos = $pedidos->count();
+@endphp
+
+<div class="delivery-orders-page">
 
     {{-- ENCABEZADO --}}
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="delivery-orders-header">
 
-        <div>
-            <h2 class="fw-bold mb-1">
-                <i class="bi bi-box-seam me-2"></i>
-                Pedidos disponibles
-            </h2>
+        <div class="delivery-orders-heading">
 
-            <p class="text-muted mb-0">
-                Pedidos listos para ser tomados y entregados.
-            </p>
+            <div class="delivery-orders-icon">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div>
+                <span class="delivery-section-label">
+                    CENTRO DE ENTREGAS
+                </span>
+
+                <h1>
+                    Pedidos disponibles
+                </h1>
+
+                <p>
+                    Revisa los pedidos listos y toma el que quieras entregar.
+                </p>
+            </div>
+
         </div>
 
+        <div class="delivery-orders-counter">
+
+            <div class="delivery-orders-counter-icon">
+                <i class="bi bi-bicycle"></i>
+            </div>
+
+            <div>
+                <span>Disponibles ahora</span>
+                <strong>{{ $totalPedidos }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- BARRA INFORMATIVA --}}
+    <div class="delivery-orders-info">
+
+        <div class="delivery-orders-info-icon">
+            <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+
+        <div class="delivery-orders-info-content">
+            <strong>Pedidos listos para entregar</strong>
+
+            <span>
+                Estos pedidos ya fueron preparados por cocina.
+                Toma uno para comenzar tu entrega.
+            </span>
+        </div>
+
+        <div class="delivery-orders-info-status">
+            <span class="delivery-live-dot"></span>
+            Disponible
+        </div>
+
+    </div>
+
+
+    {{-- SIN PEDIDOS --}}
+    @if($pedidos->isEmpty())
+
+    <div class="delivery-empty-orders">
+
+        <div class="delivery-empty-orders-animation">
+            <div class="delivery-empty-circle">
+                <i class="bi bi-bicycle"></i>
+            </div>
+        </div>
+
+        <h2>
+            No hay pedidos disponibles
+        </h2>
+
+        <p>
+            En este momento no existen pedidos listos para entregar.
+            Cuando cocina termine un pedido, aparecerá aquí automáticamente.
+        </p>
+
+        <a
+            href="{{ route('delivery.dashboard') }}"
+            class="btn delivery-empty-btn">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Volver al dashboard
+        </a>
+
+    </div>
+
+    @else
+
+    {{-- RESUMEN --}}
+    <div class="delivery-orders-summary">
+
         <div>
-            <span class="badge text-bg-primary fs-6 px-3 py-2">
-                <i class="bi bi-bag-check me-1"></i>
-                {{ $pedidos->count() }} disponibles
+            <span class="delivery-summary-label">
+                PEDIDOS EN ESPERA
+            </span>
+
+            <h2>
+                Elige tu próxima entrega
+            </h2>
+        </div>
+
+        <div class="delivery-summary-right">
+            <i class="bi bi-clock-history"></i>
+            <span>
+                Ordenados desde el más antiguo
             </span>
         </div>
 
     </div>
 
 
-    {{-- MENSAJE DE ÉXITO --}}
-    @if(session('success'))
+    {{-- GRID DE PEDIDOS --}}
+    <div class="row g-4">
 
-    <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
+        @foreach($pedidos as $pedido)
 
-        <i class="bi bi-check-circle-fill"></i>
+        @php
+        $cliente = $pedido->user;
 
-        <span>
-            {{ session('success') }}
-        </span>
+        $cantidadProductos = $pedido->detallePedidos->sum('cantidad');
+
+        $minutos = $pedido->created_at
+        ? $pedido->created_at->diffInMinutes(now())
+        : 0;
+
+        if ($minutos < 1) {
+            $tiempoPedido='Hace unos segundos' ;
+            } elseif ($minutos < 60) {
+            $tiempoPedido='Hace ' . $minutos . ' min' ;
+            } else {
+            $horas=floor($minutos / 60);
+            $tiempoPedido='Hace ' . $horas . ($horas==1 ? ' hora' : ' horas' );
+            }
+            @endphp
+
+            <div class="col-12 col-md-6 col-xl-4">
+
+            <article class="delivery-order-card">
+
+                {{-- CABECERA --}}
+                <div class="delivery-order-card-header">
+
+                    <div class="delivery-order-number">
+
+                        <div class="delivery-order-number-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+
+                        <div>
+                            <span>Pedido</span>
+                            <strong>#{{ $pedido->id }}</strong>
+                        </div>
+
+                    </div>
+
+                    <span class="delivery-ready-badge">
+                        <span></span>
+                        Listo
+                    </span>
+
+                </div>
+
+
+                {{-- TIEMPO --}}
+                <div class="delivery-order-time">
+                    <i class="bi bi-clock"></i>
+                    {{ $tiempoPedido }}
+                </div>
+
+
+                {{-- CLIENTE --}}
+                <div class="delivery-order-client">
+
+                    <div class="delivery-client-avatar">
+                        {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                    </div>
+
+                    <div class="delivery-client-data">
+
+                        <span>Cliente</span>
+
+                        <strong>
+                            {{ $cliente->name ?? 'Cliente' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                {{-- PRODUCTOS --}}
+                <div class="delivery-order-products">
+
+                    <div class="delivery-card-title">
+
+                        <span>
+                            <i class="bi bi-basket3"></i>
+                            Productos
+                        </span>
+
+                        <small>
+                            {{ $cantidadProductos }}
+                            {{ $cantidadProductos == 1 ? 'unidad' : 'unidades' }}
+                        </small>
+
+                    </div>
+
+                    <div class="delivery-products-list">
+
+                        @foreach($pedido->detallePedidos->take(3) as $detalle)
+
+                        <div class="delivery-product-row">
+
+                            <div class="delivery-product-quantity">
+                                {{ $detalle->cantidad }}x
+                            </div>
+
+                            <div class="delivery-product-name">
+                                {{ $detalle->producto->nombre ?? 'Producto' }}
+                            </div>
+
+                            <div class="delivery-product-price">
+                                Bs {{ number_format($detalle->subtotal, 2) }}
+                            </div>
+
+                        </div>
+
+                        @endforeach
+
+                        @if($pedido->detallePedidos->count() > 3)
+
+                        <div class="delivery-more-products">
+                            <i class="bi bi-three-dots"></i>
+
+                            {{ $pedido->detallePedidos->count() - 3 }}
+                            productos más
+                        </div>
+
+                        @endif
+
+                    </div>
+
+                </div>
+
+
+                {{-- TOTAL --}}
+                <div class="delivery-order-total">
+
+                    <span>
+                        Total del pedido
+                    </span>
+
+                    <strong>
+                        Bs {{ number_format($pedido->total, 2) }}
+                    </strong>
+
+                </div>
+
+
+                {{-- DIRECCIÓN --}}
+                <div class="delivery-order-location">
+
+                    <div class="delivery-location-icon">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+
+                    <div class="delivery-location-content">
+
+                        <span>
+                            Dirección de entrega
+                        </span>
+
+                        <strong>
+                            {{ $pedido->direccion_entrega ?? 'Sin dirección registrada' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                {{-- REFERENCIA --}}
+                @if(!empty($pedido->referencia_delivery))
+
+                <div class="delivery-order-reference">
+
+                    <div>
+                        <i class="bi bi-signpost-2-fill"></i>
+                    </div>
+
+                    <span>
+                        <strong>Referencia:</strong>
+                        {{ $pedido->referencia_delivery }}
+                    </span>
+
+                </div>
+
+                @endif
+
+
+                {{-- OBSERVACIÓN --}}
+                @if(!empty($pedido->observacion_cliente))
+
+                <div class="delivery-order-observation">
+
+                    <i class="bi bi-chat-left-text-fill"></i>
+
+                    <div>
+                        <strong>Observación del cliente</strong>
+
+                        <span>
+                            {{ $pedido->observacion_cliente }}
+                        </span>
+                    </div>
+
+                </div>
+
+                @endif
+
+
+                {{-- ACCIONES --}}
+                <div class="delivery-order-actions">
+
+                    <a
+                        href="{{ route('delivery.pedidos.show', $pedido->id) }}"
+                        class="delivery-order-detail-btn">
+                        <i class="bi bi-eye"></i>
+                        Ver detalle
+                    </a>
+
+
+                    <form
+                        action="{{ route('delivery.pedidos.tomar', $pedido->id) }}"
+                        method="POST"
+                        class="delivery-take-form">
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="delivery-take-btn"
+                            onclick="return confirm('¿Deseas tomar el pedido #{{ $pedido->id }}?')">
+                            <i class="bi bi-bicycle"></i>
+                            Tomar pedido
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </article>
 
     </div>
 
-    @endif
+    @endforeach
 
+</div>
 
-    {{-- MENSAJE DE ERROR --}}
-    @if(session('error'))
-
-    <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
-
-        <i class="bi bi-exclamation-triangle-fill"></i>
-
-        <span>
-            {{ session('error') }}
-        </span>
-
-    </div>
-
-    @endif
-
-
-    {{-- TARJETA PRINCIPAL --}}
-    <div class="card shadow-sm border-0">
-
-        {{-- CABECERA --}}
-        <div class="card-header bg-white py-3">
-
-            <h5 class="fw-bold mb-1">
-
-                <i class="bi bi-list-ul me-2"></i>
-
-                Pedidos listos
-
-            </h5>
-
-            <small class="text-muted">
-
-                Selecciona un pedido para consultar sus detalles antes de tomarlo.
-
-            </small>
-
-        </div>
-
-
-        {{-- CONTENIDO --}}
-        <div class="card-body p-0">
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0">
-
-                    {{-- ENCABEZADO DE TABLA --}}
-                    <thead class="table-light">
-
-                        <tr>
-
-                            <th class="text-center">
-                                ID
-                            </th>
-
-                            <th>
-                                Cliente
-                            </th>
-
-                            <th>
-                                Total
-                            </th>
-
-                            <th>
-                                Dirección
-                            </th>
-
-                            <th>
-                                Fecha
-                            </th>
-
-                            <th class="text-center">
-                                Acción
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    {{-- PEDIDOS --}}
-                    <tbody>
-
-                        @forelse($pedidos as $pedido)
-
-                        <tr>
-
-                            {{-- ID --}}
-                            <td class="text-center">
-
-                                <span class="fw-bold">
-
-                                    #{{ $pedido->id }}
-
-                                </span>
-
-                            </td>
-
-
-                            {{-- CLIENTE --}}
-                            <td>
-
-                                <div class="d-flex align-items-center gap-2">
-
-                                    <div class="text-primary fs-4">
-
-                                        <i class="bi bi-person-circle"></i>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong class="d-block">
-
-                                            {{ $pedido->user->name ?? 'Cliente eliminado' }}
-
-                                        </strong>
-
-
-                                        <small class="text-muted">
-
-                                            <i class="bi bi-telephone me-1"></i>
-
-                                            {{ $pedido->user->telefono ?? 'Sin teléfono' }}
-
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            {{-- TOTAL --}}
-                            <td>
-
-                                <strong class="text-success">
-
-                                    Bs.
-                                    {{ number_format($pedido->total, 2) }}
-
-                                </strong>
-
-                            </td>
-
-
-                            {{-- DIRECCIÓN --}}
-                            <td>
-
-                                <div class="d-flex align-items-start gap-2">
-
-                                    <i class="bi bi-geo-alt-fill text-danger mt-1"></i>
-
-                                    <span>
-
-                                        {{ $pedido->direccion_entrega }}
-
-                                    </span>
-
-                                </div>
-
-                            </td>
-
-
-                            {{-- FECHA --}}
-                            <td>
-
-                                <strong class="d-block">
-
-                                    {{ $pedido->created_at->format('d/m/Y') }}
-
-                                </strong>
-
-                                <small class="text-muted">
-
-                                    {{ $pedido->created_at->format('H:i') }}
-
-                                </small>
-
-                            </td>
-
-
-                            {{-- ACCIÓN --}}
-                            <td class="text-center">
-
-                                <a
-                                    href="{{ route('delivery.pedidos.show', $pedido->id) }}"
-                                    class="btn btn-primary btn-sm">
-
-                                    <i class="bi bi-eye me-1"></i>
-
-                                    Ver detalles
-
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-
-                        @empty
-
-                        {{-- SIN PEDIDOS --}}
-                        <tr>
-
-                            <td colspan="6" class="py-5">
-
-                                <div class="text-center text-muted">
-
-                                    <i class="bi bi-inbox display-4 d-block mb-3"></i>
-
-
-                                    <h5 class="fw-bold">
-
-                                        No hay pedidos disponibles
-
-                                    </h5>
-
-
-                                    <p class="mb-0">
-
-                                        Actualmente no existen pedidos listos para entregar.
-
-                                    </p>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
+@endif
 
 </div>
 

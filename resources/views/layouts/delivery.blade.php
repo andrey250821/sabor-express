@@ -9,12 +9,17 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
+    <meta
+        name="theme-color"
+        content="#111318">
+
     <title>
+        @yield('title', 'Delivery')
+        -
         {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
-        - Panel del Delivery
     </title>
 
-    {{-- Bootstrap --}}
+    {{-- Bootstrap 5.3.3 --}}
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet">
@@ -37,78 +42,116 @@
 
     <div class="delivery-wrapper">
 
-
         {{-- =====================================================
             SIDEBAR
         ====================================================== --}}
 
-        <aside class="delivery-sidebar">
+        <aside
+            class="delivery-sidebar"
+            id="deliverySidebar">
+
+            {{-- BOTÓN CERRAR EN MÓVIL --}}
+            <button
+                type="button"
+                class="delivery-sidebar-close d-lg-none"
+                id="deliverySidebarClose"
+                aria-label="Cerrar menú">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
 
 
-            {{-- LOGO / IDENTIDAD --}}
+            {{-- =================================================
+                MARCA / LOGO
+            ================================================== --}}
 
-            <div class="sidebar-brand">
+            <div class="delivery-brand">
 
-                <div class="sidebar-logo">
+                <a
+                    href="{{ route('delivery.dashboard') }}"
+                    class="delivery-brand-link">
 
-                    @if(!empty($configuracion?->logo))
+                    <div class="delivery-brand-logo">
 
-                    <img
-                        src="{{ asset('storage/' . $configuracion->logo) }}"
-                        alt="{{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}">
+                        @if(!empty($configuracion?->logo))
 
-                    @else
+                        <img
+                            src="{{ asset('storage/' . $configuracion->logo) }}"
+                            alt="{{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}">
 
-                    <span>
-                        🍔
-                    </span>
+                        @else
 
-                    @endif
+                        <i class="bi bi-bicycle"></i>
 
-                </div>
+                        @endif
 
-
-                <div class="sidebar-brand-name">
-
-                    {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
-
-                </div>
+                    </div>
 
 
-                <div class="sidebar-brand-subtitle">
+                    <div class="delivery-brand-text">
 
-                    Panel del Delivery
+                        <strong>
+                            {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
+                        </strong>
+
+                        <span>
+                            Panel Delivery
+                        </span>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            {{-- =================================================
+                ESTADO DEL DELIVERY
+            ================================================== --}}
+
+            <div class="delivery-status-box">
+
+                <span class="delivery-status-indicator"></span>
+
+                <div>
+
+                    <strong>
+                        En servicio
+                    </strong>
+
+                    <small>
+                        Listo para entregar
+                    </small>
 
                 </div>
 
             </div>
 
 
-            {{-- SEPARADOR --}}
-
-            <div class="sidebar-divider"></div>
-
-
             {{-- =================================================
-                MENU DEL DELIVERY
+                NAVEGACIÓN
             ================================================== --}}
 
-            <nav class="sidebar-menu">
+            <nav class="delivery-nav">
+
+                <div class="delivery-nav-title">
+                    MENÚ
+                </div>
 
 
-                {{-- Dashboard --}}
+                {{-- DASHBOARD --}}
 
                 <a
                     href="{{ route('delivery.dashboard') }}"
-                    class="sidebar-link {{ request()->routeIs('delivery.dashboard') ? 'active' : '' }}">
+                    class="delivery-nav-link
+                    {{ request()->routeIs('delivery.dashboard') ? 'active' : '' }}">
 
-                    <span class="sidebar-icon">
-
-                        <i class="bi bi-speedometer2"></i>
-
+                    <span class="delivery-nav-icon">
+                        <i class="bi bi-grid-1x2-fill"></i>
                     </span>
 
-                    <span>
+                    <span class="delivery-nav-text">
                         Dashboard
                     </span>
 
@@ -119,16 +162,19 @@
 
                 <a
                     href="{{ route('delivery.pedidos.index') }}"
-                    class="sidebar-link {{ request()->routeIs('delivery.pedidos.index') ? 'active' : '' }}">
+                    class="delivery-nav-link
+                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'active' : '' }}">
 
-                    <span class="sidebar-icon">
-
-                        <i class="bi bi-box-seam"></i>
-
+                    <span class="delivery-nav-icon">
+                        <i class="bi bi-box-seam-fill"></i>
                     </span>
 
-                    <span>
+                    <span class="delivery-nav-text">
                         Pedidos disponibles
+                    </span>
+
+                    <span class="delivery-nav-arrow">
+                        <i class="bi bi-chevron-right"></i>
                     </span>
 
                 </a>
@@ -138,44 +184,50 @@
 
                 <a
                     href="{{ route('delivery.pedidos.mis') }}"
-                    class="sidebar-link {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}">
+                    class="delivery-nav-link
+                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}">
 
-                    <span class="sidebar-icon">
-
+                    <span class="delivery-nav-icon">
                         <i class="bi bi-bicycle"></i>
-
                     </span>
 
-                    <span>
+                    <span class="delivery-nav-text">
                         Mis pedidos
                     </span>
 
                 </a>
 
-
             </nav>
+
+
+            {{-- =================================================
+                ESPACIO
+            ================================================== --}}
+
+            <div class="delivery-sidebar-spacer"></div>
 
 
             {{-- =================================================
                 INFORMACIÓN DEL USUARIO
             ================================================== --}}
 
-            <div class="sidebar-user">
+            <div class="delivery-user-card">
 
-                <div class="sidebar-user-icon">
+                <div class="delivery-user-avatar">
 
-                    <i class="bi bi-person-circle"></i>
+                    <i class="bi bi-person-fill"></i>
 
                 </div>
 
-                <div class="sidebar-user-info">
+
+                <div class="delivery-user-info">
 
                     <strong>
-                        {{ Auth::user()->name }}
+                        {{ Auth::user()->name ?? 'Delivery' }}
                     </strong>
 
                     <span>
-                        Delivery
+                        Repartidor
                     </span>
 
                 </div>
@@ -183,7 +235,40 @@
             </div>
 
 
+            {{-- =================================================
+                CERRAR SESIÓN
+            ================================================== --}}
+
+            <form
+                method="POST"
+                action="{{ route('logout') }}"
+                class="delivery-logout-form">
+
+                @csrf
+
+                <button
+                    type="submit"
+                    class="delivery-logout">
+
+                    <i class="bi bi-box-arrow-left"></i>
+
+                    <span>
+                        Cerrar sesión
+                    </span>
+
+                </button>
+
+            </form>
+
         </aside>
+
+
+        {{-- OVERLAY PARA MÓVIL --}}
+
+        <div
+            class="delivery-overlay"
+            id="deliveryOverlay">
+        </div>
 
 
         {{-- =====================================================
@@ -194,80 +279,70 @@
 
 
             {{-- =================================================
-                HEADER
+                TOPBAR
             ================================================== --}}
 
             <header class="delivery-topbar">
 
+                <div class="delivery-topbar-left">
 
-                <div class="topbar-left">
+                    {{-- BOTÓN MENÚ MÓVIL --}}
 
-                    <div>
+                    <button
+                        type="button"
+                        class="delivery-menu-toggle d-lg-none"
+                        id="deliveryMenuToggle"
+                        aria-label="Abrir menú">
 
-                        <h1 class="topbar-title">
+                        <i class="bi bi-list"></i>
 
-                            Panel del Delivery
+                    </button>
 
+
+                    <div class="delivery-page-heading">
+
+                        <span>
+                            @yield('section', 'Panel de delivery')
+                        </span>
+
+                        <h1>
+                            @yield(
+                            'heading',
+                            'Panel del Delivery'
+                            )
                         </h1>
-
-                        <p class="topbar-subtitle">
-
-                            Gestión y entrega de pedidos
-
-                        </p>
 
                     </div>
 
                 </div>
 
 
-                {{-- USUARIO --}}
+                {{-- =================================================
+                    USUARIO TOPBAR
+                ================================================== --}}
 
-                <div class="topbar-user">
+                <div class="delivery-topbar-user">
+
+                    <div class="delivery-topbar-user-icon">
+
+                        <i class="bi bi-bicycle"></i>
+
+                    </div>
 
 
-                    <div class="topbar-user-info">
+                    <div class="delivery-topbar-user-info">
 
                         <strong>
-
-                            {{ Auth::user()->name }}
-
+                            {{ Auth::user()->name ?? 'Delivery' }}
                         </strong>
 
                         <span>
-
-                            Delivery
-
+                            Repartidor
                         </span>
 
                     </div>
 
-
-                    {{-- CERRAR SESIÓN --}}
-
-                    <form
-                        method="POST"
-                        action="{{ route('logout') }}">
-
-                        @csrf
-
-                        <button
-                            type="submit"
-                            class="topbar-logout">
-
-                            <i class="bi bi-box-arrow-right"></i>
-
-                            <span>
-                                Salir
-                            </span>
-
-                        </button>
-
-                    </form>
-
-
                 </div>
-
 
             </header>
 
@@ -278,26 +353,189 @@
 
             <section class="delivery-content">
 
+                {{-- MENSAJES DE SESIÓN --}}
+
+                @if(session('success'))
+
+                <div
+                    class="alert delivery-alert delivery-alert-success alert-dismissible fade show"
+                    role="alert">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    <span>
+                        {{ session('success') }}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                    </button>
+
+                </div>
+
+                @endif
+
+
+                @if(session('error'))
+
+                <div
+                    class="alert delivery-alert delivery-alert-error alert-dismissible fade show"
+                    role="alert">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                    <span>
+                        {{ session('error') }}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                    </button>
+
+                </div>
+
+                @endif
+
+
                 @yield('content')
 
             </section>
 
 
-        </main>
+            {{-- =================================================
+                FOOTER
+            ================================================== --}}
 
+            <footer class="delivery-footer">
+
+                <span>
+
+                    <i class="bi bi-shield-check"></i>
+
+                    Panel protegido
+
+                </span>
+
+                <span>
+
+                    {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
+
+                </span>
+
+            </footer>
+
+        </main>
 
     </div>
 
 
-    {{-- Bootstrap JS --}}
+    {{-- =====================================================
+        BOOTSTRAP JS
+    ====================================================== --}}
 
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
 
 
-    @stack('scripts')
+    {{-- =====================================================
+        MENÚ RESPONSIVE
+    ====================================================== --}}
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const sidebar =
+                document.getElementById('deliverySidebar');
+
+            const overlay =
+                document.getElementById('deliveryOverlay');
+
+            const menuToggle =
+                document.getElementById('deliveryMenuToggle');
+
+            const closeButton =
+                document.getElementById('deliverySidebarClose');
+
+
+            function openSidebar() {
+
+                sidebar?.classList.add('show');
+
+                overlay?.classList.add('show');
+
+                document.body.classList.add('delivery-menu-open');
+
+            }
+
+
+            function closeSidebar() {
+
+                sidebar?.classList.remove('show');
+
+                overlay?.classList.remove('show');
+
+                document.body.classList.remove('delivery-menu-open');
+
+            }
+
+
+            menuToggle?.addEventListener(
+                'click',
+                openSidebar
+            );
+
+
+            closeButton?.addEventListener(
+                'click',
+                closeSidebar
+            );
+
+
+            overlay?.addEventListener(
+                'click',
+                closeSidebar
+            );
+
+
+            document
+                .querySelectorAll('.delivery-nav-link')
+                .forEach(function(link) {
+
+                    link.addEventListener(
+                        'click',
+                        function() {
+
+                            if (window.innerWidth < 992) {
+                                closeSidebar();
+                            }
+
+                        }
+                    );
+
+                });
+
+
+            window.addEventListener(
+                'resize',
+                function() {
+
+                    if (window.innerWidth >= 992) {
+                        closeSidebar();
+                    }
+
+                }
+            );
+
+        });
+    </script>
+
+
+    @stack('scripts')
 
 </body>
 
