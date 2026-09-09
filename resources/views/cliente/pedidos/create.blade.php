@@ -272,32 +272,9 @@
                     <div class="cliente-pedido-card-body">
 
 
-                        @if(empty(config('services.google_maps.key')))
-
-                        <div class="cliente-pedido-alert cliente-pedido-alert-warning">
-
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-
-                            <div>
-
-                                <strong>
-                                    Mapa no configurado
-                                </strong>
-
-                                <p>
-                                    Agrega
-                                    <code>GOOGLE_MAPS_API_KEY</code>
-                                    en el archivo
-                                    <code>.env</code>
-                                    para utilizar Google Maps.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        @endif
-
+                        {{-- =================================================
+                             MAPA LEAFLET / OPENSTREETMAP
+                        ================================================== --}}
 
                         {{-- BOTONES --}}
 
@@ -852,6 +829,20 @@
 
 @section('scripts')
 
+{{-- =========================================================
+     LEAFLET
+========================================================== --}}
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -929,22 +920,100 @@
 
             estadoUbicacion.innerHTML = `
 
-            <i class="bi ${
-                error
-                    ? 'bi-exclamation-circle-fill'
-                    : 'bi-info-circle-fill'
-            }"></i>
+                <i class="bi ${
+                    error
+                        ? 'bi-exclamation-circle-fill'
+                        : 'bi-info-circle-fill'
+                }"></i>
 
-            <span>
-                ${mensaje}
-            </span>
+                <span>
+                    ${mensaje}
+                </span>
 
-        `;
+            `;
 
             estadoUbicacion.classList.toggle(
                 'cliente-pedido-estado-error',
                 error
             );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NORMALIZAR COORDENADAS
+        |--------------------------------------------------------------------------
+        |
+        | Google Maps utilizaba:
+        |
+        | posicion.lat()
+        | posicion.lng()
+        |
+        | Leaflet utiliza:
+        |
+        | posicion.lat
+        | posicion.lng
+        |
+        | Esta función permite que el resto de la lógica conserve
+        | los mismos nombres y funcione correctamente con Leaflet.
+        |
+        */
+
+        function normalizarPosicion(posicion) {
+
+            if (!posicion) {
+                return null;
+            }
+
+            let lat;
+            let lng;
+
+
+            if (typeof posicion.lat === 'function') {
+
+                lat = Number(
+                    posicion.lat()
+                );
+
+            } else {
+
+                lat = Number(
+                    posicion.lat
+                );
+
+            }
+
+
+            if (typeof posicion.lng === 'function') {
+
+                lng = Number(
+                    posicion.lng()
+                );
+
+            } else {
+
+                lng = Number(
+                    posicion.lng
+                );
+
+            }
+
+
+            if (
+                !Number.isFinite(lat) ||
+                !Number.isFinite(lng)
+            ) {
+
+                return null;
+
+            }
+
+
+            return {
+                lat: lat,
+                lng: lng
+            };
 
         }
 
@@ -957,21 +1026,11 @@
 
         function guardarCoordenadas(posicion) {
 
-            if (!posicion) {
-                return;
-            }
-
-            const lat =
-                Number(posicion.lat());
-
-            const lng =
-                Number(posicion.lng());
+            const coordenadas =
+                normalizarPosicion(posicion);
 
 
-            if (
-                !Number.isFinite(lat) ||
-                !Number.isFinite(lng)
-            ) {
+            if (!coordenadas) {
 
                 mostrarEstado(
                     'Las coordenadas no son válidas.',
@@ -984,10 +1043,10 @@
 
 
             latitudInput.value =
-                lat.toFixed(7);
+                coordenadas.lat.toFixed(7);
 
             longitudInput.value =
-                lng.toFixed(7);
+                coordenadas.lng.toFixed(7);
 
         }
 
@@ -1028,17 +1087,11 @@
 
         async function obtenerDireccionPedido(posicion) {
 
-            const latitud =
-                Number(posicion.lat());
-
-            const longitud =
-                Number(posicion.lng());
+            const coordenadas =
+                normalizarPosicion(posicion);
 
 
-            if (
-                !Number.isFinite(latitud) ||
-                !Number.isFinite(longitud)
-            ) {
+            if (!coordenadas) {
 
                 mostrarEstado(
                     'Coordenadas no válidas.',
@@ -1048,6 +1101,13 @@
                 return;
 
             }
+
+
+            const latitud =
+                coordenadas.lat;
+
+            const longitud =
+                coordenadas.lng;
 
 
             const ahora =
@@ -1201,64 +1261,129 @@
             }
 
 
+            const coordenadas =
+                normalizarPosicion(posicion);
+
+
+            if (!coordenadas) {
+
+                mostrarEstado(
+                    'La ubicación seleccionada no es válida.',
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const latLng = [
+                coordenadas.lat,
+                coordenadas.lng
+            ];
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Crear marcador Leaflet
+            |--------------------------------------------------------------------------
+            */
+
             if (!marcadorPedido) {
 
                 marcadorPedido =
-                    new google.maps.Marker({
-
-                        position: posicion,
-
-                        map: mapaPedido,
-
-                        draggable: true,
-
-                        title: 'Ubicación de entrega'
-
-                    });
+                    L.marker(
+                        latLng, {
+                            draggable: true,
+                            title: 'Ubicación de entrega'
+                        }
+                    ).addTo(
+                        mapaPedido
+                    );
 
 
-                marcadorPedido.addListener(
+                marcadorPedido.bindPopup(
+                    '<strong>Ubicación de entrega</strong><br>' +
+                    'Puedes mover este marcador.'
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Mover marcador
+                |--------------------------------------------------------------------------
+                */
+
+                marcadorPedido.on(
                     'dragend',
                     function(evento) {
 
+                        const nuevaPosicion =
+                            evento.target.getLatLng();
+
+
                         guardarCoordenadas(
-                            evento.latLng
+                            nuevaPosicion
                         );
 
+
                         solicitarDireccion(
-                            evento.latLng
+                            nuevaPosicion
                         );
 
                     }
                 );
 
+
             } else {
 
-                marcadorPedido.setPosition(
-                    posicion
+                marcadorPedido.setLatLng(
+                    latLng
                 );
 
             }
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | Centrar mapa
+            |--------------------------------------------------------------------------
+            */
 
             if (centrar) {
 
-                mapaPedido.setCenter(
-                    posicion
+                mapaPedido.setView(
+                    latLng,
+                    Math.max(
+                        mapaPedido.getZoom(),
+                        16
+                    )
                 );
 
             }
 
 
+            /*
+            |--------------------------------------------------------------------------
+            | Guardar coordenadas
+            |--------------------------------------------------------------------------
+            */
+
             guardarCoordenadas(
-                marcadorPedido.getPosition()
+                marcadorPedido.getLatLng()
             );
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | Obtener dirección
+            |--------------------------------------------------------------------------
+            */
 
             if (obtenerDireccion) {
 
                 solicitarDireccion(
-                    marcadorPedido.getPosition()
+                    marcadorPedido.getLatLng()
                 );
 
             }
@@ -1268,12 +1393,29 @@
 
         /*
         |--------------------------------------------------------------------------
-        | INICIALIZAR GOOGLE MAPS
+        | INICIALIZAR MAPA
         |--------------------------------------------------------------------------
         */
 
         window.inicializarMapaPedido =
             function() {
+
+                /*
+                |--------------------------------------------------------------------------
+                | Verificar Leaflet
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    typeof L === 'undefined'
+                ) {
+
+                    window.mapaNoDisponible();
+
+                    return;
+
+                }
+
 
                 const latGuardada =
                     parseFloat(
@@ -1291,50 +1433,145 @@
                     Number.isFinite(lngGuardada);
 
 
+                /*
+                |--------------------------------------------------------------------------
+                | Centro inicial
+                |--------------------------------------------------------------------------
+                |
+                | Cochabamba solamente se utiliza como centro visual.
+                |
+                | NO se guarda como ubicación del pedido.
+                |
+                */
+
                 const centroInicial =
                     tieneUbicacionGuardada ?
-                    {
-                        lat: latGuardada,
-                        lng: lngGuardada
-                    } :
-                    cochabamba;
+                    [
+                        latGuardada,
+                        lngGuardada
+                    ] :
+                    [
+                        cochabamba.lat,
+                        cochabamba.lng
+                    ];
 
+
+                /*
+                |--------------------------------------------------------------------------
+                | Crear mapa Leaflet
+                |--------------------------------------------------------------------------
+                */
 
                 mapaPedido =
-                    new google.maps.Map(
+                    L.map(
                         document.getElementById(
                             'mapa-pedido'
                         ), {
-
-                            center: centroInicial,
-
-                            zoom: 16,
-
-                            mapTypeControl: true,
-
-                            streetViewControl: false,
-
-                            fullscreenControl: true,
-
                             zoomControl: true
-
                         }
+                    ).setView(
+                        centroInicial,
+                        16
                     );
 
 
                 /*
-                 * Si ya había coordenadas,
-                 * las recuperamos.
-                 *
-                 * Si es la primera vez,
-                 * NO consultamos automáticamente
-                 * la dirección de Cochabamba.
-                 */
+                |--------------------------------------------------------------------------
+                | OpenStreetMap
+                |--------------------------------------------------------------------------
+                */
 
-                colocarMarcador(
-                    centroInicial,
-                    false,
-                    tieneUbicacionGuardada
+                L.tileLayer(
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+                        maxZoom: 19,
+
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">' +
+                            'OpenStreetMap</a> contributors'
+
+                    }
+                ).addTo(
+                    mapaPedido
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Icono del marcador
+                |--------------------------------------------------------------------------
+                */
+
+                delete L.Icon.Default.prototype._getIconUrl;
+
+
+                L.Icon.Default.mergeOptions({
+
+                    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+
+                    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+
+                    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+
+                });
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Si ya había coordenadas, las recuperamos
+                |--------------------------------------------------------------------------
+                */
+
+                if (tieneUbicacionGuardada) {
+
+                    colocarMarcador({
+                            lat: latGuardada,
+                            lng: lngGuardada
+                        },
+                        false,
+                        false
+                    );
+
+
+                    mostrarEstado(
+                        'Ubicación cargada. Puedes mover el marcador si deseas corregirla.'
+                    );
+
+                } else {
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Primera visita
+                    |--------------------------------------------------------------------------
+                    |
+                    | NO colocamos un marcador automáticamente en Cochabamba.
+                    | El usuario debe seleccionar su ubicación.
+                    |
+                    */
+
+                    mostrarEstado(
+                        'Selecciona tu ubicación en el mapa o utiliza "Usar mi ubicación".'
+                    );
+
+                }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | HACER CLIC EN EL MAPA
+                |--------------------------------------------------------------------------
+                */
+
+                mapaPedido.on(
+                    'click',
+                    function(evento) {
+
+                        colocarMarcador(
+                            evento.latlng,
+                            true,
+                            true
+                        );
+
+                    }
                 );
 
 
@@ -1398,6 +1635,7 @@
 
                                 },
 
+
                                 function(error) {
 
                                     console.error(
@@ -1406,8 +1644,45 @@
                                     );
 
 
+                                    let mensaje =
+                                        'No se pudo obtener tu ubicación. Revisa los permisos del navegador.';
+
+
+                                    if (
+                                        error.code ===
+                                        error.PERMISSION_DENIED
+                                    ) {
+
+                                        mensaje =
+                                            'Permiso de ubicación denegado. Puedes seleccionar manualmente tu ubicación en el mapa.';
+
+                                    }
+
+
+                                    if (
+                                        error.code ===
+                                        error.POSITION_UNAVAILABLE
+                                    ) {
+
+                                        mensaje =
+                                            'La ubicación no está disponible. Puedes seleccionar manualmente tu ubicación en el mapa.';
+
+                                    }
+
+
+                                    if (
+                                        error.code ===
+                                        error.TIMEOUT
+                                    ) {
+
+                                        mensaje =
+                                            'La solicitud de ubicación tardó demasiado. Intenta nuevamente.';
+
+                                    }
+
+
                                     mostrarEstado(
-                                        'No se pudo obtener tu ubicación. Revisa los permisos del navegador.',
+                                        mensaje,
                                         true
                                     );
 
@@ -1416,6 +1691,7 @@
                                         false;
 
                                 },
+
 
                                 {
 
@@ -1460,7 +1736,7 @@
 
 
                             obtenerDireccionPedido(
-                                marcadorPedido.getPosition()
+                                marcadorPedido.getLatLng()
                             );
 
                         }
@@ -1468,12 +1744,32 @@
 
                 }
 
+
+                /*
+                |--------------------------------------------------------------------------
+                | CORREGIR TAMAÑO DEL MAPA
+                |--------------------------------------------------------------------------
+                */
+
+                setTimeout(
+                    function() {
+
+                        if (mapaPedido) {
+
+                            mapaPedido.invalidateSize();
+
+                        }
+
+                    },
+                    300
+                );
+
             };
 
 
         /*
         |--------------------------------------------------------------------------
-        | GOOGLE MAPS NO DISPONIBLE
+        | MAPA NO DISPONIBLE
         |--------------------------------------------------------------------------
         */
 
@@ -1490,21 +1786,21 @@
 
                     mapa.innerHTML = `
 
-                    <div class="cliente-pedido-mapa-error">
+                        <div class="cliente-pedido-mapa-error">
 
-                        <i class="bi bi-map"></i>
+                            <i class="bi bi-map"></i>
 
-                        <strong>
-                            Mapa no disponible
-                        </strong>
+                            <strong>
+                                Mapa no disponible
+                            </strong>
 
-                        <span>
-                            Puedes escribir tu dirección manualmente.
-                        </span>
+                            <span>
+                                Puedes escribir tu dirección manualmente.
+                            </span>
 
-                    </div>
+                        </div>
 
-                `;
+                    `;
 
                 }
 
@@ -1531,6 +1827,15 @@
                 );
 
             };
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | INICIAR MAPA
+        |--------------------------------------------------------------------------
+        */
+
+        inicializarMapaPedido();
 
 
         /*
@@ -1708,17 +2013,17 @@
 
             alerta.innerHTML = `
 
-            <i class="bi ${
-                tipo === 'error'
-                    ? 'bi-exclamation-circle-fill'
-                    : 'bi-check-circle-fill'
-            }"></i>
+                <i class="bi ${
+                    tipo === 'error'
+                        ? 'bi-exclamation-circle-fill'
+                        : 'bi-check-circle-fill'
+                }"></i>
 
-            <span>
-                ${mensaje}
-            </span>
+                <span>
+                    ${mensaje}
+                </span>
 
-        `;
+            `;
 
 
             const cardBody =
@@ -1740,7 +2045,9 @@
                 function() {
 
                     if (alerta) {
+
                         alerta.remove();
+
                     }
 
                 },
@@ -1763,8 +2070,10 @@
                 function(evento) {
 
                     /*
-                     * Evita doble envío.
-                     */
+                    |--------------------------------------------------------------------------
+                    | Evita doble envío
+                    |--------------------------------------------------------------------------
+                    */
 
                     if (
                         botonConfirmar &&
@@ -1779,8 +2088,10 @@
 
 
                     /*
-                     * Comprobante.
-                     */
+                    |--------------------------------------------------------------------------
+                    | Comprobante
+                    |--------------------------------------------------------------------------
+                    */
 
                     if (
                         inputComprobante &&
@@ -1805,11 +2116,14 @@
 
 
                     /*
-                     * Ubicación.
-                     *
-                     * No la hacemos obligatoria porque
-                     * el controller actual acepta nullable.
-                     */
+                    |--------------------------------------------------------------------------
+                    | Ubicación
+                    |--------------------------------------------------------------------------
+                    |
+                    | NO la hacemos obligatoria porque el controller
+                    | actual acepta nullable.
+                    |
+                    */
 
                     if (botonConfirmar) {
 
@@ -1819,14 +2133,14 @@
 
                         botonConfirmar.innerHTML = `
 
-                        <span
-                            class="spinner-border spinner-border-sm"
-                            aria-hidden="true">
-                        </span>
+                            <span
+                                class="spinner-border spinner-border-sm"
+                                aria-hidden="true">
+                            </span>
 
-                        Enviando pedido...
+                            Enviando pedido...
 
-                    `;
+                        `;
 
                     }
 
@@ -1837,36 +2151,5 @@
 
     });
 </script>
-
-
-@if(!empty(config('services.google_maps.key')))
-
-<script
-    async
-    defer
-    src="https://maps.googleapis.com/maps/api/js?key={{ urlencode(config('services.google_maps.key')) }}&callback=inicializarMapaPedido">
-</script>
-
-@else
-
-<script>
-    document.addEventListener(
-        'DOMContentLoaded',
-        function() {
-
-            if (
-                typeof window.mapaNoDisponible ===
-                'function'
-            ) {
-
-                window.mapaNoDisponible();
-
-            }
-
-        }
-    );
-</script>
-
-@endif
 
 @endsection

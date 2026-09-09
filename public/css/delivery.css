@@ -7878,3 +7878,220 @@ a {
     }
 
 }
+/* ================================================================
+   MAPA DE ENTREGA - LEAFLET
+================================================================ */
+
+.delivery-map-card {
+    width: 100%;
+    overflow: hidden;
+}
+
+.delivery-map-card .delivery-show-card-header {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* ---------------------------------------------------------------
+   CONTENEDOR PRINCIPAL DEL MAPA
+---------------------------------------------------------------- */
+
+.delivery-map {
+    width: 100% !important;
+    height: 450px !important;
+    min-height: 450px !important;
+
+    position: relative !important;
+
+    display: block;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    background: #e5e7eb;
+
+    z-index: 1;
+}
+
+
+/* ---------------------------------------------------------------
+   CONTENEDOR INTERNO DE LEAFLET
+---------------------------------------------------------------- */
+
+.delivery-map .leaflet-container {
+    width: 100% !important;
+    height: 100% !important;
+
+    min-height: 450px;
+
+    background: #e5e7eb;
+
+    font-family: inherit;
+
+    z-index: 1;
+}
+
+
+/* ---------------------------------------------------------------
+   CONTROLES DE LEAFLET
+---------------------------------------------------------------- */
+
+.delivery-map .leaflet-control {
+    z-index: 1000;
+}
+
+.delivery-map .leaflet-top,
+.delivery-map .leaflet-bottom {
+    z-index: 1000;
+}
+
+
+/* ---------------------------------------------------------------
+   POPUP
+---------------------------------------------------------------- */
+
+.delivery-leaflet-popup {
+    min-width: 220px;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+}
+
+.delivery-leaflet-popup strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-weight: 700;
+}
+
+.delivery-leaflet-popup span {
+    display: block;
+
+    color: #555;
+}
+
+
+/* ---------------------------------------------------------------
+   ENLACE PARA ABRIR GOOGLE MAPS
+---------------------------------------------------------------- */
+
+.delivery-map-external {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+.delivery-map-external:hover {
+    text-decoration: none;
+}
+
+
+/* ---------------------------------------------------------------
+   ERROR DEL MAPA
+---------------------------------------------------------------- */
+
+.delivery-map-error {
+    width: 100%;
+    height: 100%;
+    min-height: 450px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    background: #f3f4f6;
+
+    color: #555;
+}
+
+.delivery-map-error i {
+    font-size: 42px;
+
+    color: #dc3545;
+}
+
+.delivery-map-error strong {
+    font-size: 17px;
+
+    font-weight: 700;
+}
+
+.delivery-map-error span {
+    font-size: 14px;
+
+    color: #777;
+}
+
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+
+@media (max-width: 768px) {
+
+    .delivery-map {
+        height: 380px !important;
+        min-height: 380px !important;
+
+        border-radius: 10px;
+    }
+
+    .delivery-map .leaflet-container {
+        min-height: 380px;
+    }
+
+    .delivery-map-error {
+        min-height: 380px;
+    }
+
+    .delivery-map-card .delivery-show-card-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+    .delivery-map-external {
+        font-size: 13px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .delivery-map {
+        height: 320px !important;
+        min-height: 320px !important;
+    }
+
+    .delivery-map .leaflet-container {
+        min-height: 320px;
+    }
+
+    .delivery-map-error {
+        min-height: 320px;
+    }
+
+}
