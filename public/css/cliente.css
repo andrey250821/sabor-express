@@ -10226,3 +10226,158 @@ body {
     border-radius: 0;
     box-shadow: none;
 }
+/* ============================================================
+   SEGUIMIENTO DELIVERY EN TIEMPO REAL
+============================================================ */
+
+.cliente-delivery-tracking {
+    margin-top: 24px;
+    padding: 20px;
+
+    border-radius: 16px;
+
+    background: #fff;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.cliente-delivery-tracking-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+.cliente-delivery-tracking-header > div:first-child span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    color: #8b1e45;
+}
+
+.cliente-delivery-tracking-header h3 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    color: #222;
+}
+
+.cliente-delivery-tracking-header h3 i {
+    margin-right: 6px;
+
+    color: #8b1e45;
+}
+
+.cliente-delivery-live {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    background: #f0fdf4;
+
+    color: #198754;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.cliente-delivery-live span {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #198754;
+
+    animation: cliente-delivery-pulse 1.5s infinite;
+}
+
+@keyframes cliente-delivery-pulse {
+
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+}
+
+.cliente-delivery-map {
+    width: 100%;
+    height: 360px;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+    border: 1px solid #e5e7eb;
+}
+
+.cliente-delivery-map .leaflet-container {
+    width: 100%;
+    height: 100%;
+}
+
+.cliente-delivery-status {
+    margin-top: 12px;
+
+    padding: 10px 13px;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+
+    color: #555;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.cliente-delivery-tracking-pendiente p {
+    margin: 8px 0 0;
+
+    color: #666;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@media (max-width: 576px) {
+
+    .cliente-delivery-tracking {
+        padding: 15px;
+    }
+
+    .cliente-delivery-tracking-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .cliente-delivery-map {
+        height: 300px;
+    }
+
+}

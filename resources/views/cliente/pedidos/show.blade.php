@@ -975,6 +975,94 @@
 
                 @endif
 
+                {{-- =========================================================
+     SEGUIMIENTO DEL DELIVERY EN TIEMPO REAL
+========================================================= --}}
+
+                @if(
+                $pedido->estado === 'en_camino' &&
+                $pedido->latitud &&
+                $pedido->longitud
+                )
+
+                <div
+                    id="cliente-delivery-tracking"
+                    class="cliente-delivery-tracking"
+                    data-pedido-id="{{ $pedido->id }}"
+                    data-estado="{{ $pedido->estado }}"
+                    data-latitud="{{ $pedido->latitud }}"
+                    data-longitud="{{ $pedido->longitud }}">
+
+                    <div class="cliente-delivery-tracking-header">
+
+                        <div>
+
+                            <span>
+                                SEGUIMIENTO
+                            </span>
+
+                            <h3>
+                                <i class="bi bi-bicycle"></i>
+                                Tu delivery está en camino
+                            </h3>
+
+                        </div>
+
+                        <div class="cliente-delivery-live">
+                            <span></span>
+                            En vivo
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="cliente-delivery-map"
+                        class="cliente-delivery-map">
+                    </div>
+
+
+                    <div
+                        id="cliente-delivery-status"
+                        class="cliente-delivery-status">
+
+                        Esperando la ubicación del repartidor...
+
+                    </div>
+
+                </div>
+
+                @elseif($pedido->estado === 'asignado')
+
+                <div class="cliente-delivery-tracking cliente-delivery-tracking-pendiente">
+
+                    <div class="cliente-delivery-tracking-header">
+
+                        <div>
+
+                            <span>
+                                SEGUIMIENTO
+                            </span>
+
+                            <h3>
+                                <i class="bi bi-bicycle"></i>
+                                Delivery asignado
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                    <p>
+                        Tu pedido ya tiene un repartidor asignado.
+                        El seguimiento en tiempo real estará disponible
+                        cuando inicie el recorrido.
+                    </p>
+
+                </div>
+
+                @endif
+
             </div>
 
         </div>
@@ -1295,6 +1383,19 @@
 </div>
 
 </div>
+
+{{-- =========================================================
+     LEAFLET
+========================================================= --}}
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
