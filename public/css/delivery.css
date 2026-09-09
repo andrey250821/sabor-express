@@ -8095,3 +8095,44 @@ a {
     }
 
 }
+/* ============================================================
+   GPS DELIVERY
+============================================================ */
+
+.delivery-gps-status-wrapper {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+
+    color: #666;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.delivery-gps-status-wrapper i {
+    font-size: 16px;
+}
+
+.delivery-gps-status-wrapper
+#delivery-gps-status[data-tipo="success"] {
+    color: #198754;
+}
+
+.delivery-gps-status-wrapper
+#delivery-gps-status[data-tipo="error"] {
+    color: #dc3545;
+}
+
+.delivery-gps-status-wrapper
+#delivery-gps-status[data-tipo="normal"] {
+    color: #666;
+}

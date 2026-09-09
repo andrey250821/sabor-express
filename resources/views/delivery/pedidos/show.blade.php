@@ -661,6 +661,23 @@ $asignacion
         class="delivery-map">
     </div>
 
+    <div
+        id="delivery-gps"
+        data-pedido-id="{{ $pedido->id }}"
+        data-delivery-id="{{ auth()->id() }}"
+        data-gps-activo="{{ $estadoPedido === 'en_camino' && $esMiAsignacion ? '1' : '0' }}"
+        class="delivery-gps-status-wrapper">
+
+        <i class="bi bi-geo-alt-fill"></i>
+
+        <span id="delivery-gps-status">
+            {{ $estadoPedido === 'en_camino' && $esMiAsignacion
+            ? 'Preparando GPS...'
+            : 'GPS detenido' }}
+        </span>
+
+    </div>
+
 </div>
 
 @else
