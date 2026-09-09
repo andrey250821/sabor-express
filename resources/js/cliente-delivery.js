@@ -29,13 +29,82 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
     |--------------------------------------------------------------------------
-    | Solo seguimos al delivery cuando está EN CAMINO
+    | CALCULAR DISTANCIA ENTRE DOS COORDENADAS
+    |--------------------------------------------------------------------------
+    */
+
+    function calcularDistanciaMetros(lat1, lon1, lat2, lon2) {
+
+        const R = 6371000;
+        const rad = Math.PI / 180;
+
+        const dLat = (lat2 - lat1) * rad;
+        const dLon = (lon2 - lon1) * rad;
+
+        const a =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * rad) *
+            Math.cos(lat2 * rad) *
+            Math.sin(dLon / 2) ** 2;
+
+        const c =
+            2 * Math.atan2(
+                Math.sqrt(a),
+                Math.sqrt(1 - a)
+            );
+
+        return R * c;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORMATEAR DISTANCIA
+    |--------------------------------------------------------------------------
+    */
+
+    function formatearDistancia(metros) {
+
+        if (metros < 1000) {
+            return `${Math.round(metros)} m`;
+        }
+
+        return `${(metros / 1000).toFixed(1)} km`;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MENSAJE SEGÚN DISTANCIA
+    |--------------------------------------------------------------------------
+    */
+
+    function obtenerMensajeDistancia(distanciaMetros) {
+
+        if (distanciaMetros <= 50) {
+            return `📍 El delivery está llegando · ${formatearDistancia(distanciaMetros)}`;
+        }
+
+        if (distanciaMetros <= 300) {
+            return `🚴 ¡Tu delivery está cerca! · ${formatearDistancia(distanciaMetros)}`;
+        }
+
+        if (distanciaMetros <= 500) {
+            return `Delivery se está acercando · ${formatearDistancia(distanciaMetros)}`;
+        }
+
+        return `Delivery en camino · ${formatearDistancia(distanciaMetros)}`;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SOLO SEGUIMOS AL DELIVERY CUANDO ESTÁ EN CAMINO
     |--------------------------------------------------------------------------
     */
 
     if (estadoPedido !== 'en_camino') {
+
         if (estadoElemento) {
-            estadoElemento.textContent = 'El seguimiento en tiempo real estará disponible cuando el pedido esté en camino.';
+            estadoElemento.textContent =
+                'El seguimiento en tiempo real estará disponible cuando el pedido esté en camino.';
         }
 
         return;
@@ -43,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
     |--------------------------------------------------------------------------
-    | Verificar coordenadas del destino
+    | VERIFICAR COORDENADAS DEL DESTINO
     |--------------------------------------------------------------------------
     */
 
@@ -82,10 +151,20 @@ document.addEventListener('DOMContentLoaded', () => {
     |--------------------------------------------------------------------------
     */
 
+    const iconoDestino = L.divIcon({
+        className: 'cliente-mapa-icono-destino',
+        html: '<i class="bi bi-geo-alt-fill"></i>',
+        iconSize: [42, 42],
+        iconAnchor: [21, 42],
+        popupAnchor: [0, -42],
+    });
+
     const marcadorDestino = L.marker([
         latitud,
         longitud
-    ])
+    ], {
+        icon: iconoDestino
+    })
         .addTo(mapa)
         .bindPopup('Tu dirección de entrega');
 
@@ -110,6 +189,255 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let marcadorDelivery = null;
 
+    const iconoDelivery = L.divIcon({
+        className: 'cliente-mapa-icono-delivery',
+        html: '<i class="bi bi-bicycle"></i>',
+        iconSize: [48, 48],
+        iconAnchor: [24, 24],
+        popupAnchor: [0, -24],
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | RUTA DEL DELIVERY
+    |--------------------------------------------------------------------------
+    */
+
+    let rutaDelivery = null;
+    let ultimaRutaLatitud = null;
+    let ultimaRutaLongitud = null;
+    let solicitudRutaEnCurso = false;
+
+    const DISTANCIA_MINIMA_ACTUALIZACION_RUTA = 30;
+    /*
+    |--------------------------------------------------------------------------
+    | OBTENER RUTA REAL MEDIANTE OSRM
+    |--------------------------------------------------------------------------
+    */
+
+    async function actualizarRuta(
+    deliveryLatitud,
+    deliveryLongitud
+) {
+
+    /*
+    |--------------------------------------------------------------------------
+    | EVITAR SOLICITUDES SIMULTÁNEAS
+    |--------------------------------------------------------------------------
+    */
+
+    if (solicitudRutaEnCurso) {
+        return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | NO RECALCULAR SI EL DELIVERY CASI NO SE MOVIÓ
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        ultimaRutaLatitud !== null &&
+        ultimaRutaLongitud !== null
+    ) {
+
+        const movimientoDesdeUltimaRuta =
+            calcularDistanciaMetros(
+                ultimaRutaLatitud,
+                ultimaRutaLongitud,
+                deliveryLatitud,
+                deliveryLongitud
+            );
+
+        if (
+            movimientoDesdeUltimaRuta <
+            DISTANCIA_MINIMA_ACTUALIZACION_RUTA
+        ) {
+            return;
+        }
+    }
+
+    solicitudRutaEnCurso = true;
+
+    const url =
+        `https://router.project-osrm.org/route/v1/driving/` +
+        `${deliveryLongitud},${deliveryLatitud};` +
+        `${longitud},${latitud}` +
+        `?overview=full&geometries=geojson`;
+
+    try {
+
+        const respuesta = await fetch(url);
+
+        if (!respuesta.ok) {
+            throw new Error(
+                `Error HTTP ${respuesta.status}`
+            );
+        }
+
+        const datos = await respuesta.json();
+
+        if (
+            datos.code !== 'Ok' ||
+            !datos.routes ||
+            !datos.routes.length
+        ) {
+
+            console.warn(
+                'OSRM: no se encontró una ruta.',
+                datos
+            );
+
+            return;
+        }
+
+        const ruta = datos.routes[0];
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR POSICIÓN UTILIZADA PARA ESTA RUTA
+        |--------------------------------------------------------------------------
+        */
+
+        ultimaRutaLatitud = deliveryLatitud;
+        ultimaRutaLongitud = deliveryLongitud;
+
+        /*
+        |--------------------------------------------------------------------------
+        | ELIMINAR RUTA ANTERIOR
+        |--------------------------------------------------------------------------
+        */
+
+        if (rutaDelivery) {
+
+            mapa.removeLayer(
+                rutaDelivery
+            );
+
+            rutaDelivery = null;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIBUJAR NUEVA RUTA
+        |--------------------------------------------------------------------------
+        */
+
+        rutaDelivery = L.geoJSON(
+            ruta.geometry,
+            {
+                style: {
+                    weight: 6,
+                    opacity: 0.85,
+                }
+            }
+        ).addTo(mapa);
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATOS REALES DE LA RUTA
+        |--------------------------------------------------------------------------
+        */
+
+        const distanciaRutaMetros =
+            ruta.distance;
+
+        const duracionRutaSegundos =
+            ruta.duration;
+
+        /*
+        |--------------------------------------------------------------------------
+        | FORMATEAR TIEMPO
+        |--------------------------------------------------------------------------
+        */
+
+        const minutos =
+            Math.ceil(
+                duracionRutaSegundos / 60
+            );
+
+        let textoTiempo;
+
+        if (minutos <= 1) {
+
+            textoTiempo =
+                'menos de 1 min';
+
+        } else {
+
+            textoTiempo =
+                `${minutos} min`;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | MENSAJE PRINCIPAL
+        |--------------------------------------------------------------------------
+        */
+
+        const mensajeRuta =
+            obtenerMensajeDistancia(
+                distanciaRutaMetros
+            );
+
+        /*
+        |--------------------------------------------------------------------------
+        | MOSTRAR DISTANCIA + ETA
+        |--------------------------------------------------------------------------
+        */
+
+        if (estadoElemento) {
+
+            const fecha =
+                new Date();
+
+            const hora =
+                fecha.toLocaleTimeString(
+                    'es-BO',
+                    {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                    }
+                );
+
+            estadoElemento.innerHTML =
+                `${mensajeRuta}<br>` +
+                `⏱️ Llegada estimada: <strong>${textoTiempo}</strong>` +
+                ` · Actualizado ${hora}`;
+        }
+
+        console.log(
+            'Ruta real actualizada:',
+            {
+                distancia_ruta_metros:
+                    Math.round(
+                        distanciaRutaMetros
+                    ),
+
+                duracion_ruta_segundos:
+                    Math.round(
+                        duracionRutaSegundos
+                    ),
+
+                llegada_estimada:
+                    textoTiempo,
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Cliente Delivery: error al obtener la ruta OSRM.',
+            error
+        );
+
+    } finally {
+
+        solicitudRutaEnCurso = false;
+    }
+}
+
     /*
     |--------------------------------------------------------------------------
     | FIREBASE
@@ -120,6 +448,12 @@ document.addEventListener('DOMContentLoaded', () => {
         database,
         `delivery_locations/${pedidoId}`
     );
+
+    /*
+    |--------------------------------------------------------------------------
+    | ESCUCHAR UBICACIÓN DEL DELIVERY
+    |--------------------------------------------------------------------------
+    */
 
     onValue(
         ubicacionRef,
@@ -143,11 +477,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     marcadorDelivery = null;
                 }
 
+                if (rutaDelivery) {
+                    mapa.removeLayer(rutaDelivery);
+                    rutaDelivery = null;
+                }
+
                 return;
             }
 
-            const deliveryLatitud = Number(ubicacion.latitud);
-            const deliveryLongitud = Number(ubicacion.longitud);
+            const deliveryLatitud =
+                Number(ubicacion.latitud);
+
+            const deliveryLongitud =
+                Number(ubicacion.longitud);
 
             if (
                 !Number.isFinite(deliveryLatitud) ||
@@ -157,22 +499,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             /*
-             * Crear marcador la primera vez.
-             */
+            |--------------------------------------------------------------------------
+            | CREAR MARCADOR LA PRIMERA VEZ
+            |--------------------------------------------------------------------------
+            */
 
             if (!marcadorDelivery) {
 
                 marcadorDelivery = L.marker([
                     deliveryLatitud,
                     deliveryLongitud
-                ])
+                ], {
+                    icon: iconoDelivery
+                })
                     .addTo(mapa)
                     .bindPopup('Repartidor');
+
+                /*
+                 * Ajustar el mapa solamente
+                 * la primera vez.
+                 */
 
                 mapa.fitBounds(
                     [
                         [latitud, longitud],
-                        [deliveryLatitud, deliveryLongitud]
+                        [
+                            deliveryLatitud,
+                            deliveryLongitud
+                        ]
                     ],
                     {
                         padding: [40, 40]
@@ -182,8 +536,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
 
                 /*
-                 * Mover marcador existente.
-                 */
+                |--------------------------------------------------------------------------
+                | MOVER MARCADOR EXISTENTE
+                |--------------------------------------------------------------------------
+                */
 
                 marcadorDelivery.setLatLng([
                     deliveryLatitud,
@@ -192,34 +548,102 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             /*
-             * Estado visual.
-             */
+            |--------------------------------------------------------------------------
+            | CALCULAR DISTANCIA EN LÍNEA RECTA
+            |--------------------------------------------------------------------------
+            */
+
+            const distanciaMetros =
+                calcularDistanciaMetros(
+                    deliveryLatitud,
+                    deliveryLongitud,
+                    latitud,
+                    longitud
+                );
+
+            /*
+            |--------------------------------------------------------------------------
+            | ACTUALIZAR RUTA REAL
+            |--------------------------------------------------------------------------
+            */
+
+            actualizarRuta(
+                deliveryLatitud,
+                deliveryLongitud
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | ESTADO VISUAL
+            |--------------------------------------------------------------------------
+            */
 
             if (estadoElemento) {
 
                 const fecha = ubicacion.actualizado_en
-                    ? new Date(ubicacion.actualizado_en)
+                    ? new Date(
+                        ubicacion.actualizado_en
+                    )
                     : null;
 
                 const hora = fecha
-                    ? fecha.toLocaleTimeString('es-BO', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                    })
+                    ? fecha.toLocaleTimeString(
+                        'es-BO',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                        }
+                    )
                     : '';
 
-                estadoElemento.textContent =
-                    hora
-                        ? `Delivery en camino · Actualizado ${hora}`
-                        : 'Delivery en camino · Ubicación actualizada';
+                if (!rutaDelivery) {
+
+    if (estadoElemento) {
+
+        const fecha = ubicacion.actualizado_en
+            ? new Date(
+                ubicacion.actualizado_en
+            )
+            : null;
+
+        const hora = fecha
+            ? fecha.toLocaleTimeString(
+                'es-BO',
+                {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                }
+            )
+            : '';
+
+        const mensajeDistancia =
+            obtenerMensajeDistancia(
+                distanciaMetros
+            );
+
+        estadoElemento.textContent =
+            hora
+                ? `${mensajeDistancia} · Actualizado ${hora}`
+                : mensajeDistancia;
+    }
+}
             }
 
             console.log(
                 'Cliente: ubicación del delivery actualizada',
-                ubicacion
+                {
+                    ...ubicacion,
+
+                    distancia_metros:
+                        Math.round(
+                            distanciaMetros
+                        ),
+                }
             );
         },
+
         (error) => {
 
             console.error(
@@ -233,5 +657,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     );
-
 });

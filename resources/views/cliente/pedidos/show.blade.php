@@ -1029,7 +1029,29 @@
                         Esperando la ubicación del repartidor...
 
                     </div>
+                    <div class="cliente-delivery-legend">
 
+                        <div class="cliente-delivery-legend-item">
+                            <span class="cliente-delivery-legend-icon delivery">
+                                <i class="bi bi-bicycle"></i>
+                            </span>
+
+                            <span>
+                                Repartidor
+                            </span>
+                        </div>
+
+                        <div class="cliente-delivery-legend-item">
+                            <span class="cliente-delivery-legend-icon destino">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </span>
+
+                            <span>
+                                Tu dirección
+                            </span>
+                        </div>
+
+                    </div>
                 </div>
 
                 @elseif($pedido->estado === 'asignado')
