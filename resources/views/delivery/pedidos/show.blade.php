@@ -658,7 +658,11 @@ $asignacion
 
     <div
         id="mapa-entrega"
-        class="delivery-map">
+        class="delivery-map"
+        data-pedido-id="{{ $pedido->id }}"
+        data-latitud="{{ $latitud }}"
+        data-longitud="{{ $longitud }}"
+        data-estado="{{ $estadoPedido }}">
     </div>
 
     <div
@@ -677,7 +681,33 @@ $asignacion
         </span>
 
     </div>
+    <div
+        id="delivery-map-status"
+        class="delivery-map-status">
 
+        @if($estadoPedido === 'en_camino' && $esMiAsignacion)
+
+        📡 Esperando la ubicación del repartidor...
+
+        @elseif($estadoPedido === 'asignado' && $esMiAsignacion)
+
+        🛵 Pedido tomado. Inicia la entrega para activar el GPS.
+
+        @elseif($estadoPedido === 'listo')
+
+        📦 Pedido listo. Toma el pedido para comenzar.
+
+        @elseif($estadoPedido === 'entregado')
+
+        ✅ Pedido entregado.
+
+        @else
+
+        📍 Ubicación del destino.
+
+        @endif
+
+    </div>
 </div>
 
 @else
@@ -1150,340 +1180,6 @@ $asignacion
 
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-
-
-<script>
-    (function() {
-
-        const latitud =
-            Number(@json((float) $latitud));
-
-        const longitud =
-            Number(@json((float) $longitud));
-
-
-        function mostrarErrorMapa(mensaje) {
-
-            const contenedor =
-                document.getElementById('mapa-entrega');
-
-            if (!contenedor) {
-                return;
-            }
-
-            contenedor.innerHTML = `
-
-                        <div class="delivery-map-error">
-
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-
-                            <strong>
-                                No se pudo cargar el mapa
-                            </strong>
-
-                            <span>
-                                ${mensaje}
-                            </span>
-
-                        </div>
-
-                    `;
-
-        }
-
-
-        function iniciarMapaEntrega() {
-
-            const contenedor =
-                document.getElementById('mapa-entrega');
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Verificar contenedor
-            |--------------------------------------------------------------------------
-            */
-
-            if (!contenedor) {
-
-                console.error(
-                    'Sabor Express: no existe #mapa-entrega'
-                );
-
-                return;
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Verificar coordenadas
-            |--------------------------------------------------------------------------
-            */
-
-            if (
-                !Number.isFinite(latitud) ||
-                !Number.isFinite(longitud)
-            ) {
-
-                console.error(
-                    'Sabor Express: coordenadas inválidas', {
-                        latitud: latitud,
-                        longitud: longitud
-                    }
-                );
-
-                mostrarErrorMapa(
-                    'Las coordenadas del pedido no son válidas.'
-                );
-
-                return;
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Verificar Leaflet
-            |--------------------------------------------------------------------------
-            */
-
-            if (typeof L === 'undefined') {
-
-                console.error(
-                    'Sabor Express: Leaflet no se cargó.'
-                );
-
-                mostrarErrorMapa(
-                    'Leaflet no pudo cargarse. Verifica tu conexión a Internet.'
-                );
-
-                return;
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Evitar inicializar dos veces
-            |--------------------------------------------------------------------------
-            */
-
-            if (contenedor._leaflet_id) {
-
-                return;
-
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Crear mapa
-            |--------------------------------------------------------------------------
-            */
-
-            const mapa =
-                L.map(
-                    contenedor, {
-                        center: [
-                            latitud,
-                            longitud
-                        ],
-
-                        zoom: 17,
-
-                        zoomControl: true,
-
-                        scrollWheelZoom: true,
-
-                        dragging: true,
-
-                        doubleClickZoom: true
-                    }
-                );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | OpenStreetMap
-            |--------------------------------------------------------------------------
-            */
-
-            const capaOpenStreetMap =
-                L.tileLayer(
-                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }
-                );
-
-
-            capaOpenStreetMap.addTo(mapa);
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Detectar errores de las imágenes del mapa
-            |--------------------------------------------------------------------------
-            */
-
-            capaOpenStreetMap.on(
-                'tileerror',
-                function(evento) {
-
-                    console.error(
-                        'Sabor Express: error cargando los mapas de OpenStreetMap.',
-                        evento
-                    );
-
-                }
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Marcador
-            |--------------------------------------------------------------------------
-            */
-
-            const marcador =
-                L.marker([
-                    latitud,
-                    longitud
-                ]).addTo(mapa);
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Popup
-            |--------------------------------------------------------------------------
-            */
-
-            marcador.bindPopup(`
-
-                        <div class="delivery-leaflet-popup">
-
-                            <strong>
-                                Entrega #{{ $pedido->id }}
-                            </strong>
-
-                            <span>
-                                {{ $pedido->direccion_entrega ?? 'Ubicación del pedido' }}
-                            </span>
-
-                        </div>
-
-                    `);
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Mostrar popup
-            |--------------------------------------------------------------------------
-            */
-
-            marcador.openPopup();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Corregir tamaño del mapa
-            |--------------------------------------------------------------------------
-            */
-
-            setTimeout(
-                function() {
-
-                    mapa.invalidateSize(true);
-
-                },
-                100
-            );
-
-
-            setTimeout(
-                function() {
-
-                    mapa.invalidateSize(true);
-
-                },
-                500
-            );
-
-
-            setTimeout(
-                function() {
-
-                    mapa.invalidateSize(true);
-
-                },
-                1000
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Corregir tamaño al redimensionar
-            |--------------------------------------------------------------------------
-            */
-
-            window.addEventListener(
-                'resize',
-                function() {
-
-                    mapa.invalidateSize(true);
-
-                }
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Guardar referencia global
-            |--------------------------------------------------------------------------
-            */
-
-            window.mapaEntregaDelivery =
-                mapa;
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Mensaje de diagnóstico
-            |--------------------------------------------------------------------------
-            */
-
-            console.log(
-                'Sabor Express: mapa de entrega cargado correctamente.', {
-                    latitud: latitud,
-                    longitud: longitud
-                }
-            );
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Ejecutar cuando el DOM esté listo
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-            document.readyState === 'loading'
-        ) {
-
-            document.addEventListener(
-                'DOMContentLoaded',
-                iniciarMapaEntrega
-            );
-
-        } else {
-
-            iniciarMapaEntrega();
-
-        }
-
-    })();
 </script>
 
 @endif

@@ -8136,3 +8136,170 @@ a {
 #delivery-gps-status[data-tipo="normal"] {
     color: #666;
 }
+/* =========================================================
+   MAPA DELIVERY - SEGUIMIENTO
+========================================================= */
+
+.delivery-map-status {
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 12px 15px;
+
+    border:
+        1px solid var(--delivery-border);
+
+    border-radius: 11px;
+
+    background:
+        var(--delivery-surface-2);
+
+    color:
+        var(--delivery-muted-light);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   MARCADOR DESTINO
+========================================================= */
+
+.delivery-mapa-icono-destino {
+
+    display: flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 44px !important;
+
+    height: 44px !important;
+
+    border-radius: 50%;
+
+    background:
+        var(--delivery-red) !important;
+
+    border:
+        4px solid #fff !important;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, .35);
+
+    color: #fff;
+
+    font-size: 19px;
+
+}
+
+
+/* =========================================================
+   MARCADOR DELIVERY
+========================================================= */
+
+.delivery-mapa-icono-delivery {
+
+    display: flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 48px !important;
+
+    height: 48px !important;
+
+    border-radius: 50%;
+
+    background:
+        var(--delivery-guindo) !important;
+
+    border:
+        4px solid #fff !important;
+
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, .4);
+
+    color: #fff;
+
+    font-size: 22px;
+
+    animation:
+        delivery-marker-pulse 1.8s infinite;
+
+}
+
+
+@keyframes delivery-marker-pulse {
+
+    0% {
+
+        box-shadow:
+            0 0 0 0 rgba(139, 30, 69, .55),
+            0 4px 18px rgba(0, 0, 0, .4);
+
+    }
+
+    70% {
+
+        box-shadow:
+            0 0 0 12px rgba(139, 30, 69, 0),
+            0 4px 18px rgba(0, 0, 0, .4);
+
+    }
+
+    100% {
+
+        box-shadow:
+            0 0 0 0 rgba(139, 30, 69, 0),
+            0 4px 18px rgba(0, 0, 0, .4);
+
+    }
+
+}
+
+
+/* =========================================================
+   POPUP LEAFLET
+========================================================= */
+
+.delivery-leaflet-popup {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 160px;
+
+}
+
+
+.delivery-leaflet-popup strong {
+
+    color: #222;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+}
+
+
+.delivery-leaflet-popup span {
+
+    color: #666;
+
+    font-size: 11px;
+
+}
