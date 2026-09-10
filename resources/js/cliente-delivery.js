@@ -79,20 +79,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function obtenerMensajeDistancia(distanciaMetros) {
 
-        if (distanciaMetros <= 50) {
-            return `📍 El delivery está llegando · ${formatearDistancia(distanciaMetros)}`;
-        }
-
-        if (distanciaMetros <= 300) {
-            return `🚴 ¡Tu delivery está cerca! · ${formatearDistancia(distanciaMetros)}`;
-        }
-
-        if (distanciaMetros <= 500) {
-            return `Delivery se está acercando · ${formatearDistancia(distanciaMetros)}`;
-        }
-
-        return `Delivery en camino · ${formatearDistancia(distanciaMetros)}`;
+    if (distanciaMetros <= 50) {
+        return `📍 ¡Tu delivery está llegando! · ${formatearDistancia(distanciaMetros)}`;
     }
+
+    if (distanciaMetros <= 300) {
+        return `🟢 ¡Tu delivery está muy cerca! · ${formatearDistancia(distanciaMetros)}`;
+    }
+
+    if (distanciaMetros <= 1000) {
+        return `🟡 Tu delivery está cerca · ${formatearDistancia(distanciaMetros)}`;
+    }
+
+    if (distanciaMetros <= 2000) {
+        return `🚴 Tu delivery se está acercando · ${formatearDistancia(distanciaMetros)}`;
+    }
+
+    return `🚴 Tu delivery está en camino · ${formatearDistancia(distanciaMetros)}`;
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -402,9 +406,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
 
             estadoElemento.innerHTML =
-                `${mensajeRuta}<br>` +
-                `⏱️ Llegada estimada: <strong>${textoTiempo}</strong>` +
-                ` · Actualizado ${hora}`;
+            `${mensajeRuta}<br>` +
+            `⏱️ Tiempo estimado de llegada: <strong>${textoTiempo}</strong>` +
+            ` · Actualizado ${hora}`;
         }
 
         console.log(
