@@ -9233,3 +9233,226 @@ body {
 .pedido-detalle .pedido-observacion span {
     color: #858994;
 }
+/* =========================================================
+   ADMIN - SEGUIMIENTO DELIVERY EN TIEMPO REAL
+   ========================================================= */
+
+.admin-seguimiento-wrapper {
+    width: 100%;
+}
+
+
+/* =========================================================
+   MAPA
+   ========================================================= */
+
+.admin-delivery-map {
+    width: 100%;
+    height: 360px;
+
+    margin-top: 0.55rem;
+
+    overflow: hidden;
+
+    border: 1px solid #292b33;
+    border-radius: 10px;
+
+    background: #121318;
+}
+
+
+/* =========================================================
+   INFORMACIÓN DEBAJO DEL MAPA
+   ========================================================= */
+
+.admin-delivery-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 0.6rem;
+
+    margin-top: 0.55rem;
+}
+
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+.admin-delivery-status {
+    flex: 1 1 auto;
+
+    min-width: 240px;
+
+    padding: 0.45rem 0.65rem;
+
+    background: #121318;
+
+    border: 1px solid #292b33;
+
+    border-radius: 6px;
+
+    color: #d7d7d7;
+
+    font-size: 0.76rem;
+}
+
+
+/* =========================================================
+   DISTANCIA / ETA
+   ========================================================= */
+
+.admin-delivery-dato {
+    display: flex;
+    align-items: center;
+
+    gap: 0.4rem;
+
+    padding: 0.45rem 0.65rem;
+
+    background: #121318;
+
+    border: 1px solid #292b33;
+
+    border-radius: 6px;
+
+    font-size: 0.74rem;
+}
+
+.admin-delivery-dato span {
+    color: #858994;
+}
+
+.admin-delivery-dato span i {
+    margin-right: 0.15rem;
+}
+
+.admin-delivery-dato strong {
+    color: #fff;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MARCADOR CLIENTE
+   ========================================================= */
+
+.admin-mapa-icono-cliente {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 44px;
+
+    height: 44px;
+
+    background: #8b1e45;
+
+    border: 3px solid #fff;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.35);
+
+    color: #fff;
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   MARCADOR DELIVERY
+   ========================================================= */
+
+.admin-mapa-icono-delivery {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 48px;
+
+    height: 48px;
+
+    background: #198754;
+
+    border: 3px solid #fff;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.35);
+
+    color: #fff;
+
+    font-size: 21px;
+}
+
+
+/* =========================================================
+   POPUP
+   ========================================================= */
+
+.admin-leaflet-popup {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.15rem;
+
+    min-width: 150px;
+}
+
+.admin-leaflet-popup strong {
+    color: #222;
+
+    font-size: 0.85rem;
+}
+
+.admin-leaflet-popup span {
+    color: #555;
+
+    font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   LEAFLET
+   ========================================================= */
+
+.admin-delivery-map .leaflet-control-zoom a {
+    color: #222;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .admin-delivery-map {
+        height: 300px;
+    }
+
+    .admin-delivery-info {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .admin-delivery-status {
+        min-width: 0;
+    }
+
+    .admin-delivery-dato {
+        justify-content: space-between;
+    }
+
+}

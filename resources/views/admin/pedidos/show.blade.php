@@ -385,7 +385,76 @@
                 </div>
 
             </div>
+            {{-- SEGUIMIENTO EN TIEMPO REAL --}}
 
+            @if($pedido->estado === 'en_camino' && $pedido->latitud && $pedido->longitud)
+
+            <div class="pedido-divider"></div>
+
+            <div class="pedido-info admin-seguimiento-wrapper">
+
+                <h5>
+                    <i class="bi bi-broadcast text-danger"></i>
+                    Seguimiento en tiempo real
+                </h5>
+
+                <div
+                    id="admin-delivery-map"
+                    class="admin-delivery-map"
+
+                    data-pedido-id="{{ $pedido->id }}"
+
+                    data-latitud="{{ $pedido->latitud }}"
+
+                    data-longitud="{{ $pedido->longitud }}"
+
+                    data-estado="{{ $pedido->estado }}">
+                </div>
+
+
+                <div class="admin-delivery-info">
+
+                    <div class="admin-delivery-status">
+
+                        <span id="admin-delivery-map-status">
+                            📡 Esperando la ubicación del repartidor...
+                        </span>
+
+                    </div>
+
+
+                    <div class="admin-delivery-dato">
+
+                        <span>
+                            <i class="bi bi-signpost-2"></i>
+                            Distancia
+                        </span>
+
+                        <strong id="admin-delivery-distance">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="admin-delivery-dato">
+
+                        <span>
+                            <i class="bi bi-clock"></i>
+                            Tiempo estimado
+                        </span>
+
+                        <strong id="admin-delivery-eta">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @endif
 
             {{-- PRODUCTOS --}}
             <div class="card pedido-card shadow">
