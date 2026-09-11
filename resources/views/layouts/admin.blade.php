@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0">
 
     <title>
         {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
@@ -40,366 +40,370 @@
 <body>
 
 
-<div class="admin-wrapper">
+    <div class="admin-wrapper">
 
 
-    {{-- =====================================================
+        {{-- =====================================================
         SIDEBAR
     ====================================================== --}}
 
-    <aside class="admin-sidebar">
+        <aside class="admin-sidebar">
 
 
-        {{-- LOGO / IDENTIDAD --}}
-        <div class="sidebar-brand">
+            {{-- LOGO / IDENTIDAD --}}
+            <div class="sidebar-brand">
 
 
-            <div class="sidebar-logo">
+                <div class="sidebar-logo">
 
 
-                @if(!empty($configuracion->logo))
+                    @if(!empty($configuracion->logo))
 
                     <img
                         src="{{ asset('storage/' . $configuracion->logo) }}"
                         alt="{{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}">
 
-                @else
+                    @else
 
                     <span>
                         🍔
                     </span>
 
-                @endif
+                    @endif
+
+
+                </div>
+
+
+                <div class="sidebar-brand-name">
+
+                    {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
+
+                </div>
+
+
+                <div class="sidebar-brand-subtitle">
+
+                    Panel Administrativo
+
+                </div>
 
 
             </div>
 
 
-            <div class="sidebar-brand-name">
 
-                {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
+            {{-- SEPARADOR --}}
+            <div class="sidebar-divider"></div>
 
-            </div>
 
 
-            <div class="sidebar-brand-subtitle">
+            {{-- MENU --}}
+            <nav class="sidebar-menu">
 
-                Panel Administrativo
 
-            </div>
+                {{-- Dashboard --}}
+                <a
+                    href="{{ route('admin.dashboard') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
 
+                    <span class="sidebar-icon">
+                        <i class="bi bi-speedometer2"></i>
+                    </span>
 
-        </div>
+                    <span>
+                        Dashboard
+                    </span>
 
+                </a>
 
 
-        {{-- SEPARADOR --}}
-        <div class="sidebar-divider"></div>
 
+                {{-- Pedidos --}}
+                <a
+                    href="{{ route('admin.pedidos.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.pedidos.*') ? 'active' : '' }}">
 
+                    <span class="sidebar-icon">
+                        <i class="bi bi-bag"></i>
+                    </span>
 
-        {{-- MENU --}}
-        <nav class="sidebar-menu">
+                    <span>
+                        Pedidos
+                    </span>
 
+                </a>
 
-            {{-- Dashboard --}}
-            <a
-                href="{{ route('admin.dashboard') }}"
-                class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-speedometer2"></i>
-                </span>
 
-                <span>
-                    Dashboard
-                </span>
+                {{-- Comprobantes --}}
+                <a
+                    href="{{ route('admin.comprobantes.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.comprobantes.*') ? 'active' : '' }}">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-receipt"></i>
+                    </span>
 
+                    <span>
+                        Comprobantes
+                    </span>
 
+                </a>
 
-            {{-- Pedidos --}}
-            <a
-                href="{{ route('admin.pedidos.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.pedidos.*') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-bag"></i>
-                </span>
 
-                <span>
-                    Pedidos
-                </span>
+                {{-- Productos --}}
+                <a
+                    href="{{ route('admin.productos.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.productos.*') ? 'active' : '' }}">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </span>
 
+                    <span>
+                        Productos
+                    </span>
 
+                </a>
 
-            {{-- Comprobantes --}}
-            <a
-                href="{{ route('admin.comprobantes.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.comprobantes.*') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-receipt"></i>
-                </span>
 
-                <span>
-                    Comprobantes
-                </span>
+                {{-- Categorías --}}
+                <a
+                    href="{{ route('admin.categorias.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.categorias.*') ? 'active' : '' }}">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-tags"></i>
+                    </span>
 
+                    <span>
+                        Categorías
+                    </span>
 
+                </a>
 
-            {{-- Productos --}}
-            <a
-                href="{{ route('admin.productos.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.productos.*') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-box-seam"></i>
-                </span>
 
-                <span>
-                    Productos
-                </span>
+                {{-- Deliverys --}}
+                <a
+                    href="{{ route('admin.deliverys.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.deliverys.*') ? 'active' : '' }}">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-bicycle"></i>
+                    </span>
 
+                    <span>
+                        Deliverys
+                    </span>
 
+                </a>
 
-            {{-- Categorías --}}
-            <a
-                href="{{ route('admin.categorias.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.categorias.*') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-tags"></i>
-                </span>
 
-                <span>
-                    Categorías
-                </span>
+                {{-- Clientes --}}
+                <a
+                    href="{{ route('admin.clientes.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.clientes.*') ? 'active' : '' }}">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-people"></i>
+                    </span>
 
+                    <span>
+                        Clientes
+                    </span>
 
+                </a>
 
-            {{-- Deliverys --}}
-            <a
-                href="{{ route('admin.deliverys.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.deliverys.*') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-bicycle"></i>
-                </span>
 
-                <span>
-                    Deliverys
-                </span>
+                {{-- Calificaciones --}}
+                <a
+                    href="#"
+                    class="sidebar-link">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-star"></i>
+                    </span>
 
+                    <span>
+                        Calificaciones
+                    </span>
 
+                </a>
 
-            {{-- Clientes --}}
-            <a
-                href="{{ route('admin.clientes.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.clientes.*') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-people"></i>
-                </span>
 
-                <span>
-                    Clientes
-                </span>
+                {{-- Notificaciones --}}
+                <a
+                    href="#"
+                    class="sidebar-link">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-bell"></i>
+                    </span>
 
+                    <span>
+                        Notificaciones
+                    </span>
 
+                </a>
 
-            {{-- Calificaciones --}}
-            <a
-                href="#"
-                class="sidebar-link">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-star"></i>
-                </span>
 
-                <span>
-                    Calificaciones
-                </span>
+                {{-- Configuración --}}
+                <a
+                    href="{{ route('admin.configuracion.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.configuracion.*') ? 'active' : '' }}">
 
-            </a>
+                    <span class="sidebar-icon">
+                        <i class="bi bi-gear"></i>
+                    </span>
 
+                    <span>
+                        Configuración
+                    </span>
 
+                </a>
 
-            {{-- Notificaciones --}}
-            <a
-                href="#"
-                class="sidebar-link">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-bell"></i>
-                </span>
+            </nav>
 
-                <span>
-                    Notificaciones
-                </span>
 
-            </a>
 
+        </aside>
 
 
-            {{-- Configuración --}}
-            <a
-                href="{{ route('admin.configuracion.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.configuracion.*') ? 'active' : '' }}">
 
-                <span class="sidebar-icon">
-                    <i class="bi bi-gear"></i>
-                </span>
-
-                <span>
-                    Configuración
-                </span>
-
-            </a>
-
-
-        </nav>
-
-
-
-    </aside>
-
-
-
-    {{-- =====================================================
+        {{-- =====================================================
         CONTENIDO PRINCIPAL
     ====================================================== --}}
 
-    <main class="admin-main">
+        <main class="admin-main">
 
 
-        {{-- =================================================
+            {{-- =================================================
             HEADER
         ================================================== --}}
 
-        <header class="admin-topbar">
+            <header class="admin-topbar">
 
 
-            <div class="topbar-left">
+                <div class="topbar-left">
 
 
-                <div>
+                    <div>
 
-                    <h1 class="topbar-title">
+                        <h1 class="topbar-title">
 
-                        Panel Administrativo
+                            Panel Administrativo
 
-                    </h1>
-
-
-                    <p class="topbar-subtitle">
-
-                        Gestión de
-                        {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
-
-                    </p>
-
-                </div>
+                        </h1>
 
 
-            </div>
+                        <p class="topbar-subtitle">
 
+                            Gestión de
+                            {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
 
+                        </p>
 
-            {{-- USUARIO --}}
-            <div class="topbar-user">
-
-
-                <div class="topbar-user-info">
-
-
-                    <strong>
-
-                        {{ Auth::user()->name }}
-
-                    </strong>
-
-
-                    <span>
-
-                        Administrador
-
-                    </span>
+                    </div>
 
 
                 </div>
 
 
 
-                <form
-                    method="POST"
-                    action="{{ route('logout') }}">
+                {{-- USUARIO --}}
+                <div class="topbar-user">
 
-                    @csrf
 
-                    <button
-                        type="submit"
-                        class="topbar-logout">
+                    <div class="topbar-user-info">
 
-                        <i class="bi bi-box-arrow-right"></i>
+
+                        <strong>
+
+                            {{ Auth::user()->name }}
+
+                        </strong>
+
 
                         <span>
-                            Salir
+
+                            Administrador
+
                         </span>
 
-                    </button>
 
-                </form>
-
-
-            </div>
-
-
-        </header>
+                    </div>
 
 
 
-        {{-- =================================================
+                    <form
+                        method="POST"
+                        action="{{ route('logout') }}">
+
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="topbar-logout">
+
+                            <i class="bi bi-box-arrow-right"></i>
+
+                            <span>
+                                Salir
+                            </span>
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+
+            </header>
+
+
+
+            {{-- =================================================
             CONTENIDO
         ================================================== --}}
 
-        <section class="admin-content">
+            <section class="admin-content">
 
 
-            @yield('content')
+                @yield('content')
 
 
-        </section>
+            </section>
 
 
-    </main>
+        </main>
 
 
-</div>
+    </div>
 
 
 
-{{-- Bootstrap JS --}}
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+    {{-- Bootstrap JS --}}
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
 
-
-@stack('scripts')
-
+    {{-- Leaflet JS --}}
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+    @stack('scripts')
+    {{-- Vite / JavaScript de la aplicación --}}
+    @vite('resources/js/app.js')
 
 </body>
 
