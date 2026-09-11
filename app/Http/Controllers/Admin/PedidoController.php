@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use App\Http\Controllers\Controller;
 use App\Models\Pedido;
 
-
 class PedidoController extends Controller
 {
-
-
+    /**
+     * Mostrar todos los pedidos aprobados.
+     */
     public function index()
     {
-        // Obtener todos los pedidos
-        // incluyendo cliente y delivery asignado
         $pedidos = Pedido::with([
             'user',
             'asignacionDelivery.delivery',
-            'comprobantePago'
+            'comprobantePago',
         ])
             ->whereHas('comprobantePago', function ($query) {
                 $query->where('estado', 'aprobado');
@@ -26,33 +23,24 @@ class PedidoController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-
-        // Obtener los deliverys activos
-        $deliverys = \App\Models\User::where('role_id', 3)
-            ->where('estado', 'activo')
-            ->get();
-
-
         return view(
             'admin.pedidos.index',
-            compact(
-                'pedidos',
-                'deliverys'
-            )
+            compact('pedidos')
         );
     }
 
+    /**
+     * Mostrar el detalle completo de un pedido.
+     */
     public function show($id)
     {
-
         $pedido = Pedido::with([
             'user',
             'detallePedidos.producto',
-            'comprobantePago'
+            'comprobantePago',
+            'asignacionDelivery.delivery',
         ])
             ->findOrFail($id);
-
-
 
         return view(
             'admin.pedidos.show',

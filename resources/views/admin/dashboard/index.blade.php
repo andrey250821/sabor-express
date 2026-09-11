@@ -1,4 +1,3 @@
-
 @extends('layouts.admin')
 
 @section('content')
@@ -402,7 +401,164 @@
 
 
 
+    <!-- ==========================
+    ESTADOS DE PEDIDOS
+=========================== -->
 
+    <div class="row g-4 mt-1">
+
+        {{-- PENDIENTES --}}
+
+        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+
+            <a href="{{ route('admin.pedidos.index') }}"
+                class="text-decoration-none">
+
+                <div class="card dashboard-card h-100 shadow">
+
+                    <div class="card-body">
+
+                        <div class="icon-box bg-warning">
+
+                            <i class="bi bi-hourglass-split"></i>
+
+                        </div>
+
+                        <h6 class="text-muted mt-3">
+                            Pendientes
+                        </h6>
+
+                        <h2 class="fw-bold text-white">
+                            {{ $pedidosPendientes }}
+                        </h2>
+
+                        <small class="text-secondary">
+                            Esperando procesamiento
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        {{-- PREPARANDO --}}
+
+        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+
+            <a href="{{ route('admin.pedidos.index') }}"
+                class="text-decoration-none">
+
+                <div class="card dashboard-card h-100 shadow">
+
+                    <div class="card-body">
+
+                        <div class="icon-box bg-danger">
+
+                            <i class="bi bi-fire"></i>
+
+                        </div>
+
+                        <h6 class="text-muted mt-3">
+                            Preparando
+                        </h6>
+
+                        <h2 class="fw-bold text-white">
+                            {{ $pedidosPreparando }}
+                        </h2>
+
+                        <small class="text-secondary">
+                            En preparación
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        {{-- LISTOS --}}
+
+        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+
+            <a href="{{ route('admin.pedidos.index') }}"
+                class="text-decoration-none">
+
+                <div class="card dashboard-card h-100 shadow">
+
+                    <div class="card-body">
+
+                        <div class="icon-box bg-primary">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
+
+                        <h6 class="text-muted mt-3">
+                            Listos
+                        </h6>
+
+                        <h2 class="fw-bold text-white">
+                            {{ $pedidosListos }}
+                        </h2>
+
+                        <small class="text-secondary">
+                            Esperando delivery
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        {{-- EN CAMINO --}}
+
+        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+
+            <a href="{{ route('admin.pedidos.index') }}"
+                class="text-decoration-none">
+
+                <div class="card dashboard-card h-100 shadow">
+
+                    <div class="card-body">
+
+                        <div class="icon-box bg-guindo">
+
+                            <i class="bi bi-bicycle"></i>
+
+                        </div>
+
+                        <h6 class="text-muted mt-3">
+                            En camino
+                        </h6>
+
+                        <h2 class="fw-bold text-white">
+                            {{ $pedidosEnCamino }}
+                        </h2>
+
+                        <small class="text-secondary">
+                            Deliverys realizando entregas
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
 
 
 
@@ -535,56 +691,35 @@
 
 
         </div>
-        <!-- ESTADO DEL SISTEMA -->
-
+        {{-- PEDIDOS ENTREGADOS --}}
 
         <div class="col-12 col-lg-4">
 
-
             <div class="card dashboard-card h-100 shadow">
-
 
                 <div class="card-body">
 
+                    <div class="icon-box bg-success">
 
-                    <h5 class="fw-bold text-white">
-
-                        Estado del sistema
-
-                    </h5>
-
-
-                    <hr>
-
-
-
-                    <span class="badge bg-success p-2">
-
-                        Sistema operativo
-
-                    </span>
-
-
-
-                    <div class="mt-3">
-
-
-                        <small class="text-muted">
-
-                            Todos los servicios funcionando correctamente
-
-                        </small>
-
+                        <i class="bi bi-check2-all"></i>
 
                     </div>
 
+                    <h6 class="text-muted mt-3">
+                        Pedidos entregados
+                    </h6>
 
+                    <h2 class="fw-bold text-white">
+                        {{ $pedidosEntregados }}
+                    </h2>
+
+                    <small class="text-secondary">
+                        Entregas completadas
+                    </small>
 
                 </div>
 
-
             </div>
-
 
         </div>
 

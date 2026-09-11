@@ -22,7 +22,7 @@
             </h2>
 
             <p class="text-muted mb-0">
-                Administra los pedidos, estados y asignaciones de delivery.
+                Consulta y supervisa los pedidos, estados y entregas.
             </p>
 
         </div>
@@ -91,7 +91,7 @@
                     </h5>
 
                     <small>
-                        Consulta y administra todos los pedidos.
+                        Consulta y supervisa los pedidos registrados.
                     </small>
 
                 </div>
@@ -357,20 +357,19 @@
                                     Ver detalles
 
                                 </a>
-                                
+
 
                                 {{-- INFORMACIÓN DEL DELIVERY --}}
 
                                 <div class="mt-3 pt-2 border-top">
 
+                                    @if($pedido->asignacionDelivery && $pedido->asignacionDelivery->delivery)
 
-                                    @if($pedido->asignacionDelivery)
-
-                                    <div class="small text-success mb-3">
+                                    <div class="small text-success">
 
                                         <i class="bi bi-bicycle"></i>
 
-                                        <strong>Delivery asignado:</strong>
+                                        <strong>Delivery:</strong>
 
                                         {{ $pedido->asignacionDelivery->delivery->name }}
 
@@ -378,7 +377,7 @@
 
                                     @else
 
-                                    <div class="small text-warning mb-3">
+                                    <div class="small text-warning">
 
                                         <i class="bi bi-exclamation-circle"></i>
 
@@ -387,27 +386,8 @@
                                     </div>
 
                                     @endif
-                                    <div class="mt-2">
-                                        <label class="form-label small fw-bold">
-                                            <i class="bi bi-bicycle"></i>
-                                            Delivery
-                                        </label>
-
-                                        @if($pedido->asignacionDelivery && $pedido->asignacionDelivery->delivery)
-                                        <div class="alert alert-success py-2 mb-0">
-                                            <i class="bi bi-person-check"></i>
-                                            {{ $pedido->asignacionDelivery->delivery->name }}
-                                        </div>
-                                        @else
-                                        <div class="alert alert-secondary py-2 mb-0">
-                                            <i class="bi bi-hourglass-split"></i>
-                                            Sin delivery asignado
-                                        </div>
-                                        @endif
-                                    </div>
 
                                 </div>
-
 
                             </td>
 

@@ -8762,3 +8762,474 @@ body {
     }
 
 }
+/* =========================================================
+   ADMIN - DETALLE DE PEDIDO COMPACTO
+   ========================================================= */
+
+.pedido-detalle {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    color: #fff;
+    font-size: 0.86rem;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.pedido-detalle-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.7rem;
+}
+
+.pedido-detalle-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.pedido-detalle-header p {
+    margin: 0.1rem 0 0;
+    color: #858994;
+    font-size: 0.78rem;
+}
+
+.pedido-detalle-header .btn {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.78rem;
+}
+
+
+/* =========================================================
+   TARJETAS
+   ========================================================= */
+
+.pedido-detalle .pedido-card {
+    margin-bottom: 0.7rem !important;
+    border-radius: 12px;
+}
+
+.pedido-detalle .pedido-card .card-body {
+    padding: 0.75rem 0.9rem;
+}
+
+
+/* =========================================================
+   FILAS
+   ========================================================= */
+
+.pedido-detalle .pedido-row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0.6rem;
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+   ========================================================= */
+
+.pedido-detalle .pedido-info {
+    width: 100%;
+}
+
+.pedido-detalle .pedido-info h5 {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    margin: 0 0 0.4rem;
+
+    color: #fff;
+    font-size: 0.84rem;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.pedido-detalle .pedido-info h5 i {
+    font-size: 0.88rem;
+}
+
+
+/* =========================================================
+   DATOS
+   ========================================================= */
+
+.pedido-detalle .pedido-dato {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+
+    margin-bottom: 0.2rem;
+
+    line-height: 1.3;
+}
+
+.pedido-detalle .pedido-dato:last-child {
+    margin-bottom: 0;
+}
+
+.pedido-detalle .pedido-dato span {
+    flex: 0 0 auto;
+
+    color: #858994;
+    font-size: 0.73rem;
+}
+
+.pedido-detalle .pedido-dato strong {
+    color: #e8e8e8;
+    font-size: 0.78rem;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   SEPARADORES
+   ========================================================= */
+
+.pedido-detalle .pedido-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 0.65rem 0;
+
+    background: #292b33;
+}
+
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+.pedido-detalle .pedido-estado-wrapper {
+    display: flex;
+    align-items: center;
+    min-height: 27px;
+}
+
+.pedido-detalle .pedido-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    width: fit-content;
+
+    padding: 0.3rem 0.55rem;
+
+    border-radius: 18px;
+
+    font-size: 0.72rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DELIVERY SIN ASIGNAR
+   ========================================================= */
+
+.pedido-detalle .pedido-sin-dato {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    min-height: 27px;
+
+    color: #999ca5;
+    font-size: 0.76rem;
+}
+
+
+/* =========================================================
+   BADGES DE PAGO
+   ========================================================= */
+
+.pedido-detalle .pedido-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    padding: 0.3rem 0.5rem;
+
+    border-radius: 5px;
+
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
+.pedido-detalle .pedido-badge-success {
+    background: rgba(25, 135, 84, 0.18);
+    color: #75d9aa;
+}
+
+.pedido-detalle .pedido-badge-warning {
+    background: rgba(255, 193, 7, 0.16);
+    color: #ffd866;
+}
+
+.pedido-detalle .pedido-badge-danger {
+    background: rgba(220, 53, 69, 0.16);
+    color: #ff858f;
+}
+
+.pedido-detalle .pedido-badge-secondary {
+    background: rgba(108, 117, 125, 0.18);
+    color: #b9bdc5;
+}
+
+
+/* =========================================================
+   COORDENADAS
+   ========================================================= */
+
+.pedido-detalle .pedido-coordenadas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+}
+
+.pedido-detalle .pedido-coordenadas > div {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+}
+
+.pedido-detalle .pedido-coordenadas span {
+    color: #858994;
+    font-size: 0.72rem;
+}
+
+.pedido-detalle .pedido-coordenadas strong {
+    color: #e5e5e5;
+    font-size: 0.76rem;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   OBSERVACIÓN
+   ========================================================= */
+
+.pedido-detalle .pedido-observacion {
+    padding: 0.45rem 0.6rem;
+
+    background: #121318;
+    border: 1px solid #292b33;
+    border-radius: 6px;
+
+    color: #e5e5e5;
+    font-size: 0.77rem;
+    line-height: 1.35;
+
+    word-break: break-word;
+}
+
+.pedido-detalle .pedido-observacion span {
+    color: #858994;
+}
+
+
+/* =========================================================
+   PRODUCTOS
+   ========================================================= */
+
+.pedido-detalle .pedido-productos-header {
+    margin-bottom: 0.4rem;
+}
+
+.pedido-detalle .pedido-productos-header h5 {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    margin: 0;
+
+    color: #fff;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.pedido-detalle .pedido-table {
+    margin: 0;
+    color: #e8e8e8;
+    font-size: 0.76rem;
+}
+
+.pedido-detalle .pedido-table th {
+    padding: 0.35rem 0.5rem;
+
+    color: #858994;
+    border-bottom: 1px solid #292b33;
+
+    font-size: 0.69rem;
+    font-weight: 600;
+}
+
+.pedido-detalle .pedido-table td {
+    padding: 0.4rem 0.5rem;
+
+    color: #e2e2e2;
+    border-bottom: 1px solid #22242a;
+
+    vertical-align: middle;
+}
+
+.pedido-detalle .pedido-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.pedido-detalle .pedido-producto {
+    color: #f1f1f1;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.pedido-detalle .pedido-subtotal {
+    font-weight: 600;
+    color: #fff;
+}
+
+
+/* =========================================================
+   SIN PRODUCTOS
+   ========================================================= */
+
+.pedido-detalle .pedido-empty {
+    padding: 0.8rem !important;
+    text-align: center;
+    color: #858994 !important;
+    font-size: 0.76rem;
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.pedido-detalle .pedido-total-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.45rem;
+}
+
+.pedido-detalle .pedido-total {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    padding: 0.4rem 0.65rem;
+
+    background: #121318;
+    border: 1px solid #292b33;
+    border-radius: 6px;
+}
+
+.pedido-detalle .pedido-total span {
+    color: #858994;
+    font-size: 0.7rem;
+}
+
+.pedido-detalle .pedido-total strong {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .pedido-detalle-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pedido-detalle-header .btn {
+        width: 100%;
+    }
+
+    .pedido-detalle .pedido-card .card-body {
+        padding: 0.7rem;
+    }
+
+    .pedido-detalle .pedido-row {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 0.6rem;
+    }
+
+    .pedido-detalle .pedido-table {
+        min-width: 520px;
+    }
+
+    .pedido-detalle .pedido-total-wrapper {
+        justify-content: stretch;
+    }
+
+    .pedido-detalle .pedido-total {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+/* =========================================================
+   UBICACIÓN + OBSERVACIÓN
+   ========================================================= */
+
+.pedido-detalle .pedido-coordenadas {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    min-height: 28px;
+}
+
+.pedido-detalle .pedido-coordenadas > div {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+}
+
+.pedido-detalle .pedido-coordenadas span {
+    color: #858994;
+    font-size: 0.72rem;
+}
+
+.pedido-detalle .pedido-coordenadas strong {
+    color: #e5e5e5;
+    font-size: 0.76rem;
+    font-weight: 500;
+}
+
+.pedido-detalle .pedido-observacion {
+    display: flex;
+    align-items: center;
+    min-height: 28px;
+
+    padding: 0.4rem 0.6rem;
+
+    background: #121318;
+    border: 1px solid #292b33;
+    border-radius: 6px;
+
+    color: #e5e5e5;
+    font-size: 0.77rem;
+    line-height: 1.3;
+
+    word-break: break-word;
+}
+
+.pedido-detalle .pedido-observacion span {
+    color: #858994;
+}
