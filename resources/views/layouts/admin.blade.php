@@ -396,7 +396,15 @@
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
+    {{-- Leaflet CSS --}}
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
+    {{-- CSS principal --}}
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/admin.css') }}">
     {{-- Leaflet JS --}}
     <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
