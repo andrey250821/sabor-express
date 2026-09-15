@@ -20,16 +20,114 @@ class NotificacionController extends Controller
                 'comprobante_enviado',
                 'nueva_calificacion',
             ])
+            ->with([
+                'pedido.user',
+                'pedido.comprobantePago',
+                'pedido.calificaciones.user',
+                'pedido.calificaciones.producto',
+            ])
             ->orderBy('created_at', 'desc')
             ->get();
+
+        /*
+    |--------------------------------------------------------------------------
+    | Evitar mostrar dos veces la misma calificación
+    |--------------------------------------------------------------------------
+    |
+    | La tabla notificaciones actualmente guarda pedido_id,
+    | pero no guarda calificacion_id.
+    |
+    | Por eso buscamos la calificación correspondiente a cada
+    | notificación y usamos su ID como referencia para evitar
+    | duplicados visuales.
+    |
+    */
+
+        $idsCalificacionesMostradas = [];
+
+        $notificaciones = $notificaciones->filter(function ($notificacion) use (&$idsCalificacionesMostradas) {
+
+            if ($notificacion->evento !== 'nueva_calificacion') {
+                return true;
+            }
+
+            $calificacion = $notificacion->pedido?->calificaciones
+                ?->filter(function ($calificacion) use ($notificacion) {
+
+                    return $calificacion->created_at <= $notificacion->created_at;
+                })
+                ->sortByDesc('created_at')
+                ->first();
+
+            /*
+        | Si no encontramos una calificación relacionada,
+        | dejamos la notificación visible.
+        */
+            if (!$calificacion) {
+                return true;
+            }
+
+            /*
+        | Si esta calificación ya fue representada por otra
+        | notificación, ocultamos esta duplicada.
+        */
+            if (in_array($calificacion->id, $idsCalificacionesMostradas)) {
+                return false;
+            }
+
+            $idsCalificacionesMostradas[] = $calificacion->id;
+
+            /*
+        | Guardamos la calificación encontrada temporalmente
+        | para utilizarla directamente en la vista.
+        */
+            $notificacion->calificacionRelacionada = $calificacion;
+
+            return true;
+        })
+            ->values();
 
         $noLeidas = $notificaciones
             ->where('leido', false)
             ->count();
 
+        $comprobantes = $notificaciones
+            ->where('evento', 'comprobante_enviado')
+            ->count();
+
+        $calificaciones = $notificaciones
+            ->where('evento', 'nueva_calificacion')
+            ->count();
+
+        /*
+    |--------------------------------------------------------------------------
+    | Agrupar por fecha
+    |--------------------------------------------------------------------------
+    */
+
+        $notificacionesAgrupadas = $notificaciones
+            ->groupBy(function ($notificacion) {
+
+                if ($notificacion->created_at->isToday()) {
+                    return 'Hoy';
+                }
+
+                if ($notificacion->created_at->isYesterday()) {
+                    return 'Ayer';
+                }
+
+                return $notificacion->created_at->format('d/m/Y');
+            });
+
         return view(
             'admin.notificaciones.index',
-            compact('notificaciones', 'noLeidas')
+            compact(
+                'notificaciones',
+                'noLeidas',
+                'comprobantes',
+                'calificaciones',
+                'notificacionesAgrupadas'
+            )
         );
     }
 

@@ -9456,3 +9456,1128 @@ body {
     }
 
 }
+/* =========================================================
+   NOTIFICACIONES
+========================================================= */
+
+.notificaciones-page {
+    padding: 10px 0 40px;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.notificaciones-header {
+    background: linear-gradient(
+        135deg,
+        #17181d,
+        #101114
+    );
+
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 18px;
+
+    padding: 24px;
+
+    margin-bottom: 24px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.20);
+}
+
+.notificaciones-title {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.notificaciones-subtitle {
+    color: #9ca3af;
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   BOTÓN MARCAR TODAS
+========================================================= */
+
+.btn-marcar-todas {
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TARJETAS RESUMEN
+========================================================= */
+
+.notificacion-resumen {
+    height: 100%;
+
+    background: #17181d;
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+
+    transition: .2s ease;
+}
+
+.notificacion-resumen:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(255,255,255,.12);
+}
+
+.resumen-icon {
+    width: 52px;
+    height: 52px;
+
+    min-width: 52px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.resumen-icon.total {
+    background: rgba(139,30,69,.18);
+    color: #e85d8c;
+}
+
+.resumen-icon.nuevas {
+    background: rgba(220,53,69,.16);
+    color: #ff6b7a;
+}
+
+.resumen-icon.comprobantes {
+    background: rgba(13,110,253,.14);
+    color: #6ea8fe;
+}
+
+.resumen-icon.calificaciones {
+    background: rgba(255,193,7,.14);
+    color: #ffc107;
+}
+
+.resumen-label {
+    display: block;
+
+    color: #9ca3af;
+
+    font-size: 13px;
+
+    margin-bottom: 2px;
+}
+
+.resumen-numero {
+    color: #fff;
+
+    font-size: 25px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   GRUPO POR FECHA
+========================================================= */
+
+.fecha-grupo {
+    margin-top: 30px;
+}
+
+.fecha-grupo:first-child {
+    margin-top: 0;
+}
+
+.fecha-header {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.fecha-header-icon {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 9px;
+
+    background: rgba(139,30,69,.16);
+
+    color: #d64c7b;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fecha-header-title {
+    color: #fff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+}
+
+.fecha-header-line {
+    flex: 1;
+
+    height: 1px;
+
+    background: rgba(255,255,255,.07);
+}
+
+
+/* =========================================================
+   TARJETA DE NOTIFICACIÓN
+========================================================= */
+
+.notificacion-card {
+    position: relative;
+
+    background: #17181d;
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    border-radius: 16px;
+
+    margin-bottom: 12px;
+
+    overflow: hidden;
+
+    transition: .2s ease;
+
+    box-shadow: 0 5px 18px rgba(0,0,0,.13);
+}
+
+.notificacion-card:hover {
+    border-color: rgba(255,255,255,.12);
+
+    transform: translateY(-1px);
+}
+
+.notificacion-card.no-leida {
+    border-left: 4px solid #8b1e45;
+}
+
+.notificacion-card.leida {
+    opacity: .88;
+}
+
+.notificacion-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   ICONO NOTIFICACIÓN
+========================================================= */
+
+.notificacion-icon {
+    width: 52px;
+    height: 52px;
+
+    min-width: 52px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.icon-comprobante {
+    background: rgba(13,110,253,.13);
+    color: #6ea8fe;
+}
+
+.icon-calificacion {
+    background: rgba(255,193,7,.13);
+    color: #ffc107;
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.notificacion-titulo {
+    color: #fff;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    margin-bottom: 4px;
+}
+
+.notificacion-descripcion {
+    color: #aeb4bd;
+
+    font-size: 14px;
+
+    margin-bottom: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.badge-nueva {
+    background: #8b1e45;
+
+    color: #fff;
+
+    font-size: 11px;
+
+    border-radius: 20px;
+
+    padding: 5px 9px;
+}
+
+.badge-tipo {
+    border-radius: 20px;
+
+    padding: 5px 9px;
+
+    font-size: 11px;
+}
+
+.badge-tipo-comprobante {
+    background: rgba(13,110,253,.12);
+
+    color: #75aefc;
+}
+
+.badge-tipo-calificacion {
+    background: rgba(255,193,7,.12);
+
+    color: #ffc107;
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+========================================================= */
+
+.notificacion-info {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+}
+
+.info-item {
+    background: #101114;
+
+    border: 1px solid rgba(255,255,255,.05);
+
+    border-radius: 9px;
+
+    padding: 7px 10px;
+
+    color: #b8bec7;
+
+    font-size: 12px;
+}
+
+.info-item i {
+    margin-right: 4px;
+}
+
+.info-item strong {
+    color: #fff;
+}
+
+
+/* =========================================================
+   ESTRELLAS
+========================================================= */
+
+.estrellas {
+    color: #ffc107;
+
+    letter-spacing: 1px;
+
+    font-size: 17px;
+}
+
+.puntuacion-numero {
+    color: #fff;
+
+    font-weight: 700;
+
+    margin-left: 5px;
+}
+
+
+/* =========================================================
+   COMENTARIO
+========================================================= */
+
+.comentario-box {
+    background: rgba(255,255,255,.025);
+
+    border-left: 3px solid #8b1e45;
+
+    border-radius: 7px;
+
+    padding: 10px 12px;
+
+    margin-top: 10px;
+
+    color: #c4c8ce;
+
+    font-size: 13px;
+
+    font-style: italic;
+}
+
+.comentario-box i {
+    color: #8b1e45;
+
+    margin-right: 5px;
+}
+
+
+/* =========================================================
+   FECHA Y HORA
+========================================================= */
+
+.notificacion-fecha {
+    color: #737983;
+
+    font-size: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.notificacion-acciones {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+.notificacion-acciones .btn {
+    border-radius: 9px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    padding: 8px 12px;
+}
+
+
+/* =========================================================
+   SIN NOTIFICACIONES
+========================================================= */
+
+.sin-notificaciones {
+    background: #17181d;
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    border-radius: 18px;
+
+    padding: 60px 20px;
+
+    text-align: center;
+
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+
+.sin-notificaciones-icon {
+    width: 75px;
+    height: 75px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.04);
+
+    color: #737983;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    font-size: 32px;
+}
+
+.sin-notificaciones h4 {
+    color: #fff;
+
+    font-weight: 700;
+}
+
+.sin-notificaciones p {
+    color: #858b94;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .notificaciones-page {
+        padding-top: 0;
+    }
+
+    .notificaciones-header {
+        padding: 18px;
+
+        border-radius: 14px;
+    }
+
+    .notificaciones-header .btn {
+        width: 100%;
+    }
+
+    .notificacion-body {
+        padding: 15px;
+    }
+
+    .notificacion-icon {
+        width: 44px;
+        height: 44px;
+
+        min-width: 44px;
+
+        font-size: 19px;
+    }
+
+    .notificacion-titulo {
+        font-size: 15px;
+    }
+
+    .notificacion-descripcion {
+        font-size: 13px;
+    }
+
+    .info-item {
+        width: 100%;
+    }
+
+    .notificacion-acciones {
+        flex-direction: column;
+    }
+
+    .notificacion-acciones .btn,
+    .notificacion-acciones form,
+    .notificacion-acciones form button {
+        width: 100%;
+    }
+
+    .fecha-header-line {
+        display: none;
+    }
+}
+/* =========================================================
+   CALIFICACIONES ADMINISTRADOR
+========================================================= */
+
+.admin-calificaciones-container {
+    padding: 10px 0 40px;
+}
+
+.admin-calificaciones-header {
+    background: linear-gradient(
+        135deg,
+        #17181d,
+        #101114
+    );
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    margin-bottom: 24px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.20);
+}
+
+.admin-calificaciones-label {
+    color: #d64c7b;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.admin-calificaciones-title {
+    color: #fff;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    margin: 5px 0;
+}
+
+.admin-calificaciones-subtitle {
+    color: #9ca3af;
+
+    margin: 0;
+}
+
+
+/* PRODUCTO */
+
+.admin-calificaciones-product-card,
+.admin-calificaciones-summary-card {
+    height: 100%;
+
+    background: #17181d;
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+
+.admin-calificaciones-product-image {
+    height: 100%;
+
+    min-height: 300px;
+
+    background: #101114;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.admin-calificaciones-product-image img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.admin-calificaciones-no-image {
+    color: #737983;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    font-size: 14px;
+}
+
+.admin-calificaciones-no-image i {
+    font-size: 40px;
+}
+
+.admin-calificaciones-product-info {
+    padding: 25px;
+}
+
+.admin-calificaciones-category {
+    display: inline-block;
+
+    color: #d64c7b;
+
+    background: rgba(139,30,69,.15);
+
+    border-radius: 20px;
+
+    padding: 5px 10px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.admin-calificaciones-product-name {
+    color: #fff;
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    margin: 12px 0 8px;
+}
+
+.admin-calificaciones-product-description {
+    color: #aeb4bd;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+.admin-calificaciones-product-price {
+    color: #fff;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    margin: 15px 0;
+}
+
+
+/* PROMEDIO */
+
+.admin-calificaciones-average {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 15px;
+}
+
+.admin-calificaciones-average-number {
+    color: #fff;
+
+    font-size: 38px;
+
+    font-weight: 700;
+}
+
+.admin-calificaciones-stars {
+    color: #ffc107;
+
+    letter-spacing: 2px;
+}
+
+.admin-calificaciones-stars-large {
+    font-size: 20px;
+}
+
+.admin-calificaciones-total {
+    color: #858b94;
+
+    font-size: 12px;
+
+    margin-top: 4px;
+}
+
+
+/* RESUMEN */
+
+.admin-calificaciones-summary-body {
+    padding: 25px;
+}
+
+.admin-calificaciones-section-title {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.admin-calificaciones-section-title h2 {
+    color: #fff;
+
+    font-size: 20px;
+
+    margin: 0;
+}
+
+.admin-calificaciones-section-title p {
+    color: #858b94;
+
+    font-size: 13px;
+
+    margin: 4px 0 0;
+}
+
+.admin-calificaciones-summary-icon {
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255,193,7,.12);
+
+    color: #ffc107;
+
+    font-size: 20px;
+}
+
+.admin-rating-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 13px;
+}
+
+.admin-rating-star-number {
+    width: 40px;
+
+    color: #fff;
+
+    font-size: 13px;
+}
+
+.admin-rating-star-number i {
+    color: #ffc107;
+}
+
+.admin-rating-progress {
+    flex: 1;
+
+    height: 8px;
+
+    background: #2a2c31;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.admin-rating-progress-bar {
+    height: 100%;
+
+    background: #ffc107;
+
+    border-radius: 10px;
+}
+
+.admin-rating-count {
+    width: 25px;
+
+    text-align: right;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+}
+
+
+/* OPINIONES */
+
+.admin-calificaciones-reviews-heading {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin: 35px 0 20px;
+}
+
+.admin-calificaciones-reviews-heading h2 {
+    color: #fff;
+
+    margin: 5px 0;
+}
+
+.admin-calificaciones-reviews-heading p {
+    color: #858b94;
+
+    margin: 0;
+}
+
+.admin-calificaciones-review-count {
+    background: rgba(139,30,69,.15);
+
+    color: #d64c7b;
+
+    border: 1px solid rgba(139,30,69,.25);
+
+    border-radius: 20px;
+
+    padding: 8px 14px;
+
+    white-space: nowrap;
+
+    font-size: 13px;
+}
+
+
+/* TARJETA DE OPINIÓN */
+
+.admin-calificaciones-review-card {
+    background: #17181d;
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    border-radius: 16px;
+
+    margin-bottom: 12px;
+
+    box-shadow: 0 5px 18px rgba(0,0,0,.13);
+}
+
+.admin-calificaciones-review-body {
+    padding: 20px;
+}
+
+.admin-calificaciones-review-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.admin-calificaciones-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.admin-calificaciones-avatar {
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 50%;
+
+    background: rgba(139,30,69,.16);
+
+    color: #d64c7b;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.admin-calificaciones-user-name {
+    color: #fff;
+
+    font-weight: 600;
+}
+
+.admin-calificaciones-date {
+    color: #737983;
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+.admin-calificaciones-comment {
+    margin-top: 18px;
+
+    background: rgba(255,255,255,.025);
+
+    border-left: 3px solid #8b1e45;
+
+    border-radius: 8px;
+
+    padding: 12px 15px;
+
+    display: flex;
+
+    gap: 10px;
+}
+
+.admin-calificaciones-comment i {
+    color: #8b1e45;
+
+    font-size: 20px;
+}
+
+.admin-calificaciones-comment p {
+    color: #c4c8ce;
+
+    margin: 0;
+
+    line-height: 1.6;
+}
+
+.admin-calificaciones-no-comment {
+    margin-top: 18px;
+
+    color: #737983;
+
+    font-size: 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+/* VACÍO */
+
+.admin-calificaciones-empty-card {
+    background: #17181d;
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    border-radius: 18px;
+
+    padding: 60px 20px;
+
+    text-align: center;
+}
+
+.admin-calificaciones-empty-icon {
+    width: 70px;
+
+    height: 70px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: rgba(255,193,7,.10);
+
+    color: #ffc107;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 30px;
+}
+
+.admin-calificaciones-empty-card h3 {
+    color: #fff;
+
+    font-size: 20px;
+}
+
+.admin-calificaciones-empty-card p {
+    color: #858b94;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 767.98px) {
+
+    .admin-calificaciones-header {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 18px;
+    }
+
+    .admin-calificaciones-header .btn {
+        width: 100%;
+    }
+
+    .admin-calificaciones-title {
+        font-size: 23px;
+    }
+
+    .admin-calificaciones-product-image {
+        min-height: 240px;
+    }
+
+    .admin-calificaciones-product-info {
+        padding: 20px;
+    }
+
+    .admin-calificaciones-reviews-heading {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .admin-calificaciones-review-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}

@@ -243,43 +243,78 @@
 
                         @if($pedido->comprobantePago)
 
-                        @if($pedido->comprobantePago->estado === 'aprobado')
+                        <div class="pedido-comprobante-acciones mt-3">
 
-                        <span class="pedido-badge pedido-badge-success">
-                            <i class="bi bi-check-circle"></i>
-                            Pago aprobado
-                        </span>
+                            @if($pedido->comprobantePago->imagen)
 
-                        @elseif($pedido->comprobantePago->estado === 'pendiente')
+                            <a
+                                href="{{ asset(
+                    'storage/' . $pedido->comprobantePago->imagen
+                ) }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn btn-outline-primary">
+                                <i class="bi bi-eye me-1"></i>
+                                Ver comprobante
+                            </a>
 
-                        <span class="pedido-badge pedido-badge-warning">
-                            <i class="bi bi-clock"></i>
-                            Pago pendiente
-                        </span>
+                            @endif
 
-                        @elseif($pedido->comprobantePago->estado === 'rechazado')
 
-                        <span class="pedido-badge pedido-badge-danger">
-                            <i class="bi bi-x-circle"></i>
-                            Pago rechazado
-                        </span>
+                            @if($pedido->comprobantePago->estado === 'pendiente')
 
-                        @else
+                            <form
+                                action="{{ route(
+                    'admin.comprobantes.aprobar',
+                    $pedido->comprobantePago->id
+                ) }}"
+                                method="POST"
+                                class="d-inline">
 
-                        <span class="pedido-badge pedido-badge-secondary">
-                            {{ ucfirst($pedido->comprobantePago->estado) }}
-                        </span>
+                                @csrf
+                                @method('PUT')
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success"
+                                    onclick="return confirm(
+                        '¿Estás seguro de aprobar este comprobante?'
+                    )">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Aprobar comprobante
+                                </button>
+
+                            </form>
+
+
+                            <form
+                                action="{{ route(
+                    'admin.comprobantes.rechazar',
+                    $pedido->comprobantePago->id
+                ) }}"
+                                method="POST"
+                                class="d-inline">
+
+                                @csrf
+                                @method('PUT')
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                                    onclick="return confirm(
+                        '¿Estás seguro de rechazar este comprobante?'
+                    )">
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Rechazar comprobante
+                                </button>
+
+                            </form>
+
+                            @endif
+
+                        </div>
 
                         @endif
-
-                        @else
-
-                        <span class="pedido-badge pedido-badge-secondary">
-                            Sin comprobante
-                        </span>
-
-                        @endif
-
                     </div>
 
                 </div>

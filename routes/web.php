@@ -120,6 +120,12 @@ Route::middleware(['auth', 'role:Administrador'])
         Route::patch('/clientes/{id}/desactivar', [ClienteController::class, 'desactivar'])->name('admin.clientes.desactivar');
         Route::delete('/clientes/{id}', [ClienteController::class, 'destroy'])->name('admin.clientes.destroy');
 
+
+        Route::get(
+            '/productos/{id}/calificaciones',
+            [ProductoController::class, 'calificaciones']
+        )->name('admin.productos.calificaciones');
+
         Route::resource('productos', ProductoController::class)->names('admin.productos');
         Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
 

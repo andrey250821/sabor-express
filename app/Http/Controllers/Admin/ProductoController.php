@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Calificacion;
 
 class ProductoController extends Controller
 {
@@ -207,6 +208,45 @@ class ProductoController extends Controller
             );
     }
 
+    /**
+     * Mostrar las calificaciones de un producto.
+     */
+    public function calificaciones($id)
+    {
+        $producto = Producto::with('categoria')
+            ->findOrFail($id);
+
+        $calificaciones = Calificacion::where(
+            'producto_id',
+            $producto->id
+        )
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $promedio = $calificaciones->avg('puntuacion');
+
+        $totalCalificaciones = $calificaciones->count();
+
+        $cantidadEstrellas = [
+            5 => $calificaciones->where('puntuacion', 5)->count(),
+            4 => $calificaciones->where('puntuacion', 4)->count(),
+            3 => $calificaciones->where('puntuacion', 3)->count(),
+            2 => $calificaciones->where('puntuacion', 2)->count(),
+            1 => $calificaciones->where('puntuacion', 1)->count(),
+        ];
+
+        return view(
+            'admin.productos.calificaciones',
+            compact(
+                'producto',
+                'calificaciones',
+                'promedio',
+                'totalCalificaciones',
+                'cantidadEstrellas'
+            )
+        );
+    }
     public function destroy($id)
     {
 
