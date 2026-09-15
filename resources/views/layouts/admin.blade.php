@@ -223,8 +223,8 @@
 
                 {{-- Calificaciones --}}
                 <a
-                    href="#"
-                    class="sidebar-link">
+                    href="{{ route('admin.productos.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.productos.*') ? 'active' : '' }}">
 
                     <span class="sidebar-icon">
                         <i class="bi bi-star"></i>
