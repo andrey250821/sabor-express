@@ -9,6 +9,8 @@ use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use App\Models\Notificacion;
+use App\Models\User;
 
 class CalificacionController extends Controller
 {
@@ -162,6 +164,21 @@ class CalificacionController extends Controller
                 'puntuacion' => $datos['puntuacion'],
                 'comentario' => $datos['comentario'] ?? null,
             ]);
+            // Notificar a todos los administradores sobre la nueva calificación
+            $administradores = User::whereHas('role', function ($query) {
+                $query->where('nombre', 'Administrador');
+            })->get();
+
+            foreach ($administradores as $administrador) {
+                Notificacion::create([
+                    'user_id' => $administrador->id,
+                    'pedido_id' => $pedido->id,
+                    'mensaje' => 'El cliente ha realizado una nueva calificación para un producto del pedido #' . $pedido->id . '.',
+                    'tipo' => 'administrador',
+                    'evento' => 'nueva_calificacion',
+                    'leido' => false,
+                ]);
+            }
         } catch (QueryException $e) {
 
             /*

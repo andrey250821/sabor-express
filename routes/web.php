@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Admin\ProductoController;
-
+use App\Http\Controllers\Admin\NotificacionController;
 /*
 |--------------------------------------------------------------------------
 | CONTROLADORES CLIENTE
@@ -129,6 +129,22 @@ Route::middleware(['auth', 'role:Administrador'])
         Route::get('/comprobantes/{estado?}', [ComprobantePagoController::class, 'index'])->name('admin.comprobantes.index');
         Route::put('/comprobantes/{id}/aprobar', [ComprobantePagoController::class, 'aprobar'])->name('admin.comprobantes.aprobar');
         Route::put('/comprobantes/{id}/rechazar', [ComprobantePagoController::class, 'rechazar'])->name('admin.comprobantes.rechazar');
+
+        // Notificaciones del administrador
+        Route::get(
+            '/notificaciones',
+            [NotificacionController::class, 'index']
+        )->name('admin.notificaciones.index');
+
+        Route::patch(
+            '/notificaciones/{id}/leer',
+            [NotificacionController::class, 'marcarLeida']
+        )->name('admin.notificaciones.leer');
+
+        Route::patch(
+            '/notificaciones/leer-todas',
+            [NotificacionController::class, 'marcarTodasLeidas']
+        )->name('admin.notificaciones.leer.todas');
 
         Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('admin.configuracion.index');
         Route::put('/configuracion', [ConfiguracionController::class, 'update'])->name('admin.configuracion.update');

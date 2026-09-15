@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Cliente;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pedido;
+use App\Models\Notificacion;
+use App\Models\User;
 use App\Models\ComprobantePago;
 use App\Models\Configuracion;
 use App\Models\DetallePedido;
@@ -185,6 +187,21 @@ class PedidoController extends Controller
             ]);
 
             DB::commit();
+            // Notificar a todos los administradores que se recibió un nuevo comprobante
+            $administradores = User::whereHas('role', function ($query) {
+                $query->where('nombre', 'Administrador');
+            })->get();
+
+            foreach ($administradores as $administrador) {
+                Notificacion::create([
+                    'user_id' => $administrador->id,
+                    'pedido_id' => $pedido->id,
+                    'mensaje' => 'Se ha recibido un nuevo comprobante de pago para el pedido #' . $pedido->id . '.',
+                    'tipo' => 'administrador',
+                    'evento' => 'comprobante_enviado',
+                    'leido' => false,
+                ]);
+            }
             session()->forget('carrito');
 
             return redirect()

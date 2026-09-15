@@ -239,18 +239,33 @@
 
 
                 {{-- Notificaciones --}}
-                <a
-                    href="#"
-                    class="sidebar-link">
+                @php
+                $notificacionesNoLeidas = auth()->user()
+                ->notificaciones()
+                ->whereIn('evento', [
+                'comprobante_enviado',
+                'nueva_calificacion',
+                ])
+                ->where('leido', false)
+                ->count();
+                @endphp
 
+                <a
+                    href="{{ route('admin.notificaciones.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.notificaciones.*') ? 'active' : '' }}">
                     <span class="sidebar-icon">
                         <i class="bi bi-bell"></i>
                     </span>
 
-                    <span>
+                    <span class="flex-grow-1">
                         Notificaciones
                     </span>
 
+                    @if($notificacionesNoLeidas > 0)
+                    <span class="badge bg-danger rounded-pill">
+                        {{ $notificacionesNoLeidas }}
+                    </span>
+                    @endif
                 </a>
 
 
