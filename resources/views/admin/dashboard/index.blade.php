@@ -2,557 +2,549 @@
 
 @section('content')
 
-<div class="container-fluid px-0">
+<div class="admin-dashboard">
 
+    {{-- =========================================================
+        ENCABEZADO
+    ========================================================== --}}
 
-    <!-- TITULO -->
+    <div class="dashboard-header">
 
-    <div class="mb-4">
+        <div>
+            <span class="dashboard-eyebrow">
+                PANEL DE CONTROL
+            </span>
 
-        <h2 class="fw-bold text-white">
-            Dashboard
-        </h2>
+            <h2 class="dashboard-title">
+                Bienvenido, {{ Auth::user()->name }} 👋
+            </h2>
 
+            <p class="dashboard-subtitle">
+                Resumen general de Sabor Express
+            </p>
+        </div>
 
-        <p class="text-muted">
-            Resumen general de Sabor Express
-        </p>
+        <div class="dashboard-date">
+            <i class="bi bi-calendar3"></i>
+
+            {{ now()->translatedFormat('l, d \d\e F \d\e Y') }}
+        </div>
 
     </div>
 
 
+    {{-- =========================================================
+        INDICADORES PRINCIPALES
+    ========================================================== --}}
+
+    <div class="dashboard-metrics">
+
+        {{-- PEDIDOS --}}
+        <a
+            href="{{ route('admin.pedidos.index') }}"
+            class="dashboard-metric-card">
+
+            <div class="metric-icon pedidos">
+                <i class="bi bi-bag-check-fill"></i>
+            </div>
+
+            <div class="metric-content">
+
+                <span class="metric-label">
+                    Pedidos
+                </span>
+
+                <strong class="metric-value">
+                    {{ $pedidos }}
+                </strong>
+
+                <span class="metric-description">
+                    Pedidos registrados
+                </span>
+
+            </div>
+
+            <i class="bi bi-arrow-up-right metric-arrow"></i>
+
+        </a>
 
 
-    <!-- ==========================
-        TARJETAS PRINCIPALES
-    =========================== -->
+        {{-- VENTAS --}}
+        <div class="dashboard-metric-card">
 
+            <div class="metric-icon ventas">
+                <i class="bi bi-cash-stack"></i>
+            </div>
 
-    <div class="row g-4">
+            <div class="metric-content">
 
+                <span class="metric-label">
+                    Ventas del mes
+                </span>
 
+                <strong class="metric-value">
+                    Bs {{ number_format($ventasMes, 2) }}
+                </strong>
 
-        <!-- PEDIDOS -->
+                <span class="metric-description">
+                    Ingresos registrados
+                </span>
 
-        <div class="col-12 col-sm-6 col-xl-3">
-
-
-            <a href="{{ route('admin.pedidos.index') }}"
-                class="text-decoration-none">
-
-
-                <div class="card dashboard-card h-100 shadow">
-
-
-                    <div class="card-body">
-
-
-
-                        <div class="icon-box bg-danger">
-
-                            <i class="bi bi-bag"></i>
-
-                        </div>
-
-
-
-
-                        <h6 class="text-muted mt-3">
-
-                            Pedidos
-
-                        </h6>
-
-
-
-                        <h2 class="fw-bold text-white">
-
-                            {{ $pedidos }}
-
-                        </h2>
-
-
-
-                        <small class="text-secondary">
-
-                            Pedidos registrados
-
-                        </small>
-
-
-
-                        <div class="text-end mt-3">
-
-                            <small class="ver-detalle">
-
-                                Ver pedidos →
-
-                            </small>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </a>
-
+            </div>
 
         </div>
 
 
+        {{-- CLIENTES --}}
+        <a
+            href="{{ route('admin.clientes.index') }}"
+            class="dashboard-metric-card">
 
+            <div class="metric-icon clientes">
+                <i class="bi bi-people-fill"></i>
+            </div>
 
+            <div class="metric-content">
 
+                <span class="metric-label">
+                    Clientes
+                </span>
 
+                <strong class="metric-value">
+                    {{ $clientes }}
+                </strong>
 
-        <!-- CLIENTES -->
+                <span class="metric-description">
+                    Usuarios registrados
+                </span>
 
+            </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
+            <i class="bi bi-arrow-up-right metric-arrow"></i>
 
+        </a>
 
-            <a href="{{ route('admin.clientes.index') }}"
-                class="text-decoration-none">
 
+        {{-- DELIVERY --}}
+        <a
+            href="{{ route('admin.deliverys.index') }}"
+            class="dashboard-metric-card">
 
-                <div class="card dashboard-card h-100 shadow">
+            <div class="metric-icon delivery">
+                <i class="bi bi-bicycle"></i>
+            </div>
 
+            <div class="metric-content">
 
-                    <div class="card-body">
+                <span class="metric-label">
+                    Delivery activos
+                </span>
 
+                <strong class="metric-value">
+                    {{ $deliverys }}
+                </strong>
 
-                        <div class="icon-box bg-success">
+                <span class="metric-description">
+                    Repartidores disponibles
+                </span>
 
-                            <i class="bi bi-people"></i>
+            </div>
 
-                        </div>
+            <i class="bi bi-arrow-up-right metric-arrow"></i>
 
-
-
-                        <h6 class="text-muted mt-3">
-
-                            Clientes
-
-                        </h6>
-
-
-
-
-                        <h2 class="fw-bold text-white">
-
-                            {{ $clientes }}
-
-                        </h2>
-
-
-
-
-                        <small class="text-secondary">
-
-                            Usuarios registrados
-
-                        </small>
-
-
-
-                        <div class="text-end mt-3">
-
-
-                            <small class="ver-detalle">
-
-                                Ver clientes →
-
-                            </small>
-
-
-                        </div>
-
-
-
-                    </div>
-
-
-                </div>
-
-
-            </a>
-
-
-        </div>
-
-
-
-
-
-
-
-
-
-        <!-- DELIVERY -->
-
-
-        <div class="col-12 col-sm-6 col-xl-3">
-
-
-
-            <a href="{{ route('admin.deliverys.index') }}"
-                class="text-decoration-none">
-
-
-
-                <div class="card dashboard-card h-100 shadow">
-
-
-                    <div class="card-body">
-
-
-
-                        <div class="icon-box bg-warning">
-
-
-                            <i class="bi bi-bicycle"></i>
-
-
-                        </div>
-
-
-
-
-
-                        <h6 class="text-muted mt-3">
-
-
-                            Delivery
-
-
-                        </h6>
-
-
-
-
-
-                        <h2 class="fw-bold text-white">
-
-
-                            {{ $deliverys }}
-
-
-                        </h2>
-
-
-
-
-
-                        <small class="text-secondary">
-
-
-                            Repartidores activos
-
-
-                        </small>
-
-
-
-
-
-                        <div class="text-end mt-3">
-
-
-                            <small class="ver-detalle">
-
-
-                                Ver deliverys →
-
-
-                            </small>
-
-
-                        </div>
-
-
-
-
-                    </div>
-
-
-
-                </div>
-
-
-
-            </a>
-
-
-
-        </div>
-
-
-
-
-
-
-
-
-        <!-- PRODUCTOS -->
-
-
-        <div class="col-12 col-sm-6 col-xl-3">
-
-
-
-            <a href="{{ route('admin.productos.index') }}"
-                class="text-decoration-none">
-
-
-
-                <div class="card dashboard-card h-100 shadow">
-
-
-
-                    <div class="card-body">
-
-
-
-                        <div class="icon-box bg-primary">
-
-
-                            <i class="bi bi-box-seam"></i>
-
-
-                        </div>
-
-
-
-
-
-                        <h6 class="text-muted mt-3">
-
-
-                            Productos
-
-
-                        </h6>
-
-
-
-
-
-                        <h2 class="fw-bold text-white">
-
-
-                            {{ $productos }}
-
-
-                        </h2>
-
-
-
-
-
-                        <small class="text-secondary">
-
-
-                            Productos disponibles
-
-
-                        </small>
-
-
-
-
-
-                        <div class="text-end mt-3">
-
-
-                            <small class="ver-detalle">
-
-
-                                Ver productos →
-
-
-                            </small>
-
-
-                        </div>
-
-
-
-                    </div>
-
-
-                </div>
-
-
-
-            </a>
-
-
-
-        </div>
-
-
+        </a>
 
     </div>
 
 
+    {{-- =========================================================
+        ESTADO DE PEDIDOS
+    ========================================================== --}}
 
-    <!-- ==========================
-    ESTADOS DE PEDIDOS
-=========================== -->
+    <div class="dashboard-section">
 
-    <div class="row g-4 mt-1">
+        <div class="section-heading">
 
-        {{-- PENDIENTES --}}
+            <div>
+                <span class="section-eyebrow">
+                    OPERACIÓN
+                </span>
 
-        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                <h3>
+                    Estado de pedidos
+                </h3>
+            </div>
 
-            <a href="{{ route('admin.pedidos.index') }}"
-                class="text-decoration-none">
-
-                <div class="card dashboard-card h-100 shadow">
-
-                    <div class="card-body">
-
-                        <div class="icon-box bg-warning">
-
-                            <i class="bi bi-hourglass-split"></i>
-
-                        </div>
-
-                        <h6 class="text-muted mt-3">
-                            Pendientes
-                        </h6>
-
-                        <h2 class="fw-bold text-white">
-                            {{ $pedidosPendientes }}
-                        </h2>
-
-                        <small class="text-secondary">
-                            Esperando procesamiento
-                        </small>
-
-                    </div>
-
-                </div>
-
+            <a
+                href="{{ route('admin.pedidos.index') }}"
+                class="dashboard-link">
+                Ver pedidos
+                <i class="bi bi-arrow-right"></i>
             </a>
 
         </div>
 
 
-        {{-- PREPARANDO --}}
+        <div class="order-status-card">
 
-        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+            {{-- PENDIENTES --}}
+            <a
+                href="{{ route('admin.pedidos.index') }}"
+                class="order-status-item">
 
-            <a href="{{ route('admin.pedidos.index') }}"
-                class="text-decoration-none">
+                <span class="status-icon pendiente">
+                    <i class="bi bi-hourglass-split"></i>
+                </span>
 
-                <div class="card dashboard-card h-100 shadow">
+                <span class="status-info">
+                    <strong>{{ $pedidosPendientes }}</strong>
+                    <small>Pendientes</small>
+                </span>
 
-                    <div class="card-body">
+            </a>
 
-                        <div class="icon-box bg-danger">
 
-                            <i class="bi bi-fire"></i>
+            {{-- PREPARANDO --}}
+            <a
+                href="{{ route('admin.pedidos.index') }}"
+                class="order-status-item">
 
-                        </div>
+                <span class="status-icon preparando">
+                    <i class="bi bi-fire"></i>
+                </span>
 
-                        <h6 class="text-muted mt-3">
+                <span class="status-info">
+                    <strong>{{ $pedidosPreparando }}</strong>
+                    <small>Preparando</small>
+                </span>
+
+            </a>
+
+
+            {{-- LISTOS --}}
+            <a
+                href="{{ route('admin.pedidos.index') }}"
+                class="order-status-item">
+
+                <span class="status-icon listo">
+                    <i class="bi bi-check-circle-fill"></i>
+                </span>
+
+                <span class="status-info">
+                    <strong>{{ $pedidosListos }}</strong>
+                    <small>Listos</small>
+                </span>
+
+            </a>
+
+
+            {{-- EN CAMINO --}}
+            <a
+                href="{{ route('admin.pedidos.index') }}"
+                class="order-status-item">
+
+                <span class="status-icon camino">
+                    <i class="bi bi-bicycle"></i>
+                </span>
+
+                <span class="status-info">
+                    <strong>{{ $pedidosEnCamino }}</strong>
+                    <small>En camino</small>
+                </span>
+
+            </a>
+
+
+            {{-- ENTREGADOS --}}
+            <div class="order-status-item">
+
+                <span class="status-icon entregado">
+                    <i class="bi bi-check2-all"></i>
+                </span>
+
+                <span class="status-info">
+                    <strong>{{ $pedidosEntregados }}</strong>
+                    <small>Entregados</small>
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- =========================================================
+        CONTENIDO PRINCIPAL
+    ========================================================== --}}
+
+    <div class="dashboard-grid">
+
+
+        {{-- =====================================================
+            ÚLTIMOS PEDIDOS
+        ====================================================== --}}
+
+        <div class="dashboard-panel pedidos-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-eyebrow">
+                        ACTIVIDAD RECIENTE
+                    </span>
+
+                    <h3>
+                        Últimos pedidos
+                    </h3>
+
+                </div>
+
+                <a
+                    href="{{ route('admin.pedidos.index') }}"
+                    class="panel-action">
+                    Ver todos
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+            </div>
+
+
+            <div class="recent-orders">
+
+                @forelse($ultimosPedidos as $pedido)
+
+                <a
+                    href="{{ route('admin.pedidos.show', $pedido->id) }}"
+                    class="recent-order">
+
+                    <div class="order-number">
+                        #{{ $pedido->id }}
+                    </div>
+
+
+                    <div class="order-client">
+
+                        <strong>
+                            {{ $pedido->user->name ?? 'Cliente eliminado' }}
+                        </strong>
+
+                        <small>
+                            {{ $pedido->created_at->format('d/m/Y H:i') }}
+                        </small>
+
+                    </div>
+
+
+                    <div class="order-total">
+                        Bs {{ number_format($pedido->total, 2) }}
+                    </div>
+
+
+                    <div class="order-state">
+
+                        @if($pedido->estado == 'pendiente')
+
+                        <span class="state-badge pendiente">
+                            Pendiente
+                        </span>
+
+                        @elseif($pedido->estado == 'pagado')
+
+                        <span class="state-badge pagado">
+                            Pagado
+                        </span>
+
+                        @elseif($pedido->estado == 'preparando')
+
+                        <span class="state-badge preparando">
                             Preparando
-                        </h6>
+                        </span>
 
-                        <h2 class="fw-bold text-white">
-                            {{ $pedidosPreparando }}
-                        </h2>
+                        @elseif($pedido->estado == 'listo')
 
-                        <small class="text-secondary">
-                            En preparación
-                        </small>
+                        <span class="state-badge listo">
+                            Listo
+                        </span>
 
-                    </div>
+                        @elseif($pedido->estado == 'asignado')
 
-                </div>
+                        <span class="state-badge asignado">
+                            Asignado
+                        </span>
 
-            </a>
+                        @elseif($pedido->estado == 'en_camino')
 
-        </div>
-
-
-        {{-- LISTOS --}}
-
-        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
-
-            <a href="{{ route('admin.pedidos.index') }}"
-                class="text-decoration-none">
-
-                <div class="card dashboard-card h-100 shadow">
-
-                    <div class="card-body">
-
-                        <div class="icon-box bg-primary">
-
-                            <i class="bi bi-check-circle"></i>
-
-                        </div>
-
-                        <h6 class="text-muted mt-3">
-                            Listos
-                        </h6>
-
-                        <h2 class="fw-bold text-white">
-                            {{ $pedidosListos }}
-                        </h2>
-
-                        <small class="text-secondary">
-                            Esperando delivery
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </a>
-
-        </div>
-
-
-        {{-- EN CAMINO --}}
-
-        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
-
-            <a href="{{ route('admin.pedidos.index') }}"
-                class="text-decoration-none">
-
-                <div class="card dashboard-card h-100 shadow">
-
-                    <div class="card-body">
-
-                        <div class="icon-box bg-guindo">
-
-                            <i class="bi bi-bicycle"></i>
-
-                        </div>
-
-                        <h6 class="text-muted mt-3">
+                        <span class="state-badge camino">
                             En camino
-                        </h6>
+                        </span>
 
-                        <h2 class="fw-bold text-white">
-                            {{ $pedidosEnCamino }}
-                        </h2>
+                        @elseif($pedido->estado == 'entregado')
 
-                        <small class="text-secondary">
-                            Deliverys realizando entregas
-                        </small>
+                        <span class="state-badge entregado">
+                            Entregado
+                        </span>
+
+                        @elseif($pedido->estado == 'cancelado')
+
+                        <span class="state-badge cancelado">
+                            Cancelado
+                        </span>
+
+                        @else
+
+                        <span class="state-badge">
+                            {{ ucfirst($pedido->estado) }}
+                        </span>
+
+                        @endif
 
                     </div>
 
+
+                    <i class="bi bi-chevron-right order-arrow"></i>
+
+                </a>
+
+                @empty
+
+                <div class="empty-dashboard">
+
+                    <i class="bi bi-inbox"></i>
+
+                    <p>
+                        No existen pedidos registrados.
+                    </p>
+
                 </div>
+
+                @endforelse
+
+            </div>
+
+        </div>
+
+
+        {{-- =====================================================
+            RESUMEN RÁPIDO
+        ====================================================== --}}
+
+        <div class="dashboard-panel summary-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-eyebrow">
+                        RESUMEN
+                    </span>
+
+                    <h3>
+                        Atención requerida
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            {{-- COMPROBANTES --}}
+            <a
+                href="{{ route('admin.comprobantes.index') }}"
+                class="attention-card">
+
+                <div class="attention-icon comprobantes">
+                    <i class="bi bi-receipt-cutoff"></i>
+                </div>
+
+                <div class="attention-content">
+
+                    <strong>
+                        {{ $comprobantesPendientes }}
+                    </strong>
+
+                    <span>
+                        Comprobantes pendientes
+                    </span>
+
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+
+            </a>
+
+
+            {{-- PEDIDOS PENDIENTES --}}
+            <a
+                href="{{ route('admin.pedidos.index') }}"
+                class="attention-card">
+
+                <div class="attention-icon pendientes">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+
+                <div class="attention-content">
+
+                    <strong>
+                        {{ $pedidosPendientes }}
+                    </strong>
+
+                    <span>
+                        Pedidos pendientes
+                    </span>
+
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+
+            </a>
+
+
+            {{-- ENTREGAS --}}
+            <a
+                href="{{ route('admin.pedidos.index') }}"
+                class="attention-card">
+
+                <div class="attention-icon entregas">
+                    <i class="bi bi-truck"></i>
+                </div>
+
+                <div class="attention-content">
+
+                    <strong>
+                        {{ $pedidosEnCamino }}
+                    </strong>
+
+                    <span>
+                        Pedidos en camino
+                    </span>
+
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+
+            </a>
+
+
+            {{-- PRODUCTOS --}}
+            <a
+                href="{{ route('admin.productos.index') }}"
+                class="quick-product-link">
+
+                <div>
+
+                    <strong>
+                        {{ $productos }}
+                    </strong>
+
+                    <span>
+                        Productos registrados
+                    </span>
+
+                </div>
+
+                <i class="bi bi-box-seam"></i>
 
             </a>
 
@@ -561,709 +553,146 @@
     </div>
 
 
+    {{-- =========================================================
+        GRÁFICO
+    ========================================================== --}}
 
+    <div class="dashboard-section chart-section">
 
-    <!-- ==========================
-        SEGUNDA FILA
-    =========================== -->
+        <div class="section-heading">
 
+            <div>
 
+                <span class="section-eyebrow">
+                    RENDIMIENTO
+                </span>
 
-    <div class="row g-4 mt-1">
-
-
-
-        <!-- VENTAS -->
-
-
-        <div class="col-12 col-lg-4">
-
-
-            <div class="card dashboard-card h-100 shadow">
-
-
-                <div class="card-body">
-
-
-                    <div class="icon-box bg-danger">
-
-
-                        <i class="bi bi-cash"></i>
-
-
-                    </div>
-
-
-
-                    <h6 class="text-muted mt-3">
-
-                        Ventas del mes
-
-                    </h6>
-
-
-
-
-                    <h2 class="fw-bold text-white">
-
-
-                        Bs {{ number_format($ventasMes,2) }}
-
-
-                    </h2>
-
-
-
-                    <small class="text-secondary">
-
-                        Ingresos actuales
-
-                    </small>
-
-
-
-                </div>
-
+                <h3>
+                    Ventas de los últimos 7 días
+                </h3>
 
             </div>
 
+            <div class="chart-total">
 
-        </div>
+                <span>
+                    Ventas del mes
+                </span>
 
-
-
-
-
-
-        <!-- COMPROBANTES -->
-
-
-        <div class="col-12 col-lg-4">
-
-
-            <a href="{{ route('admin.comprobantes.index') }}"
-                class="text-decoration-none">
-
-
-                <div class="card dashboard-card h-100 shadow">
-
-
-
-                    <div class="card-body">
-
-
-                        <h5 class="fw-bold text-white">
-
-                            Comprobantes pendientes
-
-                        </h5>
-
-
-
-                        <hr>
-
-
-
-                        <h1 class="text-danger">
-
-
-                            {{ $comprobantesPendientes }}
-
-
-                        </h1>
-
-
-
-                        <small class="text-muted">
-
-                            Esperando revisión
-
-                        </small>
-
-
-                    </div>
-
-
-                </div>
-
-
-            </a>
-
-
-        </div>
-        {{-- PEDIDOS ENTREGADOS --}}
-
-        <div class="col-12 col-lg-4">
-
-            <div class="card dashboard-card h-100 shadow">
-
-                <div class="card-body">
-
-                    <div class="icon-box bg-success">
-
-                        <i class="bi bi-check2-all"></i>
-
-                    </div>
-
-                    <h6 class="text-muted mt-3">
-                        Pedidos entregados
-                    </h6>
-
-                    <h2 class="fw-bold text-white">
-                        {{ $pedidosEntregados }}
-                    </h2>
-
-                    <small class="text-secondary">
-                        Entregas completadas
-                    </small>
-
-                </div>
+                <strong>
+                    Bs {{ number_format($ventasMes, 2) }}
+                </strong>
 
             </div>
 
         </div>
 
 
+        <div class="dashboard-chart">
+
+            <canvas id="ventasChart"></canvas>
+
+        </div>
 
     </div>
-
-
-
-
-
-
-
-
-    <!-- ==========================
-        ULTIMOS PEDIDOS
-    =========================== -->
-
-
-    <div class="row mt-4">
-
-
-        <div class="col-12">
-
-
-            <div class="card dashboard-card shadow">
-
-
-                <div class="card-body">
-
-
-
-                    <div class="d-flex flex-column flex-md-row 
-                                justify-content-between 
-                                align-items-md-center 
-                                gap-2 mb-3">
-
-
-
-                        <h5 class="fw-bold text-white mb-0">
-
-
-                            <i class="bi bi-clock-history text-danger"></i>
-
-                            Últimos pedidos
-
-
-                        </h5>
-
-
-
-
-                        <a href="{{ route('admin.pedidos.index') }}"
-                            class="btn btn-sm btn-outline-light">
-
-
-                            Ver todos
-
-
-                        </a>
-
-
-
-                    </div>
-
-
-
-
-
-
-                    <div class="table-responsive">
-
-
-
-                        <table class="table table-dark table-hover align-middle">
-
-
-
-                            <thead>
-
-
-                                <tr>
-
-
-                                    <th>#</th>
-
-                                    <th>Cliente</th>
-
-                                    <th>Total</th>
-
-                                    <th>Estado</th>
-
-                                    <th>Fecha</th>
-
-
-                                </tr>
-
-
-                            </thead>
-
-
-
-
-
-                            <tbody>
-
-
-
-                                @forelse($ultimosPedidos as $pedido)
-
-
-
-                                <tr>
-
-
-
-                                    <td>
-
-                                        #{{ $pedido->id }}
-
-                                    </td>
-
-
-
-
-
-                                    <td>
-
-
-                                        {{ $pedido->user->name ?? 'Cliente eliminado' }}
-
-
-                                    </td>
-
-
-
-
-
-
-                                    <td>
-
-
-                                        Bs {{ number_format($pedido->total,2) }}
-
-
-                                    </td>
-
-
-
-
-
-
-
-                                    <td>
-
-
-
-                                        @if($pedido->estado == 'pendiente')
-
-
-                                        <span class="badge bg-warning text-dark">
-
-                                            Pendiente
-
-                                        </span>
-
-
-
-
-                                        @elseif($pedido->estado == 'asignado')
-
-
-                                        <span class="badge bg-info">
-
-                                            Asignado
-
-                                        </span>
-
-
-
-
-                                        @elseif($pedido->estado == 'entregado')
-
-
-                                        <span class="badge bg-success">
-
-                                            Entregado
-
-                                        </span>
-
-
-
-
-                                        @else
-
-
-                                        <span class="badge bg-secondary">
-
-
-                                            {{ ucfirst($pedido->estado) }}
-
-
-                                        </span>
-
-
-
-                                        @endif
-
-
-
-                                    </td>
-
-
-
-
-
-
-
-                                    <td>
-
-
-                                        {{ $pedido->created_at->format('d/m/Y H:i') }}
-
-
-                                    </td>
-
-
-
-
-                                </tr>
-
-
-
-
-
-                                @empty
-
-
-
-                                <tr>
-
-
-                                    <td colspan="5"
-                                        class="text-center text-muted">
-
-
-                                        No existen pedidos registrados.
-
-
-                                    </td>
-
-
-                                </tr>
-
-
-
-                                @endforelse
-
-
-
-
-                            </tbody>
-
-
-
-
-                        </table>
-
-
-
-
-                    </div>
-
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-
-
-
-
-
-
-
-    <!-- ==========================
-        GRAFICO VENTAS
-    =========================== -->
-
-
-
-    <div class="row mt-4">
-
-
-        <div class="col-12">
-
-
-
-            <div class="card dashboard-card shadow">
-
-
-
-                <div class="card-body">
-
-
-
-                    <h5 class="fw-bold text-white mb-3">
-
-
-                        <i class="bi bi-graph-up-arrow text-danger"></i>
-
-
-                        Ventas últimos 7 días
-
-
-
-                    </h5>
-
-
-
-
-
-
-                    <div style="height:300px;">
-
-
-                        <canvas id="ventasChart"></canvas>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-            </div>
-
-
-
-        </div>
-
-
-    </div>
-
-
 
 
 </div>
 
 
-
-
-
-
+{{-- =========================================================
+    CHART.JS
+========================================================== --}}
 
 @push('scripts')
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
-
 
 <script>
     const ventas = @json($ventasSemana);
 
-
-
     const canvas = document.getElementById('ventasChart');
 
+    if (canvas) {
 
+        const labels = ventas.map(item => item.fecha);
 
-    if (canvas && ventas.length > 0) {
-
+        const datos = ventas.map(item => Number(item.total));
 
 
         new Chart(canvas, {
 
-
             type: 'line',
-
-
 
             data: {
 
+                labels: labels,
 
+                datasets: [
 
-                labels: ventas.map(v => v.fecha),
+                    {
 
+                        label: 'Ventas',
 
+                        data: datos,
 
-                datasets: [{
+                        fill: true,
 
+                        tension: 0.4,
 
-                    label: 'Ventas Bs',
+                        borderWidth: 3,
 
+                        pointRadius: 4,
 
+                        pointHoverRadius: 6,
 
-                    data: ventas.map(v => Number(v.total)),
+                    }
 
-
-
-                    borderColor: '#8b1e45',
-
-
-
-                    backgroundColor: 'rgba(139,30,69,.20)',
-
-
-
-                    borderWidth: 3,
-
-
-
-                    fill: true,
-
-
-
-                    tension: .4,
-
-
-
-                    pointRadius: 5,
-
-
-
-                    pointBackgroundColor: '#ff4d88'
-
-
-                }]
-
+                ]
 
             },
 
-
-
-
-
-
             options: {
-
-
 
                 responsive: true,
 
-
-
                 maintainAspectRatio: false,
-
-
 
                 plugins: {
 
-
-
                     legend: {
-
-
                         display: false
-
-
                     }
-
 
                 },
 
-
-
-
                 scales: {
-
-
-
-                    x: {
-
-
-                        ticks: {
-                            color: '#ddd'
-                        },
-
-
-                        grid: {
-                            color: '#333'
-                        }
-
-
-                    },
-
-
-
-
 
                     y: {
 
+                        beginAtZero: true,
 
                         ticks: {
-                            color: '#ddd'
-                        },
 
+                            callback: function(value) {
 
-                        grid: {
-                            color: '#333'
+                                return 'Bs ' + value;
+
+                            }
+
                         }
-
 
                     }
 
-
-
                 }
-
-
 
             }
 
-
-
-
-
         });
-
-
 
     }
 </script>
 
-
-
 @endpush
-
-
 
 @endsection

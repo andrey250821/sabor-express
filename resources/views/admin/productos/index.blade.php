@@ -321,7 +321,16 @@
                         <td>
 
                             <div class="producto-acciones">
+                                {{-- CALIFICACIONES --}}
+                                <a
+                                    href="{{ route('admin.productos.calificaciones', $producto->id) }}"
+                                    class="btn-producto calificaciones"
+                                    title="Ver calificaciones">
 
+                                    <i class="bi bi-star-fill"></i>
+
+                                </a>
+                                {{-- EDITAR --}}
                                 <a
                                     href="{{ route('admin.productos.edit', $producto->id) }}"
                                     class="btn-producto editar"

@@ -26,6 +26,12 @@
         rel="stylesheet">
 
 
+    {{-- Leaflet CSS --}}
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+
     {{-- CSS principal --}}
     <link
         rel="stylesheet"
@@ -45,7 +51,7 @@
 
         {{-- =====================================================
         SIDEBAR
-    ====================================================== --}}
+        ====================================================== --}}
 
         <aside class="admin-sidebar">
 
@@ -56,7 +62,6 @@
 
                 <div class="sidebar-logo">
 
-
                     @if(!empty($configuracion->logo))
 
                     <img
@@ -65,12 +70,9 @@
 
                     @else
 
-                    <span>
-                        🍔
-                    </span>
+                    <span>🍔</span>
 
                     @endif
-
 
                 </div>
 
@@ -92,13 +94,14 @@
             </div>
 
 
-
             {{-- SEPARADOR --}}
             <div class="sidebar-divider"></div>
 
 
+            {{-- =================================================
+            MENU PRINCIPAL
+            ================================================== --}}
 
-            {{-- MENU --}}
             <nav class="sidebar-menu">
 
 
@@ -118,7 +121,6 @@
                 </a>
 
 
-
                 {{-- Pedidos --}}
                 <a
                     href="{{ route('admin.pedidos.index') }}"
@@ -133,7 +135,6 @@
                     </span>
 
                 </a>
-
 
 
                 {{-- Comprobantes --}}
@@ -152,7 +153,6 @@
                 </a>
 
 
-
                 {{-- Productos --}}
                 <a
                     href="{{ route('admin.productos.index') }}"
@@ -167,7 +167,6 @@
                     </span>
 
                 </a>
-
 
 
                 {{-- Categorías --}}
@@ -186,7 +185,6 @@
                 </a>
 
 
-
                 {{-- Deliverys --}}
                 <a
                     href="{{ route('admin.deliverys.index') }}"
@@ -201,7 +199,6 @@
                     </span>
 
                 </a>
-
 
 
                 {{-- Clientes --}}
@@ -220,7 +217,6 @@
                 </a>
 
 
-
                 {{-- Calificaciones --}}
                 <a
                     href="{{ route('admin.productos.index') }}"
@@ -237,9 +233,12 @@
                 </a>
 
 
+                {{-- =================================================
+                NOTIFICACIONES
+                ================================================== --}}
 
-                {{-- Notificaciones --}}
                 @php
+
                 $notificacionesNoLeidas = auth()->user()
                 ->notificaciones()
                 ->whereIn('evento', [
@@ -248,11 +247,14 @@
                 ])
                 ->where('leido', false)
                 ->count();
+
                 @endphp
+
 
                 <a
                     href="{{ route('admin.notificaciones.index') }}"
                     class="sidebar-link {{ request()->routeIs('admin.notificaciones.*') ? 'active' : '' }}">
+
                     <span class="sidebar-icon">
                         <i class="bi bi-bell"></i>
                     </span>
@@ -262,12 +264,14 @@
                     </span>
 
                     @if($notificacionesNoLeidas > 0)
+
                     <span class="badge bg-danger rounded-pill">
                         {{ $notificacionesNoLeidas }}
                     </span>
-                    @endif
-                </a>
 
+                    @endif
+
+                </a>
 
 
                 {{-- Configuración --}}
@@ -289,27 +293,24 @@
             </nav>
 
 
-
         </aside>
-
 
 
         {{-- =====================================================
         CONTENIDO PRINCIPAL
-    ====================================================== --}}
+        ====================================================== --}}
 
         <main class="admin-main">
 
 
             {{-- =================================================
             HEADER
-        ================================================== --}}
+            ================================================== --}}
 
             <header class="admin-topbar">
 
 
                 <div class="topbar-left">
-
 
                     <div>
 
@@ -329,9 +330,7 @@
 
                     </div>
 
-
                 </div>
-
 
 
                 {{-- USUARIO --}}
@@ -340,13 +339,11 @@
 
                     <div class="topbar-user-info">
 
-
                         <strong>
 
                             {{ Auth::user()->name }}
 
                         </strong>
-
 
                         <span>
 
@@ -354,9 +351,7 @@
 
                         </span>
 
-
                     </div>
-
 
 
                     <form
@@ -386,16 +381,13 @@
             </header>
 
 
-
             {{-- =================================================
-            CONTENIDO
-        ================================================== --}}
+            CONTENIDO DE CADA VISTA
+            ================================================== --}}
 
             <section class="admin-content">
 
-
                 @yield('content')
-
 
             </section>
 
@@ -406,27 +398,24 @@
     </div>
 
 
-
     {{-- Bootstrap JS --}}
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
-    {{-- Leaflet CSS --}}
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-    {{-- CSS principal --}}
-    <link
-        rel="stylesheet"
-        href="{{ asset('css/admin.css') }}">
+
     {{-- Leaflet JS --}}
     <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
     </script>
+
+
     @stack('scripts')
+
+
     {{-- Vite / JavaScript de la aplicación --}}
     @vite('resources/js/app.js')
+
 
 </body>
 
