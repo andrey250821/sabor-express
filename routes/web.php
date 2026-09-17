@@ -167,16 +167,75 @@ Route::middleware(['auth', 'role:Administrador'])
 
 /*
 |--------------------------------------------------------------------------
-| CLIENTE
+| CLIENTE - RUTAS PÚBLICAS
 |--------------------------------------------------------------------------
 |
-| SOLO usuarios con rol "Cliente".
+| Los visitantes pueden navegar por el restaurante y utilizar el carrito
+| sin necesidad de iniciar sesión.
+|
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/cliente',
+    [ClienteDashboardController::class, 'index']
+)->name('cliente.dashboard.index');
+
+Route::get(
+    '/productos',
+    [ClienteProductoController::class, 'index']
+)->name('cliente.productos.index');
+
+Route::get(
+    '/carrito',
+    [CarritoController::class, 'index']
+)->name('cliente.carrito.index');
+
+Route::post(
+    '/carrito/agregar/{id}',
+    [CarritoController::class, 'agregar']
+)->name('cliente.carrito.agregar');
+
+Route::put(
+    '/carrito/aumentar/{id}',
+    [CarritoController::class, 'aumentar']
+)->name('cliente.carrito.aumentar');
+
+Route::put(
+    '/carrito/disminuir/{id}',
+    [CarritoController::class, 'disminuir']
+)->name('cliente.carrito.disminuir');
+
+Route::delete(
+    '/carrito/eliminar/{id}',
+    [CarritoController::class, 'eliminar']
+)->name('cliente.carrito.eliminar');
+
+Route::delete(
+    '/carrito/vaciar',
+    [CarritoController::class, 'vaciar']
+)->name('cliente.carrito.vaciar');
+
+
+/*
+|--------------------------------------------------------------------------
+| CLIENTE - RUTAS PROTEGIDAS
+|--------------------------------------------------------------------------
+|
+| Estas funciones requieren que el usuario haya iniciado sesión y tenga
+| el rol Cliente.
 |
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth', 'role:Cliente'])
     ->group(function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | CALIFICACIONES
+        |--------------------------------------------------------------------------
+        */
 
         Route::post(
             '/pedidos/{pedidoId}/productos/{productoId}/calificar',
@@ -193,33 +252,18 @@ Route::middleware(['auth', 'role:Cliente'])
             [CalificacionController::class, 'index']
         )->name('cliente.calificaciones.index');
 
-        Route::get(
-            '/cliente',
-            [ClienteDashboardController::class, 'index']
-        )->name('cliente.dashboard.index');
 
-        Route::get(
-            '/productos',
-            [ClienteProductoController::class, 'index']
-        )->name('cliente.productos.index');
-
-        Route::get(
-            '/carrito',
-            [CarritoController::class, 'index']
-        )->name('cliente.carrito.index');
-
-        Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('cliente.carrito.agregar');
-        Route::put('/carrito/aumentar/{id}', [CarritoController::class, 'aumentar'])->name('cliente.carrito.aumentar');
-        Route::put('/carrito/disminuir/{id}', [CarritoController::class, 'disminuir'])->name('cliente.carrito.disminuir');
-        Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('cliente.carrito.eliminar');
-        Route::delete('/carrito/vaciar', [CarritoController::class, 'vaciar'])->name('cliente.carrito.vaciar');
+        /*
+        |--------------------------------------------------------------------------
+        | REALIZAR PEDIDO / CHECKOUT
+        |--------------------------------------------------------------------------
+        */
 
         Route::get(
             '/pedido',
             [ClientePedidoController::class, 'create']
         )->name('cliente.pedidos.create');
 
-        // Reverse geocoding: coordenadas -> dirección mediante OpenStreetMap/Nominatim.
         Route::get(
             '/pedido/direccion',
             [ClientePedidoController::class, 'direccion']
@@ -230,11 +274,23 @@ Route::middleware(['auth', 'role:Cliente'])
             [ClientePedidoController::class, 'store']
         )->name('cliente.pedidos.store');
 
-        Route::get('/pedidos', [ClientePedidoController::class, 'index'])->name('cliente.pedidos.index');
-        Route::get('/pedidos/{id}', [ClientePedidoController::class, 'show'])->name('cliente.pedidos.show');
+
+        /*
+        |--------------------------------------------------------------------------
+        | MIS PEDIDOS
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get(
+            '/pedidos',
+            [ClientePedidoController::class, 'index']
+        )->name('cliente.pedidos.index');
+
+        Route::get(
+            '/pedidos/{id}',
+            [ClientePedidoController::class, 'show']
+        )->name('cliente.pedidos.show');
     });
-
-
 /*
 |--------------------------------------------------------------------------
 | DELIVERY

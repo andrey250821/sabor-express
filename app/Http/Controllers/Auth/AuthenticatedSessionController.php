@@ -28,33 +28,23 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-
         $user = Auth::user();
 
-
-
         // ADMINISTRADOR
-
         if ($user->role->nombre == 'Administrador') {
 
             return redirect()
                 ->route('admin.dashboard');
         }
 
-
-
         // CLIENTE
-
         if ($user->role && $user->role->nombre === 'Cliente') {
 
             return redirect()
-                ->route('cliente.dashboard.index');
+                ->intended(route('cliente.dashboard.index'));
         }
 
-
-
         // DELIVERY
-
         if ($user->role->nombre == 'Delivery') {
 
             return redirect()
@@ -62,7 +52,6 @@ class AuthenticatedSessionController extends Controller
         }
 
         // COCINERO
-
         if ($user->role->nombre == 'Cocinero') {
 
             return redirect()
@@ -70,7 +59,6 @@ class AuthenticatedSessionController extends Controller
         }
 
         Auth::logout();
-
 
         return redirect('/login')
             ->withErrors([
