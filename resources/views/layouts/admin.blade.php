@@ -242,7 +242,7 @@
                 $notificacionesNoLeidas = auth()->user()
                 ->notificaciones()
                 ->whereIn('evento', [
-                'comprobante_enviado',
+                'comprobante_en_revision',
                 'nueva_calificacion',
                 ])
                 ->where('leido', false)
