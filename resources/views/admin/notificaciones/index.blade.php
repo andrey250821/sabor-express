@@ -21,7 +21,7 @@
                 </h2>
 
                 <p class="notificaciones-subtitle">
-                    Comprobantes de pago y nuevas calificaciones
+                    Comprobantes en revisión y nuevas calificaciones
                     recibidas por Sabor Express.
                 </p>
             </div>
@@ -177,7 +177,7 @@
         @php
 
         $esComprobante =
-        $notificacion->evento === 'comprobante_enviado';
+        $notificacion->evento === 'comprobante_en_revision';
 
         $esCalificacion =
         $notificacion->evento === 'nueva_calificacion';
@@ -499,7 +499,7 @@
                             <a
                                 href="{{ route(
             'admin.comprobantes.index',
-            ['estado' => 'pendiente']
+            ['estado' => 'en_revision']
         ) }}"
                                 class="btn btn-outline-primary">
                                 <i class="bi bi-receipt me-1"></i>
@@ -574,7 +574,7 @@
         </h4>
 
         <p class="mb-0">
-            Aquí aparecerán los comprobantes enviados
+            Aquí aparecerán los comprobantes que requieren revisión
             y las nuevas calificaciones.
         </p>
 
