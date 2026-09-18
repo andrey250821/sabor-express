@@ -45,7 +45,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         // REPARTIDOR
-        if ($user->role && $user->role->nombre === 'Repartidor') {
+        if ($user->role && $user->role->nombre === 'Delivery') {
 
             return redirect()
                 ->route('delivery.dashboard');
