@@ -32,46 +32,62 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                'unique:' . User::class,
+            ],
+            'password' => [
+                'required',
+                'confirmed',
+                Rules\Password::defaults(),
+            ],
         ]);
 
+        // Todo registro normal se crea como Cliente.
         $user = User::create([
-            'role_id' => 2, // Cliente por defecto
-
+            'role_id' => 2,
             'name' => $request->name,
-
             'email' => $request->email,
-
             'password' => Hash::make($request->password),
-
             'estado' => 'activo',
         ]);
+
         event(new Registered($user));
 
         Auth::login($user);
 
-
-        switch ($user->role_id) {
-
-
-            case 1:
-                // Administrador
-                return redirect()
-                    ->route('admin.dashboard');
-
-
-            case 3:
-                // Delivery
-                return redirect()
-                    ->route('delivery.dashboard');
-
-
-            case 2:
-            default:
-                // Cliente
-                return redirect()
-                    ->route('cliente.productos');
+        /*
+         * Redirigir según el rol del usuario.
+         */
+        if ($user->role && $user->role->nombre === 'Administrador') {
+            return redirect()
+                ->route('admin.dashboard');
         }
+
+        if ($user->role && $user->role->nombre === 'Delivery') {
+            return redirect()
+                ->route('delivery.dashboard');
+        }
+
+        if ($user->role && $user->role->nombre === 'Cocinero') {
+            return redirect()
+                ->route('cocinero.dashboard');
+        }
+
+        if ($user->role && $user->role->nombre === 'Cliente') {
+            return redirect()
+                ->route('cliente.productos');
+        }
+
+        // Si por alguna razón no tiene un rol válido.
+        Auth::logout();
+
+        return redirect('/login')->withErrors([
+            'email' => 'El usuario no tiene un rol válido.',
+        ]);
     }
 }

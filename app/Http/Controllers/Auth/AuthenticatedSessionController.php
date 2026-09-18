@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
 
         // ADMINISTRADOR
-        if ($user->role->nombre == 'Administrador') {
+        if ($user->role && $user->role->nombre === 'Administrador') {
 
             return redirect()
                 ->route('admin.dashboard');
@@ -44,20 +44,21 @@ class AuthenticatedSessionController extends Controller
                 ->intended(route('cliente.dashboard.index'));
         }
 
-        // DELIVERY
-        if ($user->role->nombre == 'Delivery') {
+        // REPARTIDOR
+        if ($user->role && $user->role->nombre === 'Repartidor') {
 
             return redirect()
                 ->route('delivery.dashboard');
         }
 
         // COCINERO
-        if ($user->role->nombre == 'Cocinero') {
+        if ($user->role && $user->role->nombre === 'Cocinero') {
 
             return redirect()
                 ->route('cocinero.dashboard');
         }
 
+        // Si el usuario no tiene un rol válido
         Auth::logout();
 
         return redirect('/login')
