@@ -207,6 +207,47 @@
                         Este comprobante requiere revisión manual.
                     </div>
 
+                    @if($comprobante->motivo_revision)
+                    <div class="mb-3">
+                        <small class="text-secondary d-block mb-1">Motivo detectado</small>
+                        <div class="alert alert-dark border border-warning-subtle mb-0">
+                            {{ $comprobante->motivo_revision }}
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($comprobante->datos_ocr)
+                    <div class="mb-3">
+                        <small class="text-secondary d-block mb-2">Datos extraídos por OCR</small>
+                        <div class="small text-white">
+                            <div class="d-flex justify-content-between border-bottom border-secondary-subtle py-1">
+                                <span>Pedido</span>
+                                <strong>{{ $comprobante->datos_ocr['pedido'] ?? 'No detectado' }}</strong>
+                            </div>
+                            <div class="d-flex justify-content-between border-bottom border-secondary-subtle py-1">
+                                <span>Monto</span>
+                                <strong>
+                                    {{ isset($comprobante->datos_ocr['monto']) && $comprobante->datos_ocr['monto'] !== null
+                                        ? 'Bs ' . number_format((float) $comprobante->datos_ocr['monto'], 2)
+                                        : 'No detectado' }}
+                                </strong>
+                            </div>
+                            <div class="d-flex justify-content-between border-bottom border-secondary-subtle py-1">
+                                <span>Referencia</span>
+                                <strong>{{ $comprobante->datos_ocr['referencia'] ?? 'No detectada' }}</strong>
+                            </div>
+                            <div class="d-flex justify-content-between border-bottom border-secondary-subtle py-1">
+                                <span>Fecha</span>
+                                <strong>{{ $comprobante->datos_ocr['fecha'] ?? 'No detectada' }}</strong>
+                            </div>
+                            <div class="d-flex justify-content-between py-1">
+                                <span>Banco</span>
+                                <strong>{{ $comprobante->datos_ocr['banco'] ?? 'No detectado' }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="comprobante-acciones mt-3">
 
                         <form action="{{ route('admin.comprobantes.aprobar', $comprobante->id) }}" method="POST" class="flex-fill">
