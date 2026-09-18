@@ -4,629 +4,280 @@
 
 <div class="container-fluid px-0 comprobantes-page">
 
-
-    {{-- =====================================================
-        ENCABEZADO
-    ====================================================== --}}
-
-    <div class="d-flex flex-column flex-md-row
-                justify-content-between
-                align-items-md-center
-                gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
         <div>
-
             <h2 class="fw-bold text-white mb-1">
-
                 <i class="bi bi-receipt text-danger"></i>
-
                 Gestión de Comprobantes
-
             </h2>
 
             <p class="text-secondary mb-0">
-
-                Revisa y administra los comprobantes de pago
-                de los pedidos.
-
+                El administrador revisa únicamente los comprobantes que presentan problemas en la validación automática.
             </p>
-
         </div>
 
-
-        {{-- TOTAL DEL ESTADO ACTUAL --}}
-
         <div class="comprobante-total">
-
             <div class="comprobante-total-icon">
-
-                <i class="bi bi-file-earmark-check"></i>
-
+                <i class="bi bi-shield-exclamation"></i>
             </div>
 
             <div>
-
-                <small class="text-secondary d-block">
-
-                    Comprobantes {{ ucfirst($estado) }}
-
-                </small>
-
-                <strong>
-
-                    {{ $comprobantes->count() }}
-
-                </strong>
-
+                <small class="text-secondary d-block">Estado actual</small>
+                <strong>{{ $comprobantes->count() }}</strong>
             </div>
-
         </div>
 
     </div>
 
-
-
-
-    {{-- =====================================================
-        TARJETAS DE ESTADO
-    ====================================================== --}}
-
+    {{-- ESTADOS --}}
     <div class="row g-3 mb-4">
 
-
-        {{-- PENDIENTES --}}
-
         <div class="col-12 col-md-4">
-
-            <a href="{{ route('admin.comprobantes.index','pendiente') }}"
-                class="text-decoration-none">
-
-                <div class="comprobante-status-card
-                    status-pendiente
-                    {{ $estado == 'pendiente' ? 'active' : '' }}">
+            <a href="{{ route('admin.comprobantes.index', 'en_revision') }}" class="text-decoration-none">
+                <div class="comprobante-status-card status-pendiente {{ $estado === 'en_revision' ? 'active' : '' }}">
 
                     <div class="status-icon">
-
-                        <i class="bi bi-hourglass-split"></i>
-
+                        <i class="bi bi-shield-exclamation"></i>
                     </div>
 
                     <div class="status-info">
-
-                        <span>
-                            Pendientes
-                        </span>
-
-                        <strong>
-                            {{ $pendientes }}
-                        </strong>
-
+                        <span>En revisión</span>
+                        <strong>{{ $enRevision }}</strong>
                     </div>
 
                     <i class="bi bi-chevron-right status-arrow"></i>
-
                 </div>
-
             </a>
-
         </div>
 
-
-
-
-        {{-- APROBADOS --}}
-
         <div class="col-12 col-md-4">
-
-            <a href="{{ route('admin.comprobantes.index','aprobado') }}"
-                class="text-decoration-none">
-
-                <div class="comprobante-status-card
-                    status-aprobado
-                    {{ $estado == 'aprobado' ? 'active' : '' }}">
+            <a href="{{ route('admin.comprobantes.index', 'aprobado') }}" class="text-decoration-none">
+                <div class="comprobante-status-card status-aprobado {{ $estado === 'aprobado' ? 'active' : '' }}">
 
                     <div class="status-icon">
-
                         <i class="bi bi-check-circle"></i>
-
                     </div>
 
                     <div class="status-info">
-
-                        <span>
-                            Aprobados
-                        </span>
-
-                        <strong>
-                            {{ $aprobados }}
-                        </strong>
-
+                        <span>Aprobados</span>
+                        <strong>{{ $aprobados }}</strong>
                     </div>
 
                     <i class="bi bi-chevron-right status-arrow"></i>
-
                 </div>
-
             </a>
-
         </div>
 
-
-
-
-        {{-- RECHAZADOS --}}
-
         <div class="col-12 col-md-4">
-
-            <a href="{{ route('admin.comprobantes.index','rechazado') }}"
-                class="text-decoration-none">
-
-                <div class="comprobante-status-card
-                    status-rechazado
-                    {{ $estado == 'rechazado' ? 'active' : '' }}">
+            <a href="{{ route('admin.comprobantes.index', 'rechazado') }}" class="text-decoration-none">
+                <div class="comprobante-status-card status-rechazado {{ $estado === 'rechazado' ? 'active' : '' }}">
 
                     <div class="status-icon">
-
                         <i class="bi bi-x-circle"></i>
-
                     </div>
 
                     <div class="status-info">
-
-                        <span>
-                            Rechazados
-                        </span>
-
-                        <strong>
-                            {{ $rechazados }}
-                        </strong>
-
+                        <span>Rechazados</span>
+                        <strong>{{ $rechazados }}</strong>
                     </div>
 
                     <i class="bi bi-chevron-right status-arrow"></i>
-
                 </div>
-
             </a>
-
         </div>
 
     </div>
 
-
-
-
-    {{-- =====================================================
-        TÍTULO DEL LISTADO
-    ====================================================== --}}
-
     <div class="comprobantes-section-header mb-3">
-
         <div>
-
             <h4 class="fw-bold text-white mb-1">
-
-                Comprobantes {{ ucfirst($estado) }}
-
+                Comprobantes {{ $estado === 'en_revision' ? 'en revisión' : ucfirst($estado) }}
             </h4>
 
             <small class="text-secondary">
-
-                Lista de comprobantes disponibles para revisión.
-
+                Los comprobantes aprobados automáticamente no requieren intervención del administrador.
             </small>
-
         </div>
-
     </div>
-
-
-
-
-    {{-- =====================================================
-        COMPROBANTES
-    ====================================================== --}}
 
     <div class="row g-4">
 
-
         @forelse($comprobantes as $comprobante)
-
 
         <div class="col-12 col-md-6 col-xl-4">
 
-
             <div class="comprobante-card">
-
-
-                {{-- CABECERA --}}
 
                 <div class="comprobante-card-header">
 
-
-                    <div class="d-flex
-                                justify-content-between
-                                align-items-center">
-
+                    <div class="d-flex justify-content-between align-items-center">
 
                         <span class="pedido-numero">
-
                             <i class="bi bi-bag"></i>
-
                             Pedido #{{ $comprobante->pedido->id }}
-
                         </span>
 
-
-                        @if($comprobante->estado == 'pendiente')
-
-                        <span class="estado-badge pendiente">
-
-                            Pendiente
-
-                        </span>
-
-                        @elseif($comprobante->estado == 'aprobado')
-
-                        <span class="estado-badge aprobado">
-
-                            Aprobado
-
-                        </span>
-
+                        @if($comprobante->estado === 'en_revision')
+                            <span class="estado-badge pendiente">En revisión</span>
+                        @elseif($comprobante->estado === 'aprobado')
+                            <span class="estado-badge aprobado">Aprobado</span>
                         @else
-
-                        <span class="estado-badge rechazado">
-
-                            Rechazado
-
-                        </span>
-
+                            <span class="estado-badge rechazado">Rechazado</span>
                         @endif
-
 
                     </div>
 
                 </div>
-
-
-
-
-                {{-- CUERPO --}}
 
                 <div class="comprobante-card-body">
 
-
-                    {{-- CLIENTE --}}
-
                     <div class="comprobante-info">
-
-
-                        <div class="info-icon">
-
-                            <i class="bi bi-person"></i>
-
-                        </div>
-
-
+                        <div class="info-icon"><i class="bi bi-person"></i></div>
                         <div>
-
-                            <small>
-                                Cliente
-                            </small>
-
-                            <strong>
-
-                                {{ $comprobante->pedido->user->name }}
-
-                            </strong>
-
+                            <small>Cliente</small>
+                            <strong>{{ $comprobante->pedido->user->name ?? 'Cliente eliminado' }}</strong>
                         </div>
-
-
                     </div>
 
-
-
-
-                    {{-- TELÉFONO --}}
-
                     <div class="comprobante-info">
-
-
-                        <div class="info-icon">
-
-                            <i class="bi bi-telephone"></i>
-
-                        </div>
-
-
+                        <div class="info-icon"><i class="bi bi-telephone"></i></div>
                         <div>
-
-                            <small>
-                                Teléfono
-                            </small>
-
-                            <strong>
-
-                                {{ $comprobante->pedido->user->telefono ?? 'Sin teléfono' }}
-
-                            </strong>
-
+                            <small>Teléfono</small>
+                            <strong>{{ $comprobante->pedido->user->telefono ?? 'Sin teléfono' }}</strong>
                         </div>
-
-
                     </div>
 
-
-
-
-                    {{-- DIRECCIÓN --}}
-
                     <div class="comprobante-info">
-
-
-                        <div class="info-icon">
-
-                            <i class="bi bi-geo-alt"></i>
-
-                        </div>
-
-
+                        <div class="info-icon"><i class="bi bi-geo-alt"></i></div>
                         <div>
-
-                            <small>
-                                Dirección
-                            </small>
-
-                            <strong>
-
-                                {{ $comprobante->pedido->direccion_entrega }}
-
-                            </strong>
-
+                            <small>Dirección</small>
+                            <strong>{{ $comprobante->pedido->direccion_entrega }}</strong>
                         </div>
-
-
                     </div>
-
-
-
-
-                    {{-- REFERENCIA --}}
 
                     @if($comprobante->pedido->referencia_delivery)
-
                     <div class="comprobante-info">
-
-
-                        <div class="info-icon">
-
-                            <i class="bi bi-pin-map"></i>
-
-                        </div>
-
-
+                        <div class="info-icon"><i class="bi bi-pin-map"></i></div>
                         <div>
-
-                            <small>
-                                Referencia
-                            </small>
-
-                            <strong>
-
-                                {{ $comprobante->pedido->referencia_delivery }}
-
-                            </strong>
-
+                            <small>Referencia Delivery</small>
+                            <strong>{{ $comprobante->pedido->referencia_delivery }}</strong>
                         </div>
-
-
                     </div>
-
                     @endif
 
-
-
-
-                    {{-- TOTAL --}}
-
                     <div class="comprobante-monto">
-
                         <div>
-
-                            <small>
-                                Total del pedido
-                            </small>
-
-                            <strong>
-
-                                Bs {{ number_format($comprobante->pedido->total, 2) }}
-
-                            </strong>
-
+                            <small>Total del pedido</small>
+                            <strong>Bs {{ number_format($comprobante->pedido->total, 2) }}</strong>
                         </div>
-
                         <i class="bi bi-cash-stack"></i>
-
                     </div>
 
-
-
-
-                    {{-- IMAGEN --}}
+                    @if($comprobante->referencia_bancaria)
+                    <div class="comprobante-info">
+                        <div class="info-icon"><i class="bi bi-upc-scan"></i></div>
+                        <div>
+                            <small>Referencia registrada</small>
+                            <strong>{{ $comprobante->referencia_bancaria }}</strong>
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="comprobante-imagen-container">
-
-
                         <img
-                            src="{{ asset('storage/'.$comprobante->imagen) }}"
+                            src="{{ asset('storage/' . $comprobante->imagen) }}"
                             class="img-fluid rounded-3 comprobante-img mb-3"
                             alt="Comprobante de pago">
-
-
                     </div>
 
-
-
-
-                    {{-- VER COMPROBANTE --}}
-
                     <a
-                        href="{{ asset('storage/'.$comprobante->imagen) }}"
+                        href="{{ asset('storage/' . $comprobante->imagen) }}"
                         target="_blank"
+                        rel="noopener noreferrer"
                         class="btn btn-outline-light w-100 mb-3">
-
-                        👁 Ver comprobante
-
+                        <i class="bi bi-eye me-1"></i>
+                        Ver comprobante
                     </a>
 
+                    @if($comprobante->estado === 'en_revision')
 
-
-
-                    {{-- =================================================
-                        ACCIONES
-                    ================================================== --}}
-
-
-                    @if($comprobante->estado == 'pendiente')
-
+                    <div class="alert alert-warning py-2">
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+                        Este comprobante requiere revisión manual.
+                    </div>
 
                     <div class="comprobante-acciones mt-3">
 
-
-                        <form
-                            action="{{ route('admin.comprobantes.aprobar',$comprobante->id) }}"
-                            method="POST"
-                            class="flex-fill">
-
+                        <form action="{{ route('admin.comprobantes.aprobar', $comprobante->id) }}" method="POST" class="flex-fill">
                             @csrf
                             @method('PUT')
 
-                            <button
-                                type="submit"
-                                class="btn btn-success w-100">
-
+                            <button type="submit" class="btn btn-success w-100">
                                 <i class="bi bi-check-lg"></i>
-
                                 Aprobar
-
                             </button>
-
                         </form>
 
-
-
-                        <form
-                            action="{{ route('admin.comprobantes.rechazar',$comprobante->id) }}"
-                            method="POST"
-                            class="flex-fill">
-
+                        <form action="{{ route('admin.comprobantes.rechazar', $comprobante->id) }}" method="POST" class="flex-fill">
                             @csrf
                             @method('PUT')
 
-                            <button
-                                type="submit"
-                                class="btn btn-danger w-100">
-
+                            <button type="submit" class="btn btn-danger w-100">
                                 <i class="bi bi-x-lg"></i>
-
                                 Rechazar
-
                             </button>
-
                         </form>
-
 
                     </div>
 
+                    @elseif($comprobante->estado === 'aprobado')
+
+                    <div class="estado-final">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Comprobante aprobado</span>
+                    </div>
 
                     @else
 
-
                     <div class="estado-final">
-
-
-                        @if($comprobante->estado == 'aprobado')
-
-                        <i class="bi bi-check-circle-fill"></i>
-
-                        <span>
-                            Comprobante aprobado
-                        </span>
-
-                        @else
-
                         <i class="bi bi-x-circle-fill"></i>
-
-                        <span>
-                            Comprobante rechazado
-                        </span>
-
-                        @endif
-
-
+                        <span>Comprobante rechazado</span>
                     </div>
-
 
                     @endif
 
-
                 </div>
-
-
             </div>
-
-
         </div>
-
 
         @empty
 
-
-        {{-- SIN COMPROBANTES --}}
-
         <div class="col-12">
-
 
             <div class="sin-comprobantes">
 
-
                 <div class="sin-comprobantes-icon">
-
-                    <i class="bi bi-inbox"></i>
-
+                    <i class="bi bi-shield-check"></i>
                 </div>
 
-
                 <h5 class="text-white fw-bold">
-
-                    No existen comprobantes
-
+                    No existen comprobantes en este estado
                 </h5>
 
-
                 <p class="text-secondary mb-0">
-
-                    No hay comprobantes
-                    {{ $estado }}
-                    para mostrar.
-
+                    {{ $estado === 'en_revision'
+                        ? 'No hay excepciones que requieran revisión administrativa.'
+                        : 'No hay comprobantes para mostrar.' }}
                 </p>
-
 
             </div>
 
-
         </div>
-
 
         @endforelse
 
-
     </div>
-
-
 </div>
 
 @endsection
