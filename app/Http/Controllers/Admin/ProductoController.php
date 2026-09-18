@@ -17,7 +17,9 @@ class ProductoController extends Controller
     {
         $categorias = Categoria::orderBy('nombre')->get();
 
-        $query = Producto::with('categoria');
+        $query = Producto::with('categoria')
+            ->withCount('calificaciones')
+            ->withAvg('calificaciones', 'puntuacion');
 
         if ($request->filled('categoria_id')) {
 
