@@ -38,6 +38,13 @@ return [
     'google_maps' => [
         'key' => env('GOOGLE_MAPS_API_KEY'),
     ],
+
+    'tesseract' => [
+        'path' => env(
+            'TESSERACT_PATH',
+            'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+        ),
+    ],
     
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
