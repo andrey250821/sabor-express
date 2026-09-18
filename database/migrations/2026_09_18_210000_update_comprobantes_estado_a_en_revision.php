@@ -15,8 +15,8 @@ return new class extends Migration
         if (Schema::getConnection()->getDriverName() === 'mysql') {
             DB::statement(
                 "ALTER TABLE comprobantes_pago
-                 MODIFY estado ENUM('en_revision', 'aprobado', 'rechazado')
-                 NOT NULL DEFAULT 'en_revision'"
+                 MODIFY estado ENUM('pendiente', 'en_revision', 'aprobado', 'rechazado')
+                 NOT NULL DEFAULT 'pendiente'"
             );
         }
     }
