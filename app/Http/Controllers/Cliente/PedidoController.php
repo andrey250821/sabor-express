@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use App\Services\ValidarComprobantePagoService;
 
 class PedidoController extends Controller
 {
@@ -110,7 +111,7 @@ class PedidoController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, ValidarComprobantePagoService $validador)
     {
         $request->validate([
             'direccion_entrega' => 'required|string|max:1000',
@@ -180,33 +181,69 @@ class PedidoController extends Controller
 
             $imagen = $request->file('comprobante')->store('comprobantes', 'public');
 
-            ComprobantePago::create([
+            $comprobante = ComprobantePago::create([
                 'pedido_id' => $pedido->id,
                 'imagen' => $imagen,
-                'estado' => 'pendiente',
+                'estado' => 'en_revision',
             ]);
 
             DB::commit();
-            // Notificar a todos los administradores que se recibió un nuevo comprobante
-            $administradores = User::whereHas('role', function ($query) {
-                $query->where('nombre', 'Administrador');
-            })->get();
 
-            foreach ($administradores as $administrador) {
+            // Ejecutar OCR después del commit para no mantener abierta
+            // la transacción mientras se ejecuta el proceso externo.
+            $validacion = $validador->validar(
+                $pedido,
+                storage_path('app/public/' . $imagen)
+            );
+
+            $comprobante->update([
+                'estado' => $validacion['estado'],
+                'referencia_bancaria' => $validacion['datos']['referencia'] ?? null,
+                'motivo_revision' => $validacion['motivo_revision'],
+                'datos_ocr' => $validacion['datos'],
+            ]);
+
+            if ($validacion['estado'] === 'aprobado') {
+                $pedido->update([
+                    'estado' => 'pagado',
+                ]);
+
                 Notificacion::create([
-                    'user_id' => $administrador->id,
+                    'user_id' => $pedido->user_id,
                     'pedido_id' => $pedido->id,
-                    'mensaje' => 'Se ha recibido un nuevo comprobante de pago para el pedido #' . $pedido->id . '.',
-                    'tipo' => 'administrador',
-                    'evento' => 'comprobante_enviado',
+                    'mensaje' => 'Tu pago fue verificado correctamente y tu pedido pasó a preparación.',
+                    'tipo' => 'cliente',
+                    'evento' => 'pedido_aceptado',
                     'leido' => false,
                 ]);
+            } else {
+                // Solo los comprobantes con problemas llegan al administrador.
+                $administradores = User::whereHas('role', function ($query) {
+                    $query->where('nombre', 'Administrador');
+                })->get();
+
+                foreach ($administradores as $administrador) {
+                    Notificacion::create([
+                        'user_id' => $administrador->id,
+                        'pedido_id' => $pedido->id,
+                        'mensaje' => 'El comprobante del pedido #' . $pedido->id . ' requiere revisión manual.',
+                        'tipo' => 'administrador',
+                        'evento' => 'comprobante_en_revision',
+                        'leido' => false,
+                    ]);
+                }
             }
+
             session()->forget('carrito');
 
             return redirect()
                 ->route('cliente.pedidos.show', $pedido->id)
-                ->with('success', 'Pedido enviado correctamente. El comprobante será revisado por el restaurante.');
+                ->with(
+                    'success',
+                    $validacion['estado'] === 'aprobado'
+                        ? 'Pedido enviado y pago verificado correctamente.'
+                        : 'Pedido enviado. El comprobante requiere revisión manual.'
+                );
         } catch (\Throwable $e) {
             DB::rollBack();
 
