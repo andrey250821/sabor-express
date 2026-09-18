@@ -17,7 +17,7 @@ class NotificacionController extends Controller
     {
         $notificaciones = Notificacion::where('user_id', Auth::id())
             ->whereIn('evento', [
-                'comprobante_enviado',
+                'comprobante_en_revision',
                 'nueva_calificacion',
             ])
             ->with([
@@ -92,7 +92,7 @@ class NotificacionController extends Controller
             ->count();
 
         $comprobantes = $notificaciones
-            ->where('evento', 'comprobante_enviado')
+            ->where('evento', 'comprobante_en_revision')
             ->count();
 
         $calificaciones = $notificaciones
@@ -154,7 +154,7 @@ class NotificacionController extends Controller
     {
         Notificacion::where('user_id', Auth::id())
             ->whereIn('evento', [
-                'comprobante_enviado',
+                'comprobante_en_revision',
                 'nueva_calificacion',
             ])
             ->where('leido', false)
