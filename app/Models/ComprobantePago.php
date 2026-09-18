@@ -14,8 +14,9 @@ class ComprobantePago extends Model
     protected $fillable = [
         'pedido_id',
         'imagen',
+        'referencia_bancaria',
         'estado',
-        'fecha_revision'
+        'fecha_revision',
     ];
 
 
@@ -23,5 +24,4 @@ class ComprobantePago extends Model
     {
         return $this->belongsTo(Pedido::class);
     }
-
 }
