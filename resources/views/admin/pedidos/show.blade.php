@@ -261,7 +261,7 @@
                             @endif
 
 
-                            @if($pedido->comprobantePago->estado === 'pendiente')
+                            @if($pedido->comprobantePago->estado === 'en_revision')
 
                             <form
                                 action="{{ route(
