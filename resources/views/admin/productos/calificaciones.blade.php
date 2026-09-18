@@ -26,10 +26,10 @@
         </div>
 
         <a
-            href="{{ route('admin.notificaciones.index') }}"
+            href="{{ route('admin.productos.index') }}"
             class="btn btn-outline-light">
             <i class="bi bi-arrow-left me-1"></i>
-            Volver a notificaciones
+            Volver a productos
         </a>
 
     </div>
