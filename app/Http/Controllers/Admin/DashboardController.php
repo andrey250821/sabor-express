@@ -36,8 +36,6 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $pedidosPendientes = Pedido::where('estado', 'pendiente')->count();
-
         $pedidosPagados = Pedido::where('estado', 'pagado')->count();
 
         $pedidosPreparando = Pedido::where('estado', 'preparando')->count();
@@ -117,18 +115,30 @@ class DashboardController extends Controller
             ->groupBy('fecha')
             ->orderBy('fecha')
             ->get();
-
-
         /*
         |--------------------------------------------------------------------------
-        | COMPROBANTES PENDIENTES
+        | COMPROBANTES EN REVISIÓN
         |--------------------------------------------------------------------------
         */
 
-        $comprobantesPendientes = ComprobantePago::where(
+        $comprobantesEnRevision = ComprobantePago::where(
             'estado',
-            'pendiente'
+            'en_revision'
         )->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | PEDIDOS EN COLA DE DELIVERY
+        |--------------------------------------------------------------------------
+        |
+        | Pedidos listos que todavía no tienen asignación de Delivery.
+        | El administrador solamente supervisa esta cola.
+        |
+        */
+
+        $pedidosEnColaDelivery = Pedido::where('estado', 'listo')
+            ->whereDoesntHave('asignacionDelivery')
+            ->count();
 
 
         /*
@@ -144,8 +154,6 @@ class DashboardController extends Controller
                 'clientes',
                 'deliverys',
                 'productos',
-
-                'pedidosPendientes',
                 'pedidosPagados',
                 'pedidosPreparando',
                 'pedidosListos',
@@ -157,7 +165,8 @@ class DashboardController extends Controller
                 'ventasMes',
                 'ultimosPedidos',
                 'ventasSemana',
-                'comprobantesPendientes'
+                'comprobantesEnRevision',
+                'pedidosEnColaDelivery'
             )
         );
     }
