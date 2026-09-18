@@ -13,7 +13,7 @@ class ComprobantePagoController extends Controller
 {
 
 
-    public function index($estado = 'pendiente')
+    public function index($estado = 'en_revision')
     {
 
         $comprobantes = ComprobantePago::with([
@@ -21,9 +21,7 @@ class ComprobantePagoController extends Controller
         ])
             ->where('estado', $estado)
             ->get();
-
-
-        $pendientes = ComprobantePago::where('estado', 'pendiente')->count();
+        $enRevision = ComprobantePago::where('estado', 'en_revision')->count();
 
         $aprobados = ComprobantePago::where('estado', 'aprobado')->count();
 
@@ -32,7 +30,7 @@ class ComprobantePagoController extends Controller
 
         return view('admin.comprobantes.index', compact(
             'comprobantes',
-            'pendientes',
+            'enRevision',
             'aprobados',
             'rechazados',
             'estado'
