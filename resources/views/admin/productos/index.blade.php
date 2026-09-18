@@ -173,6 +173,8 @@
 
                         <th>Estado</th>
 
+                        <th class="text-center">Calificaciones</th>
+
                         <th class="text-center">Acciones</th>
 
                     </tr>
@@ -317,19 +319,38 @@
                         </td>
 
 
+                        {{-- CALIFICACIONES --}}
+                        <td class="text-center">
+                            <div class="d-inline-flex flex-column align-items-center gap-1">
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <strong>
+                                        {{ $producto->calificaciones_avg_puntuacion !== null
+                                            ? number_format($producto->calificaciones_avg_puntuacion, 1)
+                                            : 'Sin calificaciones' }}
+                                    </strong>
+                                </div>
+
+                                <small class="text-muted">
+                                    {{ $producto->calificaciones_count }}
+                                    {{ $producto->calificaciones_count == 1 ? 'opinión' : 'opiniones' }}
+                                </small>
+
+                                <a
+                                    href="{{ route('admin.productos.calificaciones', $producto->id) }}"
+                                    class="btn btn-sm btn-outline-warning mt-1">
+                                    <i class="bi bi-star-fill me-1"></i>
+                                    Ver opiniones
+                                </a>
+                            </div>
+                        </td>
+
                         {{-- ACCIONES --}}
                         <td>
 
                             <div class="producto-acciones">
-                                {{-- CALIFICACIONES --}}
+                                {{-- EDITAR --}}
                                 <a
-                                    href="{{ route('admin.productos.calificaciones', $producto->id) }}"
-                                    class="btn-producto calificaciones"
-                                    title="Ver calificaciones">
-
-                                    <i class="bi bi-star-fill"></i>
-
-                                </a>
                                 {{-- EDITAR --}}
                                 <a
                                     href="{{ route('admin.productos.edit', $producto->id) }}"
@@ -370,7 +391,7 @@
 
                     <tr>
 
-                        <td colspan="7">
+                        <td colspan="8">
 
                             <div class="productos-empty">
 
