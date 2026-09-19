@@ -16,12 +16,12 @@
 
                     <i class="bi bi-person-plus-fill"></i>
 
-                    Nuevo Repartidor
+                    Nuevo Delivery
 
                 </h3>
 
                 <p>
-                    Registra un nuevo repartidor para Sabor Express.
+                    Registra un nuevo delivery para Sabor Express.
                 </p>
 
             </div>
@@ -195,7 +195,7 @@
                             name="direccion"
                             rows="3"
                             class="form-control delivery-input"
-                            placeholder="Dirección del repartidor">{{ old('direccion') }}</textarea>
+                            placeholder="Dirección del delivery">{{ old('direccion') }}</textarea>
 
                     </div>
 
@@ -255,7 +255,7 @@
                     <div>
 
                         <strong>
-                            Rol de repartidor
+                            Rol de delivery
                         </strong>
 
                         <p>
@@ -288,7 +288,7 @@
 
                         <i class="bi bi-person-plus"></i>
 
-                        Crear repartidor
+                        Crear delivery
 
                     </button>
 
