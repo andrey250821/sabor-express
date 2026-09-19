@@ -24,11 +24,14 @@ class OcrComprobanteService
 
     /**
      * Determina si están presentes los datos mínimos necesarios.
+     *
+     * El número de pedido es opcional porque un comprobante bancario
+     * real puede no incluir el ID interno del pedido. Si aparece,
+     * ValidarComprobantePagoService lo compara con el pedido real.
      */
     private function estaCompleto(array $datos): bool
     {
-        return $datos['pedido'] !== null
-            && $datos['monto'] !== null
+        return $datos['monto'] !== null
             && $datos['referencia'] !== null
             && $datos['fecha'] !== null
             && $datos['banco'] !== null;
