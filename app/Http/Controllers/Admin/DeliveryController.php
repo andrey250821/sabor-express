@@ -11,18 +11,33 @@ use Illuminate\Validation\Rule;
 class DeliveryController extends Controller
 {
     /**
-     * Lista de repartidores
+     * Lista de Delivery
      */
-    public function index()
+    public function index(Request $request)
     {
-        $deliverys = User::where('role_id', 3)
-            ->withCount('asignacionesDelivery')
+        $buscar = trim((string) $request->input('buscar', ''));
+
+        $query = User::where('role_id', 3)
+            ->withCount('asignacionesDelivery');
+
+        if ($buscar !== '') {
+            $query->where('email', 'like', '%' . $buscar . '%');
+        }
+
+        $deliverys = $query
             ->orderBy('id', 'desc')
             ->get();
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'html' => view('admin.deliverys.partials.tabla', compact('deliverys'))->render(),
+                'count' => $deliverys->count(),
+            ]);
+        }
+
         return view(
             'admin.deliverys.index',
-            compact('deliverys')
+            compact('deliverys', 'buscar')
         );
     }
 
@@ -101,7 +116,7 @@ class DeliveryController extends Controller
             ->route('admin.deliverys.index')
             ->with(
                 'success',
-                'Repartidor creado correctamente.'
+                'Delivery creado correctamente.'
             );
     }
 
@@ -193,7 +208,7 @@ class DeliveryController extends Controller
             ->route('admin.deliverys.index')
             ->with(
                 'success',
-                'Repartidor actualizado correctamente.'
+                'Delivery actualizado correctamente.'
             );
     }
 
@@ -211,7 +226,7 @@ class DeliveryController extends Controller
 
         return back()->with(
             'success',
-            'Repartidor desactivado correctamente.'
+            'Delivery desactivado correctamente.'
         );
     }
 
@@ -229,7 +244,7 @@ class DeliveryController extends Controller
 
         return back()->with(
             'success',
-            'Repartidor activado correctamente.'
+            'Delivery activado correctamente.'
         );
     }
 }
