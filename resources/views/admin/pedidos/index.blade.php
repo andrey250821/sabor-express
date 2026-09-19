@@ -244,6 +244,13 @@
 
                                     @switch($pedido->estado)
 
+                                    @case('comprobante_enviado')
+
+                                    <i class="bi bi-shield-exclamation"></i>
+                                    Pago en revisión
+
+                                    @break
+
                                     @case('pagado')
 
                                     <i class="bi bi-credit-card"></i>
