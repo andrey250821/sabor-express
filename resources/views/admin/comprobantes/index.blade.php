@@ -35,7 +35,7 @@
 
         <div class="col-12 col-md-4">
             <a href="{{ route('admin.comprobantes.index', 'en_revision') }}" class="text-decoration-none">
-                <div class="comprobante-status-card status-pendiente {{ $estado === 'en_revision' ? 'active' : '' }}">
+                <div class="comprobante-status-card status-revision {{ $estado === 'en_revision' ? 'active' : '' }}">
 
                     <div class="status-icon">
                         <i class="bi bi-shield-exclamation"></i>
@@ -119,7 +119,7 @@
                         </span>
 
                         @if($comprobante->estado === 'en_revision')
-                            <span class="estado-badge pendiente">En revisión</span>
+                            <span class="estado-badge en-revision">En revisión</span>
                         @elseif($comprobante->estado === 'aprobado')
                             <span class="estado-badge aprobado">Aprobado</span>
                         @else
