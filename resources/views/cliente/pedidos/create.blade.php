@@ -609,6 +609,44 @@
                             hidden>
 
 
+                        {{-- GENERAR COMPROBANTE DE PRUEBA PARA OCR --}}
+                        <div class="mt-3 p-3 border rounded bg-light">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="text-warning fs-4">
+                                    <i class="bi bi-robot"></i>
+                                </div>
+
+                                <div class="flex-grow-1">
+                                    <strong class="d-block">
+                                        ¿Estás probando el OCR?
+                                    </strong>
+
+                                    <small class="text-muted">
+                                        Genera una imagen de prueba con el nombre del cliente
+                                        y el total actual del pedido. No necesitas crear primero
+                                        el pedido en la base de datos.
+                                    </small>
+
+                                    <div class="mt-2">
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-warning btn-sm"
+                                            id="btn-generar-comprobante-prueba">
+                                            <i class="bi bi-file-earmark-image me-1"></i>
+                                            Generar comprobante de prueba OCR
+                                        </button>
+                                    </div>
+
+                                    <div
+                                        id="estado-generar-comprobante-prueba"
+                                        class="small mt-2"
+                                        aria-live="polite">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         {{-- PREVISUALIZACIÓN --}}
 
                         <div
@@ -895,6 +933,12 @@
 
         const btnQuitarComprobante =
             document.getElementById('btn-quitar-comprobante');
+
+        const btnGenerarComprobantePrueba =
+            document.getElementById('btn-generar-comprobante-prueba');
+
+        const estadoGenerarComprobantePrueba =
+            document.getElementById('estado-generar-comprobante-prueba');
 
         const areaComprobante =
             document.getElementById('area-comprobante');
@@ -1935,6 +1979,135 @@
                     lector.readAsDataURL(
                         archivo
                     );
+
+                }
+            );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR COMPROBANTE DE PRUEBA OCR
+        |--------------------------------------------------------------------------
+        */
+
+        if (btnGenerarComprobantePrueba) {
+
+            btnGenerarComprobantePrueba.addEventListener(
+                'click',
+                async function() {
+
+                    const token =
+                        document.querySelector(
+                            '#form-pedido input[name="_token"]'
+                        )?.value;
+
+                    if (!token) {
+                        if (estadoGenerarComprobantePrueba) {
+                            estadoGenerarComprobantePrueba.textContent =
+                                'No se pudo obtener el token de seguridad del formulario.';
+                        }
+
+                        return;
+                    }
+
+                    btnGenerarComprobantePrueba.disabled = true;
+
+                    if (estadoGenerarComprobantePrueba) {
+                        estadoGenerarComprobantePrueba.innerHTML = `
+                            <span class="text-warning">
+                                <i class="bi bi-hourglass-split me-1"></i>
+                                Generando imagen con los datos actuales del pedido...
+                            </span>
+                        `;
+                    }
+
+                    try {
+
+                        const respuesta =
+                            await fetch(
+                                '{{ route('cliente.pedidos.comprobante.prueba') }}',
+                                {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': token,
+                                        'Accept': 'application/json',
+                                    },
+                                }
+                            );
+
+                        const datos =
+                            await respuesta.json();
+
+                        if (!respuesta.ok || !datos.ok) {
+                            throw new Error(
+                                datos.message ||
+                                'No se pudo generar el comprobante de prueba.'
+                            );
+                        }
+
+                        const imagenRespuesta =
+                            await fetch(datos.url);
+
+                        if (!imagenRespuesta.ok) {
+                            throw new Error(
+                                'La imagen generada no pudo ser cargada.'
+                            );
+                        }
+
+                        const blob =
+                            await imagenRespuesta.blob();
+
+                        const archivo =
+                            new File(
+                                [blob],
+                                datos.archivo,
+                                {
+                                    type: 'image/png'
+                                }
+                            );
+
+                        const transferencia =
+                            new DataTransfer();
+
+                        transferencia.items.add(archivo);
+
+                        inputComprobante.files =
+                            transferencia.files;
+
+                        inputComprobante.dispatchEvent(
+                            new Event('change', {
+                                bubbles: true
+                            })
+                        );
+
+                        if (estadoGenerarComprobantePrueba) {
+                            estadoGenerarComprobantePrueba.innerHTML = `
+                                <span class="text-success">
+                                    <i class="bi bi-check-circle-fill me-1"></i>
+                                    Comprobante generado y cargado automáticamente.
+                                    Referencia de prueba: <strong>${datos.referencia}</strong>
+                                </span>
+                            `;
+                        }
+
+                    } catch (error) {
+
+                        if (estadoGenerarComprobantePrueba) {
+                            estadoGenerarComprobantePrueba.innerHTML = `
+                                <span class="text-danger">
+                                    <i class="bi bi-exclamation-circle-fill me-1"></i>
+                                    ${error.message}
+                                </span>
+                            `;
+                        }
+
+                    } finally {
+
+                        btnGenerarComprobantePrueba.disabled = false;
+
+                    }
 
                 }
             );
