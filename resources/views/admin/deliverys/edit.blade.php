@@ -16,12 +16,12 @@
 
                     <i class="bi bi-pencil-square"></i>
 
-                    Editar Repartidor
+                    Editar Delivery
 
                 </h3>
 
                 <p>
-                    Modifica la información del repartidor.
+                    Modifica la información del delivery.
                 </p>
 
             </div>
