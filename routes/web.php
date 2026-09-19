@@ -270,6 +270,11 @@ Route::middleware(['auth', 'role:Cliente'])
         )->name('cliente.pedidos.direccion');
 
         Route::post(
+            '/pedido/comprobante-prueba',
+            [ClientePedidoController::class, 'generarComprobantePrueba']
+        )->name('cliente.pedidos.comprobante.prueba');
+
+        Route::post(
             '/pedido',
             [ClientePedidoController::class, 'store']
         )->name('cliente.pedidos.store');
