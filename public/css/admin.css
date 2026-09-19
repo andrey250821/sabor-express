@@ -1606,34 +1606,6 @@ body{
 
 
 /* ================================
-   BOTON ASIGNAR
-================================ */
-
-.btn-asignar{
-
-    background:#d39e00!important;
-
-    border-color:#d39e00!important;
-
-    color:#111!important;
-
-    border-radius:8px;
-
-    font-weight:600;
-
-}
-
-
-.btn-asignar:hover{
-
-    background:#f0b400!important;
-
-    border-color:#f0b400!important;
-
-}
-
-
-/* ================================
    DELIVERY ASIGNADO
 ================================ */
 
@@ -2095,7 +2067,7 @@ body{
 
 /* COLORES */
 
-.status-pendiente .status-icon {
+.status-revision .status-icon {
 
     background: rgba(255,193,7,.15);
 
@@ -2104,7 +2076,7 @@ body{
 }
 
 
-.status-pendiente.active {
+.status-revision.active {
 
     border-color: #ffc107;
 
@@ -2235,7 +2207,7 @@ body{
 }
 
 
-.estado-badge.pendiente {
+.estado-badge.en-revision {
 
     background: rgba(255,193,7,.15);
 
@@ -10827,11 +10799,6 @@ body {
     justify-content: center;
 }
 
-.status-icon.pendiente {
-    background: rgba(255, 193, 7, 0.12);
-    color: #e7b52b;
-}
-
 .status-icon.preparando {
     background: rgba(220, 53, 69, 0.12);
     color: #dc5b69;
@@ -10955,11 +10922,6 @@ body {
     font-size: 10px;
     font-weight: 600;
     white-space: nowrap;
-}
-
-.state-badge.pendiente {
-    background: rgba(255, 193, 7, 0.12);
-    color: #e7b52b;
 }
 
 .state-badge.pagado {
