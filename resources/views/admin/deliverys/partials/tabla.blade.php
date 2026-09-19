@@ -6,7 +6,7 @@
 
                         <th>ID</th>
 
-                        <th>Repartidor</th>
+                        <th>Delivery</th>
 
                         <th>Contacto</th>
 
@@ -60,7 +60,7 @@
                                     </strong>
 
                                     <small>
-                                        Repartidor
+                                        Delivery
                                     </small>
 
                                 </div>
@@ -176,7 +176,7 @@
                                         type="submit"
                                         class="btn-delivery eliminar"
                                         title="Desactivar"
-                                        onclick="return confirm('¿Deseas desactivar este repartidor?')">
+                                        onclick="return confirm('¿Deseas desactivar este delivery?')">
 
                                         <i class="bi bi-person-dash"></i>
 
@@ -227,11 +227,11 @@
                                 <i class="bi bi-bicycle"></i>
 
                                 <h5>
-                                    No hay repartidores registrados
+                                    No hay deliveryes registrados
                                 </h5>
 
                                 <p>
-                                    Crea el primer repartidor para comenzar.
+                                    Crea el primer delivery para comenzar.
                                 </p>
 
 
@@ -241,7 +241,7 @@
 
                                     <i class="bi bi-plus-circle"></i>
 
-                                    Crear repartidor
+                                    Crear delivery
 
                                 </a>
 
