@@ -60,6 +60,27 @@
     <div class="card clientes-card border-0">
 
         {{-- CABECERA --}}
+        <div class="clientes-search-bar mb-3 px-3 pt-3">
+            <div class="position-relative">
+                <i class="bi bi-envelope-search clientes-search-icon"></i>
+                <input
+                    type="search"
+                    id="clientes-busqueda"
+                    class="form-control clientes-search-input"
+                    value="{{ $buscar ?? '' }}"
+                    placeholder="Buscar cliente por Gmail o correo electrónico..."
+                    autocomplete="off">
+                <span
+                    id="clientes-busqueda-loading"
+                    class="clientes-search-loading d-none">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </span>
+            </div>
+            <small class="clientes-search-help">
+                La lista se actualiza automáticamente mientras escribes.
+            </small>
+        </div>
+
         <div class="clientes-card-header">
 
             <div class="clientes-card-header-left">
@@ -83,7 +104,7 @@
             </div>
 
 
-            <div class="clientes-count">
+            <div class="clientes-count" id="clientes-count">
 
                 {{ $clientes->count() }}
                 {{ $clientes->count() == 1 ? 'cliente' : 'clientes' }}
@@ -94,229 +115,9 @@
 
 
         {{-- TABLA --}}
-        <div class="clientes-table-wrapper">
+        <div id="clientes-table-container" class="clientes-table-wrapper">
 
-            <table class="clientes-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Nombre</th>
-
-                        <th>Email</th>
-
-                        <th>Teléfono</th>
-
-                        <th>Pedidos</th>
-
-                        <th>Estado</th>
-
-                        <th class="text-center">
-                            Acciones
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    @forelse($clientes as $cliente)
-
-                    <tr>
-
-                        {{-- ID --}}
-                        <td>
-
-                            <span class="cliente-id">
-                                #{{ $cliente->id }}
-                            </span>
-
-                        </td>
-
-
-                        {{-- NOMBRE --}}
-                        <td>
-
-                            <div class="cliente-info">
-
-                                <div class="cliente-avatar">
-
-                                    {{ strtoupper(substr($cliente->name, 0, 1)) }}
-
-                                </div>
-
-                                <div class="cliente-nombre">
-
-                                    {{ $cliente->name }}
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        {{-- EMAIL --}}
-                        <td>
-
-                            <span class="cliente-email">
-
-                                {{ $cliente->email }}
-
-                            </span>
-
-                        </td>
-
-
-                        {{-- TELEFONO --}}
-                        <td>
-
-                            <span class="cliente-telefono">
-
-                                {{ $cliente->telefono ?? 'No registrado' }}
-
-                            </span>
-
-                        </td>
-
-
-                        {{-- PEDIDOS --}}
-                        <td>
-
-                            <span class="cliente-pedidos">
-
-                                {{ $cliente->pedidos_count }}
-
-                            </span>
-
-                        </td>
-
-
-                        {{-- ESTADO --}}
-                        <td>
-
-                            @if($cliente->estado === 'activo')
-
-                            <span class="cliente-estado activo">
-                                Activo
-                            </span>
-
-                            @else
-
-                            <span class="cliente-estado inactivo">
-                                Inactivo
-                            </span>
-
-                            @endif
-
-                        </td>
-
-
-                        {{-- ACCIONES --}}
-                        <td>
-
-                            <div class="cliente-acciones">
-
-                                {{-- VER --}}
-                                <a href="{{ route('admin.clientes.show', $cliente->id) }}"
-                                    class="cliente-btn cliente-btn-ver">
-
-                                    <i class="bi bi-eye-fill me-1"></i>
-                                    Ver
-
-                                </a>
-
-
-                                {{-- ACTIVAR --}}
-                                @if($cliente->estado === 'inactivo')
-
-                                <form action="{{ route('admin.clientes.activar', $cliente->id) }}"
-                                    method="POST">
-
-                                    @csrf
-                                    @method('PATCH')
-
-                                    <button type="submit"
-                                        class="cliente-btn cliente-btn-activar">
-
-                                        <i class="bi bi-check-circle-fill me-1"></i>
-                                        Activar
-
-                                    </button>
-
-                                </form>
-
-                                @else
-
-                                {{-- DESACTIVAR --}}
-                                <form action="{{ route('admin.clientes.desactivar', $cliente->id) }}"
-                                    method="POST">
-
-                                    @csrf
-                                    @method('PATCH')
-
-                                    <button type="submit"
-                                        class="cliente-btn cliente-btn-desactivar">
-
-                                        <i class="bi bi-pause-circle-fill me-1"></i>
-                                        Desactivar
-
-                                    </button>
-
-                                </form>
-
-                                @endif
-
-
-                                {{-- ELIMINAR --}}
-                                <form action="{{ route('admin.clientes.destroy', $cliente->id) }}"
-                                    method="POST"
-                                    onsubmit="return confirm('¿Estás seguro de eliminar este cliente?');">
-
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit"
-                                        class="cliente-btn cliente-btn-eliminar">
-
-                                        <i class="bi bi-trash-fill me-1"></i>
-                                        Eliminar
-
-                                    </button>
-
-                                </form>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                    @empty
-
-                    <tr>
-
-                        <td colspan="7"
-                            class="clientes-empty">
-
-                            <i class="bi bi-people clientes-empty-icon"></i>
-
-                            No hay clientes registrados.
-
-                        </td>
-
-                    </tr>
-
-                    @endforelse
-
-                </tbody>
-
-            </table>
+            @include('admin.clientes.partials.tabla', ['clientes' => $clientes])
 
         </div>
 
@@ -324,4 +125,63 @@
 
 </div>
 
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('clientes-busqueda');
+    const container = document.getElementById('clientes-table-container');
+    const count = document.getElementById('clientes-count');
+    const loading = document.getElementById('clientes-busqueda-loading');
+
+    if (!input || !container || !count) return;
+
+    let timer = null;
+    let controller = null;
+
+    const buscarClientes = () => {
+        const url = new URL('{{ route('admin.clientes.index') }}', window.location.origin);
+        const value = input.value.trim();
+
+        if (value) {
+            url.searchParams.set('buscar', value);
+        }
+
+        if (controller) controller.abort();
+        controller = new AbortController();
+
+        loading?.classList.remove('d-none');
+
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            signal: controller.signal
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('No se pudo realizar la búsqueda.');
+            return response.json();
+        })
+        .then(data => {
+            container.innerHTML = data.html;
+            count.textContent = data.count + (data.count === 1 ? ' cliente' : ' clientes');
+        })
+        .catch(error => {
+            if (error.name !== 'AbortError') {
+                container.innerHTML = '<div class="p-4 text-center text-danger">No se pudo actualizar la búsqueda.</div>';
+            }
+        })
+        .finally(() => {
+            loading?.classList.add('d-none');
+        });
+    };
+
+    input.addEventListener('input', function () {
+        clearTimeout(timer);
+        timer = setTimeout(buscarClientes, 120);
+    });
+});
+</script>
+@endpush
 @endsection
