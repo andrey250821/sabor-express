@@ -11,11 +11,11 @@
 
             <h2 class="deliverys-title">
                 <i class="bi bi-bicycle"></i>
-                Repartidores
+                Deliverys
             </h2>
 
             <p class="deliverys-subtitle">
-                Gestiona los repartidores de Sabor Express
+                Gestiona los Deliverys de Sabor Express
             </p>
 
         </div>
@@ -26,7 +26,7 @@
 
             <i class="bi bi-plus-circle"></i>
 
-            Nuevo repartidor
+            Nuevo Delivery
 
         </a>
 
@@ -51,6 +51,27 @@
     <div class="deliverys-card">
 
 
+        <div class="deliverys-search-bar mb-3 px-3 pt-3">
+            <div class="position-relative">
+                <i class="bi bi-envelope-search deliverys-search-icon"></i>
+                <input
+                    type="search"
+                    id="deliverys-busqueda"
+                    class="form-control deliverys-search-input"
+                    value="{{ $buscar ?? '' }}"
+                    placeholder="Buscar Delivery por Gmail o correo electrónico..."
+                    autocomplete="off">
+                <span
+                    id="deliverys-busqueda-loading"
+                    class="deliverys-search-loading d-none">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </span>
+            </div>
+            <small class="deliverys-search-help">
+                La lista se actualiza automáticamente mientras escribes.
+            </small>
+        </div>
+
         <div class="deliverys-card-header">
 
             <div>
@@ -58,7 +79,7 @@
                 <h5>
                     <i class="bi bi-people"></i>
 
-                    Lista de repartidores
+                    Lista de Deliverys
                 </h5>
 
                 <small>
@@ -68,11 +89,11 @@
             </div>
 
 
-            <span class="deliverys-count">
+            <span class="deliverys-count" id="deliverys-count">
 
                 {{ $deliverys->count() }}
 
-                repartidor(es)
+                {{ $deliverys->count() == 1 ? 'Delivery' : 'Deliverys' }}
 
             </span>
 
@@ -80,266 +101,9 @@
 
 
         {{-- TABLA RESPONSIVE --}}
-        <div class="table-responsive">
+        <div id="deliverys-table-container" class="table-responsive">
 
-            <table class="table deliverys-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Repartidor</th>
-
-                        <th>Contacto</th>
-
-                        <th>Asignaciones</th>
-
-                        <th>Estado</th>
-
-                        <th class="text-center">
-                            Acciones
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    @forelse($deliverys as $delivery)
-
-                    <tr>
-
-                        {{-- ID --}}
-                        <td>
-
-                            <span class="delivery-id">
-
-                                #{{ $delivery->id }}
-
-                            </span>
-
-                        </td>
-
-
-                        {{-- NOMBRE --}}
-                        <td>
-
-                            <div class="delivery-person">
-
-                                <div class="delivery-avatar">
-
-                                    <i class="bi bi-person-fill"></i>
-
-                                </div>
-
-
-                                <div>
-
-                                    <strong>
-                                        {{ $delivery->name }}
-                                    </strong>
-
-                                    <small>
-                                        Repartidor
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-                        {{-- CONTACTO --}}
-                        <td>
-
-                            <div class="delivery-contact">
-
-                                <span>
-
-                                    <i class="bi bi-envelope"></i>
-
-                                    {{ $delivery->email }}
-
-                                </span>
-
-
-                                @if($delivery->telefono)
-
-                                <span>
-
-                                    <i class="bi bi-telephone"></i>
-
-                                    {{ $delivery->telefono }}
-
-                                </span>
-
-                                @endif
-
-                            </div>
-
-                        </td>
-
-
-                        {{-- ASIGNACIONES --}}
-                        <td>
-
-                            <span class="delivery-asignaciones">
-
-                                <i class="bi bi-box-seam"></i>
-
-                                {{ $delivery->asignaciones_delivery_count }}
-
-                            </span>
-
-                        </td>
-
-
-                        {{-- ESTADO --}}
-                        <td>
-
-                            @if($delivery->estado === 'activo')
-
-                            <span class="delivery-estado activo">
-
-                                <i class="bi bi-check-circle-fill"></i>
-
-                                Activo
-
-                            </span>
-
-                            @else
-
-                            <span class="delivery-estado inactivo">
-
-                                <i class="bi bi-x-circle-fill"></i>
-
-                                Inactivo
-
-                            </span>
-
-                            @endif
-
-                        </td>
-
-
-                        {{-- ACCIONES --}}
-                        <td>
-
-                            <div class="delivery-actions">
-
-
-                                {{-- EDITAR --}}
-                                <a
-                                    href="{{ route('admin.deliverys.edit', $delivery->id) }}"
-                                    class="btn-delivery editar"
-                                    title="Editar">
-
-                                    <i class="bi bi-pencil-square"></i>
-
-                                </a>
-
-
-                                @if($delivery->estado === 'activo')
-
-                                {{-- DESACTIVAR --}}
-                                <form
-                                    action="{{ route('admin.deliverys.destroy', $delivery->id) }}"
-                                    method="POST">
-
-                                    @csrf
-
-                                    @method('DELETE')
-
-
-                                    <button
-                                        type="submit"
-                                        class="btn-delivery eliminar"
-                                        title="Desactivar"
-                                        onclick="return confirm('¿Deseas desactivar este repartidor?')">
-
-                                        <i class="bi bi-person-dash"></i>
-
-                                    </button>
-
-                                </form>
-
-                                @else
-
-                                {{-- ACTIVAR --}}
-                                <form
-                                    action="{{ route('admin.deliverys.activar', $delivery->id) }}"
-                                    method="POST">
-
-                                    @csrf
-
-                                    @method('PATCH')
-
-
-                                    <button
-                                        type="submit"
-                                        class="btn-delivery activar"
-                                        title="Activar">
-
-                                        <i class="bi bi-person-check"></i>
-
-                                    </button>
-
-                                </form>
-
-                                @endif
-
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                    @empty
-
-                    <tr>
-
-                        <td colspan="6">
-
-                            <div class="deliverys-empty">
-
-                                <i class="bi bi-bicycle"></i>
-
-                                <h5>
-                                    No hay repartidores registrados
-                                </h5>
-
-                                <p>
-                                    Crea el primer repartidor para comenzar.
-                                </p>
-
-
-                                <a
-                                    href="{{ route('admin.deliverys.create') }}"
-                                    class="btn btn-success">
-
-                                    <i class="bi bi-plus-circle"></i>
-
-                                    Crear repartidor
-
-                                </a>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                    @endforelse
-
-                </tbody>
-
-            </table>
+            @include('admin.deliverys.partials.tabla', ['deliverys' => $deliverys])
 
         </div>
 
@@ -347,4 +111,63 @@
 
 </div>
 
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('deliverys-busqueda');
+    const container = document.getElementById('deliverys-table-container');
+    const count = document.getElementById('deliverys-count');
+    const loading = document.getElementById('deliverys-busqueda-loading');
+
+    if (!input || !container || !count) return;
+
+    let timer = null;
+    let controller = null;
+
+    const buscarDeliverys = () => {
+        const url = new URL('{{ route('admin.deliverys.index') }}', window.location.origin);
+        const value = input.value.trim();
+
+        if (value) {
+            url.searchParams.set('buscar', value);
+        }
+
+        if (controller) controller.abort();
+        controller = new AbortController();
+
+        loading?.classList.remove('d-none');
+
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            signal: controller.signal
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('No se pudo realizar la búsqueda.');
+            return response.json();
+        })
+        .then(data => {
+            container.innerHTML = data.html;
+            count.textContent = data.count + (data.count === 1 ? ' Delivery' : ' Deliverys');
+        })
+        .catch(error => {
+            if (error.name !== 'AbortError') {
+                container.innerHTML = '<div class="p-4 text-center text-danger">No se pudo actualizar la búsqueda.</div>';
+            }
+        })
+        .finally(() => {
+            loading?.classList.add('d-none');
+        });
+    };
+
+    input.addEventListener('input', function () {
+        clearTimeout(timer);
+        timer = setTimeout(buscarDeliverys, 120);
+    });
+});
+</script>
+@endpush
 @endsection
