@@ -74,10 +74,6 @@ class ValidarComprobantePagoService
         if (!$datos['completo']) {
             $faltantes = [];
 
-            if ($datos['pedido'] === null) {
-                $faltantes[] = 'número de pedido';
-            }
-
             if ($datos['monto'] === null) {
                 $faltantes[] = 'monto';
             }
