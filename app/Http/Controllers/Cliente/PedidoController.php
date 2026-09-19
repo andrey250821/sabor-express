@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use App\Services\ValidarComprobantePagoService;
+use App\Services\GenerarComprobanteOcrService;
 
 class PedidoController extends Controller
 {
@@ -109,6 +110,60 @@ class PedidoController extends Controller
             'ok' => true,
             'direccion' => $direccion,
         ]);
+    }
+
+    /**
+     * Generar un comprobante de prueba a partir del pedido que el cliente
+     * está armando en el checkout, antes de guardar el pedido en la BD.
+     */
+    public function generarComprobantePrueba(
+        GenerarComprobanteOcrService $generador
+    ) {
+        $carrito = session()->get('carrito', []);
+
+        if (count($carrito) === 0) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'El carrito está vacío.',
+            ], 422);
+        }
+
+        $total = 0;
+
+        foreach ($carrito as $item) {
+            $cantidad = (int) ($item['cantidad'] ?? 0);
+            $precio = (float) ($item['precio'] ?? 0);
+
+            $total += $cantidad * $precio;
+        }
+
+        if ($total <= 0) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'No se pudo calcular el total del pedido.',
+            ], 422);
+        }
+
+        try {
+            $comprobante = $generador->generarParaCheckout(
+                cliente: Auth::user()->name,
+                monto: $total
+            );
+
+            return response()->json([
+                'ok' => true,
+                'archivo' => $comprobante['archivo'],
+                'referencia' => $comprobante['referencia'],
+                'url' => asset('storage/' . $comprobante['ruta']),
+                'mensaje' => 'Comprobante de prueba generado con los datos actuales del pedido.',
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'No se pudo generar el comprobante de prueba.',
+                'detail' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function store(Request $request, ValidarComprobantePagoService $validador)
