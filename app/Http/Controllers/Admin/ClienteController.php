@@ -11,16 +11,31 @@ class ClienteController extends Controller
     /**
      * Mostrar clientes registrados.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clientes = User::where('role_id', 2)
-            ->withCount('pedidos')
+        $buscar = trim((string) $request->input('buscar', ''));
+
+        $query = User::where('role_id', 2)
+            ->withCount('pedidos');
+
+        if ($buscar !== '') {
+            $query->where('email', 'like', '%' . $buscar . '%');
+        }
+
+        $clientes = $query
             ->orderBy('name')
             ->get();
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'html' => view('admin.clientes.partials.tabla', compact('clientes'))->render(),
+                'count' => $clientes->count(),
+            ]);
+        }
+
         return view(
             'admin.clientes.index',
-            compact('clientes')
+            compact('clientes', 'buscar')
         );
     }
 
