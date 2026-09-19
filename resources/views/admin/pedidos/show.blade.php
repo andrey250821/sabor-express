@@ -192,7 +192,7 @@
                         $pedido->asignacionDelivery->delivery)
 
                         <div class="pedido-dato">
-                            <span>Repartidor</span>
+                            <span>Delivery</span>
                             <strong>
                                 {{ $pedido->asignacionDelivery->delivery->name }}
                             </strong>
@@ -452,7 +452,7 @@
                     <div class="admin-delivery-status">
 
                         <span id="admin-delivery-map-status">
-                            📡 Esperando la ubicación del repartidor...
+                            📡 Esperando la ubicación del delivery...
                         </span>
 
                     </div>
