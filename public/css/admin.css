@@ -12602,3 +12602,73 @@ body {
     }
 
 }
+
+/* =====================================================
+   ESTADO DE PAGO EN REVISIÓN
+===================================================== */
+.estado-pago-revision {
+    background: rgba(255,193,7,.14);
+    color: #ffd45a;
+}
+
+
+/* =====================================================
+   BUSCADORES EN TIEMPO REAL — CLIENTES / DELIVERY
+===================================================== */
+.clientes-search-bar,
+.deliverys-search-bar {
+    background: #17181d;
+    border-bottom: 1px solid #292b33;
+    padding-bottom: 16px !important;
+}
+
+.clientes-search-input,
+.deliverys-search-input {
+    min-height: 44px;
+    padding-left: 42px;
+    padding-right: 44px;
+    background: #0f1014 !important;
+    border: 1px solid #383a42 !important;
+    color: #ffffff !important;
+    border-radius: 10px;
+}
+
+.clientes-search-input::placeholder,
+.deliverys-search-input::placeholder {
+    color: #777b85;
+}
+
+.clientes-search-input:focus,
+.deliverys-search-input:focus {
+    border-color: #8b1e45 !important;
+    box-shadow: 0 0 0 .2rem rgba(139,30,69,.14) !important;
+}
+
+.clientes-search-icon,
+.deliverys-search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: #c42c63;
+    pointer-events: none;
+}
+
+.clientes-search-loading,
+.deliverys-search-loading {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #c42c63;
+    z-index: 2;
+}
+
+.clientes-search-help,
+.deliverys-search-help {
+    display: block;
+    margin-top: 7px;
+    color: #777b85;
+    font-size: 11px;
+}
