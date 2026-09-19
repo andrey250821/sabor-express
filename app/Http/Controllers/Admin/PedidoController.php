@@ -8,7 +8,7 @@ use App\Models\Pedido;
 class PedidoController extends Controller
 {
     /**
-     * Mostrar todos los pedidos aprobados.
+     * Mostrar todos los pedidos para supervisión administrativa.
      */
     public function index()
     {
@@ -17,9 +17,6 @@ class PedidoController extends Controller
             'asignacionDelivery.delivery',
             'comprobantePago',
         ])
-            ->whereHas('comprobantePago', function ($query) {
-                $query->where('estado', 'aprobado');
-            })
             ->orderBy('created_at', 'desc')
             ->get();
 
