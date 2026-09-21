@@ -126,123 +126,6 @@
 
 
                 {{-- =================================================
-                     DATOS DE ENTREGA
-                ================================================== --}}
-
-                <div class="cliente-pedido-card">
-
-                    <div class="cliente-pedido-card-header">
-
-                        <div class="cliente-pedido-card-icono">
-                            <i class="bi bi-geo-alt-fill"></i>
-                        </div>
-
-                        <div>
-
-                            <h2>
-                                Datos de entrega
-                            </h2>
-
-                            <p>
-                                Indica dónde quieres recibir tu pedido.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="cliente-pedido-card-body">
-
-
-                        {{-- DIRECCIÓN --}}
-
-                        <div class="cliente-pedido-campo">
-
-                            <label for="direccion_entrega">
-
-                                <i class="bi bi-house-door-fill"></i>
-
-                                Dirección de entrega
-
-                                <span>*</span>
-
-                            </label>
-
-                            <textarea
-                                name="direccion_entrega"
-                                id="direccion_entrega"
-                                class="form-control cliente-pedido-input"
-                                rows="3"
-                                placeholder="La dirección se completará automáticamente al seleccionar tu ubicación."
-                                required>{{ old('direccion_entrega') }}</textarea>
-
-                            <small>
-                                Puedes corregir manualmente la dirección si es necesario.
-                            </small>
-
-                        </div>
-
-
-                        {{-- REFERENCIA --}}
-
-                        <div class="cliente-pedido-campo">
-
-                            <label for="referencia_delivery">
-
-                                <i class="bi bi-signpost-2-fill"></i>
-
-                                Referencia para el delivery
-
-                            </label>
-
-                            <textarea
-                                name="referencia_delivery"
-                                id="referencia_delivery"
-                                class="form-control cliente-pedido-input"
-                                rows="3"
-                                maxlength="1000"
-                                placeholder="Ej.: puerta verde, frente a la farmacia, al lado de la plaza...">{{ old('referencia_delivery') }}</textarea>
-
-                            <small>
-                                Agrega detalles que ayuden al repartidor a encontrar tu domicilio.
-                            </small>
-
-                        </div>
-
-
-                        {{-- OBSERVACIONES --}}
-
-                        <div class="cliente-pedido-campo">
-
-                            <label for="observacion_cliente">
-
-                                <i class="bi bi-chat-left-text-fill"></i>
-
-                                Observaciones del pedido
-
-                            </label>
-
-                            <textarea
-                                name="observacion_cliente"
-                                id="observacion_cliente"
-                                class="form-control cliente-pedido-input"
-                                rows="3"
-                                maxlength="500"
-                                placeholder="Ej.: poca salsa, sin cebolla, tocar el timbre...">{{ old('observacion_cliente') }}</textarea>
-
-                            <small>
-                                Instrucciones especiales sobre tu pedido.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                {{-- =================================================
                      UBICACIÓN
                 ================================================== --}}
 
@@ -393,6 +276,128 @@
                             <i class="bi bi-info-circle"></i>
 
                             Selecciona tu ubicación en el mapa.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+                {{-- =================================================
+                     DATOS DE ENTREGA
+                ================================================== --}}
+
+                <div class="cliente-pedido-card">
+
+                    <div class="cliente-pedido-card-header">
+
+                        <div class="cliente-pedido-card-icono">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Datos de entrega
+                            </h2>
+
+                            <p>
+                                Indica dónde quieres recibir tu pedido.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="cliente-pedido-card-body">
+
+
+                        {{-- DIRECCIÓN --}}
+
+                        <div class="cliente-pedido-campo">
+
+                            <label for="direccion_entrega">
+
+                                <i class="bi bi-house-door-fill"></i>
+
+                                Dirección de entrega
+
+                                <span>*</span>
+
+                            </label>
+
+                            <textarea
+                                name="direccion_entrega"
+                                id="direccion_entrega"
+                                class="form-control cliente-pedido-input cliente-pedido-direccion-bloqueada"
+                                rows="3"
+                                placeholder="La dirección se obtendrá automáticamente al seleccionar tu ubicación."
+                                readonly
+                                aria-readonly="true"
+                                tabindex="-1"
+                                required>{{ old('direccion_entrega') }}</textarea>
+
+                            <small>
+                                Esta dirección se obtiene automáticamente a partir de la ubicación seleccionada en el mapa y no puede editarse manualmente.
+                            </small>
+
+                        </div>
+
+
+                        {{-- REFERENCIA --}}
+
+                        <div class="cliente-pedido-campo">
+
+                            <label for="referencia_delivery">
+
+                                <i class="bi bi-signpost-2-fill"></i>
+
+                                Referencia para Delivery
+
+                            </label>
+
+                            <textarea
+                                name="referencia_delivery"
+                                id="referencia_delivery"
+                                class="form-control cliente-pedido-input"
+                                rows="3"
+                                maxlength="1000"
+                                placeholder="Ej.: puerta verde, frente a la farmacia, al lado de la plaza...">{{ old('referencia_delivery') }}</textarea>
+
+                            <small>
+                                Indica puntos de referencia que ayuden al Delivery a encontrar tu domicilio.
+                            </small>
+
+                        </div>
+
+
+                        {{-- OBSERVACIONES --}}
+
+                        <div class="cliente-pedido-campo">
+
+                            <label for="observacion_cliente">
+
+                                <i class="bi bi-chat-left-text-fill"></i>
+
+                                Observaciones para cocina
+
+                            </label>
+
+                            <textarea
+                                name="observacion_cliente"
+                                id="observacion_cliente"
+                                class="form-control cliente-pedido-input"
+                                rows="3"
+                                maxlength="500"
+                                placeholder="Ej.: poca salsa, sin cebolla, tocar el timbre...">{{ old('observacion_cliente') }}</textarea>
+
+                            <small>
+                                Instrucciones para la preparación, por ejemplo: sin cebolla, poca salsa, etc.
+                            </small>
 
                         </div>
 
@@ -1510,7 +1515,7 @@
         |--------------------------------------------------------------------------
         | ESTADO UBICACIÓN
         |--------------------------------------------------------------------------
-        |
+        */
 
         function mostrarEstado(mensaje, error = false) {
 
@@ -1519,24 +1524,16 @@
             }
 
             estadoUbicacion.innerHTML = `
-
-                <i class="bi ${
-                    error
-                        ? 'bi-exclamation-circle-fill'
-                        : 'bi-info-circle-fill'
-                }"></i>
-
-                <span>
-                    ${mensaje}
-                </span>
-
+                <i class="bi ${error
+                    ? 'bi-exclamation-circle-fill'
+                    : 'bi-info-circle-fill'}"></i>
+                <span>${mensaje}</span>
             `;
 
             estadoUbicacion.classList.toggle(
                 'cliente-pedido-estado-error',
                 error
             );
-
         }
 
 
@@ -1545,19 +1542,10 @@
         | NORMALIZAR COORDENADAS
         |--------------------------------------------------------------------------
         |
-        | Google Maps utilizaba:
-        |
-        | posicion.lat()
-        | posicion.lng()
-        |
-        | Leaflet utiliza:
-        |
-        | posicion.lat
-        | posicion.lng
-        |
-        | Esta función permite que el resto de la lógica conserve
-        | los mismos nombres y funcione correctamente con Leaflet.
-        |
+        | Leaflet utiliza objetos con .lat y .lng.
+        | Esta función también admite el formato lat()/lng()
+        | por compatibilidad con cualquier código anterior.
+        |--------------------------------------------------------------------------
         */
 
         function normalizarPosicion(posicion) {
@@ -2210,99 +2198,90 @@
                                 true;
 
 
-                            navigator.geolocation.getCurrentPosition(
+                            const procesarUbicacion = function(posicion) {
 
-                                function(posicion) {
+                                const ubicacion = {
+                                    lat: posicion.coords.latitude,
+                                    lng: posicion.coords.longitude
+                                };
 
-                                    const ubicacion = {
+                                colocarMarcador(
+                                    ubicacion,
+                                    true,
+                                    true
+                                );
 
-                                        lat: posicion.coords.latitude,
+                                mostrarEstado(
+                                    '✅ Ubicación encontrada. La dirección se está obteniendo automáticamente.'
+                                );
 
-                                        lng: posicion.coords.longitude
+                                btnMiUbicacion.disabled = false;
+                            };
 
-                                    };
+                            const manejarErrorUbicacion = function(error) {
 
+                                console.error(
+                                    'Geolocation:',
+                                    error
+                                );
 
-                                    colocarMarcador(
-                                        ubicacion,
-                                        true,
-                                        true
-                                    );
-
-
-                                    btnMiUbicacion.disabled =
-                                        false;
-
-                                },
-
-
-                                function(error) {
-
-                                    console.error(
-                                        'Geolocation:',
-                                        error
-                                    );
-
-
-                                    let mensaje =
-                                        'No se pudo obtener tu ubicación. Revisa los permisos del navegador.';
-
-
-                                    if (
-                                        error.code ===
-                                        error.PERMISSION_DENIED
-                                    ) {
-
-                                        mensaje =
-                                            'Permiso de ubicación denegado. Puedes seleccionar manualmente tu ubicación en el mapa.';
-
-                                    }
-
-
-                                    if (
-                                        error.code ===
-                                        error.POSITION_UNAVAILABLE
-                                    ) {
-
-                                        mensaje =
-                                            'La ubicación no está disponible. Puedes seleccionar manualmente tu ubicación en el mapa.';
-
-                                    }
-
-
-                                    if (
-                                        error.code ===
-                                        error.TIMEOUT
-                                    ) {
-
-                                        mensaje =
-                                            'La solicitud de ubicación tardó demasiado. Intenta nuevamente.';
-
-                                    }
-
-
+                                if (error.code === error.PERMISSION_DENIED) {
                                     mostrarEstado(
-                                        mensaje,
+                                        'Permiso de ubicación denegado. Activa la ubicación para este sitio en Chrome y vuelve a intentarlo.',
                                         true
                                     );
 
-
-                                    btnMiUbicacion.disabled =
-                                        false;
-
-                                },
-
-
-                                {
-
-                                    enableHighAccuracy: true,
-
-                                    timeout: 10000,
-
-                                    maximumAge: 0
-
+                                    btnMiUbicacion.disabled = false;
+                                    return;
                                 }
 
+                                if (error.code === error.TIMEOUT) {
+                                    mostrarEstado(
+                                        'La ubicación está tardando demasiado. Intentando con una ubicación aproximada...',
+                                        false
+                                    );
+
+                                    navigator.geolocation.getCurrentPosition(
+                                        procesarUbicacion,
+                                        function(errorSegundoIntento) {
+                                            console.error(
+                                                'Segundo intento de geolocalización:',
+                                                errorSegundoIntento
+                                            );
+
+                                            mostrarEstado(
+                                                'No se pudo obtener tu ubicación. También puedes hacer clic directamente sobre el mapa.',
+                                                true
+                                            );
+
+                                            btnMiUbicacion.disabled = false;
+                                        },
+                                        {
+                                            enableHighAccuracy: false,
+                                            timeout: 20000,
+                                            maximumAge: 120000
+                                        }
+                                    );
+
+                                    return;
+                                }
+
+                                mostrarEstado(
+                                    'La ubicación no está disponible. Puedes hacer clic directamente sobre el mapa.',
+                                    true
+                                );
+
+                                btnMiUbicacion.disabled = false;
+                            };
+
+                            navigator.geolocation.getCurrentPosition(
+                                procesarUbicacion,
+                                manejarErrorUbicacion,
+                                {
+                                    enableHighAccuracy: false,
+                                    timeout: 12000,
+                                    maximumAge: 120000
+                                }
                             );
 
                         }
@@ -2710,10 +2689,32 @@
                     | Ubicación
                     |--------------------------------------------------------------------------
                     |
-                    | NO la hacemos obligatoria porque el controller
-                    | actual acepta nullable.
+                    | La ubicación es obligatoria para completar
+                    | correctamente la dirección de entrega.
                     |
                     */
+
+                    if (
+                        !latitudInput?.value ||
+                        !longitudInput?.value ||
+                        !direccionInput?.value.trim()
+                    ) {
+
+                        evento.preventDefault();
+
+                        mostrarEstado(
+                            'Selecciona tu ubicación en el mapa para obtener automáticamente la dirección.',
+                            true
+                        );
+
+                        document.getElementById('mapa-pedido')?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+
+                        return;
+                    }
+
 
                     if (botonConfirmar) {
 
