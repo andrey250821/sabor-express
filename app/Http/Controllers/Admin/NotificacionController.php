@@ -139,6 +139,10 @@ class NotificacionController extends Controller
     {
         $notificacion = Notificacion::where('id', $id)
             ->where('user_id', Auth::id())
+            ->whereIn('evento', [
+                'comprobante_en_revision',
+                'nueva_calificacion',
+            ])
             ->firstOrFail();
 
         $notificacion->update([
