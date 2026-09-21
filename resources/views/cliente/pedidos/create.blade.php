@@ -1281,6 +1281,25 @@
                 URL.createObjectURL(archivo);
 
             if (comprobantePreview) {
+                comprobantePreview.onload = function() {
+
+                    if (comprobantePreviewContenedor) {
+                        comprobantePreviewContenedor.hidden = false;
+                    }
+
+                };
+
+                comprobantePreview.onerror = function() {
+
+                    limpiarVistaPreviaComprobante();
+
+                    if (comprobanteNombre) {
+                        comprobanteNombre.textContent =
+                            'No se pudo mostrar la vista previa de esta imagen.';
+                    }
+
+                };
+
                 comprobantePreview.src =
                     urlVistaPreviaComprobante;
             }
@@ -1288,6 +1307,61 @@
             if (comprobantePreviewContenedor) {
                 comprobantePreviewContenedor.hidden = false;
             }
+
+            if (areaComprobante) {
+                areaComprobante.classList.add('seleccionado');
+            }
+
+            if (comprobanteTitulo) {
+                comprobanteTitulo.textContent =
+                    'Comprobante seleccionado';
+            }
+
+            if (comprobanteNombre) {
+                comprobanteNombre.textContent =
+                    archivo.name || 'Imagen seleccionada';
+            }
+
+        }
+
+
+        if (inputComprobante) {
+
+            inputComprobante.addEventListener(
+                'change',
+                function() {
+
+                    const archivo =
+                        this.files && this.files.length > 0
+                            ? this.files[0]
+                            : null;
+
+                    if (!archivo) {
+
+                        limpiarVistaPreviaComprobante();
+
+                        if (areaComprobante) {
+                            areaComprobante.classList.remove('seleccionado');
+                        }
+
+                        if (comprobanteTitulo) {
+                            comprobanteTitulo.textContent =
+                                'Seleccionar comprobante';
+                        }
+
+                        if (comprobanteNombre) {
+                            comprobanteNombre.textContent =
+                                'Haz clic aquí para seleccionar una imagen';
+                        }
+
+                        return;
+
+                    }
+
+                    mostrarVistaPreviaComprobante(archivo);
+
+                }
+            );
 
         }
 
