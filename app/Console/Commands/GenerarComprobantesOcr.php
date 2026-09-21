@@ -115,7 +115,7 @@ class GenerarComprobantesOcr extends Command
             monto: $totalReal,
             referencia: $referenciaCorrecta,
             fecha: $fecha,
-            cliente: $cliente,
+            cliente: $clienteNombre,
             chrome: $chrome,
             htmlDirectory: $htmlDirectory,
             outputDirectory: $outputDirectory
@@ -134,7 +134,7 @@ class GenerarComprobantesOcr extends Command
             monto: $montoIncorrecto,
             referencia: '98452218',
             fecha: $fecha,
-            cliente: $cliente,
+            cliente: $clienteNombre,
             chrome: $chrome,
             htmlDirectory: $htmlDirectory,
             outputDirectory: $outputDirectory
@@ -151,7 +151,7 @@ class GenerarComprobantesOcr extends Command
             monto: $totalReal,
             referencia: $referenciaCorrecta,
             fecha: $fecha,
-            cliente: $cliente,
+            cliente: $clienteNombre,
             chrome: $chrome,
             htmlDirectory: $htmlDirectory,
             outputDirectory: $outputDirectory
@@ -168,54 +168,13 @@ class GenerarComprobantesOcr extends Command
             monto: $totalReal,
             referencia: '',
             fecha: $fecha,
-            cliente: $cliente,
+            cliente: $clienteNombre,
             chrome: $chrome,
             htmlDirectory: $htmlDirectory,
             outputDirectory: $outputDirectory
         );
 
-        $this->newLine();
-
-        $this->info(
-            "Comprobantes generados correctamente para el pedido #{$numeroPedido}."
-        );
-
-        $this->newLine();
-
-        $this->table(
-            ['Tipo', 'Monto', 'Referencia', 'Archivo'],
-            [
-                [
-                    'Correcto',
-                    'Bs ' . number_format($totalReal, 2),
-                    $referenciaCorrecta,
-                    "pedido_{$numeroPedido}_comprobante_correcto.png",
-                ],
-                [
-                    'Monto incorrecto',
-                    'Bs ' . number_format($montoIncorrecto, 2),
-                    '98452218',
-                    "pedido_{$numeroPedido}_comprobante_monto_incorrecto.png",
-                ],
-                [
-                    'Referencia duplicada',
-                    'Bs ' . number_format($totalReal, 2),
-                    $referenciaCorrecta,
-                    "pedido_{$numeroPedido}_comprobante_referencia_duplicada.png",
-                ],
-                [
-                    'Incompleto',
-                    'Bs ' . number_format($totalReal, 2),
-                    'FALTANTE',
-                    "pedido_{$numeroPedido}_comprobante_incompleto.png",
-                ],
-            ]
-        );
-
-        $this->newLine();
-
-        $this->info('Ubicación:');
-        $this->line($outputDirectory);
+        $this->info('Imágenes de prueba OCR creadas correctamente.');
 
         return self::SUCCESS;
     }
@@ -639,8 +598,5 @@ HTML;
             return;
         }
 
-        $this->info(
-            "Generado: {$nombreArchivo}"
-        );
     }
 }
