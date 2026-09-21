@@ -609,6 +609,73 @@
                             hidden>
 
 
+                        {{-- =================================================
+                             PRUEBAS DEL OCR
+                        ================================================== --}}
+
+                        <div class="cliente-ocr-pruebas">
+
+                            <div class="cliente-ocr-pruebas-header">
+
+                                <div class="cliente-ocr-pruebas-icono">
+                                    <i class="bi bi-cpu-fill"></i>
+                                </div>
+
+                                <div>
+                                    <strong>Pruebas del OCR</strong>
+
+                                    <p>
+                                        Genera 4 comprobantes de prueba usando
+                                        tu nombre, el próximo pedido y el total actual.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="cliente-ocr-pruebas-info">
+
+                                <div>
+                                    <span>Cliente</span>
+                                    <strong>{{ auth()->user()->name }}</strong>
+                                </div>
+
+                                <div>
+                                    <span>Próximo pedido</span>
+                                    <strong>#{{ $proximoPedidoId }}</strong>
+                                </div>
+
+                                <div>
+                                    <span>Total</span>
+                                    <strong>Bs {{ number_format($total, 2) }}</strong>
+                                </div>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                id="btn-generar-comprobantes-ocr"
+                                class="cliente-ocr-pruebas-btn">
+
+                                <i class="bi bi-images"></i>
+
+                                Generar imágenes de prueba OCR
+
+                            </button>
+
+                            <div
+                                id="estado-generacion-ocr"
+                                class="cliente-ocr-pruebas-estado"
+                                aria-live="polite">
+                            </div>
+
+                            <div
+                                id="resultados-comprobantes-ocr"
+                                class="cliente-ocr-pruebas-resultados">
+                            </div>
+
+                        </div>
+
+
                         {{-- PREVISUALIZACIÓN --}}
 
                         <div
@@ -827,6 +894,159 @@
 @endsection
 
 
+@push('styles')
+<style>
+    .cliente-ocr-pruebas {
+        margin-top: 20px;
+        padding: 18px;
+        border: 1px solid rgba(139, 30, 69, .18);
+        border-radius: 14px;
+        background: #fff8fb;
+    }
+
+    .cliente-ocr-pruebas-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .cliente-ocr-pruebas-icono {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        background: #8b1e45;
+        color: #fff;
+    }
+
+    .cliente-ocr-pruebas-header strong {
+        display: block;
+        color: #2d1b22;
+    }
+
+    .cliente-ocr-pruebas-header p {
+        margin: 4px 0 0;
+        color: #75636b;
+        font-size: .86rem;
+    }
+
+    .cliente-ocr-pruebas-info {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .cliente-ocr-pruebas-info > div {
+        padding: 10px 12px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,.06);
+        border-radius: 10px;
+    }
+
+    .cliente-ocr-pruebas-info span {
+        display: block;
+        margin-bottom: 3px;
+        color: #86747c;
+        font-size: .72rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    .cliente-ocr-pruebas-info strong {
+        color: #2d1b22;
+        word-break: break-word;
+    }
+
+    .cliente-ocr-pruebas-btn {
+        width: 100%;
+        border: 0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        background: #8b1e45;
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .cliente-ocr-pruebas-btn:disabled {
+        opacity: .65;
+        cursor: wait;
+    }
+
+    .cliente-ocr-pruebas-estado {
+        min-height: 22px;
+        margin-top: 10px;
+        color: #75636b;
+        font-size: .86rem;
+    }
+
+    .cliente-ocr-pruebas-resultados {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .cliente-ocr-prueba-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,.07);
+        border-radius: 10px;
+    }
+
+    .cliente-ocr-prueba-nombre {
+        min-width: 0;
+        color: #4d3d45;
+        font-size: .78rem;
+        word-break: break-word;
+    }
+
+    .cliente-ocr-prueba-acciones {
+        display: flex;
+        gap: 6px;
+        flex: 0 0 auto;
+    }
+
+    .cliente-ocr-prueba-acciones a,
+    .cliente-ocr-prueba-acciones button {
+        border: 0;
+        border-radius: 8px;
+        padding: 7px 9px;
+        font-size: .75rem;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .cliente-ocr-ver {
+        background: #f0ecef;
+        color: #45363d;
+    }
+
+    .cliente-ocr-usar {
+        background: #198754;
+        color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .cliente-ocr-pruebas-info {
+            grid-template-columns: 1fr;
+        }
+
+        .cliente-ocr-prueba-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+@endpush
+
 @section('scripts')
 
 {{-- =========================================================
@@ -908,9 +1128,275 @@
 
         /*
         |--------------------------------------------------------------------------
-        | ESTADO UBICACIÓN
+        | PRUEBAS DEL OCR
         |--------------------------------------------------------------------------
         */
+
+        const botonGenerarOcr =
+            document.getElementById('btn-generar-comprobantes-ocr');
+
+        const estadoGeneracionOcr =
+            document.getElementById('estado-generacion-ocr');
+
+        const resultadosOcr =
+            document.getElementById('resultados-comprobantes-ocr');
+
+        const rutaGenerarComprobantesOcr =
+            @json(route('cliente.pedidos.generar.comprobantes.prueba'));
+
+        const tokenCsrf =
+            @json(csrf_token());
+
+
+        function escaparHtmlOcr(valor) {
+
+            const elemento =
+                document.createElement('div');
+
+            elemento.textContent =
+                valor ?? '';
+
+            return elemento.innerHTML;
+
+        }
+
+
+        function mostrarEstadoOcr(mensaje, error = false) {
+
+            if (!estadoGeneracionOcr) {
+                return;
+            }
+
+            estadoGeneracionOcr.innerHTML =
+                mensaje;
+
+            estadoGeneracionOcr.style.color =
+                error ? '#b42318' : '#75636b';
+
+        }
+
+
+        async function usarImagenOcr(imagen) {
+
+            if (!inputComprobante || !imagen?.url) {
+                return;
+            }
+
+            try {
+
+                mostrarEstadoOcr(
+                    'Cargando el comprobante en el campo principal...'
+                );
+
+                const respuesta =
+                    await fetch(imagen.url);
+
+                if (!respuesta.ok) {
+                    throw new Error(
+                        'No se pudo abrir la imagen generada.'
+                    );
+                }
+
+                const blob =
+                    await respuesta.blob();
+
+                const archivo =
+                    new File(
+                        [blob],
+                        imagen.nombre,
+                        {
+                            type: blob.type || 'image/png'
+                        }
+                    );
+
+                const transferencia =
+                    new DataTransfer();
+
+                transferencia.items.add(archivo);
+
+                inputComprobante.files =
+                    transferencia.files;
+
+                inputComprobante.dispatchEvent(
+                    new Event(
+                        'change',
+                        { bubbles: true }
+                    )
+                );
+
+                mostrarEstadoOcr(
+                    '✅ Se cargó <strong>'
+                    + escaparHtmlOcr(imagen.nombre)
+                    + '</strong> en el comprobante principal.'
+                );
+
+                areaComprobante?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+            } catch (error) {
+
+                console.error(
+                    'Error al usar imagen OCR:',
+                    error
+                );
+
+                mostrarEstadoOcr(
+                    '❌ No se pudo cargar automáticamente esa imagen. Puedes abrirla y seleccionarla manualmente.',
+                    true
+                );
+
+            }
+
+        }
+
+
+        function renderizarResultadosOcr(imagenes) {
+
+            if (!resultadosOcr) {
+                return;
+            }
+
+            resultadosOcr.innerHTML =
+                imagenes.map(function(imagen) {
+
+                    return `
+                        <div class="cliente-ocr-prueba-item">
+
+                            <div class="cliente-ocr-prueba-nombre">
+                                ${escaparHtmlOcr(imagen.nombre)}
+                            </div>
+
+                            <div class="cliente-ocr-prueba-acciones">
+
+                                <a
+                                    href="${imagen.url}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="cliente-ocr-ver">
+                                    <i class="bi bi-eye"></i>
+                                    Ver
+                                </a>
+
+                                <button
+                                    type="button"
+                                    class="cliente-ocr-usar">
+                                    <i class="bi bi-upload"></i>
+                                    Usar
+                                </button>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join('');
+
+
+            resultadosOcr
+                .querySelectorAll('.cliente-ocr-usar')
+                .forEach(function(boton, indice) {
+
+                    boton.addEventListener(
+                        'click',
+                        function() {
+
+                            usarImagenOcr(
+                                imagenes[indice]
+                            );
+
+                        }
+                    );
+
+                });
+
+        }
+
+
+        if (botonGenerarOcr) {
+
+            botonGenerarOcr.addEventListener(
+                'click',
+                async function() {
+
+                    botonGenerarOcr.disabled = true;
+
+                    resultadosOcr.innerHTML = '';
+
+                    mostrarEstadoOcr(
+                        '<i class="bi bi-hourglass-split"></i> Generando las 4 imágenes de prueba...'
+                    );
+
+                    try {
+
+                        const respuesta =
+                            await fetch(
+                                rutaGenerarComprobantesOcr,
+                                {
+                                    method: 'POST',
+
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'X-CSRF-TOKEN': tokenCsrf
+                                    }
+                                }
+                            );
+
+                        const datos =
+                            await respuesta.json();
+
+                        if (
+                            !respuesta.ok ||
+                            !datos.ok
+                        ) {
+                            throw new Error(
+                                datos.message
+                                || 'No se pudieron generar las imágenes.'
+                            );
+                        }
+
+                        renderizarResultadosOcr(
+                            datos.imagenes
+                        );
+
+                        mostrarEstadoOcr(
+                            '✅ Generados los 4 comprobantes para <strong>pedido #'
+                            + datos.pedido
+                            + '</strong>. Puedes pulsar <strong>Usar</strong> para cargar cualquiera de ellos en el comprobante principal.'
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            'Error al generar comprobantes OCR:',
+                            error
+                        );
+
+                        mostrarEstadoOcr(
+                            '❌ '
+                            + escaparHtmlOcr(error.message),
+                            true
+                        );
+
+                    } finally {
+
+                        botonGenerarOcr.disabled = false;
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ESTADO UBICACIÓN
+        |--------------------------------------------------------------------------
+        |
 
         function mostrarEstado(mensaje, error = false) {
 
