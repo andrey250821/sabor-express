@@ -247,13 +247,11 @@
                         Notificaciones
                     </span>
 
-                    @if($notificacionesNoLeidas > 0)
-
-                    <span class="badge bg-danger rounded-pill">
+                    <span
+                        id="badge-notificaciones"
+                        class="badge bg-danger rounded-pill {{ $notificacionesNoLeidas > 0 ? '' : 'd-none' }}">
                         {{ $notificacionesNoLeidas }}
                     </span>
-
-                    @endif
 
                 </a>
 
