@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Pedido;
+use App\Models\ComprobantePago;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -58,8 +59,10 @@ class GenerarComprobantesOcr extends Command
         $cliente = $pedido->user?->name ?? 'Cliente Sabor Express';
         $fecha = now()->format('d/m/Y');
 
-        // Referencia utilizada en las pruebas
-        $referenciaCorrecta = '98452217';
+        // Generar una referencia numérica que no exista todavía en la base de datos.
+        // La misma referencia se reutiliza únicamente en la imagen de
+        // "referencia duplicada" para provocar ese caso de prueba.
+        $referenciaCorrecta = $this->generarReferenciaDisponible($numeroPedido);
 
         /*
         |--------------------------------------------------------------------------
@@ -175,6 +178,28 @@ class GenerarComprobantesOcr extends Command
         $this->line($outputDirectory);
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Genera una referencia bancaria numérica que no esté registrada.
+     */
+    private function generarReferenciaDisponible(int $pedidoId): string
+    {
+        $base = 98450000 + $pedidoId;
+
+        for ($i = 0; $i < 1000; $i++) {
+            $referencia = (string) ($base + $i);
+
+            if (!ComprobantePago::where('referencia_bancaria', $referencia)->exists()) {
+                return $referencia;
+            }
+        }
+
+        do {
+            $referencia = (string) random_int(10000000, 99999999);
+        } while (ComprobantePago::where('referencia_bancaria', $referencia)->exists());
+
+        return $referencia;
     }
 
     /**
