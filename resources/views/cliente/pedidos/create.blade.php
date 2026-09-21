@@ -609,27 +609,19 @@
                             hidden>
 
 
-                        {{-- =================================================
-                             PRUEBAS DEL OCR
-                        ================================================== --}}
+                        {{-- HERRAMIENTA DE PRUEBA OCR --}}
+                        <div class="cliente-ocr-herramienta">
 
-                        <div class="cliente-ocr-pruebas">
-
-                            <div class="cliente-ocr-pruebas-header">
-
-                                <div class="cliente-ocr-pruebas-icono">
-                                    <i class="bi bi-cpu-fill"></i>
-                                </div>
+                            <div class="cliente-ocr-herramienta-cabecera">
+                                <i class="bi bi-cpu-fill"></i>
 
                                 <div>
-                                    <strong>Pruebas del OCR</strong>
-
-                                    <p>
-                                        Genera 4 comprobantes de prueba usando
-                                        tu nombre, el próximo pedido y el total actual.
-                                    </p>
+                                    <strong>Prueba OCR</strong>
+                                    <span>
+                                        Genera comprobantes de prueba con los datos de este pedido
+                                        y usa cualquiera directamente en el comprobante seleccionado.
+                                    </span>
                                 </div>
-
                             </div>
 
                             <div class="cliente-ocr-pruebas-info">
@@ -860,49 +852,46 @@
 
 @push('styles')
 <style>
-    .cliente-ocr-pruebas {
-        margin-top: 20px;
-        padding: 18px;
-        border: 1px solid rgba(139, 30, 69, .18);
-        border-radius: 14px;
-        background: #fff8fb;
+    .cliente-ocr-herramienta {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(139, 30, 69, .16);
     }
 
-    .cliente-ocr-pruebas-header {
+    .cliente-ocr-herramienta-cabecera {
         display: flex;
         align-items: flex-start;
-        gap: 12px;
-        margin-bottom: 14px;
+        gap: 10px;
+        margin-bottom: 12px;
+        color: #4d3d45;
     }
 
-    .cliente-ocr-pruebas-icono {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .cliente-ocr-herramienta-cabecera > i {
+        margin-top: 2px;
+        font-size: 1.1rem;
+        color: #8b1e45;
         flex: 0 0 auto;
-        background: #8b1e45;
-        color: #fff;
     }
 
-    .cliente-ocr-pruebas-header strong {
+    .cliente-ocr-herramienta-cabecera strong {
         display: block;
         color: #2d1b22;
+        font-size: .92rem;
     }
 
-    .cliente-ocr-pruebas-header p {
-        margin: 4px 0 0;
+    .cliente-ocr-herramienta-cabecera span {
+        display: block;
+        margin-top: 3px;
         color: #75636b;
-        font-size: .86rem;
+        font-size: .82rem;
+        line-height: 1.45;
     }
 
     .cliente-ocr-pruebas-info {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 10px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
     }
 
     .cliente-ocr-pruebas-info > div {
