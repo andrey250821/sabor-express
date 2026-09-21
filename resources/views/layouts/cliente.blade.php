@@ -32,6 +32,8 @@
         rel="stylesheet"
         href="{{ asset('css/cliente.css') }}">
 
+    @stack('styles')
+
 </head>
 
 <body>
