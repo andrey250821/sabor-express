@@ -4710,100 +4710,6 @@ body {
 }
 
 
-/* =========================================================
-   PREVISUALIZACIÓN
-   ========================================================= */
-
-.cliente-comprobante-preview {
-    display: none;
-
-    margin-top: 18px;
-
-    background: #101116;
-
-    border: 1px solid #34363e;
-
-    border-radius: 13px;
-
-    overflow: hidden;
-}
-
-
-.cliente-comprobante-preview.activo {
-    display: block;
-}
-
-
-.cliente-comprobante-preview-header {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 12px 15px;
-
-    background: #191a20;
-
-    border-bottom: 1px solid #2c2e36;
-
-    color: #fff;
-
-    font-size: 13px;
-
-    font-weight: 700;
-}
-
-
-.cliente-comprobante-preview-header button {
-    width: 30px;
-    height: 30px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid #542536;
-
-    border-radius: 8px;
-
-    background: #240f18;
-
-    color: #ff5a85;
-
-    cursor: pointer;
-
-    transition: .2s ease;
-}
-
-
-.cliente-comprobante-preview-header button:hover {
-    background: #8b1e45;
-
-    color: #fff;
-}
-
-
-.cliente-comprobante-preview-body {
-    padding: 15px;
-
-    background: #0c0d11;
-}
-
-
-.cliente-comprobante-preview img {
-    display: block;
-
-    width: 100%;
-
-    max-height: 500px;
-
-    object-fit: contain;
-
-    border-radius: 8px;
-}
-
-
 .cliente-comprobante-info {
     display: flex;
 
@@ -5367,11 +5273,6 @@ body {
         min-height: 170px;
 
         padding: 25px 15px;
-    }
-
-
-    .cliente-comprobante-preview img {
-        max-height: 350px;
     }
 
 
