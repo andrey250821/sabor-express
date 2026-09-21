@@ -585,11 +585,11 @@
 
                             </div>
 
-                            <strong>
+                            <strong id="comprobante-titulo">
                                 Seleccionar comprobante
                             </strong>
 
-                            <span>
+                            <span id="comprobante-nombre">
                                 Haz clic aquí para seleccionar una imagen
                             </span>
 
@@ -671,42 +671,6 @@
                             <div
                                 id="resultados-comprobantes-ocr"
                                 class="cliente-ocr-pruebas-resultados">
-                            </div>
-
-                        </div>
-
-
-                        {{-- PREVISUALIZACIÓN --}}
-
-                        <div
-                            id="comprobante-preview"
-                            class="cliente-comprobante-preview">
-
-                            <div class="cliente-comprobante-preview-header">
-
-                                <span>
-                                    Vista previa del comprobante
-                                </span>
-
-                                <button
-                                    type="button"
-                                    id="btn-quitar-comprobante"
-                                    aria-label="Quitar comprobante">
-
-                                    <i class="bi bi-x-lg"></i>
-
-                                </button>
-
-                            </div>
-
-
-                            <div class="cliente-comprobante-preview-body">
-
-                                <img
-                                    id="comprobante-imagen-preview"
-                                    src=""
-                                    alt="Vista previa del comprobante">
-
                             </div>
 
                         </div>
@@ -1107,17 +1071,14 @@
         const inputComprobante =
             document.getElementById('comprobante');
 
-        const preview =
-            document.getElementById('comprobante-preview');
-
-        const imagenPreview =
-            document.getElementById('comprobante-imagen-preview');
-
-        const btnQuitarComprobante =
-            document.getElementById('btn-quitar-comprobante');
-
         const areaComprobante =
             document.getElementById('area-comprobante');
+
+        const comprobanteTitulo =
+            document.getElementById('comprobante-titulo');
+
+        const comprobanteNombre =
+            document.getElementById('comprobante-nombre');
 
         const formulario =
             document.getElementById('form-pedido');
@@ -2369,6 +2330,20 @@
                         this.value =
                             '';
 
+                        if (comprobanteTitulo) {
+                            comprobanteTitulo.textContent =
+                                'Seleccionar comprobante';
+                        }
+
+                        if (comprobanteNombre) {
+                            comprobanteNombre.textContent =
+                                'Haz clic aquí para seleccionar una imagen';
+                        }
+
+                        areaComprobante?.classList.remove(
+                            'seleccionado'
+                        );
+
 
                         return;
 
@@ -2389,70 +2364,39 @@
                         this.value =
                             '';
 
+                        if (comprobanteTitulo) {
+                            comprobanteTitulo.textContent =
+                                'Seleccionar comprobante';
+                        }
+
+                        if (comprobanteNombre) {
+                            comprobanteNombre.textContent =
+                                'Haz clic aquí para seleccionar una imagen';
+                        }
+
+                        areaComprobante?.classList.remove(
+                            'seleccionado'
+                        );
+
 
                         return;
 
                     }
 
 
-                    const lector =
-                        new FileReader();
-
-
-                    lector.onload =
-                        function(evento) {
-
-                            imagenPreview.src =
-                                evento.target.result;
-
-
-                            preview.classList.add(
-                                'activo'
-                            );
-
-
-                            areaComprobante.classList.add(
-                                'seleccionado'
-                            );
-
-                        };
-
-
-                    lector.readAsDataURL(
-                        archivo
-                    );
-
-                }
-            );
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | QUITAR COMPROBANTE
-        |--------------------------------------------------------------------------
-        */
-
-        if (btnQuitarComprobante) {
-
-            btnQuitarComprobante.addEventListener(
-                'click',
-                function() {
-
-                    inputComprobante.value =
-                        '';
-
-                    imagenPreview.src =
-                        '';
-
-                    preview.classList.remove(
-                        'activo'
-                    );
-
-                    areaComprobante.classList.remove(
+                    areaComprobante?.classList.add(
                         'seleccionado'
                     );
+
+                    if (comprobanteTitulo) {
+                        comprobanteTitulo.textContent =
+                            'Comprobante seleccionado';
+                    }
+
+                    if (comprobanteNombre) {
+                        comprobanteNombre.textContent =
+                            archivo.name;
+                    }
 
                 }
             );
