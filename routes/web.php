@@ -274,6 +274,17 @@ Route::middleware(['auth', 'role:Cliente'])
             [ClientePedidoController::class, 'generarComprobantesPrueba']
         )->name('cliente.pedidos.generar.comprobantes.prueba');
 
+        Route::get(
+            '/pedido/comprobante-prueba/{nombreArchivo}',
+            [ClientePedidoController::class, 'verComprobantePrueba']
+        )->where('nombreArchivo', 'pedido_[0-9]+_cliente_[A-Za-z0-9_-]+_(CORRECTO|MONTO_INCORRECTO|REFERENCIA_DUPLICADA|INCOMPLETO)\.png')
+         ->name('cliente.pedidos.comprobante.prueba.imagen');
+
+        Route::get(
+            '/pedidos/{id}/comprobante-imagen',
+            [ClientePedidoController::class, 'verComprobante']
+        )->name('cliente.pedidos.comprobante.imagen');
+
         Route::post(
             '/pedido',
             [ClientePedidoController::class, 'store']
