@@ -1255,6 +1255,12 @@
 
                 $estadoComprobante = [
 
+                'en_revision' => [
+                'texto' => 'Comprobante en revisión',
+                'clase' => 'pendiente',
+                'icono' => 'bi-hourglass-split'
+                ],
+
                 'pendiente' => [
                 'texto' => 'Pendiente de revisión',
                 'clase' => 'pendiente',
