@@ -1314,9 +1314,14 @@
 
                 <div class="cliente-pedido-show-comprobante-imagen">
 
-                    <img
-                        src="{{ asset('storage/' . $pedido->comprobantePago->imagen) }}"
-                        alt="Comprobante de pago">
+                    <a
+                        href="{{ route('cliente.pedidos.comprobante.imagen', $pedido->id) }}"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <img
+                            src="{{ route('cliente.pedidos.comprobante.imagen', $pedido->id) }}"
+                            alt="Comprobante de pago">
+                    </a>
 
                 </div>
 
