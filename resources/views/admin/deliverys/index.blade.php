@@ -11,11 +11,11 @@
 
             <h2 class="deliverys-title">
                 <i class="bi bi-bicycle"></i>
-                Repartidores
+                Delivery
             </h2>
 
             <p class="deliverys-subtitle">
-                Gestiona los repartidores de Sabor Express
+                Gestiona el personal de Delivery de Sabor Express
             </p>
 
         </div>
@@ -58,7 +58,7 @@
                 <h5>
                     <i class="bi bi-people"></i>
 
-                    Lista de repartidores
+                    Lista de Delivery
                 </h5>
 
                 <small>
@@ -72,7 +72,7 @@
 
                 {{ $deliverys->count() }}
 
-                repartidor(es)
+                Delivery(s)
 
             </span>
 
@@ -170,7 +170,7 @@
                                     </strong>
 
                                     <small>
-                                        Repartidor
+                                        Delivery
                                     </small>
 
                                 </div>
@@ -286,7 +286,7 @@
                                         type="submit"
                                         class="btn-delivery eliminar"
                                         title="Desactivar"
-                                        onclick="return confirm('¿Deseas desactivar este repartidor?')">
+                                        onclick="return confirm('¿Deseas desactivar este Delivery?')">
 
                                         <i class="bi bi-person-dash"></i>
 
@@ -337,11 +337,11 @@
                                 <i class="bi bi-bicycle"></i>
 
                                 <h5>
-                                    No hay repartidores registrados
+                                    No hay Delivery registrados
                                 </h5>
 
                                 <p>
-                                    Crea el primer repartidor para comenzar.
+                                    Crea el primer Delivery para comenzar.
                                 </p>
 
 
@@ -351,7 +351,7 @@
 
                                     <i class="bi bi-plus-circle"></i>
 
-                                    Crear repartidor
+                                    Crear Delivery
 
                                 </a>
 
