@@ -185,14 +185,19 @@
                     @endif
 
                     <div class="comprobante-imagen-container">
-                        <img
-                            src="{{ asset('storage/' . $comprobante->imagen) }}"
-                            class="img-fluid rounded-3 comprobante-img mb-3"
-                            alt="Comprobante de pago">
+                        <a
+                            href="{{ route('admin.comprobantes.imagen', $comprobante->id) }}"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <img
+                                src="{{ route('admin.comprobantes.imagen', $comprobante->id) }}"
+                                class="img-fluid rounded-3 comprobante-img mb-3"
+                                alt="Comprobante de pago">
+                        </a>
                     </div>
 
                     <a
-                        href="{{ asset('storage/' . $comprobante->imagen) }}"
+                        href="{{ route('admin.comprobantes.imagen', $comprobante->id) }}"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="btn btn-outline-light w-100 mb-3">
