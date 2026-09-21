@@ -288,8 +288,8 @@ class PedidoController extends Controller
         $request->validate([
             'direccion_entrega' => 'required|string|max:1000',
             'referencia_delivery' => 'nullable|string|max:1000',
-            'latitud' => 'nullable|numeric|between:-90,90',
-            'longitud' => 'nullable|numeric|between:-180,180',
+            'latitud' => 'required|numeric|between:-90,90',
+            'longitud' => 'required|numeric|between:-180,180',
             'observacion_cliente' => 'nullable|string|max:500',
             'comprobante' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
