@@ -903,6 +903,20 @@
         border-top: 1px solid rgba(139, 30, 69, .16);
     }
 
+    /* Dirección generada automáticamente desde la ubicación */
+    .cliente-pedido-direccion-bloqueada {
+        background: #17181d !important;
+        border-color: #454750 !important;
+        color: #e5e5e5 !important;
+        cursor: not-allowed;
+        resize: none;
+    }
+
+    .cliente-pedido-direccion-bloqueada:focus {
+        border-color: #454750 !important;
+        box-shadow: none !important;
+    }
+
     .cliente-ocr-herramienta-cabecera {
         display: flex;
         align-items: flex-start;
