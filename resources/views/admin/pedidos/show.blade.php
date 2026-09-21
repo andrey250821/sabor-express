@@ -248,9 +248,10 @@
                             @if($pedido->comprobantePago->imagen)
 
                             <a
-                                href="{{ asset(
-                    'storage/' . $pedido->comprobantePago->imagen
-                ) }}"
+                                href="{{ route(
+                                'admin.comprobantes.imagen',
+                                $pedido->comprobantePago->id
+                            ) }}"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="btn btn-outline-primary">
