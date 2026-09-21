@@ -249,7 +249,7 @@
 
                                 @if($esComprobante)
 
-                                Comprobante de pago recibido
+                                Comprobante requiere revisión
 
                                 @elseif($esCalificacion)
 
