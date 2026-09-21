@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\File;
 class GenerarComprobantesOcr extends Command
 {
     protected $signature = 'ocr:generar-comprobantes
-                            {--pedido= : ID del pedido para generar los comprobantes}';
+                            {--pedido= : Número del pedido}
+                            {--total= : Total del pedido. Se usa si el pedido aún no existe en la BD}
+                            {--cliente= : Nombre del cliente. Se usa si el pedido aún no existe en la BD}';
 
-    protected $description = 'Genera comprobantes de prueba OCR a partir de un pedido real';
+    protected $description = 'Genera comprobantes de prueba OCR a partir de un pedido real o de datos de checkout';
 
     public function handle()
     {
@@ -27,13 +29,51 @@ class GenerarComprobantesOcr extends Command
             return self::FAILURE;
         }
 
-        // Obtener el pedido real junto con el cliente
+        // Intentar primero con un pedido real de la BD.
         $pedido = Pedido::with('user')->find($pedidoId);
 
         if (!$pedido) {
-            $this->error("No existe el pedido #{$pedidoId}.");
+            /*
+             * El pedido todavía puede no existir porque el flujo actual
+             * solicita el comprobante antes de guardar el pedido.
+             *
+             * En ese caso permitimos generar una imagen sintética usando
+             * los datos que conocemos en el checkout.
+             */
+            $total = $this->option('total');
+            $cliente = $this->option('cliente');
 
-            return self::FAILURE;
+            if ($total === null || $cliente === null || trim($cliente) === '') {
+                $this->error("No existe el pedido #{$pedidoId} en la BD.");
+                $this->newLine();
+                $this->line('Para generar la imagen antes de crear el pedido debes indicar también:');
+                $this->line('--total=...');
+                $this->line('--cliente="..."');
+                $this->newLine();
+                $this->line('Ejemplo:');
+                $this->line('php artisan ocr:generar-comprobantes --pedido=5 --total=85 --cliente="Juan"');
+
+                return self::FAILURE;
+            }
+
+            if (!is_numeric($total) || (float) $total <= 0) {
+                $this->error('El total debe ser un número mayor que 0.');
+
+                return self::FAILURE;
+            }
+
+            // Pedido temporal: NO se guarda en la base de datos.
+            $pedido = new Pedido();
+            $pedido->id = (int) $pedidoId;
+            $pedido->total = (float) $total;
+
+            $clienteNombre = trim($cliente);
+
+            $this->warn(
+                "El pedido #{$pedidoId} todavía no existe en la BD. Se generarán imágenes de prueba usando los datos proporcionados."
+            );
+        } else {
+            $clienteNombre = $pedido->user?->name ?? 'Cliente Sabor Express';
         }
 
         // Comprobar Chrome
@@ -56,7 +96,7 @@ class GenerarComprobantesOcr extends Command
         // Datos reales del pedido
         $numeroPedido = $pedido->id;
         $totalReal = (float) $pedido->total;
-        $cliente = $pedido->user?->name ?? 'Cliente Sabor Express';
+        // El nombre ya se resolvió desde la BD o desde --cliente.
         $fecha = now()->format('d/m/Y');
 
         // Generar una referencia numérica que no exista todavía en la base de datos.
