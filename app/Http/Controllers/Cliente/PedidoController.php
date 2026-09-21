@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use App\Services\ValidarComprobantePagoService;
@@ -118,6 +119,59 @@ class PedidoController extends Controller
     }
 
     /**
+     * Mostrar una imagen sintética generada para las pruebas OCR.
+     */
+    public function verComprobantePrueba(string $nombreArchivo)
+    {
+        $nombreArchivo = basename($nombreArchivo);
+
+        if (!preg_match(
+            '/^pedido_\d+_cliente_[A-Za-z0-9_-]+_(CORRECTO|MONTO_INCORRECTO|REFERENCIA_DUPLICADA|INCOMPLETO)\.png$/',
+            $nombreArchivo
+        )) {
+            abort(404);
+        }
+
+        $ruta = storage_path('app/public/comprobantes_test/' . $nombreArchivo);
+
+        if (!is_file($ruta)) {
+            abort(404);
+        }
+
+        return response()->file($ruta, [
+            'Content-Type' => 'image/png',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        ]);
+    }
+
+    /**
+     * Mostrar el comprobante real de un pedido del cliente autenticado.
+     */
+    public function verComprobante(int $id)
+    {
+        $pedido = Pedido::where('user_id', Auth::id())
+            ->with('comprobantePago')
+            ->findOrFail($id);
+
+        $imagen = $pedido->comprobantePago?->imagen;
+
+        if (!$imagen) {
+            abort(404);
+        }
+
+        $disk = Storage::disk('public');
+
+        if (!$disk->exists($imagen)) {
+            abort(404);
+        }
+
+        return response()->file($disk->path($imagen), [
+            'Content-Type' => $disk->mimeType($imagen) ?: 'application/octet-stream',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        ]);
+    }
+
+    /**
      * Generar las cuatro imágenes sintéticas para probar el OCR desde el checkout.
      *
      * Este endpoint NO crea el pedido ni modifica la base de datos.
@@ -185,7 +239,7 @@ class PedidoController extends Controller
                 $imagenes[] = [
                     'tipo' => $clave,
                     'nombre' => $nombreArchivo,
-                    'url' => asset('storage/comprobantes_test/' . $nombreArchivo),
+                    'url' => route('cliente.pedidos.comprobante.prueba.imagen', ['nombreArchivo' => $nombreArchivo]),
                     'ruta' => $rutaArchivo,
                 ];
             }
