@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ComprobantePago;
 use App\Models\Notificacion;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class ComprobantePagoController extends Controller
 {
@@ -49,6 +50,29 @@ class ComprobantePagoController extends Controller
             'rechazados',
             'estado'
         ));
+    }
+
+    /**
+     * Mostrar la imagen del comprobante al administrador.
+     */
+    public function verImagen(int $id)
+    {
+        $comprobante = ComprobantePago::findOrFail($id);
+
+        if (!$comprobante->imagen) {
+            abort(404);
+        }
+
+        $disk = Storage::disk('public');
+
+        if (!$disk->exists($comprobante->imagen)) {
+            abort(404);
+        }
+
+        return response()->file($disk->path($comprobante->imagen), [
+            'Content-Type' => $disk->mimeType($comprobante->imagen) ?: 'application/octet-stream',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        ]);
     }
 
     public function aprobar($id)
