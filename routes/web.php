@@ -133,6 +133,7 @@ Route::middleware(['auth', 'role:Administrador'])
         Route::get('/pedidos/{id}', [AdminPedidoController::class, 'show'])->name('admin.pedidos.show');
 
         Route::get('/comprobantes/{estado?}', [ComprobantePagoController::class, 'index'])->name('admin.comprobantes.index');
+        Route::get('/comprobantes/{id}/imagen', [ComprobantePagoController::class, 'verImagen'])->name('admin.comprobantes.imagen');
         Route::put('/comprobantes/{id}/aprobar', [ComprobantePagoController::class, 'aprobar'])->name('admin.comprobantes.aprobar');
         Route::put('/comprobantes/{id}/rechazar', [ComprobantePagoController::class, 'rechazar'])->name('admin.comprobantes.rechazar');
 
