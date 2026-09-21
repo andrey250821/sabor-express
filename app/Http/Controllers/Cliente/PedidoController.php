@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use App\Services\ValidarComprobantePagoService;
 
 class PedidoController extends Controller
@@ -44,8 +46,12 @@ class PedidoController extends Controller
         session()->put('carrito', $carrito);
 
         $configuracion = Configuracion::first();
+        $proximoPedidoId = $this->obtenerProximoPedidoId();
 
-        return view('cliente.pedidos.create', compact('total', 'configuracion'));
+        return view(
+            'cliente.pedidos.create',
+            compact('total', 'configuracion', 'proximoPedidoId')
+        );
     }
 
     /**
@@ -109,6 +115,118 @@ class PedidoController extends Controller
             'ok' => true,
             'direccion' => $direccion,
         ]);
+    }
+
+    /**
+     * Generar las cuatro imágenes sintéticas para probar el OCR desde el checkout.
+     *
+     * Este endpoint NO crea el pedido ni modifica la base de datos.
+     * Utiliza el siguiente ID AUTO_INCREMENT disponible y el total actual
+     * del carrito para que el comprobante CORRECTO pueda utilizarse en la
+     * creación real del pedido.
+     */
+    public function generarComprobantesPrueba()
+    {
+        $carrito = session()->get('carrito', []);
+
+        if (count($carrito) === 0) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'El carrito está vacío.',
+            ], 422);
+        }
+
+        $total = 0;
+
+        foreach ($carrito as $item) {
+            $total += (float) ($item['cantidad'] ?? 0) * (float) ($item['precio'] ?? 0);
+        }
+
+        if ($total <= 0) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'No se pudo calcular el total del carrito.',
+            ], 422);
+        }
+
+        $pedidoId = $this->obtenerProximoPedidoId();
+        $cliente = trim(Auth::user()->name ?? 'Cliente');
+
+        $exitCode = Artisan::call('ocr:generar-comprobantes', [
+            '--pedido' => $pedidoId,
+            '--total' => $total,
+            '--cliente' => $cliente,
+        ]);
+
+        if ($exitCode !== 0) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'No se pudieron generar las imágenes de prueba OCR.',
+                'detalle' => Artisan::output(),
+            ], 500);
+        }
+
+        $clienteArchivo = Str::slug($cliente !== '' ? $cliente : 'cliente', '_');
+
+        $tipos = [
+            'correcto' => 'CORRECTO',
+            'monto_incorrecto' => 'MONTO_INCORRECTO',
+            'referencia_duplicada' => 'REFERENCIA_DUPLICADA',
+            'incompleto' => 'INCOMPLETO',
+        ];
+
+        $imagenes = [];
+
+        foreach ($tipos as $clave => $nombreTipo) {
+            $nombreArchivo = "pedido_{$pedidoId}_cliente_{$clienteArchivo}_{$nombreTipo}.png";
+            $rutaArchivo = storage_path('app/public/comprobantes_test/' . $nombreArchivo);
+
+            if (file_exists($rutaArchivo)) {
+                $imagenes[] = [
+                    'tipo' => $clave,
+                    'nombre' => $nombreArchivo,
+                    'url' => asset('storage/comprobantes_test/' . $nombreArchivo),
+                    'ruta' => $rutaArchivo,
+                ];
+            }
+        }
+
+        if (count($imagenes) !== 4) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'El generador terminó, pero no se encontraron las cuatro imágenes esperadas.',
+                'imagenes' => $imagenes,
+                'detalle' => Artisan::output(),
+            ], 500);
+        }
+
+        return response()->json([
+            'ok' => true,
+            'pedido' => $pedidoId,
+            'cliente' => $cliente,
+            'total' => round($total, 2),
+            'imagenes' => $imagenes,
+        ]);
+    }
+
+    /**
+     * Obtener el siguiente AUTO_INCREMENT disponible de la tabla pedidos.
+     * Se utiliza únicamente para las pruebas del generador OCR en el checkout.
+     */
+    private function obtenerProximoPedidoId(): int
+    {
+        $resultado = DB::selectOne(
+            "SELECT AUTO_INCREMENT
+             FROM INFORMATION_SCHEMA.TABLES
+             WHERE TABLE_SCHEMA = DATABASE()
+               AND TABLE_NAME = 'pedidos'"
+        );
+
+        if ($resultado && isset($resultado->AUTO_INCREMENT)) {
+            return (int) $resultado->AUTO_INCREMENT;
+        }
+
+        return (int) (Pedido::max('id') ?? 0) + 1;
     }
 
     public function store(Request $request, ValidarComprobantePagoService $validador)
