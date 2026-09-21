@@ -579,7 +579,21 @@
                             class="cliente-comprobante-area"
                             id="area-comprobante">
 
-                            <div class="cliente-comprobante-icono">
+                            <div
+                                class="cliente-comprobante-preview"
+                                id="comprobante-preview-contenedor"
+                                hidden>
+
+                                <img
+                                    id="comprobante-preview"
+                                    src=""
+                                    alt="Vista previa del comprobante">
+
+                            </div>
+
+                            <div
+                                class="cliente-comprobante-icono"
+                                id="comprobante-icono">
 
                                 <i class="bi bi-image"></i>
 
@@ -852,6 +866,32 @@
 
 @push('styles')
 <style>
+    .cliente-comprobante-preview {
+        width: min(100%, 360px);
+        margin: 0 auto 14px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .cliente-comprobante-preview[hidden] {
+        display: none !important;
+    }
+
+    .cliente-comprobante-preview img {
+        display: block;
+        width: 100%;
+        max-height: 420px;
+        object-fit: contain;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, .08);
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+    }
+
+    .cliente-comprobante-area.seleccionado .cliente-comprobante-icono {
+        display: none;
+    }
+
     .cliente-ocr-herramienta {
         margin-top: 18px;
         padding-top: 16px;
@@ -1069,6 +1109,14 @@
         const comprobanteNombre =
             document.getElementById('comprobante-nombre');
 
+        const comprobantePreviewContenedor =
+            document.getElementById('comprobante-preview-contenedor');
+
+        const comprobantePreview =
+            document.getElementById('comprobante-preview');
+
+        let urlVistaPreviaComprobante = null;
+
         const formulario =
             document.getElementById('form-pedido');
 
@@ -1197,6 +1245,48 @@
                     true
                 );
 
+            }
+
+        }
+
+
+        function limpiarVistaPreviaComprobante() {
+
+            if (urlVistaPreviaComprobante) {
+                URL.revokeObjectURL(urlVistaPreviaComprobante);
+                urlVistaPreviaComprobante = null;
+            }
+
+            if (comprobantePreview) {
+                comprobantePreview.removeAttribute('src');
+            }
+
+            if (comprobantePreviewContenedor) {
+                comprobantePreviewContenedor.hidden = true;
+            }
+
+        }
+
+
+        function mostrarVistaPreviaComprobante(archivo) {
+
+            if (!archivo || !archivo.type.startsWith('image/')) {
+                limpiarVistaPreviaComprobante();
+                return;
+            }
+
+            limpiarVistaPreviaComprobante();
+
+            urlVistaPreviaComprobante =
+                URL.createObjectURL(archivo);
+
+            if (comprobantePreview) {
+                comprobantePreview.src =
+                    urlVistaPreviaComprobante;
+            }
+
+            if (comprobantePreviewContenedor) {
+                comprobantePreviewContenedor.hidden = false;
             }
 
         }
@@ -2291,6 +2381,7 @@
 
 
                     if (!archivo) {
+                        limpiarVistaPreviaComprobante();
                         return;
                     }
 
@@ -2318,6 +2409,8 @@
 
                         this.value =
                             '';
+
+                        limpiarVistaPreviaComprobante();
 
                         if (comprobanteTitulo) {
                             comprobanteTitulo.textContent =
@@ -2353,6 +2446,8 @@
                         this.value =
                             '';
 
+                        limpiarVistaPreviaComprobante();
+
                         if (comprobanteTitulo) {
                             comprobanteTitulo.textContent =
                                 'Seleccionar comprobante';
@@ -2372,6 +2467,8 @@
 
                     }
 
+
+                    mostrarVistaPreviaComprobante(archivo);
 
                     areaComprobante?.classList.add(
                         'seleccionado'
