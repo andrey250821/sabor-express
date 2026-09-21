@@ -6,6 +6,7 @@ use App\Models\Pedido;
 use App\Models\ComprobantePago;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class GenerarComprobantesOcr extends Command
 {
@@ -220,11 +221,35 @@ class GenerarComprobantesOcr extends Command
 
         $montoFormateado = number_format($monto, 2);
 
-        $nombreArchivo = "pedido_{$numeroPedido}_comprobante_{$tipo}.png";
+        /*
+         * El nombre del cliente se incluye en el archivo para que sea
+         * fácil identificar a qué pedido pertenece cada imagen.
+         *
+         * Ejemplo:
+         * pedido_4_cliente_Juan_Perez_CORRECTO.png
+         */
+        $clienteArchivo = Str::slug(
+            trim($cliente) !== '' ? $cliente : 'cliente',
+            '_'
+        );
+
+        $tipoArchivo = match ($tipo) {
+            'correcto' => 'CORRECTO',
+            'monto_incorrecto' => 'MONTO_INCORRECTO',
+            'referencia_duplicada' => 'REFERENCIA_DUPLICADA',
+            'incompleto' => 'INCOMPLETO',
+            default => Str::upper(Str::slug($tipo, '_')),
+        };
+
+        $nombreArchivo =
+            "pedido_{$numeroPedido}_cliente_{$clienteArchivo}_{$tipoArchivo}.png";
+
+        $nombreHtml =
+            "pedido_{$numeroPedido}_cliente_{$clienteArchivo}_{$tipoArchivo}.html";
 
         $htmlPath = $htmlDirectory
             . DIRECTORY_SEPARATOR
-            . "pedido_{$numeroPedido}_{$tipo}.html";
+            . $nombreHtml;
 
         $outputPath = $outputDirectory
             . DIRECTORY_SEPARATOR
@@ -597,6 +622,10 @@ HTML;
 
             return;
         }
+
+        $this->line(
+            "  ✓ {$nombreArchivo}"
+        );
 
     }
 }
