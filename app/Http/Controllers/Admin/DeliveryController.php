@@ -13,12 +13,27 @@ class DeliveryController extends Controller
     /**
      * Lista de repartidores
      */
-    public function index()
+    public function index(Request $request)
     {
+        $buscar = trim((string) $request->input('buscar', ''));
+
         $deliverys = User::where('role_id', 3)
+            ->when($buscar !== '', function ($query) use ($buscar) {
+                $query->where('email', 'like', '%' . $buscar . '%');
+            })
             ->withCount('asignacionesDelivery')
             ->orderBy('id', 'desc')
             ->get();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'html' => view(
+                    'admin.deliverys._tabla',
+                    compact('deliverys')
+                )->render(),
+                'count' => $deliverys->count(),
+            ]);
+        }
 
         return view(
             'admin.deliverys.index',
