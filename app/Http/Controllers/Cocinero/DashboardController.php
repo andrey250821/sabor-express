@@ -8,9 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    /**
+     * Dashboard del cocinero.
+     *
+     * Pendientes: todos los pedidos pagados que todavía no comenzaron
+     * a prepararse.
+     *
+     * Preparando y Listos: únicamente los pedidos del cocinero
+     * autenticado.
+     */
     public function index()
     {
-        $pendientes = Pedido::with([
+        $pedidosPendientes = Pedido::with([
             'user',
             'detallePedidos.producto',
         ])
@@ -19,16 +28,6 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'asc')
             ->orderBy('id', 'asc')
             ->get();
-
-        $miPedidoPendiente = Pedido::with([
-            'user',
-            'detallePedidos.producto',
-        ])
-            ->where('estado', 'pagado')
-            ->where('cocinero_id', Auth::id())
-            ->orderBy('created_at', 'asc')
-            ->orderBy('id', 'asc')
-            ->first();
 
         $pedidosPreparando = Pedido::with([
             'user',
@@ -45,14 +44,12 @@ class DashboardController extends Controller
             'detallePedidos.producto',
         ])
             ->where('estado', 'listo')
+            ->where('cocinero_id', Auth::id())
             ->orderBy('created_at', 'asc')
             ->orderBy('id', 'asc')
             ->get();
 
-        // Solo mostramos en "Pedidos recientes" pedidos que no puedan
-        // confundirse con el trabajo activo de otro cocinero.
-        $pedidos = $pendientes
-            ->concat($miPedidoPendiente ? collect([$miPedidoPendiente]) : collect())
+        $pedidos = $pedidosPendientes
             ->concat($pedidosPreparando)
             ->concat($pedidosListos)
             ->sortBy([
@@ -62,8 +59,7 @@ class DashboardController extends Controller
             ->values();
 
         $totalPedidos =
-            $pendientes->count()
-            + ($miPedidoPendiente ? 1 : 0)
+            $pedidosPendientes->count()
             + $pedidosPreparando->count()
             + $pedidosListos->count();
 
@@ -74,8 +70,7 @@ class DashboardController extends Controller
                 'pedidosPendientes',
                 'pedidosPreparando',
                 'pedidosListos',
-                'totalPedidos',
-                'miPedidoPendiente'
+                'totalPedidos'
             )
         );
     }
