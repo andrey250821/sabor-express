@@ -351,8 +351,6 @@
                             <div class="producto-acciones">
                                 {{-- EDITAR --}}
                                 <a
-                                {{-- EDITAR --}}
-                                <a
                                     href="{{ route('admin.productos.edit', $producto->id) }}"
                                     class="btn-producto editar"
                                     title="Editar producto">
