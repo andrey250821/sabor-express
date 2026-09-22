@@ -113,8 +113,7 @@
 
             @php
 
-            $estadoRechazado = $pedido->comprobantePago?->estado === 'rechazado'
-                || $pedido->estado === 'cancelado';
+            $estadoRechazado = $pedido->comprobantePago?->estado === 'rechazado';
 
             $estados = [
 
@@ -1273,7 +1272,7 @@
                 @endphp
 
 
-                {{-- ESTADO DEL COMPROBANTE --}}
+                {{-- ESTADO DEL PAGO --}}
 
                 <div class="cliente-pedido-show-comprobante-estado {{ $comprobanteEstado['clase'] }}">
 
@@ -1338,7 +1337,7 @@
 
                 @else
 
-                {{-- SIN COMPROBANTE --}}
+                {{-- SIN COMPROBANTE DE PAGO --}}
 
                 <div class="cliente-pedido-show-comprobante-sin-registro">
 
