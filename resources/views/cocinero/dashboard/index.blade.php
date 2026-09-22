@@ -113,7 +113,7 @@
                 </strong>
 
                 <small>
-                    Hay pedidos pagados esperando comenzar la preparación.
+                    Hay pedidos pagados que todavía no han sido tomados por ningún cocinero.
                 </small>
             </div>
 
@@ -127,7 +127,7 @@
                 <strong>Cocina al día</strong>
 
                 <small>
-                    No hay pedidos pendientes de preparación.
+                    No hay pedidos pagados sin asignar en la cola.
                 </small>
             </div>
 
@@ -177,7 +177,7 @@
                     <div class="cocinero-stat-bottom">
 
                         <span>
-                            Esperando preparación
+                            Esperando ser tomado
                         </span>
 
                         <i class="bi bi-arrow-up-right"></i>
@@ -507,11 +507,18 @@
                         </div>
 
 
-                        @if($pedido->estado === 'pagado')
+                        @if($pedido->estado === 'pagado' && (int) $pedido->cocinero_id === (int) auth()->id())
+
+                        <span class="cocinero-order-status preparing">
+                            <i class="bi bi-person-check-fill"></i>
+                            Reservado para ti
+                        </span>
+
+                        @elseif($pedido->estado === 'pagado')
 
                         <span class="cocinero-order-status pending">
                             <i class="bi bi-hourglass-split"></i>
-                            Pendiente
+                            En cola
                         </span>
 
                         @elseif($pedido->estado === 'preparando')
