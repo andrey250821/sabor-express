@@ -7,27 +7,26 @@ use App\Models\Pedido;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PedidoController extends Controller
 {
     /**
-     * Mostrar la cola de cocina.
+     * Mostrar los pedidos de cocina.
      *
      * Pendientes:
-     * - Solo pedidos pagados que todavía no fueron tomados por ningún cocinero.
+     * - Todos los pedidos pagados que todavía no han comenzado a prepararse.
      *
      * Preparando:
-     * - Solo pedidos que el cocinero autenticado tomó y está preparando.
+     * - Solo los pedidos que el cocinero autenticado comenzó a preparar.
      *
      * Listos:
-     * - Todos los pedidos ya terminados por cocina. En esta etapa ya no
-     *   existen acciones de cocina, por lo que son seguros de visualizar.
+     * - Solo los pedidos que el cocinero autenticado terminó.
      *
-     * El pedido pagado que ya tomó el cocinero actual se muestra aparte
-     * para no perderlo de vista.
+     * La tarjeta seleccionada se controla mediante ?seccion=pendientes|preparando|listos.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         $pendientes = Pedido::with([
             'user',
@@ -38,16 +37,6 @@ class PedidoController extends Controller
             ->orderBy('created_at', 'asc')
             ->orderBy('id', 'asc')
             ->get();
-
-        $miPedidoPendiente = Pedido::with([
-            'user',
-            'detallePedidos.producto',
-        ])
-            ->where('estado', 'pagado')
-            ->where('cocinero_id', Auth::id())
-            ->orderBy('created_at', 'asc')
-            ->orderBy('id', 'asc')
-            ->first();
 
         $preparando = Pedido::with([
             'user',
@@ -64,23 +53,32 @@ class PedidoController extends Controller
             'detallePedidos.producto',
         ])
             ->where('estado', 'listo')
+            ->where('cocinero_id', Auth::id())
             ->orderBy('created_at', 'asc')
             ->orderBy('id', 'asc')
             ->get();
 
+        $seccionesValidas = ['pendientes', 'preparando', 'listos'];
+
+        $seccion = $request->query('seccion', 'pendientes');
+
+        if (!in_array($seccion, $seccionesValidas, true)) {
+            $seccion = 'pendientes';
+        }
+
         return view('cocinero.pedidos.index', compact(
             'pendientes',
-            'miPedidoPendiente',
             'preparando',
-            'listos'
+            'listos',
+            'seccion'
         ));
     }
 
     /**
      * Mostrar el detalle de un pedido.
      *
-     * Un cocinero no puede abrir un pedido pagado o en preparación
-     * que ya pertenezca a otro cocinero.
+     * Los pedidos en preparación o listos solo pueden ser consultados
+     * por el cocinero que inició su preparación.
      */
     public function show(int $id): View
     {
@@ -91,8 +89,7 @@ class PedidoController extends Controller
         ])->findOrFail($id);
 
         if (
-            in_array($pedido->estado, ['pagado', 'preparando'], true)
-            && $pedido->cocinero_id !== null
+            in_array($pedido->estado, ['preparando', 'listo'], true)
             && (int) $pedido->cocinero_id !== (int) Auth::id()
         ) {
             abort(403, 'Este pedido pertenece a otro cocinero.');
@@ -105,32 +102,37 @@ class PedidoController extends Controller
     }
 
     /**
-     * Tomar el siguiente pedido de la cola.
+     * Iniciar la preparación de un pedido.
      *
-     * La cola es FIFO: el primer pedido disponible es el primero
-     * que puede tomar un cocinero. Así se evita que alguien salte
-     * pedidos y se respeta el orden en que llegaron a cocina.
+     * Este es el único momento en que un pedido pasa a pertenecer
+     * a un cocinero. No existe una etapa intermedia de "reservado".
+     *
+     * La operación se ejecuta dentro de una transacción y con bloqueo
+     * para evitar que dos cocineros reclamen el mismo pedido.
      */
-    public function tomar(int $id): RedirectResponse
+    public function preparar(int $id): RedirectResponse
     {
         try {
             DB::transaction(function () use ($id): void {
-                $cocineroId = (int) Auth::id();
-
-                // Un cocinero trabaja con un único pedido activo a la vez.
-                $yaTienePedido = Pedido::query()
-                    ->where('cocinero_id', $cocineroId)
-                    ->whereIn('estado', ['pagado', 'preparando'])
+                $pedido = Pedido::query()
+                    ->where('id', $id)
                     ->lockForUpdate()
-                    ->exists();
+                    ->firstOrFail();
 
-                if ($yaTienePedido) {
+                if ($pedido->estado !== 'pagado') {
                     throw new \RuntimeException(
-                        'Ya tienes un pedido asignado. Termina ese pedido antes de tomar otro.'
+                        'El pedido no puede comenzar a prepararse porque su estado ya cambió.'
                     );
                 }
 
-                // Bloqueamos el siguiente pedido libre de la cola.
+                if ($pedido->cocinero_id !== null) {
+                    throw new \RuntimeException(
+                        'Este pedido ya fue tomado por otro cocinero.'
+                    );
+                }
+
+                // FIFO: solo puede comenzar el pedido pagado más antiguo
+                // que todavía está libre en la cola.
                 $siguiente = Pedido::query()
                     ->where('estado', 'pagado')
                     ->whereNull('cocinero_id')
@@ -139,21 +141,19 @@ class PedidoController extends Controller
                     ->lockForUpdate()
                     ->first();
 
-                if (!$siguiente) {
+                if (!$siguiente || (int) $siguiente->id !== $id) {
+                    $numero = $siguiente?->id;
+
                     throw new \RuntimeException(
-                        'No hay pedidos pendientes disponibles en este momento.'
+                        $numero
+                            ? 'Para respetar el orden de llegada debes preparar primero el pedido #' . $numero . '.'
+                            : 'No hay pedidos pendientes disponibles en este momento.'
                     );
                 }
 
-                // No se permite saltar el orden de la cola.
-                if ((int) $siguiente->id !== $id) {
-                    throw new \RuntimeException(
-                        'Para respetar la cola debes tomar primero el pedido #' . $siguiente->id . '.'
-                    );
-                }
-
-                $siguiente->update([
-                    'cocinero_id' => $cocineroId,
+                $pedido->update([
+                    'cocinero_id' => Auth::id(),
+                    'estado' => 'preparando',
                 ]);
             });
         } catch (\RuntimeException $e) {
@@ -161,35 +161,11 @@ class PedidoController extends Controller
         }
 
         return redirect()
-            ->route('cocinero.pedidos.show', $id)
-            ->with('success', 'Pedido #' . $id . ' tomado correctamente. Ahora solo tú puedes modificarlo.');
-    }
-
-    /**
-     * Cambiar pedido de PAGADO a PREPARANDO.
-     */
-    public function preparar(int $id): RedirectResponse
-    {
-        $pedido = Pedido::findOrFail($id);
-
-        if ((int) $pedido->cocinero_id !== (int) Auth::id()) {
-            abort(403, 'No puedes iniciar la preparación de un pedido tomado por otro cocinero.');
-        }
-
-        if ($pedido->estado !== 'pagado') {
-            return back()->with(
-                'error',
-                'El pedido no puede comenzar a prepararse porque su estado ya cambió.'
+            ->route('cocinero.pedidos.index', ['seccion' => 'preparando'])
+            ->with(
+                'success',
+                'Pedido #' . $id . ' comenzó a prepararse y ya no está disponible para los demás cocineros.'
             );
-        }
-
-        $pedido->update([
-            'estado' => 'preparando',
-        ]);
-
-        return redirect()
-            ->route('cocinero.pedidos.show', $pedido->id)
-            ->with('success', 'El pedido comenzó a prepararse.');
     }
 
     /**
@@ -215,10 +191,10 @@ class PedidoController extends Controller
         ]);
 
         return redirect()
-            ->route('cocinero.pedidos.index')
+            ->route('cocinero.pedidos.index', ['seccion' => 'listos'])
             ->with(
                 'success',
-                'Pedido #' . $pedido->id . ' listo. Ya puedes tomar el siguiente pedido de la cola.'
+                'Pedido #' . $pedido->id . ' listo. El pedido queda registrado entre tus pedidos terminados.'
             );
     }
 }
