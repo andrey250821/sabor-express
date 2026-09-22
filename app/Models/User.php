@@ -67,7 +67,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Pedidos tomados por este cocinero.
+     * Pedidos cuya preparación inició este cocinero.
      */
     public function pedidosCocina(): HasMany
     {
