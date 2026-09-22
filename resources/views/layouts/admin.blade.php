@@ -8,6 +8,10 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}">
+
     <title>
         {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}
         - Panel Administrativo
@@ -247,13 +251,11 @@
                         Notificaciones
                     </span>
 
-                    @if($notificacionesNoLeidas > 0)
-
-                    <span class="badge bg-danger rounded-pill">
+                    <span
+                        id="badge-notificaciones"
+                        class="badge bg-danger rounded-pill {{ $notificacionesNoLeidas > 0 ? '' : 'd-none' }}">
                         {{ $notificacionesNoLeidas }}
                     </span>
-
-                    @endif
 
                 </a>
 
