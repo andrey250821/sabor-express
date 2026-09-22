@@ -35,13 +35,13 @@
 
                 <div class="cocinero-hero-actions">
 
-                    <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
+                    <a href="{{ route('cocinero.pedidos.index') }}"
                         class="cocinero-btn-primary">
                         <i class="bi bi-bag-check"></i>
                         Gestionar pedidos
                     </a>
 
-                    <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
+                    <a href="{{ route('cocinero.pedidos.index') }}"
                         class="cocinero-btn-secondary">
                         <i class="bi bi-list-check"></i>
                         Ver pedidos
@@ -151,7 +151,7 @@
         {{-- PENDIENTES --}}
         <div class="col-12 col-sm-6 col-xl-3">
 
-            <a href="{{ route('cocinero.pedidos.index') }}"
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
                 class="cocinero-stat-link">
 
                 <div class="cocinero-stat-card warning">
@@ -177,7 +177,7 @@
                     <div class="cocinero-stat-bottom">
 
                         <span>
-                            Esperando ser tomado
+                            Esperando preparación
                         </span>
 
                         <i class="bi bi-arrow-up-right"></i>
@@ -624,7 +624,7 @@
 
             <div class="col-12 col-md-4">
 
-                <a href="{{ route('cocinero.pedidos.index') }}"
+                <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
                     class="cocinero-action">
 
                     <div class="cocinero-action-icon blue">
@@ -652,7 +652,7 @@
 
             <div class="col-12 col-md-4">
 
-                <a href="{{ route('cocinero.pedidos.index') }}"
+                <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'listos']) }}"
                     class="cocinero-action">
 
                     <div class="cocinero-action-icon green">
