@@ -67,6 +67,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Pedidos tomados por este cocinero.
+     */
+    public function pedidosCocina(): HasMany
+    {
+        return $this->hasMany(Pedido::class, 'cocinero_id');
+    }
+
+    /**
      * Un delivery puede tener muchas asignaciones.
      */
     public function asignacionesDelivery(): HasMany
