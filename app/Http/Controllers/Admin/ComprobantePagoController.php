@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ComprobantePago;
+use App\Models\Pedido;
 use App\Models\Notificacion;
+use App\Models\Producto;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ComprobantePagoController extends Controller
@@ -123,29 +126,58 @@ class ComprobantePagoController extends Controller
             );
         }
 
-        $comprobante->update([
-            'estado' => 'rechazado',
-            'fecha_revision' => Carbon::now(),
-        ]);
+        DB::transaction(function () use ($comprobante) {
+            $pedido = Pedido::with('detallePedidos')
+                ->findOrFail($comprobante->pedido_id);
 
-        $pedido = $comprobante->pedido;
+            /*
+             * El stock fue reservado cuando el cliente creó el pedido.
+             * Al rechazar el comprobante, devolvemos exactamente las
+             * unidades que pertenecían a ese pedido.
+             *
+             * Cada producto se bloquea mientras se actualiza para evitar
+             * inconsistencias si otro pedido modifica el mismo stock.
+             */
+            foreach ($pedido->detallePedidos as $detalle) {
+                $producto = Producto::where('id', $detalle->producto_id)
+                    ->lockForUpdate()
+                    ->first();
 
-        $pedido->update([
-            'estado' => 'cancelado',
-        ]);
+                if (!$producto) {
+                    continue;
+                }
 
-        Notificacion::create([
-            'user_id' => $pedido->user_id,
-            'pedido_id' => $pedido->id,
-            'mensaje' => 'Tu pedido #' . $pedido->id . ' fue rechazado porque el comprobante de pago no pudo validarse. Puedes realizar un nuevo pedido con un comprobante válido.',
-            'tipo' => 'cliente',
-            'evento' => 'comprobante_rechazado',
-            'leido' => false,
-        ]);
+                $producto->stock += (int) $detalle->cantidad;
+
+                $producto->estado = $producto->stock > 0
+                    ? 'disponible'
+                    : 'agotado';
+
+                $producto->save();
+            }
+
+            $comprobante->update([
+                'estado' => 'rechazado',
+                'fecha_revision' => Carbon::now(),
+            ]);
+
+            $pedido->update([
+                'estado' => 'cancelado',
+            ]);
+
+            Notificacion::create([
+                'user_id' => $pedido->user_id,
+                'pedido_id' => $pedido->id,
+                'mensaje' => 'Tu pedido #' . $pedido->id . ' fue rechazado porque el comprobante de pago no pudo validarse. Puedes realizar un nuevo pedido con un comprobante válido.',
+                'tipo' => 'cliente',
+                'evento' => 'comprobante_rechazado',
+                'leido' => false,
+            ]);
+        });
 
         return back()->with(
             'success',
-            'Comprobante rechazado correctamente'
+            'Comprobante rechazado correctamente y stock liberado.'
         );
     }
 }
