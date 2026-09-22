@@ -113,80 +113,67 @@
 
             @php
 
+            $estadoRechazado = $pedido->comprobantePago?->estado === 'rechazado'
+                || $pedido->estado === 'cancelado';
+
             $estados = [
 
-            'comprobante_enviado' => [
-            'texto' => 'Comprobante enviado',
-            'icono' => 'bi-receipt',
-            'clase' => 'enviado'
-            ],
+                'comprobante_enviado' => [
+                    'texto' => 'Pago en revisión',
+                    'icono' => 'bi-hourglass-split',
+                    'clase' => 'pendiente'
+                ],
 
-            'pendiente' => [
-            'texto' => 'Pendiente',
-            'icono' => 'bi-hourglass-split',
-            'clase' => 'pendiente'
-            ],
+                'pagado' => [
+                    'texto' => 'Pago confirmado',
+                    'icono' => 'bi-check-circle-fill',
+                    'clase' => 'confirmado'
+                ],
 
-            'confirmado' => [
-            'texto' => 'Pedido confirmado',
-            'icono' => 'bi-check-circle',
-            'clase' => 'confirmado'
-            ],
+                'preparando' => [
+                    'texto' => 'Preparando pedido',
+                    'icono' => 'bi-fire',
+                    'clase' => 'preparando'
+                ],
 
-            'preparando' => [
-            'texto' => 'Preparando pedido',
-            'icono' => 'bi-fire',
-            'clase' => 'preparando'
-            ],
+                'listo' => [
+                    'texto' => 'Pedido listo',
+                    'icono' => 'bi-check2-circle',
+                    'clase' => 'listo'
+                ],
 
-            'en_preparacion' => [
-            'texto' => 'En preparación',
-            'icono' => 'bi-fire',
-            'clase' => 'preparando'
-            ],
+                'asignado' => [
+                    'texto' => 'Delivery asignado',
+                    'icono' => 'bi-bicycle',
+                    'clase' => 'asignado'
+                ],
 
-            'listo' => [
-            'texto' => 'Pedido listo',
-            'icono' => 'bi-check2-circle',
-            'clase' => 'listo'
-            ],
+                'en_camino' => [
+                    'texto' => 'Pedido en camino',
+                    'icono' => 'bi-bicycle',
+                    'clase' => 'camino'
+                ],
 
-            'asignado' => [
-            'texto' => 'Delivery asignado',
-            'icono' => 'bi-person-check',
-            'clase' => 'asignado'
-            ],
+                'entregado' => [
+                    'texto' => 'Pedido entregado',
+                    'icono' => 'bi-house-check-fill',
+                    'clase' => 'entregado'
+                ],
 
-            'en_camino' => [
-            'texto' => 'En camino',
-            'icono' => 'bi-bicycle',
-            'clase' => 'camino'
-            ],
-
-            'entregado' => [
-            'texto' => 'Pedido entregado',
-            'icono' => 'bi-check-circle-fill',
-            'clase' => 'entregado'
-            ],
-
-            'cancelado' => [
-            'texto' => 'Pedido cancelado',
-            'icono' => 'bi-x-circle-fill',
-            'clase' => 'cancelado'
-            ],
+                'cancelado' => [
+                    'texto' => $estadoRechazado
+                        ? 'Pago rechazado'
+                        : 'Pedido cancelado',
+                    'icono' => 'bi-x-circle-fill',
+                    'clase' => 'cancelado'
+                ],
 
             ];
 
             $estadoActual = $estados[$pedido->estado] ?? [
-
-            'texto' => ucfirst(
-            str_replace('_', ' ', $pedido->estado)
-            ),
-
-            'icono' => 'bi-info-circle',
-
-            'clase' => 'pendiente'
-
+                'texto' => 'Estado actualizado',
+                'icono' => 'bi-info-circle',
+                'clase' => 'pendiente'
             ];
 
             @endphp
@@ -250,66 +237,49 @@
 
                     $pasos = [
 
-                    [
-                    'estados' => ['comprobante_enviado'],
-                    'icono' => 'bi-receipt',
-                    'texto' => 'Comprobante'
-                    ],
+                        [
+                            'estados' => ['pagado'],
+                            'icono' => 'bi-check-circle-fill',
+                            'texto' => 'Pago confirmado'
+                        ],
 
-                    [
-                    'estados' => ['confirmado'],
-                    'icono' => 'bi-check-circle',
-                    'texto' => 'Confirmado'
-                    ],
+                        [
+                            'estados' => ['preparando'],
+                            'icono' => 'bi-fire',
+                            'texto' => 'Preparando'
+                        ],
 
-                    [
-                    'estados' => [
-                    'preparando',
-                    'en_preparacion'
-                    ],
-                    'icono' => 'bi-fire',
-                    'texto' => 'Preparando'
-                    ],
+                        [
+                            'estados' => ['listo'],
+                            'icono' => 'bi-box-seam',
+                            'texto' => 'Listo'
+                        ],
 
-                    [
-                    'estados' => ['listo'],
-                    'icono' => 'bi-box-seam',
-                    'texto' => 'Listo'
-                    ],
+                        [
+                            'estados' => ['asignado', 'en_camino'],
+                            'icono' => 'bi-bicycle',
+                            'texto' => 'En camino'
+                        ],
 
-                    [
-                    'estados' => [
-                    'asignado',
-                    'en_camino'
-                    ],
-                    'icono' => 'bi-bicycle',
-                    'texto' => 'Delivery'
-                    ],
-
-                    [
-                    'estados' => ['entregado'],
-                    'icono' => 'bi-house-check',
-                    'texto' => 'Entregado'
-                    ],
+                        [
+                            'estados' => ['entregado'],
+                            'icono' => 'bi-house-check-fill',
+                            'texto' => 'Entregado'
+                        ],
 
                     ];
 
                     $ordenEstados = [
-
-                    'comprobante_enviado' => 1,
-                    'pendiente' => 1,
-                    'confirmado' => 2,
-                    'preparando' => 3,
-                    'en_preparacion' => 3,
-                    'listo' => 4,
-                    'asignado' => 5,
-                    'en_camino' => 5,
-                    'entregado' => 6,
-
+                        'comprobante_enviado' => 1,
+                        'pagado' => 1,
+                        'preparando' => 2,
+                        'listo' => 3,
+                        'asignado' => 4,
+                        'en_camino' => 4,
+                        'entregado' => 5,
                     ];
 
-                    $progresoActual =
-                    $ordenEstados[$pedido->estado] ?? 1;
+                    $progresoActual = $ordenEstados[$pedido->estado] ?? 1;
 
                     @endphp
 
@@ -368,7 +338,9 @@
                     <div>
 
                         <strong>
-                            Este pedido fue cancelado
+                            {{ $estadoRechazado
+                                ? 'El pago fue rechazado y este pedido no continuará.'
+                                : 'Este pedido fue cancelado.' }}
                         </strong>
 
                         <p>
