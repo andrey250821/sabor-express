@@ -329,26 +329,60 @@ class PedidoController extends Controller
             ]);
 
             foreach ($carrito as $item) {
+                /*
+                 * Volvemos a consultar el producto dentro de la transacción
+                 * y bloqueamos su fila para comprobar el stock real justo
+                 * antes de confirmar el pedido.
+                 */
+                $producto = Producto::where('id', $item['id'])
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$producto) {
+                    throw new \RuntimeException(
+                        'El producto seleccionado ya no existe: ' . ($item['nombre'] ?? 'producto')
+                    );
+                }
+
+                if (
+                    $producto->estado !== 'disponible'
+                    || (int) $producto->stock <= 0
+                ) {
+                    throw new \RuntimeException(
+                        'El producto "' . $producto->nombre . '" ya no está disponible.'
+                    );
+                }
+
+                $cantidadSolicitada = (int) $item['cantidad'];
+
+                if ((int) $producto->stock < $cantidadSolicitada) {
+                    throw new \RuntimeException(
+                        'No hay stock suficiente de "' . $producto->nombre
+                        . '". Disponible: ' . $producto->stock
+                        . ' unidad(es); solicitadas: ' . $cantidadSolicitada . '.'
+                    );
+                }
+
+                /*
+                 * Reservar el stock como parte de la misma transacción
+                 * que crea el detalle del pedido.
+                 */
+                $producto->stock -= $cantidadSolicitada;
+
+                if ($producto->stock <= 0) {
+                    $producto->stock = 0;
+                    $producto->estado = 'agotado';
+                }
+
+                $producto->save();
+
                 DetallePedido::create([
                     'pedido_id' => $pedido->id,
-                    'producto_id' => $item['id'],
-                    'cantidad' => $item['cantidad'],
-                    'precio' => $item['precio'],
-                    'subtotal' => $item['subtotal'],
+                    'producto_id' => $producto->id,
+                    'cantidad' => $cantidadSolicitada,
+                    'precio' => $producto->precio,
+                    'subtotal' => $cantidadSolicitada * (float) $producto->precio,
                 ]);
-
-                $producto = Producto::find($item['id']);
-
-                if ($producto) {
-                    $producto->stock -= $item['cantidad'];
-
-                    if ($producto->stock <= 0) {
-                        $producto->stock = 0;
-                        $producto->estado = 'agotado';
-                    }
-
-                    $producto->save();
-                }
             }
 
             $imagen = $request->file('comprobante')->store('comprobantes', 'public');
