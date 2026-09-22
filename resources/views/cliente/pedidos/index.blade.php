@@ -155,7 +155,9 @@
             ],
 
             'cancelado' => [
-                'texto' => 'Pago rechazado / Pedido cancelado',
+                'texto' => $pedido->comprobantePago?->estado === 'rechazado'
+                    ? 'Pago rechazado'
+                    : 'Pedido cancelado',
                 'icono' => 'bi-x-circle-fill',
                 'clase' => 'cancelado'
             ],
