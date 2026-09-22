@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ComprobantePagoController;
 use App\Http\Controllers\Admin\ConfiguracionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DeliveryController;
+use App\Http\Controllers\Admin\CocineroController;
 use App\Http\Controllers\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\NotificacionController;
@@ -165,6 +166,15 @@ Route::middleware(['auth', 'role:Administrador'])
         Route::put('/deliverys/{id}', [DeliveryController::class, 'update'])->name('admin.deliverys.update');
         Route::delete('/deliverys/{id}', [DeliveryController::class, 'destroy'])->name('admin.deliverys.destroy');
         Route::patch('/deliverys/{id}/activar', [DeliveryController::class, 'activar'])->name('admin.deliverys.activar');
+
+        // Gestión de Cocineros
+        Route::get('/cocineros', [CocineroController::class, 'index'])->name('admin.cocineros.index');
+        Route::get('/cocineros/create', [CocineroController::class, 'create'])->name('admin.cocineros.create');
+        Route::post('/cocineros', [CocineroController::class, 'store'])->name('admin.cocineros.store');
+        Route::get('/cocineros/{id}/edit', [CocineroController::class, 'edit'])->name('admin.cocineros.edit');
+        Route::put('/cocineros/{id}', [CocineroController::class, 'update'])->name('admin.cocineros.update');
+        Route::delete('/cocineros/{id}', [CocineroController::class, 'destroy'])->name('admin.cocineros.destroy');
+        Route::patch('/cocineros/{id}/activar', [CocineroController::class, 'activar'])->name('admin.cocineros.activar');
     });
 
 
