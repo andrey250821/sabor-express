@@ -35,7 +35,7 @@ class Pedido extends Model
     }
 
     /**
-     * Cocinero que tomó el pedido.
+     * Cocinero que inició la preparación del pedido.
      */
     public function cocinero(): BelongsTo
     {
