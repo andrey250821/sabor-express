@@ -113,7 +113,7 @@
                 </strong>
 
                 <small>
-                    Hay pedidos pagados que todavía no han sido tomados por ningún cocinero.
+                    Hay pedidos pagados que todavía no han comenzado a prepararse.
                 </small>
             </div>
 
@@ -127,7 +127,7 @@
                 <strong>Cocina al día</strong>
 
                 <small>
-                    No hay pedidos pagados sin asignar en la cola.
+                    No hay pedidos pagados esperando preparación.
                 </small>
             </div>
 
