@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Delivery;
 use App\Http\Controllers\Controller;
 use App\Models\Pedido;
 use App\Models\AsignacionDelivery;
+use App\Models\Notificacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -260,6 +261,17 @@ class PedidoController extends Controller
         $pedido->estado = 'en_camino';
 
         $pedido->save();
+
+        // Avisar al cliente en el momento en que el Delivery
+        // inicia realmente el recorrido.
+        Notificacion::create([
+            'user_id' => $pedido->user_id,
+            'pedido_id' => $pedido->id,
+            'mensaje' => 'Tu pedido #' . $pedido->id . ' ya está en camino con nuestro Delivery.',
+            'tipo' => 'cliente',
+            'evento' => 'pedido_en_camino',
+            'leido' => false,
+        ]);
 
         return back()->with(
             'success',

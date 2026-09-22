@@ -202,26 +202,6 @@
                     </div>
 
 
-                    {{-- DIRECCION --}}
-                    <div class="col-12">
-
-                        <label class="delivery-form-label">
-
-                            <i class="bi bi-geo-alt"></i>
-
-                            Dirección
-
-                        </label>
-
-
-                        <textarea
-                            name="direccion"
-                            rows="3"
-                            class="form-control delivery-input">{{ old('direccion', $delivery->direccion) }}</textarea>
-
-                    </div>
-
-
                     {{-- PASSWORD --}}
                     <div class="col-md-6">
 

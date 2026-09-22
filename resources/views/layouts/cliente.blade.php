@@ -137,6 +137,42 @@
 
                     </a>
 
+                    @auth
+                    @php
+                        $notificacionesNoLeidas = auth()->user()
+                            ->notificaciones()
+                            ->where('tipo', 'cliente')
+                            ->where('leido', false)
+                            ->count();
+                    @endphp
+
+                    <a
+                        href="{{ route('cliente.notificaciones.index') }}"
+                        class="cliente-nav-link nav-link d-flex align-items-center gap-1">
+
+                        <i class="bi bi-bell"></i>
+
+                        <span>Notificaciones</span>
+
+                        @if($notificacionesNoLeidas > 0)
+                            <span class="badge bg-danger rounded-pill">
+                                {{ $notificacionesNoLeidas }}
+                            </span>
+                        @endif
+
+                    </a>
+
+                    <a
+                        href="{{ route('cliente.configuracion.edit') }}"
+                        class="cliente-nav-link nav-link">
+
+                        <i class="bi bi-person-gear"></i>
+
+                        <span>Mi perfil</span>
+
+                    </a>
+                    @endauth
+
                 </div>
 
 

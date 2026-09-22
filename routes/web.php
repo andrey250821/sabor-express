@@ -28,6 +28,8 @@ use App\Http\Controllers\Cliente\DashboardController as ClienteDashboardControll
 use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
 use App\Http\Controllers\Cliente\ProductoController as ClienteProductoController;
 use App\Http\Controllers\Cliente\CalificacionController;
+use App\Http\Controllers\Cliente\NotificacionController as ClienteNotificacionController;
+use App\Http\Controllers\Cliente\PerfilController as ClientePerfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -252,6 +254,50 @@ Route::middleware(['auth', 'role:Cliente'])
             '/productos/{productoId}/calificaciones',
             [CalificacionController::class, 'index']
         )->name('cliente.calificaciones.index');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOTIFICACIONES DEL CLIENTE
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get(
+            '/notificaciones',
+            [ClienteNotificacionController::class, 'index']
+        )->name('cliente.notificaciones.index');
+
+        Route::patch(
+            '/notificaciones/{id}/leer',
+            [ClienteNotificacionController::class, 'marcarLeida']
+        )->name('cliente.notificaciones.leer');
+
+        Route::patch(
+            '/notificaciones/leer-todas',
+            [ClienteNotificacionController::class, 'marcarTodasLeidas']
+        )->name('cliente.notificaciones.leer.todas');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CONFIGURACIÓN DEL PERFIL DEL CLIENTE
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get(
+            '/configuracion',
+            [ClientePerfilController::class, 'edit']
+        )->name('cliente.configuracion.edit');
+
+        Route::patch(
+            '/configuracion',
+            [ClientePerfilController::class, 'update']
+        )->name('cliente.configuracion.update');
+
+        Route::patch(
+            '/configuracion/password',
+            [ClientePerfilController::class, 'updatePassword']
+        )->name('cliente.configuracion.password');
 
 
         /*

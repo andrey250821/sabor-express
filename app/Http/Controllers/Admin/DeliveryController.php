@@ -59,13 +59,7 @@ class DeliveryController extends Controller
                 'string',
                 'max:20'
             ],
-
-            'direccion' => [
-                'nullable',
-                'string'
-            ],
-
-            'password' => [
+'password' => [
                 'required',
                 'string',
                 'min:6',
@@ -88,10 +82,7 @@ class DeliveryController extends Controller
             'email' => $request->email,
 
             'telefono' => $request->telefono,
-
-            'direccion' => $request->direccion,
-
-            'password' => Hash::make($request->password),
+'password' => Hash::make($request->password),
 
             'estado' => $request->estado
 
@@ -147,13 +138,7 @@ class DeliveryController extends Controller
                 'string',
                 'max:20'
             ],
-
-            'direccion' => [
-                'nullable',
-                'string'
-            ],
-
-            'password' => [
+'password' => [
                 'nullable',
                 'string',
                 'min:6',
@@ -172,10 +157,7 @@ class DeliveryController extends Controller
         $delivery->email = $request->email;
 
         $delivery->telefono = $request->telefono;
-
-        $delivery->direccion = $request->direccion;
-
-        $delivery->estado = $request->estado;
+$delivery->estado = $request->estado;
 
         /**
          * Solo cambiar contraseña si se escribió una nueva
