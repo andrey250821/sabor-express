@@ -34,6 +34,7 @@ default => 'bi-info-circle-fill',
 };
 
 $cliente = $pedido->user->name ?? 'Cliente';
+$cocinero = $pedido->cocinero->name ?? null;
 
 $detalles = $pedido->detallePedidos ?? collect();
 
@@ -408,7 +409,7 @@ $cantidadProductos = $detalles->sum('cantidad');
                             </h3>
 
                             <span>
-                                Actualiza el estado del pedido
+                                Solo puedes modificar pedidos que tú hayas tomado.
                             </span>
 
                         </div>
@@ -417,30 +418,57 @@ $cantidadProductos = $detalles->sum('cantidad');
 
                 </div>
 
-
                 <div class="cocinero-detail-actions">
 
-                    @if($estado === 'pagado')
+                    @if($estado === 'pagado' && $pedido->cocinero_id === null)
 
                     <div class="cocinero-action-info pendiente">
-
                         <i class="bi bi-clock-history"></i>
 
                         <div>
-
-                            <strong>
-                                Esperando preparación
-                            </strong>
+                            <strong>Pedido disponible</strong>
 
                             <span>
-                                Este pedido está pagado y listo
-                                para comenzar a prepararse.
+                                Este pedido todavía no pertenece a ningún cocinero.
+                                Al tomarlo quedará reservado exclusivamente para ti.
                             </span>
-
                         </div>
-
                     </div>
 
+                    <form
+                        method="POST"
+                        action="{{ route('cocinero.pedidos.tomar', $pedido->id) }}">
+
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="btn cocinero-action-btn preparar">
+
+                            <i class="bi bi-hand-index-thumb-fill"></i>
+                            Tomar pedido
+
+                        </button>
+
+                    </form>
+
+                    @elseif(
+                        $estado === 'pagado'
+                        && (int) $pedido->cocinero_id === (int) auth()->id()
+                    )
+
+                    <div class="cocinero-action-info pendiente">
+                        <i class="bi bi-person-check-fill"></i>
+
+                        <div>
+                            <strong>Pedido reservado para ti</strong>
+
+                            <span>
+                                Los demás cocineros no pueden modificar este pedido.
+                                Puedes iniciar su preparación.
+                            </span>
+                        </div>
+                    </div>
 
                     <form
                         method="POST"
@@ -454,35 +482,28 @@ $cantidadProductos = $detalles->sum('cantidad');
                             class="btn cocinero-action-btn preparar">
 
                             <i class="bi bi-fire"></i>
-
                             Comenzar preparación
 
                         </button>
 
                     </form>
 
-
-                    @elseif($estado === 'preparando')
+                    @elseif(
+                        $estado === 'preparando'
+                        && (int) $pedido->cocinero_id === (int) auth()->id()
+                    )
 
                     <div class="cocinero-action-info preparando">
-
                         <i class="bi bi-fire"></i>
 
                         <div>
-
-                            <strong>
-                                Pedido en preparación
-                            </strong>
+                            <strong>Pedido en preparación</strong>
 
                             <span>
-                                Cuando termines, marca el pedido
-                                como listo para delivery.
+                                Este pedido es tuyo. Cuando termines, márcalo como listo.
                             </span>
-
                         </div>
-
                     </div>
-
 
                     <form
                         method="POST"
@@ -496,54 +517,39 @@ $cantidadProductos = $detalles->sum('cantidad');
                             class="btn cocinero-action-btn listo">
 
                             <i class="bi bi-check-lg"></i>
-
                             Marcar como listo
 
                         </button>
 
                     </form>
 
-
                     @elseif($estado === 'listo')
 
                     <div class="cocinero-action-info listo">
-
                         <i class="bi bi-check-circle-fill"></i>
 
                         <div>
-
-                            <strong>
-                                Pedido listo
-                            </strong>
+                            <strong>Pedido listo</strong>
 
                             <span>
-                                El pedido está listo y disponible
-                                para que un delivery lo tome.
+                                Cocina ya terminó este pedido. No requiere acciones de preparación.
                             </span>
-
                         </div>
-
                     </div>
 
                     @else
 
                     <div class="cocinero-action-info">
-
                         <i class="bi bi-info-circle-fill"></i>
 
                         <div>
-
-                            <strong>
-                                {{ $estadoTexto }}
-                            </strong>
+                            <strong>Sin acciones disponibles</strong>
 
                             <span>
-                                Este pedido ya no requiere
-                                acciones desde cocina.
+                                Este pedido está siendo gestionado por otro cocinero
+                                o ya no pertenece a la etapa de cocina.
                             </span>
-
                         </div>
-
                     </div>
 
                     @endif
