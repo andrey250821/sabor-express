@@ -317,10 +317,14 @@
                         {{-- STOCK --}}
                         <div class="cliente-producto-stock">
 
-                            <i class="bi bi-check-circle-fill"></i>
+                            <i class="bi bi-box-seam-fill"></i>
 
                             <span>
-                                Disponible
+                                Stock disponible:
+                                <strong>
+                                    {{ $producto->stock }}
+                                </strong>
+                                {{ $producto->stock == 1 ? 'unidad' : 'unidades' }}
                             </span>
 
                         </div>
