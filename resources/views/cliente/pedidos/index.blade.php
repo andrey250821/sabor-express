@@ -194,7 +194,7 @@
                     'clase' => 'rechazado',
                     'icono' => 'bi-x-circle-fill',
                 ];
-            ]
+            }
 
             @endphp
 
