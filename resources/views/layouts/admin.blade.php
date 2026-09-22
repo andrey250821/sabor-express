@@ -221,6 +221,22 @@
                 </a>
 
 
+                {{-- Cocineros --}}
+                <a
+                    href="{{ route('admin.cocineros.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.cocineros.*') ? 'active' : '' }}">
+
+                    <span class="sidebar-icon">
+                        <i class="bi bi-person-badge-fill"></i>
+                    </span>
+
+                    <span>
+                        Cocineros
+                    </span>
+
+                </a>
+
+
                 {{-- =================================================
                 NOTIFICACIONES
                 ================================================== --}}
