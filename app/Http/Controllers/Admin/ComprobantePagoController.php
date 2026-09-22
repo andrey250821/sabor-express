@@ -168,7 +168,7 @@ class ComprobantePagoController extends Controller
             Notificacion::create([
                 'user_id' => $pedido->user_id,
                 'pedido_id' => $pedido->id,
-                'mensaje' => 'Tu pedido #' . $pedido->id . ' fue rechazado porque el comprobante de pago no pudo validarse. El stock reservado fue liberado y puedes realizar un nuevo pedido con un comprobante válido.',
+                'mensaje' => 'Tu pedido #' . $pedido->id . ' fue rechazado porque el comprobante de pago no pudo validarse. Puedes realizar un nuevo pedido con un comprobante válido.',
                 'tipo' => 'cliente',
                 'evento' => 'comprobante_rechazado',
                 'leido' => false,
