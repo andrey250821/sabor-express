@@ -66,7 +66,7 @@ $cantidadListos = $listos->count();
                     <div class="pedido-stat-content">
                         <span>Pendientes</span>
                         <strong>{{ $cantidadPendientes }}</strong>
-                        <small>En cola sin tomar</small>
+                        <small>Esperando preparación</small>
                     </div>
                 </div>
             </a>
@@ -119,13 +119,15 @@ $cantidadListos = $listos->count();
                 <div class="pedido-stat-content">
                     <span>Resumen</span>
                     <strong>{{ $totalActivos }}</strong>
-                    <small>Pedidos de cocina visibles</small>
+                    <small>Resumen general</small>
                 </div>
             </div>
         </div>
 
     </div>
 
+
+    @if($seccion === 'pendientes')
 
     {{-- =====================================================
          COLA DE PEDIDOS PENDIENTES
@@ -238,13 +240,15 @@ $cantidadListos = $listos->count();
                 <h3>Cola vacía</h3>
 
                 <p>
-                    No hay pedidos pendientes sin asignar a un cocinero.
+                    No hay pedidos pagados esperando preparación.
                 </p>
             </div>
         @endif
 
     </section>
 
+
+    @elseif($seccion === 'preparando')
 
     {{-- =====================================================
          MIS PEDIDOS EN PREPARACIÓN
@@ -366,6 +370,8 @@ $cantidadListos = $listos->count();
     </section>
 
 
+    @elseif($seccion === 'listos')
+
     {{-- =====================================================
          PEDIDOS LISTOS
     ====================================================== --}}
@@ -467,6 +473,8 @@ $cantidadListos = $listos->count();
         @endif
 
     </section>
+
+    @endif
 
 </div>
 
