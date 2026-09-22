@@ -239,7 +239,7 @@
                         [
                             'estados' => ['pagado'],
                             'icono' => 'bi-check-circle-fill',
-                            'texto' => 'Pago confirmado'
+                            'texto' => 'Pago'
                         ],
 
                         [
@@ -257,7 +257,7 @@
                         [
                             'estados' => ['asignado', 'en_camino'],
                             'icono' => 'bi-bicycle',
-                            'texto' => 'En camino'
+                            'texto' => 'Delivery'
                         ],
 
                         [
