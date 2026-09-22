@@ -113,130 +113,86 @@
             $estados = [
 
             'comprobante_enviado' => [
-            'texto' => 'Comprobante enviado',
-            'icono' => 'bi-receipt',
-            'clase' => 'enviado'
+                'texto' => 'Pago en revisión',
+                'icono' => 'bi-hourglass-split',
+                'clase' => 'pendiente'
             ],
 
-            'pendiente' => [
-            'texto' => 'Pendiente',
-            'icono' => 'bi-hourglass-split',
-            'clase' => 'pendiente'
-            ],
-
-            'confirmado' => [
-            'texto' => 'Pedido confirmado',
-            'icono' => 'bi-check-circle',
-            'clase' => 'confirmado'
+            'pagado' => [
+                'texto' => 'Pago confirmado',
+                'icono' => 'bi-check-circle-fill',
+                'clase' => 'confirmado'
             ],
 
             'preparando' => [
-            'texto' => 'Preparando pedido',
-            'icono' => 'bi-fire',
-            'clase' => 'preparando'
-            ],
-
-            'en_preparacion' => [
-            'texto' => 'En preparación',
-            'icono' => 'bi-fire',
-            'clase' => 'preparando'
+                'texto' => 'Preparando',
+                'icono' => 'bi-fire',
+                'clase' => 'preparando'
             ],
 
             'listo' => [
-            'texto' => 'Pedido listo',
-            'icono' => 'bi-check2-circle',
-            'clase' => 'listo'
+                'texto' => 'Listo',
+                'icono' => 'bi-check2-circle',
+                'clase' => 'listo'
             ],
 
             'asignado' => [
-            'texto' => 'Delivery asignado',
-            'icono' => 'bi-person-check',
-            'clase' => 'asignado'
+                'texto' => 'Delivery asignado',
+                'icono' => 'bi-bicycle',
+                'clase' => 'asignado'
             ],
 
             'en_camino' => [
-            'texto' => 'En camino',
-            'icono' => 'bi-bicycle',
-            'clase' => 'camino'
+                'texto' => 'En camino',
+                'icono' => 'bi-bicycle',
+                'clase' => 'camino'
             ],
 
             'entregado' => [
-            'texto' => 'Pedido entregado',
-            'icono' => 'bi-check-circle-fill',
-            'clase' => 'entregado'
+                'texto' => 'Entregado',
+                'icono' => 'bi-house-check-fill',
+                'clase' => 'entregado'
             ],
 
             'cancelado' => [
-            'texto' => 'Pedido cancelado',
-            'icono' => 'bi-x-circle-fill',
-            'clase' => 'cancelado'
+                'texto' => 'Pago rechazado / Pedido cancelado',
+                'icono' => 'bi-x-circle-fill',
+                'clase' => 'cancelado'
             ],
 
             ];
 
-
-            $estadoActual =
-            $estados[$pedido->estado]
-            ?? [
-
-            'texto' => ucfirst(
-            str_replace(
-            '_',
-            ' ',
-            $pedido->estado
-            )
-            ),
-
-            'icono' => 'bi-info-circle',
-
-            'clase' => 'pendiente'
-
+            $estadoActual = $estados[$pedido->estado] ?? [
+                'texto' => 'Estado actualizado',
+                'icono' => 'bi-info-circle',
+                'clase' => 'pendiente'
             ];
-
 
             /*
             |--------------------------------------------------------------------------
-            | ESTADO DEL COMPROBANTE
+            | ESTADO DEL PAGO
             |--------------------------------------------------------------------------
             */
 
-            if ($pedido->comprobantePago) {
-
-            $estadoComprobante = [
-
-            'pendiente' => [
-            'texto' => 'Pendiente',
-            'clase' => 'pendiente',
-            'icono' => 'bi-clock'
-            ],
-
-            'aprobado' => [
-            'texto' => 'Aprobado',
-            'clase' => 'aprobado',
-            'icono' => 'bi-check-circle-fill'
-            ],
-
-            'rechazado' => [
-            'texto' => 'Rechazado',
-            'clase' => 'rechazado',
-            'icono' => 'bi-x-circle-fill'
-            ],
-
+            $pagoActual = [
+                'texto' => 'En revisión',
+                'clase' => 'pendiente',
+                'icono' => 'bi-hourglass-split',
             ];
 
-            $comprobanteActual =
-            $estadoComprobante[
-            $pedido->comprobantePago->estado
+            if ($pedido->comprobantePago?->estado === 'aprobado' || $pedido->estado === 'pagado') {
+                $pagoActual = [
+                    'texto' => 'Aprobado',
+                    'clase' => 'aprobado',
+                    'icono' => 'bi-check-circle-fill',
+                ];
+            } elseif ($pedido->comprobantePago?->estado === 'rechazado' || $pedido->estado === 'cancelado') {
+                $pagoActual = [
+                    'texto' => 'Rechazado',
+                    'clase' => 'rechazado',
+                    'icono' => 'bi-x-circle-fill',
+                ];
             ]
-            ?? [
-            'texto' => ucfirst(
-            $pedido->comprobantePago->estado
-            ),
-            'clase' => 'pendiente',
-            'icono' => 'bi-info-circle'
-            ];
-
-            }
 
             @endphp
 
@@ -517,43 +473,23 @@
                 <div class="cliente-mis-pedidos-card-footer">
 
 
-                    {{-- COMPROBANTE --}}
+                    {{-- PAGO --}}
 
                     <div class="cliente-mis-pedidos-comprobante">
 
-                        @if($pedido->comprobantePago)
-
-                        <i class="bi {{ $comprobanteActual['icono'] }}"></i>
+                        <i class="bi {{ $pagoActual['icono'] }}"></i>
 
                         <div>
 
                             <span>
-                                Comprobante
+                                Pago
                             </span>
 
-                            <strong class="{{ $comprobanteActual['clase'] }}">
-                                {{ $comprobanteActual['texto'] }}
+                            <strong class="{{ $pagoActual['clase'] }}">
+                                {{ $pagoActual['texto'] }}
                             </strong>
 
                         </div>
-
-                        @else
-
-                        <i class="bi bi-receipt"></i>
-
-                        <div>
-
-                            <span>
-                                Comprobante
-                            </span>
-
-                            <strong class="sin-comprobante">
-                                Sin comprobante
-                            </strong>
-
-                        </div>
-
-                        @endif
 
                     </div>
 
