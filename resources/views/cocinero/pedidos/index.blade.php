@@ -14,13 +14,7 @@ $listos = $listos ?? collect();
 $cantidadPendientes = $pendientes->count();
 $cantidadPreparando = $preparando->count();
 $cantidadListos = $listos->count();
-$miPedidoPendiente = $miPedidoPendiente ?? null;
-
-$totalActivos =
-    $cantidadPendientes +
-    ($miPedidoPendiente ? 1 : 0) +
-    $cantidadPreparando +
-    $cantidadListos;
+\n$totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
 @endphp
 
 <div class="container-fluid cocinero-pedidos">
@@ -38,8 +32,9 @@ $totalActivos =
                 <div>
                     <h2>Pedidos de cocina</h2>
                     <p>
-                        Toma pedidos en orden de llegada y trabaja únicamente
-                        sobre el pedido que tengas asignado.
+                        Los pedidos pagados aparecen en orden de llegada.
+                        Al pulsar <strong>Preparar</strong>, el pedido pasa a tu sección
+                        de preparación y deja de estar disponible para los demás cocineros.
                     </p>
                 </div>
             </div>
@@ -62,7 +57,7 @@ $totalActivos =
 
         {{-- PENDIENTES EN COLA --}}
         <div class="col-12 col-sm-6 col-xl-3" id="pendientes">
-            <a href="#cola-pendientes" class="text-decoration-none">
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}" class="text-decoration-none">
                 <div class="pedido-stat-card pendiente">
                     <div class="pedido-stat-icon">
                         <i class="bi bi-clock-history"></i>
@@ -80,7 +75,7 @@ $totalActivos =
 
         {{-- PREPARANDO --}}
         <div class="col-12 col-sm-6 col-xl-3" id="preparando">
-            <a href="#mis-preparando" class="text-decoration-none">
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}" class="text-decoration-none">
                 <div class="pedido-stat-card preparando">
                     <div class="pedido-stat-icon">
                         <i class="bi bi-fire"></i>
@@ -98,7 +93,7 @@ $totalActivos =
 
         {{-- LISTOS --}}
         <div class="col-12 col-sm-6 col-xl-3" id="listos">
-            <a href="#pedidos-listos" class="text-decoration-none">
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'listos']) }}" class="text-decoration-none">
                 <div class="pedido-stat-card listo">
                     <div class="pedido-stat-icon">
                         <i class="bi bi-check-circle-fill"></i>
@@ -122,42 +117,14 @@ $totalActivos =
                 </div>
 
                 <div class="pedido-stat-content">
-                    <span>Visibles</span>
+                    <span>Resumen</span>
                     <strong>{{ $totalActivos }}</strong>
-                    <small>Cola y pedidos activos</small>
+                    <small>Pedidos de cocina visibles</small>
                 </div>
             </div>
         </div>
 
     </div>
-
-
-    {{-- =====================================================
-         AVISO DE MI PEDIDO RESERVADO
-    ====================================================== --}}
-    @if($miPedidoPendiente)
-        <div class="cocinero-kitchen-alert mb-4">
-            <div class="cocinero-kitchen-alert-icon">
-                <i class="bi bi-person-check-fill"></i>
-            </div>
-
-            <div>
-                <strong>
-                    Tienes el pedido #{{ $miPedidoPendiente->id }} reservado
-                </strong>
-
-                <span>
-                    Los demás cocineros ya no pueden tomar ni modificar este pedido.
-                    Puedes comenzar la preparación cuando estés listo.
-                </span>
-            </div>
-
-            <a href="{{ route('cocinero.pedidos.show', $miPedidoPendiente->id) }}"
-                class="btn btn-sm btn-light ms-auto">
-                Ver pedido
-            </a>
-        </div>
-    @endif
 
 
     {{-- =====================================================
@@ -174,7 +141,7 @@ $totalActivos =
 
                 <span>
                     Los pedidos aparecen en orden de llegada.
-                    Cuando un cocinero toma uno, desaparece de esta cola para todos.
+                    Cuando un cocinero pulsa Preparar, desaparece de esta cola para todos.
                 </span>
             </div>
 
@@ -243,15 +210,16 @@ $totalActivos =
 
                             <form
                                 method="POST"
-                                action="{{ route('cocinero.pedidos.tomar', $pedido->id) }}">
+                                action="{{ route('cocinero.pedidos.preparar', $pedido->id) }}">
                                 @csrf
+                                @method('PUT')
 
                                 <button
                                     type="submit"
                                     class="btn cocinero-btn-preparar"
-                                    onclick="return confirm('¿Tomar el pedido #{{ $pedido->id }}? Este pedido quedará reservado para ti.')">
-                                    <i class="bi bi-hand-index-thumb-fill"></i>
-                                    <span>Tomar pedido</span>
+                                    onclick="return confirm('¿Comenzar a preparar el pedido #{{ $pedido->id }}? Al iniciar, dejará de estar disponible para los demás cocineros.')">
+                                    <i class="bi bi-fire"></i>
+                                    <span>Preparar</span>
                                 </button>
                             </form>
 
@@ -279,95 +247,6 @@ $totalActivos =
 
 
     {{-- =====================================================
-         MI PEDIDO RESERVADO ANTES DE PREPARAR
-    ====================================================== --}}
-    @if($miPedidoPendiente)
-        <section class="cocinero-orders-card mb-4">
-
-            <div class="cocinero-orders-header">
-                <div>
-                    <h3>
-                        <i class="bi bi-person-check-fill me-2"></i>
-                        Mi pedido reservado
-                    </h3>
-
-                    <span>
-                        Este pedido pertenece a tu turno actual y nadie más puede modificarlo.
-                    </span>
-                </div>
-            </div>
-
-            <div class="cocinero-orders-list">
-                <article class="cocinero-order-item">
-
-                    <div class="cocinero-order-number">
-                        <span>#</span>
-                        <strong>{{ $miPedidoPendiente->id }}</strong>
-                    </div>
-
-                    <div class="cocinero-order-info">
-                        <div class="cocinero-order-title">
-                            <h4>Pedido #{{ $miPedidoPendiente->id }}</h4>
-
-                            <span class="pedido-status pendiente">
-                                <i class="bi bi-person-check-fill"></i>
-                                Reservado para ti
-                            </span>
-                        </div>
-
-                        <div class="cocinero-order-meta">
-                            <span>
-                                <i class="bi bi-person-fill"></i>
-                                {{ $miPedidoPendiente->user->name ?? 'Cliente' }}
-                            </span>
-
-                            <span>
-                                <i class="bi bi-basket-fill"></i>
-                                {{ $miPedidoPendiente->detallePedidos->count() }}
-                                {{ $miPedidoPendiente->detallePedidos->count() == 1 ? 'producto' : 'productos' }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="cocinero-order-total">
-                        <span>Total</span>
-                        <strong>
-                            Bs {{ number_format($miPedidoPendiente->total ?? 0, 2) }}
-                        </strong>
-                    </div>
-
-                    <div class="cocinero-order-actions">
-
-                        <a href="{{ route('cocinero.pedidos.show', $miPedidoPendiente->id) }}"
-                            class="btn cocinero-btn-view">
-                            <i class="bi bi-eye-fill"></i>
-                            <span>Ver</span>
-                        </a>
-
-                        <form
-                            method="POST"
-                            action="{{ route('cocinero.pedidos.preparar', $miPedidoPendiente->id) }}">
-                            @csrf
-                            @method('PUT')
-
-                            <button
-                                type="submit"
-                                class="btn cocinero-btn-preparar">
-                                <i class="bi bi-fire"></i>
-                                <span>Comenzar</span>
-                            </button>
-                        </form>
-
-                    </div>
-
-                </article>
-            </div>
-
-        </section>
-    @endif
-
-
-    {{-- =====================================================
          MIS PEDIDOS EN PREPARACIÓN
     ====================================================== --}}
     <section class="cocinero-orders-card mb-4" id="mis-preparando">
@@ -380,7 +259,7 @@ $totalActivos =
                 </h3>
 
                 <span>
-                    Solo aparecen los pedidos que tú tomaste y comenzaste a preparar.
+                    Solo aparecen los pedidos que tú comenzaste a preparar.
                 </span>
             </div>
 
@@ -478,7 +357,7 @@ $totalActivos =
                 <h3>Ningún pedido en preparación</h3>
 
                 <p>
-                    Cuando comiences a preparar un pedido reservado para ti,
+                    Cuando comiences a preparar un pedido,
                     aparecerá aquí.
                 </p>
             </div>
