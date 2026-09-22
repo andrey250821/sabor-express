@@ -35,13 +35,13 @@
 
                 <div class="cocinero-hero-actions">
 
-                    <a href="{{ route('cocinero.pedidos.index') }}"
+                    <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
                         class="cocinero-btn-primary">
                         <i class="bi bi-bag-check"></i>
                         Gestionar pedidos
                     </a>
 
-                    <a href="{{ route('cocinero.pedidos.index') }}"
+                    <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
                         class="cocinero-btn-secondary">
                         <i class="bi bi-list-check"></i>
                         Ver pedidos
@@ -194,7 +194,7 @@
         {{-- PREPARANDO --}}
         <div class="col-12 col-sm-6 col-xl-3">
 
-            <a href="{{ route('cocinero.pedidos.index') }}"
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
                 class="cocinero-stat-link">
 
                 <div class="cocinero-stat-card primary">
@@ -237,7 +237,7 @@
         {{-- LISTOS --}}
         <div class="col-12 col-sm-6 col-xl-3">
 
-            <a href="{{ route('cocinero.pedidos.index') }}"
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'listos']) }}"
                 class="cocinero-stat-link">
 
                 <div class="cocinero-stat-card success">
@@ -507,14 +507,7 @@
                         </div>
 
 
-                        @if($pedido->estado === 'pagado' && (int) $pedido->cocinero_id === (int) auth()->id())
-
-                        <span class="cocinero-order-status preparing">
-                            <i class="bi bi-person-check-fill"></i>
-                            Reservado para ti
-                        </span>
-
-                        @elseif($pedido->estado === 'pagado')
+                        @if($pedido->estado === 'pagado')
 
                         <span class="cocinero-order-status pending">
                             <i class="bi bi-hourglass-split"></i>
