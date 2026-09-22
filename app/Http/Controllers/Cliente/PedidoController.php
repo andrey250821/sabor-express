@@ -389,6 +389,17 @@ class PedidoController extends Controller
                     'leido' => false,
                 ]);
             } else {
+                // El cliente también queda informado mientras su pago
+                // espera una revisión manual del administrador.
+                Notificacion::create([
+                    'user_id' => $pedido->user_id,
+                    'pedido_id' => $pedido->id,
+                    'mensaje' => 'El pago de tu pedido #' . $pedido->id . ' requiere una revisión manual. Te avisaremos cuando sea aprobado o rechazado.',
+                    'tipo' => 'cliente',
+                    'evento' => 'comprobante_en_revision',
+                    'leido' => false,
+                ]);
+
                 // Solo los comprobantes con problemas llegan al administrador.
                 $administradores = User::whereHas('role', function ($query) {
                     $query->where('nombre', 'Administrador');
