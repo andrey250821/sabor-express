@@ -353,21 +353,30 @@ class GenerarComprobantesOcr extends Command
             margin-bottom: 8px;
         }
 
+        .numero-pedido-ocr-identificador {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 22px;
+        }
+
+        .numero-pedido-ocr-simbolo {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 42px;
+            line-height: 1;
+            font-weight: 900;
+            color: #222222;
+        }
+
         .numero-pedido-ocr-numero {
             font-family: "Courier New", Courier, monospace;
             font-size: 82px;
             line-height: 1;
             font-weight: 900;
             color: #000000;
-            letter-spacing: 10px;
+            letter-spacing: 6px;
             white-space: nowrap;
-        }
-
-        .numero-pedido-ocr-secundario {
-            margin-top: 10px;
-            font-size: 24px;
-            font-weight: 800;
-            color: #222222;
         }
 
         .seccion {
@@ -477,12 +486,9 @@ class GenerarComprobantesOcr extends Command
                     NUMERO DE PEDIDO
                 </div>
 
-                <div class="numero-pedido-ocr-numero">
-                    {$numeroPedido}
-                </div>
-
-                <div class="numero-pedido-ocr-secundario">
-                    Pedido #{$numeroPedido}
+                <div class="numero-pedido-ocr-identificador">
+                    <span class="numero-pedido-ocr-simbolo">#</span>
+                    <span class="numero-pedido-ocr-numero">{$numeroPedido}</span>
                 </div>
             </div>
 
@@ -490,19 +496,6 @@ class GenerarComprobantesOcr extends Command
 
 
         <div class="seccion">
-
-            <div class="fila">
-
-                <span class="etiqueta">
-                    Pedido
-                </span>
-
-                <span class="valor">
-                    #{$numeroPedido}
-                </span>
-
-            </div>
-
 
             <div class="fila">
 
