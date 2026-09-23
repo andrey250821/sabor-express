@@ -45,60 +45,71 @@ class OcrComprobanteService
     private function extraerPedido(string $texto): ?int
     {
         /*
-         * 1. Intentar primero las variantes normales en todo el texto.
+         * El número de pedido es un dato crítico. La imagen de prueba
+         * lo muestra en grande y con una etiqueta propia para que OCR
+         * pueda reconocer números de dos o más dígitos (11, 12, 13...).
          *
-         * Se acepta:
-         * - N°, Nº, N?, No, Nro, Nro.
-         * - #, :, -
-         * - "Pedido 15" sin prefijo
+         * Probamos primero las etiquetas más específicas para evitar
+         * confundir el ID con otros números del comprobante.
          */
-        $patron = '/\bPedido\b\s*(?:N\s*(?:[°º?oO0])?\s*|Nro\.?\s*|#\s*)?[#:\-]?\s*(\d{1,8})\b/iu';
+        $patronesPrioritarios = [
+            '/\bNUMERO\s+DE\s+PEDIDO\s*[:\-]?\s*([0-9]{1,8})\b/iu',
+            '/\bN(?:UMERO|ÚMERO)\s+DE\s+PEDIDO\s*[:\-]?\s*([0-9]{1,8})\b/iu',
+            '/\bID\s+DEL\s+PEDIDO\s*[:\-]?\s*([0-9]{1,8})\b/iu',
+            '/\bPEDIDO\s+ID\s*[:\-]?\s*([0-9]{1,8})\b/iu',
+            '/\bPEDIDO\b\s*(?:N\s*(?:[°º?oO0])?\s*|Nro\.?\s*|No\.?\s*|#\s*)?[#:\-]?\s*([0-9]{1,8})\b/iu',
+            '/\bPEDIDO\b\s*[:\-]?\s*#?\s*([0-9]{1,8})\b/iu',
+        ];
 
-        if (preg_match($patron, $texto, $matches)) {
-            return (int) $matches[1];
+        foreach ($patronesPrioritarios as $patron) {
+            if (preg_match($patron, $texto, $matches)) {
+                return (int) $matches[1];
+            }
         }
 
         /*
-         * 2. Fallback por líneas.
+         * Fallback por líneas. OCR puede separar la etiqueta del número:
          *
-         * Si OCR separa la etiqueta del número:
-         *
-         * Pedido N?
-         * 15
+         * NUMERO DE PEDIDO
+         * 11
          *
          * o:
          *
          * Pedido
-         * 15
+         * 11
          *
-         * buscamos un número limpio en la línea siguiente.
+         * También aceptamos una línea que contenga únicamente el número.
          */
         $lineas = preg_split('/\R+/u', $texto) ?: [];
 
         foreach ($lineas as $indice => $linea) {
-            if (stripos($linea, 'pedido') === false) {
-                continue;
-            }
+            $lineaNormalizada = trim($linea);
 
-            $siguiente = $lineas[$indice + 1] ?? '';
+            if (
+                preg_match('/\b(?:NUMERO|N\W*UMERO)\s+DE\s+PEDIDO\b/iu', $lineaNormalizada)
+                || preg_match('/\bID\s+DEL\s+PEDIDO\b/iu', $lineaNormalizada)
+                || preg_match('/\bPEDIDO\b/iu', $lineaNormalizada)
+            ) {
+                $siguiente = trim($lineas[$indice + 1] ?? '');
 
-            if (preg_match('/^\s*(\d{1,8})\s*$/u', trim($siguiente), $matches)) {
-                return (int) $matches[1];
-            }
+                if (preg_match('/^(\d{1,8})$/u', $siguiente, $matches)) {
+                    return (int) $matches[1];
+                }
 
-            /*
-             * También intentamos combinar la línea "Pedido ..." con
-             * la siguiente cuando esta contiene el número junto a un
-             * pequeño residuo de OCR.
-             */
-            if ($siguiente !== '') {
-                $contexto = trim($linea . ' ' . $siguiente);
+                if ($siguiente !== '' && preg_match('/(?:^|\D)(\d{1,8})(?:\D|$)/u', $siguiente, $matches)) {
+                    return (int) $matches[1];
+                }
 
-                if (preg_match(
-                    '/\bPedido\b[^\d\r\n]{0,25}(\d{1,8})\b/iu',
-                    $contexto,
-                    $matches
-                )) {
+                /*
+                 * Si la propia línea contiene un número, conservar todos
+                 * los dígitos contiguos en vez de quedarnos con un solo
+                 * dígito por una coincidencia demasiado corta.
+                 */
+                if (preg_match('/(?:#|N\s*[°º?oO0]?|No\.?|Nro\.?)\s*([0-9]{1,8})/iu', $lineaNormalizada, $matches)) {
+                    return (int) $matches[1];
+                }
+
+                if (preg_match('/\bPEDIDO\b[^0-9]{0,30}([0-9]{1,8})\b/iu', $lineaNormalizada, $matches)) {
                     return (int) $matches[1];
                 }
             }
