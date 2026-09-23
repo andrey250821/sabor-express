@@ -336,47 +336,10 @@ class GenerarComprobantesOcr extends Command
             font-weight: bold;
         }
 
-        .numero-pedido-ocr {
-            margin-top: 25px;
-            padding: 20px 25px;
-            border: 4px solid #111111;
-            border-radius: 12px;
-            background: #ffffff;
-            text-align: center;
-        }
-
-        .numero-pedido-ocr-etiqueta {
-            font-size: 26px;
-            font-weight: 800;
-            color: #222222;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .numero-pedido-ocr-identificador {
-            margin-top: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: baseline;
-            gap: 22px;
-        }
-
-        .numero-pedido-ocr-simbolo {
-            font-family: "Courier New", Courier, monospace;
-            font-size: 42px;
-            line-height: 1;
-            font-weight: 900;
-            color: #222222;
-        }
-
-        .numero-pedido-ocr-numero {
-            font-family: "Courier New", Courier, monospace;
-            font-size: 82px;
-            line-height: 1;
-            font-weight: 900;
-            color: #000000;
-            letter-spacing: 6px;
-            white-space: nowrap;
+        .numero-pedido {
+            margin-top: 15px;
+            font-size: 20px;
+            color: #555555;
         }
 
         .seccion {
@@ -481,21 +444,27 @@ class GenerarComprobantesOcr extends Command
                 {$tipoTexto}
             </div>
 
-            <div class="numero-pedido-ocr">
-                <div class="numero-pedido-ocr-etiqueta">
-                    NUMERO DE PEDIDO
-                </div>
-
-                <div class="numero-pedido-ocr-identificador">
-                    <span class="numero-pedido-ocr-simbolo">#</span>
-                    <span class="numero-pedido-ocr-numero">{$numeroPedido}</span>
-                </div>
+            <div class="numero-pedido">
+                Pedido N° {$numeroPedido}
             </div>
 
         </div>
 
 
         <div class="seccion">
+
+            <div class="fila">
+
+                <span class="etiqueta">
+                    Pedido
+                </span>
+
+                <span class="valor">
+                    #{$numeroPedido}
+                </span>
+
+            </div>
+
 
             <div class="fila">
 
@@ -620,7 +589,6 @@ HTML;
             . ' --disable-gpu'
             . ' --no-sandbox'
             . ' --hide-scrollbars'
-            . ' --force-device-scale-factor=2'
             . ' --window-size=900,1200'
             . ' --screenshot="'
             . $outputPath
