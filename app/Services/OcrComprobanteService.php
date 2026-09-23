@@ -45,40 +45,34 @@ class OcrComprobanteService
     private function extraerPedido(string $texto): ?int
     {
         /*
-         * El comprobante generado para pruebas muestra una única zona:
+         * Tesseract puede devolver variantes como:
+         * - Pedido N° 16
+         * - Pedido Nº 16
+         * - Pedido N? 16
+         * - Pedido No 16
+         * - Pedido # 16
+         * - NUMERO DE PEDIDO + 16 en la línea siguiente
          *
-         * NUMERO DE PEDIDO
-         * # 16
-         *
-         * El símbolo # puede ser interpretado por Tesseract como "4".
-         * Por eso la extracción prioriza la etiqueta "NUMERO DE PEDIDO"
-         * y permite que el número aparezca con #, separado por espacios
-         * o en la línea siguiente.
+         * Primero normalizamos espacios invisibles y saltos de línea.
          */
+        $textoNormalizado = str_replace(["\\u{00A0}", "\\u{200B}", "\\r"], [' ', '', ''], $texto);
+        $textoNormalizado = preg_replace('/[ \\t]+/u', ' ', $textoNormalizado) ?? $textoNormalizado;
 
-        $patronesPrioritarios = [
-            // Ej.: "NUMERO DE PEDIDO # 16" o "NUMERO DE PEDIDO 16"
-            '/\bNUMERO\s+DE\s+PEDIDO\b\s*[:\-]?\s*#?\s*(\d{1,8})\b/iu',
-
-            // Ej.: OCR en dos líneas: "NUMERO DE PEDIDO" + "# 16"
-            '/\bNUMERO\s+DE\s+PEDIDO\b\s*\R\s*#?\s*(\d{1,8})\b/iu',
-
-            // Ej.: OCR confunde # con 4 y conserva el espacio: "4 16"
-            // Se aplica únicamente después de la etiqueta completa.
-            '/\bNUMERO\s+DE\s+PEDIDO\b\s*\R\s*4\s+(\d{1,8})\b/iu',
-
-            // Otras formas conocidas de la etiqueta.
-            '/\bID\s+DEL\s+PEDIDO\b\s*[:\-]?\s*#?\s*(\d{1,8})\b/iu',
-            '/\bPEDIDO\s+ID\b\s*[:\-]?\s*#?\s*(\d{1,8})\b/iu',
-
-            // Formato convencional "Pedido # 16", "Pedido N° 16", etc.
-            '/\bPEDIDO\b\s*(?:N\s*[°º?oO0]\s*|Nro\.?\s*|No\.?\s*|#\s*)[:\-]?\s*(\d{1,8})\b/iu',
-            '/\bPEDIDO\b\s*[:\-]?\s*#\s*(\d{1,8})\b/iu',
-            '/\bPEDIDO\b\s*[:\-]?\s*(\d{1,8})\b/iu',
+        /*
+         * Patrones directos. El número debe aparecer inmediatamente
+         * después de la etiqueta o de una identificación de pedido.
+         */
+        $patrones = [
+            '/\\bNUMERO\\s+DE\\s+PEDIDO\\b\\s*[:\\-#]?\\s*(\\d{1,8})\\b/iu',
+            '/\\bNUMERO\\s+DE\\s+PEDIDO\\b[^\\d\\r\\n]{0,20}(\\d{1,8})\\b/iu',
+            '/\\bID\\s+DEL\\s+PEDIDO\\b\\s*[:\\-#]?\\s*(\\d{1,8})\\b/iu',
+            '/\\bPEDIDO\\s+ID\\b\\s*[:\\-#]?\\s*(\\d{1,8})\\b/iu',
+            '/\\bPEDIDO\\b\\s*(?:N\\s*[°º?oO0]\\s*|Nro\\.?\\s*|No\\.?\\s*|#\\s*)?[:\\-]?\\s*(\\d{1,8})\\b/iu',
+            '/\\bPEDIDO\\b[^\\d\\r\\n]{0,20}(\\d{1,8})\\b/iu',
         ];
 
-        foreach ($patronesPrioritarios as $patron) {
-            if (preg_match($patron, $texto, $matches)) {
+        foreach ($patrones as $patron) {
+            if (preg_match($patron, $textoNormalizado, $matches)) {
                 return (int) $matches[1];
             }
         }
@@ -86,48 +80,79 @@ class OcrComprobanteService
         /*
          * Fallback por líneas.
          *
-         * Si OCR separa la etiqueta y el identificador:
+         * Caso típico:
+         *   NUMERO DE PEDIDO
+         *   16
          *
-         * NUMERO DE PEDIDO
-         * # 16
+         * También acepta:
+         *   Pedido
+         *   # 16
          *
-         * también aceptamos una línea que contenga "# 16".
+         * o pequeñas alteraciones producidas por OCR.
          */
-        $lineas = preg_split('/\R+/u', $texto) ?: [];
+        $lineas = preg_split('/\\R+/u', $texto) ?: [];
 
         foreach ($lineas as $indice => $linea) {
-            $lineaNormalizada = trim($linea);
+            $lineaNormalizada = trim(
+                preg_replace('/[ \\t]+/u', ' ', str_replace("\\u{00A0}", ' ', $linea)) ?? $linea
+            );
 
-            if (!preg_match('/\b(?:NUMERO\s+DE\s+PEDIDO|N\W*UMERO\s+DE\s+PEDIDO|ID\s+DEL\s+PEDIDO|PEDIDO\s+ID|PEDIDO)\b/iu', $lineaNormalizada)) {
+            $lineaMinusculas = mb_strtolower($lineaNormalizada, 'UTF-8');
+
+            $esEtiquetaPedido =
+                str_contains($lineaMinusculas, 'pedido')
+                || str_contains($lineaMinusculas, 'numero de pedido')
+                || str_contains($lineaMinusculas, 'numero  de pedido')
+                || str_contains($lineaMinusculas, 'id del pedido')
+                || str_contains($lineaMinusculas, 'pedido id');
+
+            if (!$esEtiquetaPedido) {
                 continue;
             }
 
-            $siguiente = trim($lineas[$indice + 1] ?? '');
-
-            if (preg_match('/^#\s*(\d{1,8})$/u', $siguiente, $matches)) {
+            /*
+             * Si la misma línea contiene un número, intentamos usarlo.
+             * No tomamos fechas largas ni montos con decimales.
+             */
+            if (preg_match('/(?:#|N\\s*[°º?oO0]|No\\.?|Nro\\.?)?\\s*(\\d{1,8})(?![.,]\\d)/iu', $lineaNormalizada, $matches)) {
                 return (int) $matches[1];
             }
 
             /*
-             * Caso específico de OCR donde "#" se convirtió en "4":
-             * "# 16" -> "4 16".
+             * Revisar hasta las siguientes 2 líneas. Esto cubre cuando
+             * Tesseract separa la etiqueta y el número.
              */
-            if (preg_match('/^4\s+(\d{1,8})$/u', $siguiente, $matches)) {
-                return (int) $matches[1];
-            }
+            for ($siguienteIndice = $indice + 1; $siguienteIndice <= $indice + 2; $siguienteIndice++) {
+                $siguiente = trim(
+                    preg_replace('/[ \\t]+/u', ' ', str_replace("\\u{00A0}", ' ', $lineas[$siguienteIndice] ?? '')) ?? ''
+                );
 
-            if (preg_match('/^(\d{1,8})$/u', $siguiente, $matches)) {
-                return (int) $matches[1];
-            }
+                /*
+                 * Línea simple: 16
+                 */
+                if (preg_match('/^(\\d{1,8})$/u', $siguiente, $matches)) {
+                    return (int) $matches[1];
+                }
 
-            if (preg_match('/(?:#|N\s*[°º?oO0]|No\.?|Nro\.?)\s*(\d{1,8})/iu', $lineaNormalizada, $matches)) {
-                return (int) $matches[1];
+                /*
+                 * Línea: # 16
+                 */
+                if (preg_match('/^#?\\s*(\\d{1,8})$/u', $siguiente, $matches)) {
+                    return (int) $matches[1];
+                }
+
+                /*
+                 * Línea: 4 16, una confusión frecuente al leer '# 16'.
+                 * Aceptamos solo si termina en un único número válido.
+                 */
+                if (preg_match('/^4\\s+(\\d{1,8})$/u', $siguiente, $matches)) {
+                    return (int) $matches[1];
+                }
             }
         }
 
         return null;
     }
-
     /**
      * Extrae el monto pagado.
      */
