@@ -48,6 +48,8 @@ class ValidarComprobantePagoService
             'stdout',
             '-l',
             'spa',
+            '--psm',
+            '6',
         ]);
 
         if ($resultado->failed()) {
