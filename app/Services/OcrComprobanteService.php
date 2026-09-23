@@ -45,20 +45,36 @@ class OcrComprobanteService
     private function extraerPedido(string $texto): ?int
     {
         /*
-         * El número de pedido es un dato crítico. La imagen de prueba
-         * lo muestra en grande y con una etiqueta propia para que OCR
-         * pueda reconocer números de dos o más dígitos (11, 12, 13...).
+         * El comprobante generado para pruebas muestra una única zona:
          *
-         * Probamos primero las etiquetas más específicas para evitar
-         * confundir el ID con otros números del comprobante.
+         * NUMERO DE PEDIDO
+         * # 16
+         *
+         * El símbolo # puede ser interpretado por Tesseract como "4".
+         * Por eso la extracción prioriza la etiqueta "NUMERO DE PEDIDO"
+         * y permite que el número aparezca con #, separado por espacios
+         * o en la línea siguiente.
          */
+
         $patronesPrioritarios = [
-            '/\bNUMERO\s+DE\s+PEDIDO\s*[:\-]?\s*([0-9]{1,8})\b/iu',
-            '/\bN(?:UMERO|ÚMERO)\s+DE\s+PEDIDO\s*[:\-]?\s*([0-9]{1,8})\b/iu',
-            '/\bID\s+DEL\s+PEDIDO\s*[:\-]?\s*([0-9]{1,8})\b/iu',
-            '/\bPEDIDO\s+ID\s*[:\-]?\s*([0-9]{1,8})\b/iu',
-            '/\bPEDIDO\b\s*(?:N\s*(?:[°º?oO0])?\s*|Nro\.?\s*|No\.?\s*|#\s*)?[#:\-]?\s*([0-9]{1,8})\b/iu',
-            '/\bPEDIDO\b\s*[:\-]?\s*#?\s*([0-9]{1,8})\b/iu',
+            // Ej.: "NUMERO DE PEDIDO # 16" o "NUMERO DE PEDIDO 16"
+            '/\bNUMERO\s+DE\s+PEDIDO\b\s*[:\-]?\s*#?\s*(\d{1,8})\b/iu',
+
+            // Ej.: OCR en dos líneas: "NUMERO DE PEDIDO" + "# 16"
+            '/\bNUMERO\s+DE\s+PEDIDO\b\s*\R\s*#?\s*(\d{1,8})\b/iu',
+
+            // Ej.: OCR confunde # con 4 y conserva el espacio: "4 16"
+            // Se aplica únicamente después de la etiqueta completa.
+            '/\bNUMERO\s+DE\s+PEDIDO\b\s*\R\s*4\s+(\d{1,8})\b/iu',
+
+            // Otras formas conocidas de la etiqueta.
+            '/\bID\s+DEL\s+PEDIDO\b\s*[:\-]?\s*#?\s*(\d{1,8})\b/iu',
+            '/\bPEDIDO\s+ID\b\s*[:\-]?\s*#?\s*(\d{1,8})\b/iu',
+
+            // Formato convencional "Pedido # 16", "Pedido N° 16", etc.
+            '/\bPEDIDO\b\s*(?:N\s*[°º?oO0]\s*|Nro\.?\s*|No\.?\s*|#\s*)[:\-]?\s*(\d{1,8})\b/iu',
+            '/\bPEDIDO\b\s*[:\-]?\s*#\s*(\d{1,8})\b/iu',
+            '/\bPEDIDO\b\s*[:\-]?\s*(\d{1,8})\b/iu',
         ];
 
         foreach ($patronesPrioritarios as $patron) {
@@ -68,50 +84,44 @@ class OcrComprobanteService
         }
 
         /*
-         * Fallback por líneas. OCR puede separar la etiqueta del número:
+         * Fallback por líneas.
+         *
+         * Si OCR separa la etiqueta y el identificador:
          *
          * NUMERO DE PEDIDO
-         * 11
+         * # 16
          *
-         * o:
-         *
-         * Pedido
-         * 11
-         *
-         * También aceptamos una línea que contenga únicamente el número.
+         * también aceptamos una línea que contenga "# 16".
          */
         $lineas = preg_split('/\R+/u', $texto) ?: [];
 
         foreach ($lineas as $indice => $linea) {
             $lineaNormalizada = trim($linea);
 
-            if (
-                preg_match('/\b(?:NUMERO|N\W*UMERO)\s+DE\s+PEDIDO\b/iu', $lineaNormalizada)
-                || preg_match('/\bID\s+DEL\s+PEDIDO\b/iu', $lineaNormalizada)
-                || preg_match('/\bPEDIDO\b/iu', $lineaNormalizada)
-            ) {
-                $siguiente = trim($lineas[$indice + 1] ?? '');
+            if (!preg_match('/\b(?:NUMERO\s+DE\s+PEDIDO|N\W*UMERO\s+DE\s+PEDIDO|ID\s+DEL\s+PEDIDO|PEDIDO\s+ID|PEDIDO)\b/iu', $lineaNormalizada)) {
+                continue;
+            }
 
-                if (preg_match('/^(\d{1,8})$/u', $siguiente, $matches)) {
-                    return (int) $matches[1];
-                }
+            $siguiente = trim($lineas[$indice + 1] ?? '');
 
-                if ($siguiente !== '' && preg_match('/(?:^|\D)(\d{1,8})(?:\D|$)/u', $siguiente, $matches)) {
-                    return (int) $matches[1];
-                }
+            if (preg_match('/^#\s*(\d{1,8})$/u', $siguiente, $matches)) {
+                return (int) $matches[1];
+            }
 
-                /*
-                 * Si la propia línea contiene un número, conservar todos
-                 * los dígitos contiguos en vez de quedarnos con un solo
-                 * dígito por una coincidencia demasiado corta.
-                 */
-                if (preg_match('/(?:#|N\s*[°º?oO0]?|No\.?|Nro\.?)\s*([0-9]{1,8})/iu', $lineaNormalizada, $matches)) {
-                    return (int) $matches[1];
-                }
+            /*
+             * Caso específico de OCR donde "#" se convirtió en "4":
+             * "# 16" -> "4 16".
+             */
+            if (preg_match('/^4\s+(\d{1,8})$/u', $siguiente, $matches)) {
+                return (int) $matches[1];
+            }
 
-                if (preg_match('/\bPEDIDO\b[^0-9]{0,30}([0-9]{1,8})\b/iu', $lineaNormalizada, $matches)) {
-                    return (int) $matches[1];
-                }
+            if (preg_match('/^(\d{1,8})$/u', $siguiente, $matches)) {
+                return (int) $matches[1];
+            }
+
+            if (preg_match('/(?:#|N\s*[°º?oO0]|No\.?|Nro\.?)\s*(\d{1,8})/iu', $lineaNormalizada, $matches)) {
+                return (int) $matches[1];
             }
         }
 
