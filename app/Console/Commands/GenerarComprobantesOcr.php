@@ -460,7 +460,7 @@ class GenerarComprobantesOcr extends Command
                 </span>
 
                 <span class="valor">
-                    #{$numeroPedido}
+                    # {$numeroPedido}
                 </span>
 
             </div>
