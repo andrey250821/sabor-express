@@ -408,7 +408,7 @@ $cantidadProductos = $detalles->sum('cantidad');
                             </h3>
 
                             <span>
-                                Actualiza el estado del pedido
+                                Gestiona únicamente el estado de tus pedidos de cocina
                             </span>
 
                         </div>
@@ -420,7 +420,10 @@ $cantidadProductos = $detalles->sum('cantidad');
 
                 <div class="cocinero-detail-actions">
 
-                    @if($estado === 'pagado')
+                    @if(
+                        $estado === 'pagado'
+                        && $pedido->cocinero_id === null
+                    )
 
                     <div class="cocinero-action-info pendiente">
 
@@ -429,12 +432,14 @@ $cantidadProductos = $detalles->sum('cantidad');
                         <div>
 
                             <strong>
-                                Esperando preparación
+                                Pedido disponible
                             </strong>
 
                             <span>
-                                Este pedido está pagado y listo
-                                para comenzar a prepararse.
+                                Este pedido está en la cola de preparación.
+                                Al pulsar <strong>Preparar pedido</strong>, pasará
+                                inmediatamente a tu sección de preparación y dejará
+                                de estar disponible para los demás cocineros.
                             </span>
 
                         </div>
@@ -451,18 +456,22 @@ $cantidadProductos = $detalles->sum('cantidad');
 
                         <button
                             type="submit"
-                            class="btn cocinero-action-btn preparar">
+                            class="btn cocinero-action-btn preparar"
+                            onclick="return confirm('¿Comenzar a preparar el pedido #{{ $pedido->id }}? Se retirará de la cola de los demás cocineros.')">
 
                             <i class="bi bi-fire"></i>
 
-                            Comenzar preparación
+                            Preparar pedido
 
                         </button>
 
                     </form>
 
 
-                    @elseif($estado === 'preparando')
+                    @elseif(
+                        $estado === 'preparando'
+                        && (int) $pedido->cocinero_id === (int) auth()->id()
+                    )
 
                     <div class="cocinero-action-info preparando">
 
@@ -475,8 +484,8 @@ $cantidadProductos = $detalles->sum('cantidad');
                             </strong>
 
                             <span>
-                                Cuando termines, marca el pedido
-                                como listo para delivery.
+                                Este pedido está siendo preparado por ti.
+                                Cuando termines, márcalo como listo.
                             </span>
 
                         </div>
@@ -493,7 +502,8 @@ $cantidadProductos = $detalles->sum('cantidad');
 
                         <button
                             type="submit"
-                            class="btn cocinero-action-btn listo">
+                            class="btn cocinero-action-btn listo"
+                            onclick="return confirm('¿Marcar el pedido #{{ $pedido->id }} como listo?')">
 
                             <i class="bi bi-check-lg"></i>
 
@@ -504,7 +514,10 @@ $cantidadProductos = $detalles->sum('cantidad');
                     </form>
 
 
-                    @elseif($estado === 'listo')
+                    @elseif(
+                        $estado === 'listo'
+                        && (int) $pedido->cocinero_id === (int) auth()->id()
+                    )
 
                     <div class="cocinero-action-info listo">
 
@@ -517,13 +530,14 @@ $cantidadProductos = $detalles->sum('cantidad');
                             </strong>
 
                             <span>
-                                El pedido está listo y disponible
-                                para que un delivery lo tome.
+                                Este pedido fue terminado por ti y ya está
+                                disponible para el siguiente paso del flujo.
                             </span>
 
                         </div>
 
                     </div>
+
 
                     @else
 
@@ -534,12 +548,12 @@ $cantidadProductos = $detalles->sum('cantidad');
                         <div>
 
                             <strong>
-                                {{ $estadoTexto }}
+                                Sin acciones disponibles
                             </strong>
 
                             <span>
-                                Este pedido ya no requiere
-                                acciones desde cocina.
+                                Este pedido ya no se encuentra en una etapa
+                                que pueda ser gestionada desde esta cuenta.
                             </span>
 
                         </div>

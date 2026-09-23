@@ -21,20 +21,31 @@ class ProbarOcr extends Command
         $pedidoId = $this->option('pedido');
         $tipo = $this->option('tipo');
 
-        $archivo = "pedido_{$pedidoId}_comprobante_{$tipo}.png";
+        $tipoArchivo = match ($tipo) {
+            'correcto' => 'CORRECTO',
+            'monto_incorrecto' => 'MONTO_INCORRECTO',
+            'referencia_duplicada' => 'REFERENCIA_DUPLICADA',
+            'incompleto' => 'INCOMPLETO',
+            default => strtoupper(str_replace('-', '_', $tipo)),
+        };
 
-        $ruta = storage_path(
-            "app/public/comprobantes_test/{$archivo}"
-        );
+        $patron = "pedido_{$pedidoId}_cliente_*_{$tipoArchivo}.png";
+        $coincidencias = glob(
+            storage_path("app/public/comprobantes_test/{$patron}")
+        ) ?: [];
+
+        rsort($coincidencias);
+
+        $ruta = $coincidencias[0] ?? null;
+        $archivo = $ruta ? basename($ruta) : "pedido_{$pedidoId}_*_{$tipoArchivo}.png";
 
         $this->info("Comprobante: {$archivo}");
         $this->info("Ruta: {$ruta}");
         $this->newLine();
 
         // Verificar que exista la imagen
-        if (!file_exists($ruta)) {
-            $this->error("No se encontró la imagen.");
-            $this->line($ruta);
+        if (!$ruta || !file_exists($ruta)) {
+            $this->error("No se encontró una imagen de prueba para el pedido #{$pedidoId} y tipo {$tipo}.");
 
             return self::FAILURE;
         }
@@ -58,6 +69,8 @@ class ProbarOcr extends Command
             'stdout',
             '-l',
             'spa',
+            '--psm',
+            '6',
         ]);
 
         if ($resultado->failed()) {

@@ -113,7 +113,7 @@
                 </strong>
 
                 <small>
-                    Hay pedidos pagados esperando comenzar la preparación.
+                    Hay pedidos pagados que todavía no han comenzado a prepararse.
                 </small>
             </div>
 
@@ -127,7 +127,7 @@
                 <strong>Cocina al día</strong>
 
                 <small>
-                    No hay pedidos pendientes de preparación.
+                    No hay pedidos pagados esperando preparación.
                 </small>
             </div>
 
@@ -151,7 +151,7 @@
         {{-- PENDIENTES --}}
         <div class="col-12 col-sm-6 col-xl-3">
 
-            <a href="{{ route('cocinero.pedidos.index') }}"
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
                 class="cocinero-stat-link">
 
                 <div class="cocinero-stat-card warning">
@@ -194,7 +194,7 @@
         {{-- PREPARANDO --}}
         <div class="col-12 col-sm-6 col-xl-3">
 
-            <a href="{{ route('cocinero.pedidos.index') }}"
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
                 class="cocinero-stat-link">
 
                 <div class="cocinero-stat-card primary">
@@ -237,7 +237,7 @@
         {{-- LISTOS --}}
         <div class="col-12 col-sm-6 col-xl-3">
 
-            <a href="{{ route('cocinero.pedidos.index') }}"
+            <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'listos']) }}"
                 class="cocinero-stat-link">
 
                 <div class="cocinero-stat-card success">
@@ -511,7 +511,7 @@
 
                         <span class="cocinero-order-status pending">
                             <i class="bi bi-hourglass-split"></i>
-                            Pendiente
+                            En cola
                         </span>
 
                         @elseif($pedido->estado === 'preparando')
@@ -624,7 +624,7 @@
 
             <div class="col-12 col-md-4">
 
-                <a href="{{ route('cocinero.pedidos.index') }}"
+                <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
                     class="cocinero-action">
 
                     <div class="cocinero-action-icon blue">
@@ -652,7 +652,7 @@
 
             <div class="col-12 col-md-4">
 
-                <a href="{{ route('cocinero.pedidos.index') }}"
+                <a href="{{ route('cocinero.pedidos.index', ['seccion' => 'listos']) }}"
                     class="cocinero-action">
 
                     <div class="cocinero-action-icon green">

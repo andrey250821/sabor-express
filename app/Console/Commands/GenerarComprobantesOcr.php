@@ -445,7 +445,7 @@ class GenerarComprobantesOcr extends Command
             </div>
 
             <div class="numero-pedido">
-                Pedido N° {$numeroPedido}
+                NUMERO DE PEDIDO: {$numeroPedido}
             </div>
 
         </div>
@@ -456,11 +456,11 @@ class GenerarComprobantesOcr extends Command
             <div class="fila">
 
                 <span class="etiqueta">
-                    Pedido
+                    NUMERO DE PEDIDO
                 </span>
 
                 <span class="valor">
-                    #{$numeroPedido}
+                    {$numeroPedido}
                 </span>
 
             </div>

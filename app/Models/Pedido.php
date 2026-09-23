@@ -16,6 +16,7 @@ class Pedido extends Model
      */
     protected $fillable = [
         'user_id',
+        'cocinero_id',
         'total',
         'estado',
         'latitud',
@@ -31,6 +32,14 @@ class Pedido extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Cocinero que inició la preparación del pedido.
+     */
+    public function cocinero(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'cocinero_id');
     }
 
     /**
