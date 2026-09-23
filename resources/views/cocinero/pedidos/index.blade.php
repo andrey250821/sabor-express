@@ -14,7 +14,7 @@ $listos = $listos ?? collect();
 $cantidadPendientes = $pendientes->count();
 $cantidadPreparando = $preparando->count();
 $cantidadListos = $listos->count();
-\n$totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
+$totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
 @endphp
 
 <div class="container-fluid cocinero-pedidos">
