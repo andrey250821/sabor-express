@@ -58,6 +58,7 @@ use App\Http\Controllers\Delivery\PedidoController as DeliveryPedidoController;
 */
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilePhotoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,6 +80,11 @@ Route::get('/', function () {
 |
 |--------------------------------------------------------------------------
 */
+
+Route::get(
+    '/usuarios/{user}/foto',
+    [ProfilePhotoController::class, 'show']
+)->name('perfil.foto');
 
 Route::middleware('auth')->group(function () {
 
