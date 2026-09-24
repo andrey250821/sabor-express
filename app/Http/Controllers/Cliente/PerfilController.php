@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PerfilController extends Controller
@@ -38,6 +40,12 @@ class PerfilController extends Controller
                 'string',
                 'max:20',
             ],
+            'foto_perfil' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+            ],
         ]);
 
         $user = $request->user();
@@ -46,6 +54,25 @@ class PerfilController extends Controller
             'name' => $datos['name'],
             'telefono' => $datos['telefono'] ?? null,
         ]);
+
+        if ($request->hasFile('foto_perfil')) {
+            $fotoAnterior = $user->foto_perfil;
+
+            $nuevaFoto = $request->file('foto_perfil')
+                ->store('perfiles', 'public');
+
+            $user->update([
+                'foto_perfil' => $nuevaFoto,
+            ]);
+
+            if (
+                $fotoAnterior &&
+                !Str::startsWith($fotoAnterior, ['http://', 'https://']) &&
+                Storage::disk('public')->exists($fotoAnterior)
+            ) {
+                Storage::disk('public')->delete($fotoAnterior);
+            }
+        }
 
         return Redirect::route('cliente.configuracion.edit')
             ->with('profile_status', 'Información de perfil actualizada correctamente.');
