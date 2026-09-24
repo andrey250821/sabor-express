@@ -215,7 +215,13 @@
 
                 <div class="delivery-user-avatar">
 
-                    <i class="bi bi-person-fill"></i>
+                    @if(Auth::user()->foto_perfil_url)
+                        <img
+                            src="{{ Auth::user()->foto_perfil_url }}"
+                            alt="Foto de {{ Auth::user()->name }}">
+                    @else
+                        <i class="bi bi-person-fill"></i>
+                    @endif
 
                 </div>
 
@@ -227,7 +233,7 @@
                     </strong>
 
                     <span>
-                        Repartidor
+                        Delivery
                     </span>
 
                 </div>
@@ -325,7 +331,13 @@
 
                     <div class="delivery-topbar-user-icon">
 
-                        <i class="bi bi-bicycle"></i>
+                        @if(Auth::user()->foto_perfil_url)
+                            <img
+                                src="{{ Auth::user()->foto_perfil_url }}"
+                                alt="Foto de {{ Auth::user()->name }}">
+                        @else
+                            <i class="bi bi-bicycle"></i>
+                        @endif
 
                     </div>
 
@@ -337,7 +349,7 @@
                         </strong>
 
                         <span>
-                            Repartidor
+                            Delivery
                         </span>
 
                     </div>
