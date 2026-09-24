@@ -61,6 +61,14 @@ class PerfilController extends Controller
             $nuevaFoto = $request->file('foto_perfil')
                 ->store('perfiles', 'public');
 
+            if (!$nuevaFoto) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'foto_perfil' => 'No se pudo guardar la foto de perfil. Verifica que el directorio de almacenamiento tenga permisos de escritura.',
+                    ]);
+            }
+
             $user->update([
                 'foto_perfil' => $nuevaFoto,
             ]);
