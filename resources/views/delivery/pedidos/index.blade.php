@@ -196,7 +196,13 @@ $totalPedidos = $pedidos->count();
                 <div class="delivery-order-client">
 
                     <div class="delivery-client-avatar">
-                        {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                        @if($cliente?->foto_perfil_url)
+                            <img
+                                src="{{ $cliente->foto_perfil_url }}"
+                                alt="Foto de {{ $cliente->name }}">
+                        @else
+                            {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                        @endif
                     </div>
 
                     <div class="delivery-client-data">
