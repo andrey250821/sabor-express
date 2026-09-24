@@ -17,7 +17,10 @@
         </div>
 
         @if($noLeidas > 0)
-            <form action="{{ route('cliente.notificaciones.leer.todas') }}" method="POST">
+            <form
+                id="form-marcar-todas-notificaciones-cliente"
+                action="{{ route('cliente.notificaciones.leer.todas') }}"
+                method="POST">
                 @csrf
                 @method('PATCH')
                 <button type="submit" class="btn btn-outline-secondary">
@@ -69,7 +72,9 @@
                         };
                     @endphp
 
-                    <div class="card border-0 shadow-sm {{ !$notificacion->leido ? 'border-start border-4 border-primary' : '' }}">
+                    <div
+                        class="card border-0 shadow-sm {{ !$notificacion->leido ? 'border-start border-4 border-primary' : '' }} notification-card-cliente {{ $notificacion->leido ? 'leida' : 'no-leida' }}"
+                        data-notificacion-card="{{ $notificacion->id }}">
                         <div class="card-body">
                             <div class="d-flex align-items-start gap-3">
                                 <div class="fs-3 {{ $claseIcono }}">
@@ -113,7 +118,7 @@
                                         <form
                                             action="{{ route('cliente.notificaciones.leer', $notificacion->id) }}"
                                             method="POST"
-                                            class="d-inline-block ms-2">
+                                            class="d-inline-block ms-2 js-marcar-notificacion-cliente">
                                             @csrf
                                             @method('PATCH')
 
@@ -143,3 +148,118 @@
     @endforelse
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const formMarcarTodas = document.getElementById('form-marcar-todas-notificaciones-cliente');
+        const badgeNavbar = document.getElementById('badge-notificaciones-cliente');
+
+        const actualizarContador = (cantidad) => {
+            if (badgeNavbar) {
+                badgeNavbar.textContent = cantidad;
+                badgeNavbar.classList.toggle('d-none', cantidad === 0);
+            }
+
+            if (formMarcarTodas) {
+                formMarcarTodas.classList.toggle('d-none', cantidad === 0);
+            }
+        };
+
+        const marcarComoLeida = async (form) => {
+            const boton = form.querySelector('button[type="submit"]');
+            const card = form.closest('[data-notificacion-card]');
+
+            if (!boton || !card) return;
+
+            boton.disabled = true;
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': csrf,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('No se pudo marcar la notificación.');
+                }
+
+                const data = await response.json();
+
+                card.classList.remove('border-start', 'border-4', 'border-primary', 'no-leida');
+                card.classList.add('leida');
+
+                form.remove();
+
+                const badgeNueva = card.querySelector('.text-bg-primary');
+                if (badgeNueva) {
+                    badgeNueva.remove();
+                }
+
+                actualizarContador(data.noLeidas);
+            } catch (error) {
+                console.error(error);
+                boton.disabled = false;
+            }
+        };
+
+        document.querySelectorAll('.js-marcar-notificacion-cliente').forEach(form => {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                marcarComoLeida(form);
+            });
+        });
+
+        formMarcarTodas?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const boton = formMarcarTodas.querySelector('button[type="submit"]');
+
+            if (!boton) return;
+
+            boton.disabled = true;
+
+            try {
+                const response = await fetch(formMarcarTodas.action, {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': csrf,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('No se pudieron marcar todas las notificaciones.');
+                }
+
+                document.querySelectorAll('[data-notificacion-card]').forEach(card => {
+                    card.classList.remove('border-start', 'border-4', 'border-primary', 'no-leida');
+                    card.classList.add('leida');
+
+                    const badgeNueva = card.querySelector('.text-bg-primary');
+                    if (badgeNueva) {
+                        badgeNueva.remove();
+                    }
+
+                    const form = card.querySelector('.js-marcar-notificacion-cliente');
+                    if (form) {
+                        form.remove();
+                    }
+                });
+
+                actualizarContador(0);
+            } catch (error) {
+                console.error(error);
+                boton.disabled = false;
+            }
+        });
+    });
+</script>
+@endpush
+
