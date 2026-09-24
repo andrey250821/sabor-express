@@ -319,7 +319,14 @@
 
                             <div class="admin-calificaciones-avatar">
 
-                                <i class="bi bi-person-fill"></i>
+                                @if($calificacion->user?->foto_perfil_url)
+                                    <img
+                                        src="{{ $calificacion->user->foto_perfil_url }}"
+                                        alt="Foto de {{ $calificacion->user->name }}"
+                                        class="admin-calificaciones-avatar-image">
+                                @else
+                                    <i class="bi bi-person-fill"></i>
+                                @endif
 
                             </div>
 
