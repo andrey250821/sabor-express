@@ -46,11 +46,20 @@ class User extends Authenticatable
             return null;
         }
 
+        // Las fotos de Google se muestran directamente desde su URL.
         if (Str::startsWith($this->foto_perfil, ['http://', 'https://'])) {
             return $this->foto_perfil;
         }
 
-        return Storage::disk('public')->url($this->foto_perfil);
+        // Las fotos subidas por el usuario se sirven mediante una ruta de
+        // Laravel para no depender de public/storage como enlace simbólico.
+        $disk = Storage::disk('public');
+
+        if (!$disk->exists($this->foto_perfil)) {
+            return null;
+        }
+
+        return route('perfil.foto', ['user' => $this->getKey()]);
     }
 
     /**
