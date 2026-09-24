@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Models\Role;
 use App\Models\Pedido;
@@ -26,10 +28,30 @@ class User extends Authenticatable
         'name',
         'email',
         'google_id',
+        'foto_perfil',
         'telefono',
         'password',
         'estado',
     ];
+
+    /**
+     * URL pública de la foto de perfil.
+     *
+     * Puede contener una ruta local almacenada en el disco público
+     * o una URL externa, por ejemplo la foto proporcionada por Google.
+     */
+    public function getFotoPerfilUrlAttribute(): ?string
+    {
+        if (!$this->foto_perfil) {
+            return null;
+        }
+
+        if (Str::startsWith($this->foto_perfil, ['http://', 'https://'])) {
+            return $this->foto_perfil;
+        }
+
+        return Storage::disk('public')->url($this->foto_perfil);
+    }
 
     /**
      * Campos ocultos.
