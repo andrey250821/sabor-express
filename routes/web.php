@@ -40,6 +40,7 @@ use App\Http\Controllers\Cliente\PerfilController as ClientePerfilController;
 
 use App\Http\Controllers\Cocinero\DashboardController as CocineroDashboardController;
 use App\Http\Controllers\Cocinero\PedidoController as CocineroPedidoController;
+use App\Http\Controllers\Cocinero\PerfilController as CocineroPerfilController;
 
 /*
 |--------------------------------------------------------------------------
