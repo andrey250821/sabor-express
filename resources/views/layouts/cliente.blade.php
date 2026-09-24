@@ -157,7 +157,7 @@
                         @if($notificacionesNoLeidas > 0)
                             <span
                                 id="badge-notificaciones-cliente"
-                                class="badge bg-danger rounded-pill">
+                                class="badge bg-danger rounded-pill {{ $notificacionesNoLeidas > 0 ? '' : 'd-none' }}">
                                 {{ $notificacionesNoLeidas }}
                             </span>
                         @endif
