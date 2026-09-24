@@ -4036,6 +4036,14 @@ body.cocinero-layout::-webkit-scrollbar-thumb:hover {
     padding: 22px;
 }
 
+.cocinero-client-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
 .cocinero-client-avatar {
     width: 52px;
     height: 52px;
