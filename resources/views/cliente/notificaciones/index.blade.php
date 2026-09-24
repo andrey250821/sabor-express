@@ -149,7 +149,7 @@
 </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -261,5 +261,5 @@
         });
     });
 </script>
-@endpush
+@endsection
 
