@@ -62,9 +62,18 @@ class GoogleController extends Controller
              */
             if ($user) {
 
+                $actualizaciones = [];
+
                 if (!$user->google_id) {
-                    $user->google_id = $googleUser->getId();
-                    $user->save();
+                    $actualizaciones['google_id'] = $googleUser->getId();
+                }
+
+                if (!$user->foto_perfil && $googleUser->getAvatar()) {
+                    $actualizaciones['foto_perfil'] = $googleUser->getAvatar();
+                }
+
+                if ($actualizaciones) {
+                    $user->update($actualizaciones);
                 }
 
             } else {
@@ -82,6 +91,7 @@ class GoogleController extends Controller
                         ?: 'Usuario Google',
                     'email' => $googleUser->getEmail(),
                     'google_id' => $googleUser->getId(),
+                    'foto_perfil' => $googleUser->getAvatar(),
                     'password' => Hash::make(Str::random(32)),
                     'estado' => 'activo',
                 ]);
