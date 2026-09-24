@@ -1,14 +1,14 @@
 <?php
 
-namespace AppHttpControllersCocinero;
+namespace App\Http\Controllers\Cocinero;
 
-use AppHttpControllersController;
-use IlluminateHttpRedirectResponse;
-use IlluminateHttpRequest;
-use IlluminateSupportFacadesStorage;
-use IlluminateSupportFacadesRedirect;
-use IlluminateSupportStr;
-use IlluminateViewView;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class PerfilController extends Controller
 {
