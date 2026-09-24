@@ -73,7 +73,13 @@
 
             <div class="cliente-info-avatar">
 
-                {{ strtoupper(substr($cliente->name, 0, 1)) }}
+                @if($cliente->foto_perfil_url)
+                    <img
+                        src="{{ $cliente->foto_perfil_url }}"
+                        alt="Foto de {{ $cliente->name }}">
+                @else
+                    {{ strtoupper(substr($cliente->name, 0, 1)) }}
+                @endif
 
             </div>
 
