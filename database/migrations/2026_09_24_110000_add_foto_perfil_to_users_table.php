@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('foto_perfil')->nullable()->after('google_id');
+            $table->text('foto_perfil')->nullable()->after('google_id');
         });
     }
 
