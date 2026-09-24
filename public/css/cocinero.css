@@ -2004,6 +2004,15 @@ body.sidebar-open {
 }
 
 
+.cocinero-avatar img,
+.cocinero-topbar-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
 .cocinero-profile-info {
     min-width: 0;
 
