@@ -68,7 +68,7 @@ class GoogleController extends Controller
                     $actualizaciones['google_id'] = $googleUser->getId();
                 }
 
-                if (!$user->foto_perfil && $googleUser->getAvatar()) {
+                if (!$user->foto_perfil_url && $googleUser->getAvatar()) {
                     $actualizaciones['foto_perfil'] = $googleUser->getAvatar();
                 }
 
