@@ -182,10 +182,26 @@
                     @auth
 
                     <div class="cliente-user-info">
-                        <span class="cliente-user-name">
-                            <i class="bi bi-person-circle"></i>
-                            {{ Auth::user()->name }}
-                        </span>
+                        <a
+                            href="{{ route('cliente.configuracion.edit') }}"
+                            class="cliente-profile-link"
+                            title="Ver mi perfil">
+
+                            <span class="cliente-navbar-profile-avatar">
+                                @if(Auth::user()->foto_perfil_url)
+                                    <img
+                                        src="{{ Auth::user()->foto_perfil_url }}"
+                                        alt="Foto de perfil de {{ Auth::user()->name }}">
+                                @else
+                                    <i class="bi bi-person-fill"></i>
+                                @endif
+                            </span>
+
+                            <span class="cliente-user-name">
+                                {{ Auth::user()->name }}
+                            </span>
+
+                        </a>
 
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
