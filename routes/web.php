@@ -384,7 +384,6 @@ Route::middleware(['auth', 'role:Delivery'])
         Route::get('/dashboard', [DeliveryDashboardController::class, 'index'])->name('delivery.dashboard');
         Route::get('/pedidos', [DeliveryPedidoController::class, 'index'])->name('delivery.pedidos.index');
         Route::get('/pedidos/{id}', [DeliveryPedidoController::class, 'show'])->name('delivery.pedidos.show');
-        Route::post('/pedidos/{id}/tomar', [DeliveryPedidoController::class, 'tomar'])->name('delivery.pedidos.tomar');
         Route::get('/mis-pedidos', [DeliveryPedidoController::class, 'misPedidos'])->name('delivery.pedidos.mis');
         Route::put('/pedidos/{id}/iniciar', [DeliveryPedidoController::class, 'iniciar'])->name('delivery.pedidos.iniciar');
         Route::put('/pedidos/{id}/entregar', [DeliveryPedidoController::class, 'entregar'])->name('delivery.pedidos.entregar');
