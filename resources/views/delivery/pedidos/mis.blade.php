@@ -72,7 +72,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
             <i class="bi bi-plus-lg"></i>
 
-            Tomar nuevo pedido
+            Ver cola de pedidos
 
         </a>
 
@@ -309,7 +309,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                 <p>
                     Actualmente no tienes pedidos tomados.
-                    Puedes revisar los pedidos disponibles y elegir una nueva entrega.
+                    La siguiente entrega se asignará automáticamente cuando quedes libre.
                 </p>
 
                 <a
@@ -318,7 +318,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                     <i class="bi bi-box-seam"></i>
 
-                    Ver pedidos disponibles
+                    Ver cola de pedidos
 
                 </a>
 
