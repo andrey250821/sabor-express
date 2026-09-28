@@ -60,7 +60,7 @@
 
             <span>
                 El sistema respeta el orden de la cola.
-                Cuando quedes libre, recibirás obligatoriamente el siguiente pedido disponible.
+                Cuando quedes libre, recibirás obligatoriamente el siguiente pedido de la cola.
             </span>
         </div>
 
