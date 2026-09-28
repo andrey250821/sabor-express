@@ -399,7 +399,13 @@ $asignacion
 
             <div class="delivery-client-avatar">
 
-                {{ strtoupper(substr($pedido->user->name ?? 'C', 0, 1)) }}
+                @if($pedido->user->foto_perfil_url)
+                    <img
+                        src="{{ $pedido->user->foto_perfil_url }}"
+                        alt="Foto de {{ $pedido->user->name }}">
+                @else
+                    {{ strtoupper(substr($pedido->user->name ?? 'C', 0, 1)) }}
+                @endif
 
             </div>
 

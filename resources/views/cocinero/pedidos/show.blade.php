@@ -151,7 +151,13 @@ $cantidadProductos = $detalles->sum('cantidad');
 
                     <div class="cocinero-client-avatar">
 
-                        <i class="bi bi-person-fill"></i>
+                        @if($pedido->user?->foto_perfil_url)
+                            <img
+                                src="{{ $pedido->user->foto_perfil_url }}"
+                                alt="Foto de {{ $pedido->user->name }}">
+                        @else
+                            <i class="bi bi-person-fill"></i>
+                        @endif
 
                     </div>
 

@@ -40,6 +40,7 @@ use App\Http\Controllers\Cliente\PerfilController as ClientePerfilController;
 
 use App\Http\Controllers\Cocinero\DashboardController as CocineroDashboardController;
 use App\Http\Controllers\Cocinero\PedidoController as CocineroPedidoController;
+use App\Http\Controllers\Cocinero\PerfilController as CocineroPerfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,7 @@ use App\Http\Controllers\Delivery\PedidoController as DeliveryPedidoController;
 */
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilePhotoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +80,11 @@ Route::get('/', function () {
 |
 |--------------------------------------------------------------------------
 */
+
+Route::get(
+    '/usuarios/{user}/foto',
+    [ProfilePhotoController::class, 'show']
+)->name('perfil.foto');
 
 Route::middleware('auth')->group(function () {
 
@@ -170,6 +177,7 @@ Route::middleware(['auth', 'role:Administrador'])
         // Gestión de Cocineros
         Route::get('/cocineros', [CocineroController::class, 'index'])->name('admin.cocineros.index');
         Route::get('/cocineros/create', [CocineroController::class, 'create'])->name('admin.cocineros.create');
+        Route::get('/cocineros/{id}', [CocineroController::class, 'show'])->name('admin.cocineros.show');
         Route::post('/cocineros', [CocineroController::class, 'store'])->name('admin.cocineros.store');
         Route::get('/cocineros/{id}/edit', [CocineroController::class, 'edit'])->name('admin.cocineros.edit');
         Route::put('/cocineros/{id}', [CocineroController::class, 'update'])->name('admin.cocineros.update');
@@ -393,6 +401,8 @@ Route::middleware(['auth', 'role:Cocinero'])
     ->prefix('cocinero')
     ->group(function () {
         Route::get('/dashboard', [CocineroDashboardController::class, 'index'])->name('cocinero.dashboard');
+        Route::get('/perfil', [CocineroPerfilController::class, 'edit'])->name('cocinero.perfil.edit');
+        Route::patch('/perfil', [CocineroPerfilController::class, 'update'])->name('cocinero.perfil.update');
         Route::get('/pedidos', [CocineroPedidoController::class, 'index'])->name('cocinero.pedidos.index');
         Route::get('/pedidos/{id}', [CocineroPedidoController::class, 'show'])->name('cocinero.pedidos.show');
         Route::put('/pedidos/{id}/preparar', [CocineroPedidoController::class, 'preparar'])->name('cocinero.pedidos.preparar');

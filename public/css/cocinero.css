@@ -2004,6 +2004,15 @@ body.sidebar-open {
 }
 
 
+.cocinero-avatar img,
+.cocinero-topbar-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
 .cocinero-profile-info {
     min-width: 0;
 
@@ -4025,6 +4034,14 @@ body.cocinero-layout::-webkit-scrollbar-thumb:hover {
     align-items: center;
     gap: 15px;
     padding: 22px;
+}
+
+.cocinero-client-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
 }
 
 .cocinero-client-avatar {

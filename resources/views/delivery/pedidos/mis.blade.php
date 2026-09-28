@@ -391,7 +391,13 @@ $cantidadEntregados = $pedidosEntregados->count();
                         <div class="delivery-my-client">
 
                             <div class="delivery-my-avatar">
-                                {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                                @if($cliente?->foto_perfil_url)
+                                    <img
+                                        src="{{ $cliente->foto_perfil_url }}"
+                                        alt="Foto de {{ $cliente->name }}">
+                                @else
+                                    {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                                @endif
                             </div>
 
                             <div>
@@ -724,7 +730,13 @@ $cantidadEntregados = $pedidosEntregados->count();
                         <div class="delivery-delivered-client">
 
                             <div class="delivery-delivered-avatar">
-                                {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                                @if($cliente?->foto_perfil_url)
+                                    <img
+                                        src="{{ $cliente->foto_perfil_url }}"
+                                        alt="Foto de {{ $cliente->name }}">
+                                @else
+                                    {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                                @endif
                             </div>
 
                             <div>

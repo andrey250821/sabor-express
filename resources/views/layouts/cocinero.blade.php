@@ -82,25 +82,19 @@
 
         </div>
 
-        {{-- Botón cerrar en móvil --}}
-        <button
-            type="button"
-            class="cocinero-sidebar-close d-lg-none"
-            id="cocineroSidebarClose"
-            aria-label="Cerrar menú">
-            <i class="bi bi-x-lg"></i>
-        </button>
-
-        </div>
-
-
         {{-- =================================================
              INFORMACIÓN DEL COCINERO
         ================================================== --}}
         <div class="cocinero-profile">
 
             <div class="cocinero-avatar">
-                <i class="bi bi-person-fill"></i>
+                @if(Auth::user()->foto_perfil_url)
+                    <img
+                        src="{{ Auth::user()->foto_perfil_url }}"
+                        alt="Foto de {{ Auth::user()->name }}">
+                @else
+                    <i class="bi bi-person-fill"></i>
+                @endif
             </div>
 
             <div class="cocinero-profile-info">
@@ -160,8 +154,8 @@
 
 
             {{-- Perfil --}}
-            <a href="#"
-                class="cocinero-nav-link">
+            <a href="{{ route('cocinero.perfil.edit') }}"
+                class="cocinero-nav-link {{ request()->routeIs('cocinero.perfil.*') ? 'active' : '' }}">
 
                 <span class="cocinero-nav-icon">
                     <i class="bi bi-person-circle"></i>
@@ -280,7 +274,13 @@
                         <div class="cocinero-topbar-user">
 
                             <div class="cocinero-topbar-avatar">
-                                <i class="bi bi-person-fill"></i>
+                                @if(Auth::user()->foto_perfil_url)
+                                    <img
+                                        src="{{ Auth::user()->foto_perfil_url }}"
+                                        alt="Foto de {{ Auth::user()->name }}">
+                                @else
+                                    <i class="bi bi-person-fill"></i>
+                                @endif
                             </div>
 
                             <div class="d-none d-md-block">

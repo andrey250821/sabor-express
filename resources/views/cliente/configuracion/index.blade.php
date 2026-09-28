@@ -54,9 +54,36 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('cliente.configuracion.update') }}" method="POST">
+                    <form action="{{ route('cliente.configuracion.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
+
+                        <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded bg-light">
+                            <div class="cliente-perfil-avatar-preview">
+                                @if($user->foto_perfil_url)
+                                    <img
+                                        src="{{ $user->foto_perfil_url }}"
+                                        alt="Foto de perfil de {{ $user->name }}">
+                                @else
+                                    <span>{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                                @endif
+                            </div>
+                            <div class="flex-grow-1">
+                                <h3 class="h6 mb-1">Foto de perfil</h3>
+                                <p class="text-muted small mb-2">
+                                    Puedes subir una foto nueva. Las cuentas de Google muestran su foto de Google mientras no establezcas una foto propia.
+                                </p>
+                                <input
+                                    id="foto_perfil"
+                                    name="foto_perfil"
+                                    type="file"
+                                    class="form-control @error('foto_perfil') is-invalid @enderror"
+                                    accept="image/jpeg,image/png,image/webp">
+                                @error('foto_perfil')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="mb-3">
                             <label for="name" class="form-label fw-semibold">Nombre completo</label>

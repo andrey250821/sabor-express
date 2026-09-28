@@ -43,6 +43,27 @@ class CocineroController extends Controller
     }
 
     /**
+     * Mostrar información del cocinero.
+     */
+    public function show($id)
+    {
+        $cocinero = User::where('role_id', 4)
+            ->withCount('pedidosCocina')
+            ->with([
+                'pedidosCocina' => fn ($query) => $query
+                    ->with('user')
+                    ->latest()
+                    ->take(10),
+            ])
+            ->findOrFail($id);
+
+        return view(
+            'admin.cocineros.show',
+            compact('cocinero')
+        );
+    }
+
+    /**
      * Mostrar formulario para crear un cocinero.
      */
     public function create()

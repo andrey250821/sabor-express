@@ -1,31 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Cliente;
+namespace App\Http\Controllers\Cocinero;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PerfilController extends Controller
 {
     /**
-     * Mostrar la configuración del perfil del cliente autenticado.
+     * Mostrar el perfil del cocinero autenticado.
      */
-    public function edit(): View
+    public function edit(Request $request): View
     {
-        return view('cliente.configuracion.index', [
-            'user' => Auth::user(),
+        return view('cocinero.perfil.index', [
+            'user' => $request->user(),
         ]);
     }
 
     /**
-     * Actualizar nombre y teléfono.
+     * Actualizar los datos que el cocinero puede modificar.
+     *
+     * El rol, correo y estado se mantienen bajo control administrativo.
      */
     public function update(Request $request): RedirectResponse
     {
@@ -82,35 +82,7 @@ class PerfilController extends Controller
             }
         }
 
-        return Redirect::route('cliente.configuracion.edit')
-            ->with('profile_status', 'Información de perfil actualizada correctamente.');
-    }
-
-    /**
-     * Actualizar contraseña del cliente.
-     */
-    public function updatePassword(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('passwordUpdate', [
-            'current_password' => [
-                'required',
-                'current_password',
-            ],
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'confirmed',
-            ],
-        ]);
-
-        $user = $request->user();
-
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-
-        return Redirect::route('cliente.configuracion.edit')
-            ->with('password_status', 'Contraseña actualizada correctamente.');
+        return Redirect::route('cocinero.perfil.edit')
+            ->with('profile_status', 'Perfil actualizado correctamente.');
     }
 }

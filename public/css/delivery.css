@@ -704,6 +704,15 @@ a {
 }
 
 
+.delivery-user-avatar img,
+.delivery-topbar-user-icon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
 .delivery-user-info {
 
     min-width: 0;
@@ -4792,6 +4801,16 @@ a {
     border-radius: 13px;
 
     background: #1d1f26;
+}
+
+.delivery-client-avatar img,
+.delivery-my-avatar img,
+.delivery-delivered-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: inherit;
 }
 
 .delivery-client-avatar {

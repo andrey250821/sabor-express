@@ -9,7 +9,13 @@
     <td>
         <div class="delivery-person">
             <div class="delivery-avatar">
-                <i class="bi bi-person-fill"></i>
+                @if($cocinero->foto_perfil_url)
+                    <img
+                        src="{{ $cocinero->foto_perfil_url }}"
+                        alt="Foto de {{ $cocinero->name }}">
+                @else
+                    <i class="bi bi-person-fill"></i>
+                @endif
             </div>
 
             <div>
@@ -56,6 +62,13 @@
 
     <td>
         <div class="delivery-actions">
+            <a
+                href="{{ route('admin.cocineros.show', $cocinero->id) }}"
+                class="btn-delivery"
+                title="Ver cocinero">
+                <i class="bi bi-eye-fill"></i>
+            </a>
+
             <a
                 href="{{ route('admin.cocineros.edit', $cocinero->id) }}"
                 class="btn-delivery editar"
