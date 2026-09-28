@@ -16,7 +16,7 @@ $asignaciones = $asignaciones ?? collect();
 */
 
 // Pedidos que todavía están siendo gestionados
-$pedidosTomados = $asignaciones->filter(function ($asignacion) {
+$pedidosAsignados = $asignaciones->filter(function ($asignacion) {
 return in_array($asignacion->estado, [
 'aceptado',
 'en_camino'
@@ -28,7 +28,7 @@ $pedidosEntregados = $asignaciones->filter(function ($asignacion) {
 return $asignacion->estado === 'entregado';
 });
 
-$cantidadTomados = $pedidosTomados->count();
+$cantidadAsignados = $pedidosAsignados->count();
 $cantidadEntregados = $pedidosEntregados->count();
 @endphp
 
@@ -96,11 +96,11 @@ $cantidadEntregados = $pedidosEntregados->count();
                 <div>
 
                     <span>
-                        Pedidos tomados
+                        Pedidos asignados
                     </span>
 
                     <strong>
-                        {{ $cantidadTomados }}
+                        {{ $cantidadAsignados }}
                     </strong>
 
                     <small>
@@ -214,19 +214,19 @@ $cantidadEntregados = $pedidosEntregados->count();
             <button
                 type="button"
                 class="delivery-my-tab active"
-                id="tab-tomados"
-                data-target="panel-tomados"
+                id="tab-asignados"
+                data-target="panel-asignados"
                 role="tab"
                 aria-selected="true">
 
                 <i class="bi bi-bicycle"></i>
 
                 <span>
-                    Tomados
+                    Asignados
                 </span>
 
                 <strong>
-                    {{ $cantidadTomados }}
+                    {{ $cantidadAsignados }}
                 </strong>
 
             </button>
@@ -264,7 +264,7 @@ $cantidadEntregados = $pedidosEntregados->count();
     ====================================================== --}}
 
     <div
-        id="panel-tomados"
+        id="panel-asignados"
         class="delivery-my-tab-panel active">
 
         <div class="delivery-my-section">
@@ -279,7 +279,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                     <h2>
                         <i class="bi bi-bicycle"></i>
-                        Pedidos tomados
+                        Pedidos asignados
                     </h2>
 
                     <p>
@@ -289,13 +289,13 @@ $cantidadEntregados = $pedidosEntregados->count();
                 </div>
 
                 <div class="delivery-my-section-count active">
-                    {{ $cantidadTomados }}
+                    {{ $cantidadAsignados }}
                 </div>
 
             </div>
 
 
-            @if($pedidosTomados->isEmpty())
+            @if($pedidosAsignados->isEmpty())
 
             <div class="delivery-my-empty delivery-my-empty-active">
 
@@ -308,7 +308,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                 </h3>
 
                 <p>
-                    Actualmente no tienes pedidos tomados.
+                    Actualmente no tienes pedidos asignados en proceso.
                     La siguiente entrega se asignará automáticamente cuando quedes libre.
                 </p>
 
@@ -328,7 +328,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
             <div class="row g-4">
 
-                @foreach($pedidosTomados as $asignacion)
+                @foreach($pedidosAsignados as $asignacion)
 
                 @php
                 $pedido = $asignacion->pedido;
