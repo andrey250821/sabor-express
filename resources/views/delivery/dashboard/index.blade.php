@@ -41,8 +41,7 @@
                 <p class="delivery-dashboard-text">
 
                     Bienvenido a tu centro de entregas.
-                    Revisa los pedidos disponibles, toma nuevas entregas
-                    y mantén actualizado el estado de tus pedidos.
+                    Consulta la cantidad de pedidos en cola. Las entregas se asignan automáticamente y mantén actualizado el estado de tus pedidos.
 
                 </p>
 
@@ -116,7 +115,7 @@
                             </strong>
 
                             <span>
-                                Disponibles
+                                En cola
                             </span>
 
                         </div>
@@ -177,7 +176,7 @@
 
                     {{ $pedidosEnCola === 1
                             ? 'pedido disponible'
-                            : 'pedidos disponibles'
+                            : 'pedidos en cola'
                         }}
 
                 </strong>
@@ -243,7 +242,7 @@
                         <div>
 
                             <span class="delivery-stat-label">
-                                Disponibles
+                                En cola
                             </span>
 
                             <strong class="delivery-stat-number">
@@ -631,7 +630,7 @@
                             </strong>
 
                             <span>
-                                Disponibles
+                                En cola
                             </span>
 
                         </div>
@@ -703,7 +702,7 @@
 
                         <span>
                             Los pedidos listos aparecen automáticamente
-                            para que puedas tomarlos.
+                            para que el sistema te asigne el siguiente pedido automáticamente.
                         </span>
 
                     </div>
@@ -769,7 +768,7 @@
                         </strong>
 
                         <span>
-                            Ver cola de pedidos para tomar
+                            Ver cola de pedidos
                         </span>
 
                     </div>
