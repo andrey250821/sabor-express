@@ -177,6 +177,53 @@ class PedidoTest extends TestCase
         ]);
     }
 
+    public function test_cola_solo_muestra_la_cantidad_y_no_los_detalles(): void
+    {
+        $deliveryRole = Role::create([
+            'nombre' => 'Delivery',
+            'descripcion' => 'Delivery del sistema',
+        ]);
+
+        $clienteRole = Role::create([
+            'nombre' => 'Cliente',
+            'descripcion' => 'Cliente del sistema',
+        ]);
+
+        $delivery = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery 1',
+            'email' => 'delivery1@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente privado',
+            'email' => 'cliente-privado@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 85,
+            'estado' => 'listo',
+            'fecha_listo' => now(),
+            'direccion_entrega' => 'Dirección privada de prueba',
+        ]);
+
+        $response = $this->actingAs($delivery)
+            ->get('/delivery/pedidos');
+
+        $response->assertOk();
+        $response->assertSee('Pedidos en cola');
+        $response->assertSee('1');
+        $response->assertDontSee('Cliente privado');
+        $response->assertDontSee('cliente-privado@test.com');
+        $response->assertDontSee('Dirección privada de prueba');
+    }
+
     public function test_delivery_no_puede_ver_detalles_de_un_pedido_ajeno(): void
     {
         $deliveryRole = Role::create([
