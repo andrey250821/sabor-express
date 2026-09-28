@@ -53,7 +53,7 @@
 
                         <i class="bi bi-box-seam"></i>
 
-                        Ver pedidos disponibles
+                        Ver cola de pedidos
 
                     </a>
 
@@ -100,7 +100,7 @@
                     </div>
 
 
-                    {{-- PEDIDOS DISPONIBLES --}}
+                    {{-- PEDIDOS EN COLA --}}
                     <div class="delivery-floating-card floating-top">
 
                         <div class="delivery-floating-icon available">
@@ -112,7 +112,7 @@
                         <div>
 
                             <strong>
-                                {{ $pedidosDisponibles }}
+                                {{ $pedidosEnCola }}
                             </strong>
 
                             <span>
@@ -163,7 +163,7 @@
 
         <div class="delivery-dashboard-status-left">
 
-            @if($pedidosDisponibles > 0)
+            @if($pedidosEnCola > 0)
 
             <div class="delivery-status-pulse warning">
                 <span></span>
@@ -173,9 +173,9 @@
 
                 <strong>
 
-                    {{ $pedidosDisponibles }}
+                    {{ $pedidosEnCola }}
 
-                    {{ $pedidosDisponibles === 1
+                    {{ $pedidosEnCola === 1
                             ? 'pedido disponible'
                             : 'pedidos disponibles'
                         }}
@@ -184,7 +184,7 @@
 
                 <small>
 
-                    Hay pedidos listos en cocina esperando ser tomados.
+                    Hay pedidos listos en cocina esperando asignación automática.
 
                 </small>
 
@@ -199,11 +199,11 @@
             <div>
 
                 <strong>
-                    No hay nuevos pedidos
+                    No hay pedidos en cola
                 </strong>
 
                 <small>
-                    Actualmente no existen pedidos disponibles para tomar.
+                    Actualmente no hay pedidos esperando asignación.
                 </small>
 
             </div>
@@ -247,7 +247,7 @@
                             </span>
 
                             <strong class="delivery-stat-number">
-                                {{ $pedidosDisponibles }}
+                                {{ $pedidosEnCola }}
                             </strong>
 
                         </div>
@@ -263,7 +263,7 @@
                     <div class="delivery-stat-bottom">
 
                         <span>
-                            Pedidos listos para tomar
+                            Pedidos listos esperando asignación
                         </span>
 
                         <i class="bi bi-arrow-up-right"></i>
@@ -423,7 +423,7 @@
                         <div class="delivery-flow-content">
 
                             <strong>
-                                Pedido disponible
+                                Pedido en cola
                             </strong>
 
                             <span>
@@ -433,7 +433,7 @@
                         </div>
 
                         <div class="delivery-flow-count">
-                            {{ $pedidosDisponibles }}
+                            {{ $pedidosEnCola }}
                         </div>
 
                     </div>
@@ -458,11 +458,11 @@
                         <div class="delivery-flow-content">
 
                             <strong>
-                                Pedido tomado
+                                Pedido asignado
                             </strong>
 
                             <span>
-                                Entrega aceptada
+                                Asignación automática
                             </span>
 
                         </div>
@@ -627,7 +627,7 @@
                         <div>
 
                             <strong>
-                                {{ $pedidosDisponibles }}
+                                {{ $pedidosEnCola }}
                             </strong>
 
                             <span>
@@ -750,7 +750,7 @@
         <div class="row g-3">
 
 
-            {{-- PEDIDOS DISPONIBLES --}}
+            {{-- PEDIDOS EN COLA --}}
             <div class="col-12 col-md-4">
 
                 <a href="{{ route('delivery.pedidos.index') }}"
@@ -769,7 +769,7 @@
                         </strong>
 
                         <span>
-                            Ver pedidos disponibles para tomar
+                            Ver cola de pedidos para tomar
                         </span>
 
                     </div>
