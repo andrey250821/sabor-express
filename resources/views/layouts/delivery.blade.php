@@ -170,7 +170,7 @@
                     </span>
 
                     <span class="delivery-nav-text">
-                        Pedidos disponibles
+                        Cola de pedidos
                     </span>
 
                     <span class="delivery-nav-arrow">
