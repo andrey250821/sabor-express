@@ -304,7 +304,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                 </div>
 
                 <h3>
-                    No tienes pedidos pendientes
+                    No tienes pedidos registrados
                 </h3>
 
                 <p>
