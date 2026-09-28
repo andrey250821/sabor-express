@@ -175,7 +175,7 @@
                     {{ $pedidosEnCola }}
 
                     {{ $pedidosEnCola === 1
-                            ? 'pedido disponible'
+                            ? 'pedido en cola'
                             : 'pedidos en cola'
                         }}
 
