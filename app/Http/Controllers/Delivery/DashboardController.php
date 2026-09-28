@@ -31,7 +31,7 @@ class DashboardController extends Controller
         }
 
         // Pedidos listos que todavía NO tienen delivery asignado
-        $pedidosDisponibles = Pedido::where('estado', 'listo')
+        $pedidosEnCola = Pedido::where('estado', 'listo')
             ->whereDoesntHave('asignacionDelivery')
             ->count();
 
@@ -57,7 +57,7 @@ class DashboardController extends Controller
         return view(
             'delivery.dashboard.index',
             compact(
-                'pedidosDisponibles',
+                'pedidosEnCola',
                 'misPedidos',
                 'pedidosEntregados',
                 'delivery'
