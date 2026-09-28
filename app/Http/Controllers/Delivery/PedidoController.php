@@ -3,86 +3,95 @@
 namespace App\Http\Controllers\Delivery;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pedido;
 use App\Models\AsignacionDelivery;
 use App\Models\Notificacion;
-use Illuminate\Http\Request;
+use App\Models\Pedido;
+use App\Services\AsignarPedidoDeliveryService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class PedidoController extends Controller
 {
     /**
-     * Verificar que el usuario actual sea un delivery activo.
+     * Verificar que el usuario actual sea un Delivery activo.
      */
     private function verificarDelivery()
     {
         $delivery = Auth::user();
 
         if (!$delivery) {
-            return redirect()->route('login')
+            return redirect()
+                ->route('login')
                 ->with('error', 'Debe iniciar sesión.');
         }
 
         if (
-            $delivery->role_id != 3 ||
+            (int) $delivery->role_id !== 3 ||
             $delivery->estado !== 'activo'
         ) {
-            abort(403, 'No tienes permisos para acceder como delivery.');
+            abort(403, 'No tienes permisos para acceder como Delivery.');
         }
 
         return $delivery;
     }
 
-
     /**
-     * PEDIDOS DISPONIBLES
+     * COLA DE PEDIDOS
      *
-     * Muestra los pedidos que:
-     * - Están listos.
-     * - No tienen delivery asignado.
+     * El Delivery puede consultar únicamente cuántos pedidos están
+     * esperando asignación. No se muestran clientes, productos,
+     * direcciones, montos ni ningún otro detalle.
+     *
+     * La selección del pedido no la realiza el Delivery:
+     * el sistema asigna automáticamente el siguiente pedido de la cola.
      */
-    public function index()
+    public function index(): View|RedirectResponse
     {
         $delivery = $this->verificarDelivery();
 
-        if ($delivery instanceof \Illuminate\Http\RedirectResponse) {
+        if ($delivery instanceof RedirectResponse) {
             return $delivery;
         }
 
-        $pedidos = Pedido::with([
-            'user',
-            'detallePedidos.producto'
-        ])
+        $pedidosEnCola = Pedido::query()
             ->where('estado', 'listo')
             ->whereDoesntHave('asignacionDelivery')
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->count();
 
         return view(
             'delivery.pedidos.index',
-            compact('pedidos')
+            compact('pedidosEnCola')
         );
     }
 
-
     /**
      * DETALLE DE UN PEDIDO
+     *
+     * Solo puede abrirse un pedido que haya sido asignado al
+     * Delivery autenticado. Esto evita que pueda consultar
+     * manualmente un pedido ajeno escribiendo su ID en la URL.
      */
-    public function show($id)
+    public function show(int $id): View|RedirectResponse
     {
         $delivery = $this->verificarDelivery();
 
-        if ($delivery instanceof \Illuminate\Http\RedirectResponse) {
+        if ($delivery instanceof RedirectResponse) {
             return $delivery;
         }
 
-        $pedido = Pedido::with([
-            'user',
-            'detallePedidos.producto',
-            'comprobantePago',
-            'asignacionDelivery.delivery'
-        ])->findOrFail($id);
+        $pedido = Pedido::query()
+            ->whereHas('asignacionDelivery', function ($query) use ($delivery) {
+                $query->where('delivery_id', $delivery->id);
+            })
+            ->with([
+                'user',
+                'detallePedidos.producto',
+                'comprobantePago',
+                'asignacionDelivery.delivery',
+            ])
+            ->findOrFail($id);
 
         return view(
             'delivery.pedidos.show',
@@ -90,124 +99,30 @@ class PedidoController extends Controller
         );
     }
 
-
-    /**
-     * TOMAR PEDIDO
-     *
-     * El delivery toma personalmente el pedido.
-     *
-     * Reglas:
-     * - Debe ser delivery activo.
-     * - El pedido debe estar LISTO.
-     * - No debe tener otro delivery asignado.
-     */
-    public function tomar($id)
-    {
-        $delivery = $this->verificarDelivery();
-
-        if ($delivery instanceof \Illuminate\Http\RedirectResponse) {
-            return $delivery;
-        }
-
-        DB::beginTransaction();
-
-        try {
-
-            $pedido = Pedido::lockForUpdate()
-                ->findOrFail($id);
-
-            // El pedido debe estar listo
-            if ($pedido->estado !== 'listo') {
-
-                DB::rollBack();
-
-                return back()->with(
-                    'error',
-                    'Este pedido todavía no está listo para entregar.'
-                );
-            }
-
-            // Verificar si ya tiene delivery
-            $asignacionExistente = AsignacionDelivery::where(
-                'pedido_id',
-                $pedido->id
-            )->first();
-
-            if ($asignacionExistente) {
-
-                DB::rollBack();
-
-                return back()->with(
-                    'error',
-                    'Este pedido ya fue tomado por otro repartidor.'
-                );
-            }
-
-            // Crear asignación
-            AsignacionDelivery::create([
-
-                'pedido_id' => $pedido->id,
-
-                'delivery_id' => $delivery->id,
-
-                'estado' => 'aceptado',
-
-                'fecha_asignacion' => now(),
-
-                'fecha_respuesta' => now(),
-
-            ]);
-
-            // Cambiar estado del pedido
-            $pedido->estado = 'asignado';
-
-            $pedido->save();
-
-            DB::commit();
-
-            return redirect()
-                ->route('delivery.pedidos.mis')
-                ->with(
-                    'success',
-                    'Pedido tomado correctamente.'
-                );
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()->with(
-                'error',
-                'No se pudo tomar el pedido.'
-            );
-        }
-    }
-
-
     /**
      * MIS PEDIDOS
      *
-     * Pedidos que pertenecen al delivery actualmente logueado.
+     * Muestra únicamente asignaciones pertenecientes al Delivery
+     * autenticado. Los pedidos históricos también pueden consultarse.
      */
-    public function misPedidos()
+    public function misPedidos(): View|RedirectResponse
     {
         $delivery = $this->verificarDelivery();
 
-        if ($delivery instanceof \Illuminate\Http\RedirectResponse) {
+        if ($delivery instanceof RedirectResponse) {
             return $delivery;
         }
 
-        $asignaciones = AsignacionDelivery::with([
-            'pedido.user',
-            'pedido.detallePedidos.producto'
-        ])
-            ->where(
-                'delivery_id',
-                $delivery->id
-            )
+        $asignaciones = AsignacionDelivery::query()
+            ->with([
+                'pedido.user',
+                'pedido.detallePedidos.producto',
+            ])
+            ->where('delivery_id', $delivery->id)
             ->whereIn('estado', [
                 'aceptado',
                 'en_camino',
-                'entregado'
+                'entregado',
             ])
             ->orderBy('created_at', 'desc')
             ->get();
@@ -218,60 +133,61 @@ class PedidoController extends Controller
         );
     }
 
-
     /**
      * INICIAR ENTREGA
      *
-     * aceptado -> en_camino
+     * La asignación ya fue aceptada automáticamente por el sistema.
+     * El Delivery solamente indica cuándo comienza el recorrido.
      */
-    public function iniciar($id)
+    public function iniciar(int $id): RedirectResponse
     {
         $delivery = $this->verificarDelivery();
 
-        if ($delivery instanceof \Illuminate\Http\RedirectResponse) {
+        if ($delivery instanceof RedirectResponse) {
             return $delivery;
         }
 
-        $asignacion = AsignacionDelivery::where(
-            'pedido_id',
-            $id
-        )
-            ->where(
-                'delivery_id',
-                $delivery->id
-            )
-            ->firstOrFail();
+        DB::transaction(function () use ($id, $delivery): void {
+            $asignacion = AsignacionDelivery::query()
+                ->where('pedido_id', $id)
+                ->where('delivery_id', $delivery->id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        // Solo se puede iniciar si está aceptado
-        if ($asignacion->estado !== 'aceptado') {
+            if ($asignacion->estado !== 'aceptado') {
+                throw new \RuntimeException(
+                    'El pedido no puede iniciar la entrega en este momento.'
+                );
+            }
 
-            return back()->with(
-                'error',
-                'El pedido no puede iniciar la entrega en este momento.'
-            );
-        }
+            $pedido = Pedido::query()
+                ->where('id', $id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        $asignacion->estado = 'en_camino';
+            if ($pedido->estado !== 'asignado') {
+                throw new \RuntimeException(
+                    'El pedido ya no se encuentra disponible para iniciar la entrega.'
+                );
+            }
 
-        $asignacion->save();
+            $asignacion->update([
+                'estado' => 'en_camino',
+            ]);
 
-        // Actualizar pedido
-        $pedido = Pedido::findOrFail($id);
+            $pedido->update([
+                'estado' => 'en_camino',
+            ]);
 
-        $pedido->estado = 'en_camino';
-
-        $pedido->save();
-
-        // Avisar al cliente en el momento en que el Delivery
-        // inicia realmente el recorrido.
-        Notificacion::create([
-            'user_id' => $pedido->user_id,
-            'pedido_id' => $pedido->id,
-            'mensaje' => 'Tu pedido #' . $pedido->id . ' ya está en camino con nuestro Delivery.',
-            'tipo' => 'cliente',
-            'evento' => 'pedido_en_camino',
-            'leido' => false,
-        ]);
+            Notificacion::create([
+                'user_id' => $pedido->user_id,
+                'pedido_id' => $pedido->id,
+                'mensaje' => 'Tu pedido #' . $pedido->id . ' ya está en camino con nuestro Delivery.',
+                'tipo' => 'cliente',
+                'evento' => 'pedido_en_camino',
+                'leido' => false,
+            ]);
+        });
 
         return back()->with(
             'success',
@@ -279,53 +195,81 @@ class PedidoController extends Controller
         );
     }
 
-
     /**
      * MARCAR COMO ENTREGADO
      *
      * en_camino -> entregado
+     *
+     * Después de completar la entrega, el mismo Delivery queda libre
+     * y el sistema procesa inmediatamente la cola para asignarle
+     * el siguiente pedido, sin permitir que salte pedidos.
      */
-    public function entregar($id)
-    {
+    public function entregar(
+        int $id,
+        AsignarPedidoDeliveryService $asignador
+    ): RedirectResponse {
         $delivery = $this->verificarDelivery();
 
-        if ($delivery instanceof \Illuminate\Http\RedirectResponse) {
+        if ($delivery instanceof RedirectResponse) {
             return $delivery;
         }
 
-        $asignacion = AsignacionDelivery::where(
-            'pedido_id',
-            $id
-        )
-            ->where(
-                'delivery_id',
-                $delivery->id
-            )
-            ->firstOrFail();
+        DB::transaction(function () use ($id, $delivery): void {
+            $asignacion = AsignacionDelivery::query()
+                ->where('pedido_id', $id)
+                ->where('delivery_id', $delivery->id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        // Solo se puede entregar si está en camino
-        if ($asignacion->estado !== 'en_camino') {
+            if ($asignacion->estado !== 'en_camino') {
+                throw new \RuntimeException(
+                    'El pedido todavía no está en camino.'
+                );
+            }
 
+            $pedido = Pedido::query()
+                ->where('id', $id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($pedido->estado !== 'en_camino') {
+                throw new \RuntimeException(
+                    'El pedido ya no se encuentra en camino.'
+                );
+            }
+
+            $asignacion->update([
+                'estado' => 'entregado',
+            ]);
+
+            $pedido->update([
+                'estado' => 'entregado',
+            ]);
+
+            Notificacion::create([
+                'user_id' => $pedido->user_id,
+                'pedido_id' => $pedido->id,
+                'mensaje' => 'Tu pedido #' . $pedido->id . ' fue entregado correctamente.',
+                'tipo' => 'cliente',
+                'evento' => 'pedido_entregado',
+                'leido' => false,
+            ]);
+        });
+
+        // Al liberar este Delivery, se entrega automáticamente
+        // el siguiente pedido más antiguo que esté esperando.
+        $asignados = $asignador->procesarCola();
+
+        if ($asignados > 0) {
             return back()->with(
-                'error',
-                'El pedido todavía no está en camino.'
+                'success',
+                'Pedido marcado como entregado. Se te asignó automáticamente el siguiente pedido de la cola.'
             );
         }
 
-        $asignacion->estado = 'entregado';
-
-        $asignacion->save();
-
-        // Actualizar pedido
-        $pedido = Pedido::findOrFail($id);
-
-        $pedido->estado = 'entregado';
-
-        $pedido->save();
-
         return back()->with(
             'success',
-            'Pedido marcado como entregado correctamente.'
+            'Pedido marcado como entregado correctamente. No hay más pedidos esperando en la cola.'
         );
     }
 }
