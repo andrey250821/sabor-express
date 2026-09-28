@@ -694,11 +694,11 @@ $estadoPedido === 'en_camino'
 
         @elseif($estadoPedido === 'asignado' && $esMiAsignacion)
 
-        🛵 Pedido tomado. Inicia la entrega para activar el GPS.
+        🛵 Pedido asignado. Inicia la entrega para activar el GPS.
 
         @elseif($estadoPedido === 'listo')
 
-        📦 Pedido listo. Toma el pedido para comenzar.
+        📦 Pedido listo. La asignación se realizará automáticamente.
 
         @elseif($estadoPedido === 'entregado')
 
@@ -1028,45 +1028,6 @@ $estadoPedido === 'en_camino'
 
     </div>
 
-
-    @elseif($pedidoDeOtroDelivery)
-
-    <div class="delivery-action-icon unavailable">
-
-        <i class="bi bi-person-lock"></i>
-
-    </div>
-
-
-    <div class="delivery-action-content">
-
-        <span>
-            Pedido no disponible
-        </span>
-
-        <h2>
-            Este pedido ya fue tomado
-        </h2>
-
-        <p>
-            Otro repartidor ya tiene asignado este pedido.
-        </p>
-
-    </div>
-
-
-    <div class="delivery-action-complete-badge unavailable">
-
-        <i class="bi bi-person-check"></i>
-
-        Ya asignado
-
-    </div>
-
-
-    {{-- ========================================================
-             ESTADO NO DISPONIBLE
-        ========================================================= --}}
 
     @else
 
