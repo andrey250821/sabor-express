@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Pedido;
 use App\Models\AsignacionDelivery;
 use Illuminate\Support\Facades\Auth;
+use App\Services\AsignarPedidoDeliveryService;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(AsignarPedidoDeliveryService $asignador)
     {
         // Verificar que haya un usuario logueado
         $deliveryId = Auth::id();
@@ -30,7 +31,10 @@ class DashboardController extends Controller
             abort(403, 'No tienes permisos para acceder a esta sección.');
         }
 
-        // Pedidos listos que todavía NO tienen delivery asignado
+        // Procesar cualquier pedido que ya esté en cola y tenga un Delivery libre.
+        $asignador->procesarCola();
+
+        // Pedidos listos que todavía NO tienen Delivery asignado
         $pedidosEnCola = Pedido::where('estado', 'listo')
             ->whereDoesntHave('asignacionDelivery')
             ->count();
