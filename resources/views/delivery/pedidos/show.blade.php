@@ -96,11 +96,11 @@ is_numeric($longitud);
 |--------------------------------------------------------------------------
 | Permisos de acción
 |--------------------------------------------------------------------------
+|
+| Solo se permiten acciones sobre pedidos asignados automáticamente
+| al Delivery autenticado.
+|--------------------------------------------------------------------------
 */
-
-$puedeTomar =
-$estadoPedido === 'listo'
-&& !$asignacion;
 
 $puedeIniciar =
 $estadoPedido === 'asignado'
