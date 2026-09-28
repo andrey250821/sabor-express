@@ -1,20 +1,13 @@
 @extends('layouts.delivery')
 
-@section('title', 'Pedidos disponibles')
+@section('title', 'Cola de pedidos')
 @section('section', 'Gestión de pedidos')
-@section('heading', 'Pedidos disponibles')
+@section('heading', 'Cola de pedidos')
 
 @section('content')
 
-@php
-$pedidos = $pedidos ?? collect();
-
-$totalPedidos = $pedidos->count();
-@endphp
-
 <div class="delivery-orders-page">
 
-    {{-- ENCABEZADO --}}
     <div class="delivery-orders-header">
 
         <div class="delivery-orders-heading">
@@ -29,11 +22,12 @@ $totalPedidos = $pedidos->count();
                 </span>
 
                 <h1>
-                    Pedidos disponibles
+                    Pedidos en cola
                 </h1>
 
                 <p>
-                    Revisa los pedidos listos y toma el que quieras entregar.
+                    Consulta cuántos pedidos están esperando asignación.
+                    Los pedidos se asignan automáticamente y no puedes elegirlos.
                 </p>
             </div>
 
@@ -42,12 +36,12 @@ $totalPedidos = $pedidos->count();
         <div class="delivery-orders-counter">
 
             <div class="delivery-orders-counter-icon">
-                <i class="bi bi-bicycle"></i>
+                <i class="bi bi-clock-history"></i>
             </div>
 
             <div>
-                <span>Disponibles ahora</span>
-                <strong>{{ $totalPedidos }}</strong>
+                <span>Pedidos en cola</span>
+                <strong>{{ $pedidosEnCola }}</strong>
             </div>
 
         </div>
@@ -55,7 +49,6 @@ $totalPedidos = $pedidos->count();
     </div>
 
 
-    {{-- BARRA INFORMATIVA --}}
     <div class="delivery-orders-info">
 
         <div class="delivery-orders-info-icon">
@@ -63,329 +56,89 @@ $totalPedidos = $pedidos->count();
         </div>
 
         <div class="delivery-orders-info-content">
-            <strong>Pedidos listos para entregar</strong>
+            <strong>Asignación automática</strong>
 
             <span>
-                Estos pedidos ya fueron preparados por cocina.
-                Toma uno para comenzar tu entrega.
+                El sistema respeta el orden de la cola.
+                Cuando quedes libre, recibirás obligatoriamente el siguiente pedido disponible.
             </span>
         </div>
 
         <div class="delivery-orders-info-status">
             <span class="delivery-live-dot"></span>
-            Disponible
+            Automático
         </div>
 
     </div>
 
 
-    {{-- SIN PEDIDOS --}}
-    @if($pedidos->isEmpty())
-
-    <div class="delivery-empty-orders">
-
-        <div class="delivery-empty-orders-animation">
-            <div class="delivery-empty-circle">
-                <i class="bi bi-bicycle"></i>
-            </div>
-        </div>
-
-        <h2>
-            No hay pedidos disponibles
-        </h2>
-
-        <p>
-            En este momento no existen pedidos listos para entregar.
-            Cuando cocina termine un pedido, aparecerá aquí automáticamente.
-        </p>
-
-        <a
-            href="{{ route('delivery.dashboard') }}"
-            class="btn delivery-empty-btn">
-            <i class="bi bi-speedometer2 me-2"></i>
-            Volver al dashboard
-        </a>
-
-    </div>
-
-    @else
-
-    {{-- RESUMEN --}}
     <div class="delivery-orders-summary">
 
         <div>
             <span class="delivery-summary-label">
-                PEDIDOS EN ESPERA
+                ESTADO DE LA COLA
             </span>
 
             <h2>
-                Elige tu próxima entrega
+                {{ $pedidosEnCola > 0 ? 'Hay pedidos esperando asignación' : 'La cola está vacía' }}
             </h2>
         </div>
 
         <div class="delivery-summary-right">
-            <i class="bi bi-clock-history"></i>
+            <i class="bi bi-shuffle"></i>
             <span>
-                Ordenados desde el más antiguo
+                Sin selección manual
             </span>
         </div>
 
     </div>
 
 
-    {{-- GRID DE PEDIDOS --}}
-    <div class="row g-4">
+    <div class="row justify-content-center">
 
-        @foreach($pedidos as $pedido)
+        <div class="col-12 col-lg-8">
 
-        @php
-        $cliente = $pedido->user;
+            <article class="delivery-show-card text-center p-5">
 
-        $cantidadProductos = $pedido->detallePedidos->sum('cantidad');
-
-        $minutos = $pedido->created_at
-        ? $pedido->created_at->diffInMinutes(now())
-        : 0;
-
-        if ($minutos < 1) {
-            $tiempoPedido='Hace unos segundos' ;
-            } elseif ($minutos < 60) {
-            $tiempoPedido='Hace ' . $minutos . ' min' ;
-            } else {
-            $horas=floor($minutos / 60);
-            $tiempoPedido='Hace ' . $horas . ($horas==1 ? ' hora' : ' horas' );
-            }
-            @endphp
-
-            <div class="col-12 col-md-6 col-xl-4">
-
-            <article class="delivery-order-card">
-
-                {{-- CABECERA --}}
-                <div class="delivery-order-card-header">
-
-                    <div class="delivery-order-number">
-
-                        <div class="delivery-order-number-icon">
-                            <i class="bi bi-receipt"></i>
-                        </div>
-
-                        <div>
-                            <span>Pedido</span>
-                            <strong>#{{ $pedido->id }}</strong>
-                        </div>
-
-                    </div>
-
-                    <span class="delivery-ready-badge">
-                        <span></span>
-                        Listo
-                    </span>
-
+                <div class="delivery-show-card-icon mx-auto mb-4">
+                    <i class="bi bi-box-seam"></i>
                 </div>
 
-
-                {{-- TIEMPO --}}
-                <div class="delivery-order-time">
-                    <i class="bi bi-clock"></i>
-                    {{ $tiempoPedido }}
+                <div class="display-4 fw-bold mb-2">
+                    {{ $pedidosEnCola }}
                 </div>
 
+                <h2 class="mb-3">
+                    {{ $pedidosEnCola === 1 ? 'pedido en cola' : 'pedidos en cola' }}
+                </h2>
 
-                {{-- CLIENTE --}}
-                <div class="delivery-order-client">
+                <p class="text-muted mb-4">
+                    Estos pedidos ya están listos en cocina y todavía no tienen un Delivery asignado.
+                    Los detalles permanecen ocultos hasta que un pedido sea asignado a ti.
+                </p>
 
-                    <div class="delivery-client-avatar">
-                        @if($cliente?->foto_perfil_url)
-                            <img
-                                src="{{ $cliente->foto_perfil_url }}"
-                                alt="Foto de {{ $cliente->name }}">
-                        @else
-                            {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
-                        @endif
+                @if($pedidosEnCola > 0)
+
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Cuando termines tu entrega actual, el sistema te asignará automáticamente
+                        el siguiente pedido de la cola.
                     </div>
 
-                    <div class="delivery-client-data">
+                @else
 
-                        <span>Cliente</span>
-
-                        <strong>
-                            {{ $cliente->name ?? 'Cliente' }}
-                        </strong>
-
+                    <div class="alert alert-success mb-0">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        No hay pedidos esperando asignación en este momento.
                     </div>
-
-                </div>
-
-
-                {{-- PRODUCTOS --}}
-                <div class="delivery-order-products">
-
-                    <div class="delivery-card-title">
-
-                        <span>
-                            <i class="bi bi-basket3"></i>
-                            Productos
-                        </span>
-
-                        <small>
-                            {{ $cantidadProductos }}
-                            {{ $cantidadProductos == 1 ? 'unidad' : 'unidades' }}
-                        </small>
-
-                    </div>
-
-                    <div class="delivery-products-list">
-
-                        @foreach($pedido->detallePedidos->take(3) as $detalle)
-
-                        <div class="delivery-product-row">
-
-                            <div class="delivery-product-quantity">
-                                {{ $detalle->cantidad }}x
-                            </div>
-
-                            <div class="delivery-product-name">
-                                {{ $detalle->producto->nombre ?? 'Producto' }}
-                            </div>
-
-                            <div class="delivery-product-price">
-                                Bs {{ number_format($detalle->subtotal, 2) }}
-                            </div>
-
-                        </div>
-
-                        @endforeach
-
-                        @if($pedido->detallePedidos->count() > 3)
-
-                        <div class="delivery-more-products">
-                            <i class="bi bi-three-dots"></i>
-
-                            {{ $pedido->detallePedidos->count() - 3 }}
-                            productos más
-                        </div>
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-
-                {{-- TOTAL --}}
-                <div class="delivery-order-total">
-
-                    <span>
-                        Total del pedido
-                    </span>
-
-                    <strong>
-                        Bs {{ number_format($pedido->total, 2) }}
-                    </strong>
-
-                </div>
-
-
-                {{-- DIRECCIÓN --}}
-                <div class="delivery-order-location">
-
-                    <div class="delivery-location-icon">
-                        <i class="bi bi-geo-alt-fill"></i>
-                    </div>
-
-                    <div class="delivery-location-content">
-
-                        <span>
-                            Dirección de entrega
-                        </span>
-
-                        <strong>
-                            {{ $pedido->direccion_entrega ?? 'Sin dirección registrada' }}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                {{-- REFERENCIA --}}
-                @if(!empty($pedido->referencia_delivery))
-
-                <div class="delivery-order-reference">
-
-                    <div>
-                        <i class="bi bi-signpost-2-fill"></i>
-                    </div>
-
-                    <span>
-                        <strong>Referencia:</strong>
-                        {{ $pedido->referencia_delivery }}
-                    </span>
-
-                </div>
 
                 @endif
-
-
-                {{-- OBSERVACIÓN --}}
-                @if(!empty($pedido->observacion_cliente))
-
-                <div class="delivery-order-observation">
-
-                    <i class="bi bi-chat-left-text-fill"></i>
-
-                    <div>
-                        <strong>Observación del cliente</strong>
-
-                        <span>
-                            {{ $pedido->observacion_cliente }}
-                        </span>
-                    </div>
-
-                </div>
-
-                @endif
-
-
-                {{-- ACCIONES --}}
-                <div class="delivery-order-actions">
-
-                    <a
-                        href="{{ route('delivery.pedidos.show', $pedido->id) }}"
-                        class="delivery-order-detail-btn">
-                        <i class="bi bi-eye"></i>
-                        Ver detalle
-                    </a>
-
-
-                    <form
-                        action="{{ route('delivery.pedidos.tomar', $pedido->id) }}"
-                        method="POST"
-                        class="delivery-take-form">
-                        @csrf
-
-                        <button
-                            type="submit"
-                            class="delivery-take-btn"
-                            onclick="return confirm('¿Deseas tomar el pedido #{{ $pedido->id }}?')">
-                            <i class="bi bi-bicycle"></i>
-                            Tomar pedido
-                        </button>
-
-                    </form>
-
-                </div>
 
             </article>
 
+        </div>
+
     </div>
-
-    @endforeach
-
-</div>
-
-@endif
 
 </div>
 
