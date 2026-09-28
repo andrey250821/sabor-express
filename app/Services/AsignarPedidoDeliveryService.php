@@ -31,7 +31,7 @@ class AsignarPedidoDeliveryService
                 ->where('role_id', 3)
                 ->where('estado', 'activo')
                 ->whereDoesntHave('asignacionesDelivery', function ($query) {
-                    $query->whereIn('estado', ['aceptado', 'en_camino']);
+                    $query->whereIn('estado', ['pendiente', 'aceptado', 'en_camino']);
                 })
                 ->orderBy('id')
                 ->lockForUpdate()
