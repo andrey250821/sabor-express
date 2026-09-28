@@ -7,6 +7,7 @@ use App\Models\Pedido;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Services\AsignarPedidoDeliveryService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -171,30 +172,40 @@ class PedidoController extends Controller
     /**
      * Cambiar pedido de PREPARANDO a LISTO.
      */
-    public function listo(int $id): RedirectResponse
+    public function listo(int $id, AsignarPedidoDeliveryService $asignador): RedirectResponse
     {
-        $pedido = Pedido::findOrFail($id);
+        try {
+            DB::transaction(function () use ($id): void {
+                $pedido = Pedido::query()
+                    ->where('id', $id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-        if ((int) $pedido->cocinero_id !== (int) Auth::id()) {
-            abort(403, 'No puedes finalizar un pedido que pertenece a otro cocinero.');
+                if ((int) $pedido->cocinero_id !== (int) Auth::id()) {
+                    abort(403, 'No puedes finalizar un pedido que pertenece a otro cocinero.');
+                }
+
+                if ($pedido->estado !== 'preparando') {
+                    throw new \RuntimeException(
+                        'El pedido no puede marcarse como listo porque no está en preparación.'
+                    );
+                }
+
+                $pedido->update([
+                    'estado' => 'listo',
+                    'fecha_listo' => now(),
+                ]);
+            });
+
+            $asignador->procesarCola();
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        if ($pedido->estado !== 'preparando') {
-            return back()->with(
-                'error',
-                'El pedido no puede marcarse como listo porque no está en preparación.'
-            );
-        }
-
-        $pedido->update([
-            'estado' => 'listo',
-        ]);
 
         return redirect()
             ->route('cocinero.pedidos.index', ['seccion' => 'listos'])
             ->with(
                 'success',
-                'Pedido #' . $pedido->id . ' listo. El pedido queda registrado entre tus pedidos terminados.'
+                'Pedido #' . $id . ' listo. Se procesó automáticamente la cola de Delivery.'
             );
-    }
-}
+    }}
