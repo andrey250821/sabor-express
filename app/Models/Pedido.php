@@ -19,12 +19,20 @@ class Pedido extends Model
         'cocinero_id',
         'total',
         'estado',
+        'fecha_listo',
         'latitud',
         'longitud',
         'direccion_entrega',
         'observacion_cliente',
         'referencia_delivery',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'fecha_listo' => 'datetime',
+        ];
+    }
 
     /**
      * Un pedido pertenece a un cliente.
