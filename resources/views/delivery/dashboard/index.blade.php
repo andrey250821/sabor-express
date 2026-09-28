@@ -229,7 +229,7 @@
     <div class="row g-3 mb-4">
 
 
-        {{-- DISPONIBLES --}}
+        {{-- PEDIDOS EN COLA --}}
         <div class="col-12 col-sm-6 col-xl-4">
 
             <a href="{{ route('delivery.pedidos.index') }}"
