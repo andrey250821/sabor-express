@@ -6,113 +6,235 @@ use App\Models\AsignacionDelivery;
 use App\Models\Pedido;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\AsignarPedidoDeliveryService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PedidoTest extends TestCase
 {
-    public function test_delivery_puede_completar_el_flujo_de_entrega(): void
+    use RefreshDatabase;
+
+    public function test_asigna_la_cola_fifo_a_los_deliverys_libres(): void
     {
-        // Buscar o crear el rol Delivery
-        $role = Role::firstOrCreate(
-            ['nombre' => 'Delivery'],
-            ['descripcion' => 'Repartidor del sistema']
-        );
+        $deliveryRole = Role::create([
+            'nombre' => 'Delivery',
+            'descripcion' => 'Delivery del sistema',
+        ]);
 
-        // Buscar o crear usuario Delivery de prueba
-        $delivery = User::where(
-            'email',
-            'testdelivery@saborexpress.com'
-        )->first();
+        $clienteRole = Role::create([
+            'nombre' => 'Cliente',
+            'descripcion' => 'Cliente del sistema',
+        ]);
 
-        if (!$delivery) {
-            $delivery = User::create([
-                'role_id' => $role->id,
-                'name' => 'Delivery de Prueba',
-                'email' => 'testdelivery@saborexpress.com',
-                'password' => 'password',
-                'estado' => 'activo',
-            ]);
+        $delivery1 = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery 1',
+            'email' => 'delivery1@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $delivery2 = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery 2',
+            'email' => 'delivery2@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente de prueba',
+            'email' => 'cliente@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $pedidos = collect();
+
+        foreach (range(1, 5) as $numero) {
+            $pedidos->push(Pedido::create([
+                'user_id' => $cliente->id,
+                'total' => 10 * $numero,
+                'estado' => 'listo',
+                'fecha_listo' => now()->subMinutes(10 - $numero),
+                'direccion_entrega' => 'Dirección de prueba ' . $numero,
+            ]));
         }
 
-        // Buscar un pedido que esté listo
-        $pedido = Pedido::where('estado', 'listo')->firstOrFail();
+        $asignador = app(AsignarPedidoDeliveryService::class);
 
-        // Eliminar una asignación previa del pedido si existiera
-        AsignacionDelivery::where('pedido_id', $pedido->id)->delete();
+        $asignados = $asignador->procesarCola();
 
-        /*
-         * 1. DELIVERY TOMA EL PEDIDO
-         * listo -> asignado
-         */
-        $response = $this->actingAs($delivery)
-            ->post('/delivery/pedidos/' . $pedido->id . '/tomar');
+        $this->assertSame(2, $asignados);
 
-        $response->assertRedirect();
+        $this->assertEquals(
+            $delivery1->id,
+            AsignacionDelivery::where('pedido_id', $pedidos[0]->id)->value('delivery_id')
+        );
 
-        $pedido->refresh();
+        $this->assertEquals(
+            $delivery2->id,
+            AsignacionDelivery::where('pedido_id', $pedidos[1]->id)->value('delivery_id')
+        );
+
+        $this->assertEquals(
+            'listo',
+            $pedidos[2]->fresh()->estado
+        );
+
+        $this->assertEquals(
+            'listo',
+            $pedidos[3]->fresh()->estado
+        );
+
+        $this->assertEquals(
+            'listo',
+            $pedidos[4]->fresh()->estado
+        );
+    }
+
+    public function test_delivery_recibe_obligatoriamente_el_siguiente_pedido_al_entregar(): void
+    {
+        $deliveryRole = Role::create([
+            'nombre' => 'Delivery',
+            'descripcion' => 'Delivery del sistema',
+        ]);
+
+        $clienteRole = Role::create([
+            'nombre' => 'Cliente',
+            'descripcion' => 'Cliente del sistema',
+        ]);
+
+        $delivery1 = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery 1',
+            'email' => 'delivery1@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $delivery2 = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery 2',
+            'email' => 'delivery2@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente de prueba',
+            'email' => 'cliente@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $pedidos = collect();
+
+        foreach (range(1, 5) as $numero) {
+            $pedidos->push(Pedido::create([
+                'user_id' => $cliente->id,
+                'total' => 10 * $numero,
+                'estado' => 'listo',
+                'fecha_listo' => now()->subMinutes(10 - $numero),
+                'direccion_entrega' => 'Dirección de prueba ' . $numero,
+            ]));
+        }
+
+        app(AsignarPedidoDeliveryService::class)->procesarCola();
+
+        $pedido2 = $pedidos[1];
+
+        $this->actingAs($delivery2)
+            ->put('/delivery/pedidos/' . $pedido2->id . '/iniciar')
+            ->assertRedirect();
+
+        $this->actingAs($delivery2)
+            ->put('/delivery/pedidos/' . $pedido2->id . '/entregar')
+            ->assertRedirect();
+
+        $this->assertEquals(
+            'entregado',
+            $pedido2->fresh()->estado
+        );
+
+        $pedido3 = $pedidos[2]->fresh();
 
         $this->assertEquals(
             'asignado',
-            $pedido->estado
-        );
-
-        $asignacion = AsignacionDelivery::where(
-            'pedido_id',
-            $pedido->id
-        )
-            ->where(
-                'delivery_id',
-                $delivery->id
-            )
-            ->firstOrFail();
-
-        $this->assertEquals(
-            'aceptado',
-            $asignacion->estado
-        );
-
-        /*
-         * 2. INICIAR ENTREGA
-         * aceptado -> en_camino
-         */
-        $response = $this->actingAs($delivery)
-            ->put('/delivery/pedidos/' . $pedido->id . '/iniciar');
-
-        $response->assertRedirect();
-
-        $pedido->refresh();
-        $asignacion->refresh();
-
-        $this->assertEquals(
-            'en_camino',
-            $pedido->estado
+            $pedido3->estado
         );
 
         $this->assertEquals(
-            'en_camino',
-            $asignacion->estado
+            $delivery2->id,
+            AsignacionDelivery::where('pedido_id', $pedido3->id)->value('delivery_id')
         );
 
-        /*
-         * 3. MARCAR COMO ENTREGADO
-         * en_camino -> entregado
-         */
-        $response = $this->actingAs($delivery)
-            ->put('/delivery/pedidos/' . $pedido->id . '/entregar');
-
-        $response->assertRedirect();
-
-        $pedido->refresh();
-        $asignacion->refresh();
-
-        $this->assertEquals(
-            'entregado',
-            $pedido->estado
-        );
-
-        $this->assertEquals(
-            'entregado',
-            $asignacion->estado
-        );
+        // El pedido 4 no debe adelantarse al pedido 3.
+        $this->assertDatabaseMissing('asignaciones_delivery', [
+            'pedido_id' => $pedidos[3]->id,
+        ]);
     }
-} 
+
+    public function test_delivery_no_puede_ver_detalles_de_un_pedido_ajeno(): void
+    {
+        $deliveryRole = Role::create([
+            'nombre' => 'Delivery',
+            'descripcion' => 'Delivery del sistema',
+        ]);
+
+        $clienteRole = Role::create([
+            'nombre' => 'Cliente',
+            'descripcion' => 'Cliente del sistema',
+        ]);
+
+        $delivery1 = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery 1',
+            'email' => 'delivery1@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $delivery2 = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery 2',
+            'email' => 'delivery2@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente de prueba',
+            'email' => 'cliente@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $pedido = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 50,
+            'estado' => 'listo',
+            'fecha_listo' => now(),
+            'direccion_entrega' => 'Dirección privada',
+        ]);
+
+        AsignacionDelivery::create([
+            'pedido_id' => $pedido->id,
+            'delivery_id' => $delivery2->id,
+            'estado' => 'aceptado',
+            'fecha_asignacion' => now(),
+            'fecha_respuesta' => now(),
+        ]);
+
+        $this->actingAs($delivery1)
+            ->get('/delivery/pedidos/' . $pedido->id)
+            ->assertNotFound();
+
+        $this->actingAs($delivery2)
+            ->get('/delivery/pedidos/' . $pedido->id)
+            ->assertOk();
+    }
+}
