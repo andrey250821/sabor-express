@@ -112,10 +112,7 @@ $estadoPedido === 'en_camino'
 && $esMiAsignacion
 && $asignacion->estado === 'en_camino';
 
-$pedidoDeOtroDelivery =
-$asignacion
-&& !$esMiAsignacion
-&& $estadoPedido !== 'entregado';
+
 @endphp
 
 
@@ -893,57 +890,7 @@ $asignacion
              PEDIDO DISPONIBLE
         ========================================================= --}}
 
-    @if($puedeTomar)
-
-    <div class="delivery-action-icon take">
-
-        <i class="bi bi-hand-index-thumb"></i>
-
-    </div>
-
-
-    <div class="delivery-action-content">
-
-        <span>
-            Pedido disponible
-        </span>
-
-        <h2>
-            ¿Deseas tomar este pedido?
-        </h2>
-
-        <p>
-            Al tomarlo, el pedido quedará asignado a ti y podrás iniciar la entrega cuando estés listo.
-        </p>
-
-    </div>
-
-
-    <form
-        method="POST"
-        action="{{ route('delivery.pedidos.tomar', $pedido->id) }}"
-        class="delivery-action-form">
-
-        @csrf
-
-        <button
-            type="submit"
-            class="delivery-action-button primary">
-
-            <i class="bi bi-hand-index-thumb"></i>
-
-            Tomar pedido
-
-        </button>
-
-    </form>
-
-
-    {{-- ========================================================
-             PEDIDO TOMADO POR ESTE DELIVERY
-        ========================================================= --}}
-
-    @elseif($puedeIniciar)
+    @if($puedeIniciar)
 
     <div class="delivery-action-icon start">
 
