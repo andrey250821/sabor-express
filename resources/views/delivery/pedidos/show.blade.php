@@ -1029,10 +1029,6 @@ $estadoPedido === 'en_camino'
     </div>
 
 
-    {{-- ========================================================
-             PEDIDO DE OTRO DELIVERY
-        ========================================================= --}}
-
     @elseif($pedidoDeOtroDelivery)
 
     <div class="delivery-action-icon unavailable">
