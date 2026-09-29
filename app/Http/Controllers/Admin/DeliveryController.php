@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 class DeliveryController extends Controller
 {
     /**
-     * Lista de repartidores
+     * Lista de Delivery
      */
     public function index(Request $request)
     {
@@ -42,7 +42,7 @@ class DeliveryController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear delivery
+     * Mostrar formulario para crear un Delivery
      */
     public function create()
     {
@@ -107,12 +107,12 @@ class DeliveryController extends Controller
             ->route('admin.deliverys.index')
             ->with(
                 'success',
-                'Repartidor creado correctamente.'
+                'Delivery creado correctamente.'
             );
     }
 
     /**
-     * Mostrar formulario de edición
+     * Mostrar formulario de edición del Delivery
      */
     public function edit($id)
     {
@@ -190,12 +190,12 @@ $delivery->estado = $request->estado;
             ->route('admin.deliverys.index')
             ->with(
                 'success',
-                'Repartidor actualizado correctamente.'
+                'Delivery actualizado correctamente.'
             );
     }
 
     /**
-     * Desactivar delivery
+     * Desactivar Delivery
      */
     public function destroy($id)
     {
@@ -213,7 +213,7 @@ $delivery->estado = $request->estado;
     }
 
     /**
-     * Activar delivery nuevamente
+     * Activar nuevamente el Delivery
      */
     public function activar($id)
     {
