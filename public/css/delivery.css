@@ -5377,8 +5377,85 @@ a {
 
 
 /* =========================================================
+   HISTORIAL DE ENTREGAS POR FECHA
+   ========================================================= */
+
+.delivery-delivered-date-section {
+    margin-bottom: 24px;
+}
+
+.delivery-delivered-date-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 14px;
+    padding: 18px 20px;
+    border: 1px solid #292b33;
+    border-radius: 16px;
+    background: #17181d;
+}
+
+.delivery-delivered-date-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 4px 0 3px;
+    color: #f0f1f3;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.delivery-delivered-date-title i {
+    color: #35d07f;
+}
+
+.delivery-delivered-date-subtitle {
+    margin: 0;
+    color: #777b85;
+    font-size: 11px;
+}
+
+.delivery-delivered-date-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.delivery-delivered-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border: 1px solid rgba(53, 208, 127, .22);
+    border-radius: 10px;
+    background: rgba(25, 135, 84, .08);
+    color: #35d07f;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.delivery-delivered-toggle:hover {
+    border-color: rgba(53, 208, 127, .4);
+    background: rgba(25, 135, 84, .14);
+}
+
+.delivery-delivered-toggle i {
+    transition: transform .2s ease;
+}
+
+.delivery-delivered-toggle:not(.collapsed) i {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
+
 
 @media (max-width: 991.98px) {
 
