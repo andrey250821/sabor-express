@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\AsignacionDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -38,6 +39,63 @@ class DeliveryController extends Controller
         return view(
             'admin.deliverys.index',
             compact('deliverys')
+        );
+    }
+
+    /**
+     * Mostrar el detalle y las estadísticas económicas de un Delivery.
+     */
+    public function show(int $id)
+    {
+        $delivery = User::query()
+            ->where('role_id', 3)
+            ->findOrFail($id);
+
+        $asignaciones = AsignacionDelivery::query()
+            ->where('delivery_id', $delivery->id)
+            ->with('pedido')
+            ->orderByDesc('created_at')
+            ->get();
+
+        $pedidosActivos = $asignaciones
+            ->whereIn('estado', ['aceptado', 'en_camino'])
+            ->count();
+
+        $pedidosEntregados = $asignaciones
+            ->where('estado', 'entregado');
+
+        $totalDeliveryGenerado = round(
+            $pedidosEntregados->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->tarifa_delivery ?? 0)
+            ),
+            2
+        );
+
+        $comisionDelivery = round(
+            $pedidosEntregados->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)
+            ),
+            2
+        );
+
+        $parteRestaurante = round(
+            $pedidosEntregados->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->monto_restaurante_delivery ?? 0)
+            ),
+            2
+        );
+
+        return view(
+            'admin.deliverys.show',
+            compact(
+                'delivery',
+                'asignaciones',
+                'pedidosActivos',
+                'pedidosEntregados',
+                'totalDeliveryGenerado',
+                'comisionDelivery',
+                'parteRestaurante'
+            )
         );
     }
 
@@ -208,7 +266,7 @@ $delivery->estado = $request->estado;
 
         return back()->with(
             'success',
-            'Repartidor desactivado correctamente.'
+            'Delivery desactivado correctamente.'
         );
     }
 
@@ -226,7 +284,7 @@ $delivery->estado = $request->estado;
 
         return back()->with(
             'success',
-            'Repartidor activado correctamente.'
+            'Delivery activado correctamente.'
         );
     }
 }
