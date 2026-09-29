@@ -115,9 +115,25 @@ class CalcularDeliveryService
             2
         );
 
-        $tarifaCalculada = round(
-            max($tarifaMinima, $distanciaKm * $precioKm),
-            2
+        /*
+         * La tarifa final se calcula con la distancia por carretera
+         * y el precio configurado por kilómetro, respetando la tarifa mínima.
+         *
+         * Regla de cobro:
+         * - 8.50 se mantiene en 8.50
+         * - 8.25 pasa a 8.50
+         * - 8.75 pasa a 9.00
+         *
+         * Es decir, siempre se redondea hacia arriba al siguiente múltiplo
+         * de Bs 0.50, excepto cuando ya se encuentra exactamente en uno.
+         */
+        $tarifaBase = max(
+            $tarifaMinima,
+            $distanciaKm * $precioKm
+        );
+
+        $tarifaCalculada = $this->redondearTarifaDelivery(
+            $tarifaBase
         );
 
         $montoDelivery = round(
@@ -142,5 +158,16 @@ class CalcularDeliveryService
             'tarifa_minima_delivery' => $tarifaMinima,
             'precio_km_delivery' => $precioKm,
         ];
+    }
+
+    /**
+     * Redondear la tarifa de Delivery hacia arriba al múltiplo de Bs 0.50.
+     */
+    private function redondearTarifaDelivery(float $tarifa): float
+    {
+        return round(
+            ceil(max(0, $tarifa) * 2) / 2,
+            2
+        );
     }
 }
