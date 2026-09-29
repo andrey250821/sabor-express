@@ -368,7 +368,7 @@
 
 
     {{-- =========================================================
-         RESUMEN ECONÓMICO
+         RESUMEN ECONÓMICO DEL DÍA
     ========================================================== --}}
     <section class="delivery-dashboard-financial mb-4">
 
@@ -376,15 +376,15 @@
 
             <div>
                 <span class="delivery-financial-kicker">
-                    MIS INGRESOS
+                    INGRESOS DEL DÍA
                 </span>
 
                 <h2>
-                    Resumen económico
+                    Resumen de hoy
                 </h2>
 
                 <p>
-                    Información calculada a partir de tus pedidos entregados.
+                    Solo se contabilizan las entregas completadas hoy.
                 </p>
             </div>
 
@@ -394,17 +394,8 @@
 
         </div>
 
+
         <div class="delivery-financial-grid">
-
-            <div class="delivery-financial-card">
-                <span>
-                    Total cobrado por entregas
-                </span>
-
-                <strong>
-                    Bs {{ number_format($totalDeliveryGenerado, 2) }}
-                </strong>
-            </div>
 
             <div class="delivery-financial-card commission">
                 <span>
@@ -412,9 +403,14 @@
                 </span>
 
                 <strong>
-                    Bs {{ number_format($comisionDelivery, 2) }}
+                    Bs {{ number_format($comisionHoy, 2) }}
                 </strong>
+
+                <small>
+                    De tus entregas
+                </small>
             </div>
+
 
             <div class="delivery-financial-card restaurant">
                 <span>
@@ -422,8 +418,198 @@
                 </span>
 
                 <strong>
-                    Bs {{ number_format($parteRestaurante, 2) }}
+                    Bs {{ number_format($parteRestauranteHoy, 2) }}
                 </strong>
+
+                <small>
+                    Parte del restaurante
+                </small>
+            </div>
+
+
+            <div class="delivery-financial-card">
+                <span>
+                    Entregas completadas
+                </span>
+
+                <strong>
+                    {{ $entregasHoy }}
+                </strong>
+
+                <small>
+                    Hoy
+                </small>
+            </div>
+
+        </div>
+
+
+        {{-- HISTORIAL DE 7 DÍAS --}}
+        <div class="delivery-history-wrapper mt-4">
+
+            <div class="delivery-history-header">
+
+                <div>
+                    <strong>
+                        Historial de los últimos 7 días
+                    </strong>
+
+                    <span>
+                        Consulta lo generado por fecha.
+                    </span>
+                </div>
+
+                <button
+                    type="button"
+                    class="delivery-history-toggle"
+                    id="toggle-historial-delivery"
+                    aria-expanded="false"
+                    aria-controls="historial-delivery">
+                    <i class="bi bi-calendar-week"></i>
+                    Ver historial
+                </button>
+
+            </div>
+
+
+            <div
+                id="historial-delivery"
+                class="delivery-history-content"
+                hidden>
+
+                <div class="delivery-history-days">
+
+                    @foreach($historialDias as $dia)
+
+                    <a
+                        href="{{ route('delivery.dashboard', ['fecha' => $dia['fecha']]) }}"
+                        class="delivery-history-day {{ $fechaHistorial->toDateString() === $dia['fecha'] ? 'active' : '' }}">
+
+                        <span class="delivery-history-day-label">
+                            {{ $dia['etiqueta'] }}
+                        </span>
+
+                        <strong>
+                            Bs {{ number_format($dia['comision'], 2) }}
+                        </strong>
+
+                        <small>
+                            {{ $dia['entregas'] }}
+                            {{ $dia['entregas'] === 1 ? 'entrega' : 'entregas' }}
+                        </small>
+
+                    </a>
+
+                    @endforeach
+
+                </div>
+
+
+                <div class="delivery-history-selected mt-3">
+
+                    <div class="delivery-history-selected-header">
+
+                        <div>
+                            <span>
+                                Día seleccionado
+                            </span>
+
+                            <strong>
+                                {{ $fechaHistorial->format('d/m/Y') }}
+                            </strong>
+                        </div>
+
+                        <div class="delivery-history-selected-totals">
+
+                            <div>
+                                <small>Mi comisión</small>
+                                <strong>
+                                    Bs {{ number_format($comisionDiaSeleccionado, 2) }}
+                                </strong>
+                            </div>
+
+                            <div>
+                                <small>Restaurante</small>
+                                <strong>
+                                    Bs {{ number_format($parteRestauranteDiaSeleccionado, 2) }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    @if($entregasDiaSeleccionado->isEmpty())
+
+                    <div class="delivery-history-empty">
+                        <i class="bi bi-calendar-x"></i>
+                        <span>
+                            No hay entregas completadas en esta fecha.
+                        </span>
+                    </div>
+
+                    @else
+
+                    <div class="delivery-history-list">
+
+                        @foreach($entregasDiaSeleccionado as $asignacion)
+
+                        @php
+                            $pedidoHistorico = $asignacion->pedido;
+                        @endphp
+
+                        <div class="delivery-history-item">
+
+                            <div>
+                                <strong>
+                                    Pedido #{{ $pedidoHistorico?->id ?? '—' }}
+                                </strong>
+
+                                <small>
+                                    {{ $asignacion->fecha_entrega?->format('H:i') ?? '—' }}
+                                    ·
+                                    {{ number_format((float) ($pedidoHistorico?->distancia_delivery_km ?? 0), 2) }} km
+                                </small>
+                            </div>
+
+                            <div class="delivery-history-item-values">
+
+                                <span>
+                                    Ruta:
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedidoHistorico?->tarifa_delivery ?? 0), 2) }}
+                                    </strong>
+                                </span>
+
+                                <span>
+                                    Tú:
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedidoHistorico?->monto_delivery ?? 0), 2) }}
+                                        ({{ number_format((float) ($pedidoHistorico?->porcentaje_delivery ?? 0), 0) }}%)
+                                    </strong>
+                                </span>
+
+                                <span>
+                                    Restaurante:
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedidoHistorico?->monto_restaurante_delivery ?? 0), 2) }}
+                                        ({{ number_format((float) ($pedidoHistorico?->porcentaje_restaurante_delivery ?? 0), 0) }}%)
+                                    </strong>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        @endforeach
+
+                    </div>
+
+                    @endif
+
+                </div>
+
             </div>
 
         </div>
