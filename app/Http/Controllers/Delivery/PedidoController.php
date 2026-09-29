@@ -7,6 +7,7 @@ use App\Models\AsignacionDelivery;
 use App\Models\Notificacion;
 use App\Models\Pedido;
 use App\Services\AsignarPedidoDeliveryService;
+use App\Services\FirebaseDeliveryLocationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -206,7 +207,8 @@ class PedidoController extends Controller
      */
     public function entregar(
         int $id,
-        AsignarPedidoDeliveryService $asignador
+        AsignarPedidoDeliveryService $asignador,
+        FirebaseDeliveryLocationService $firebaseLocation
     ): RedirectResponse {
         $delivery = $this->verificarDelivery();
 
@@ -255,6 +257,13 @@ class PedidoController extends Controller
                 'leido' => false,
             ]);
         });
+
+        /*
+         * Firebase es independiente de MySQL. La ubicación del pedido
+         * se elimina explícitamente al finalizar la entrega.
+         * No dependemos de que el navegador vuelva a cargar la página.
+         */
+        $firebaseLocation->eliminarPorPedido($id);
 
         // Al liberar este Delivery, se entrega automáticamente
         // el siguiente pedido más antiguo que esté esperando.
