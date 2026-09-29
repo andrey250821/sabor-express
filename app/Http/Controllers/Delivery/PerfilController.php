@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use App\Models\AsignacionDelivery;
 
 class PerfilController extends Controller
 {
@@ -20,6 +21,44 @@ class PerfilController extends Controller
         return view('delivery.perfil.index', [
             'user' => $request->user(),
         ]);
+    }
+
+    /**
+     * Activar o desactivar el estado de trabajo del Delivery.
+     *
+     * Un Delivery con pedidos activos no puede pasar a inactivo
+     * para evitar dejar una entrega en curso sin acceso.
+     */
+    public function alternarEstado(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $tienePedidoActivo = AsignacionDelivery::query()
+            ->where('delivery_id', $user->id)
+            ->whereIn('estado', ['aceptado', 'en_camino'])
+            ->exists();
+
+        if ($user->estado === 'activo' && $tienePedidoActivo) {
+            return back()->with(
+                'error',
+                'No puedes ponerte inactivo mientras tengas un pedido asignado o en camino. Finaliza primero la entrega.'
+            );
+        }
+
+        $nuevoEstado = $user->estado === 'activo'
+            ? 'inactivo'
+            : 'activo';
+
+        $user->update([
+            'estado' => $nuevoEstado,
+        ]);
+
+        return back()->with(
+            'success',
+            $nuevoEstado === 'activo'
+                ? 'Ahora estás activo y puedes recibir pedidos.'
+                : 'Ahora estás inactivo y no recibirás nuevos pedidos.'
+        );
     }
 
     /**
