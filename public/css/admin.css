@@ -13125,3 +13125,44 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================================
+   PEDIDOS ADMIN - DESGLOSE ECONÓMICO DE DELIVERY
+   ============================================================ */
+
+.pedido-financial-breakdown {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(139, 30, 69, 0.08);
+    background: #fbfafb;
+}
+
+.pedido-financial-breakdown > div:not(.pedido-total-wrapper) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.38rem 0;
+    color: #6b626a;
+}
+
+.pedido-financial-breakdown > div strong {
+    color: #252129;
+}
+
+.pedido-financial-breakdown > div strong.text-success {
+    color: #26773f !important;
+}
+
+.pedido-financial-breakdown small {
+    color: #837982;
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .pedido-financial-breakdown > div:not(.pedido-total-wrapper) {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
