@@ -23,6 +23,43 @@ class PerfilController extends Controller
     }
 
     /**
+     * Activar o desactivar el estado de trabajo del Cocinero.
+     *
+     * No se permite pasar a inactivo mientras el cocinero tenga
+     * una preparación actualmente en curso.
+     */
+    public function alternarEstado(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $tienePreparacionActiva = $user->pedidosCocina()
+            ->where('estado', 'preparando')
+            ->exists();
+
+        if ($user->estado === 'activo' && $tienePreparacionActiva) {
+            return back()->with(
+                'error',
+                'No puedes ponerte inactivo mientras tengas un pedido en preparación. Finaliza primero la preparación.'
+            );
+        }
+
+        $nuevoEstado = $user->estado === 'activo'
+            ? 'inactivo'
+            : 'activo';
+
+        $user->update([
+            'estado' => $nuevoEstado,
+        ]);
+
+        return back()->with(
+            'success',
+            $nuevoEstado === 'activo'
+                ? 'Ahora estás activo y puedes recibir pedidos de cocina.'
+                : 'Ahora estás inactivo y no recibirás nuevos pedidos de cocina.'
+        );
+    }
+
+    /**
      * Actualizar los datos que el cocinero puede modificar.
      *
      * El rol, correo y estado se mantienen bajo control administrativo.
