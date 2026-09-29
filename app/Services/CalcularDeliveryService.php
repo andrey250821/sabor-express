@@ -82,6 +82,9 @@ class CalcularDeliveryService
 
         $respuesta = Http::timeout(12)
             ->retry(2, 250)
+            ->withHeaders([
+                'User-Agent' => 'SaborExpress/1.0 (sistema de pedidos y delivery)',
+            ])
             ->acceptJson()
             ->get($url, [
                 'overview' => 'false',
