@@ -50,13 +50,37 @@ class DashboardController extends Controller
             ])
             ->count();
 
-        // Pedidos entregados por este delivery
-        $pedidosEntregados = AsignacionDelivery::where(
-            'delivery_id',
-            $deliveryId
-        )
+        // Pedidos entregados por este Delivery.
+        $entregasFinalizadas = AsignacionDelivery::query()
+            ->where('delivery_id', $deliveryId)
             ->where('estado', 'entregado')
-            ->count();
+            ->with([
+                'pedido:id,total,tarifa_delivery,monto_delivery,monto_restaurante_delivery,distancia_delivery_km'
+            ])
+            ->get();
+
+        $pedidosEntregados = $entregasFinalizadas->count();
+
+        $totalDeliveryGenerado = round(
+            $entregasFinalizadas->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->tarifa_delivery ?? 0)
+            ),
+            2
+        );
+
+        $comisionDelivery = round(
+            $entregasFinalizadas->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)
+            ),
+            2
+        );
+
+        $parteRestaurante = round(
+            $entregasFinalizadas->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->monto_restaurante_delivery ?? 0)
+            ),
+            2
+        );
 
         return view(
             'delivery.dashboard.index',
@@ -64,7 +88,10 @@ class DashboardController extends Controller
                 'pedidosEnCola',
                 'misPedidos',
                 'pedidosEntregados',
-                'delivery'
+                'delivery',
+                'totalDeliveryGenerado',
+                'comisionDelivery',
+                'parteRestaurante'
             )
         );
     }
