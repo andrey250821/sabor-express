@@ -450,31 +450,12 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                             <div class="delivery-my-info-item">
 
-                                <i class="bi bi-cash-stack"></i>
-
-                                <div>
-
-                                    <span>
-                                        Total
-                                    </span>
-
-                                    <strong>
-                                        Bs {{ number_format($pedido->total, 2) }}
-                                    </strong>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="delivery-my-info-item">
-
                                 <i class="bi bi-signpost-split"></i>
 
                                 <div>
 
                                     <span>
-                                        Delivery
+                                        Costo de la ruta
                                         @if($pedido->distancia_delivery_km !== null)
                                             · {{ number_format((float) $pedido->distancia_delivery_km, 2) }} km
                                         @endif
@@ -497,10 +478,31 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                                     <span>
                                         Mi comisión
+                                        ({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%)
                                     </span>
 
                                     <strong>
                                         Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="delivery-my-info-item">
+
+                                <i class="bi bi-shop"></i>
+
+                                <div>
+
+                                    <span>
+                                        Parte restaurante
+                                        ({{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%)
+                                    </span>
+
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
                                     </strong>
 
                                 </div>
