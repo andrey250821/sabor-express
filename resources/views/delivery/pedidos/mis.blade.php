@@ -466,6 +466,47 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                             </div>
 
+
+                            <div class="delivery-my-info-item">
+
+                                <i class="bi bi-signpost-split"></i>
+
+                                <div>
+
+                                    <span>
+                                        Delivery
+                                        @if($pedido->distancia_delivery_km !== null)
+                                            · {{ number_format((float) $pedido->distancia_delivery_km, 2) }} km
+                                        @endif
+                                    </span>
+
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="delivery-my-info-item">
+
+                                <i class="bi bi-person-badge-fill"></i>
+
+                                <div>
+
+                                    <span>
+                                        Mi comisión
+                                    </span>
+
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
 
@@ -855,9 +896,18 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                                 <div class="delivery-delivered-bottom">
 
-                                    <strong>
-                                        Bs {{ number_format($pedido->total, 2) }}
-                                    </strong>
+                                    <div>
+                                        <strong>
+                                            Bs {{ number_format($pedido->total, 2) }}
+                                        </strong>
+
+                                        <small class="delivery-delivered-financial">
+                                            Delivery:
+                                            Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                                            · Mi comisión:
+                                            Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                                        </small>
+                                    </div>
 
                                     <a
                                         href="{{ route('delivery.pedidos.show', $pedido->id) }}"
