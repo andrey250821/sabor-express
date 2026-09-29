@@ -166,6 +166,7 @@ Route::middleware(['auth', 'role:Administrador'])
 
         Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('admin.configuracion.index');
         Route::put('/configuracion', [ConfiguracionController::class, 'update'])->name('admin.configuracion.update');
+        Route::get('/configuracion/ubicacion/direccion', [ConfiguracionController::class, 'obtenerDireccionUbicacion'])->name('admin.configuracion.ubicacion.direccion');
         Route::put('/configuracion/ubicacion', [ConfiguracionController::class, 'updateUbicacion'])->name('admin.configuracion.ubicacion.update');
         Route::put('/configuracion/delivery', [ConfiguracionController::class, 'updateDelivery'])->name('admin.configuracion.delivery.update');
 
