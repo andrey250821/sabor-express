@@ -45,6 +45,13 @@ return [
             'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
         ),
     ],
+
+    'firebase' => [
+        'database_url' => env(
+            'FIREBASE_DATABASE_URL',
+            'https://sabor-express-3e291-default-rtdb.firebaseio.com'
+        ),
+    ],
     
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
