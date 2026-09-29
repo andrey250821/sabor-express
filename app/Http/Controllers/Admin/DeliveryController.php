@@ -225,12 +225,28 @@ class DeliveryController extends Controller
 
         ]);
 
+        if (
+            $request->estado === 'inactivo' &&
+            $delivery->estado === 'activo'
+        ) {
+            $tienePedidoActivo = AsignacionDelivery::query()
+                ->where('delivery_id', $delivery->id)
+                ->whereIn('estado', ['aceptado', 'en_camino'])
+                ->exists();
+
+            if ($tienePedidoActivo) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'No se puede desactivar este Delivery porque tiene un pedido asignado o en camino. Debe finalizar la entrega primero.');
+            }
+        }
+
         $delivery->name = $request->name;
 
         $delivery->email = $request->email;
 
         $delivery->telefono = $request->telefono;
-$delivery->estado = $request->estado;
+        $delivery->estado = $request->estado;
 
         /**
          * Solo cambiar contraseña si se escribió una nueva
