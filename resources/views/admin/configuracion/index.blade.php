@@ -336,7 +336,13 @@
                             placeholder="Ej. Av. principal, esquina...">{{ old('direccion', $configuracion->direccion ?? '') }}</textarea>
 
                         <small class="configuracion-help">
-                            Escribe la dirección que corresponde al marcador del mapa.
+                            Al mover el marcador, la dirección se actualizará automáticamente.
+                        </small>
+
+                        <small
+                            id="estado-direccion-restaurante"
+                            class="configuracion-help d-block mt-1"
+                            aria-live="polite">
                         </small>
 
                     </div>
@@ -727,6 +733,8 @@
         const mapaContenedor = document.getElementById('mapa-restaurante');
         const latitudInput = document.getElementById('latitud-restaurante');
         const longitudInput = document.getElementById('longitud-restaurante');
+        const direccionInput = document.getElementById('direccion-restaurante');
+        const estadoDireccion = document.getElementById('estado-direccion-restaurante');
         const btnUbicacion = document.getElementById('btn-ubicacion-actual-restaurante');
 
         if (!mapaContenedor || typeof L === 'undefined') {
@@ -761,6 +769,8 @@
         ).addTo(mapa);
 
         let marcador = null;
+        let temporizadorDireccion = null;
+        let solicitudDireccion = null;
 
         function actualizarCoordenadas(lat, lng) {
 
@@ -773,7 +783,84 @@
             }
         }
 
-        function colocarMarcador(lat, lng, centrar = true) {
+        async function actualizarDireccion(lat, lng) {
+
+            if (!direccionInput || !estadoDireccion) {
+                return;
+            }
+
+            if (temporizadorDireccion) {
+                clearTimeout(temporizadorDireccion);
+            }
+
+            if (solicitudDireccion) {
+                solicitudDireccion.abort();
+            }
+
+            temporizadorDireccion = setTimeout(async function () {
+
+                solicitudDireccion = new AbortController();
+
+                estadoDireccion.textContent =
+                    'Consultando dirección de la ubicación seleccionada...';
+
+                estadoDireccion.classList.remove('text-danger', 'text-success');
+                estadoDireccion.classList.add('text-muted');
+
+                try {
+
+                    const url =
+                        '{{ route('admin.configuracion.ubicacion.direccion') }}' +
+                        '?latitud=' + encodeURIComponent(Number(lat).toFixed(7)) +
+                        '&longitud=' + encodeURIComponent(Number(lng).toFixed(7));
+
+                    const respuesta = await fetch(
+                        url,
+                        {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            signal: solicitudDireccion.signal
+                        }
+                    );
+
+                    const datos = await respuesta.json();
+
+                    if (!respuesta.ok || !datos.ok) {
+                        throw new Error(
+                            datos.message ||
+                            'No se pudo obtener la dirección.'
+                        );
+                    }
+
+                    direccionInput.value = datos.direccion;
+
+                    estadoDireccion.textContent =
+                        'Dirección obtenida automáticamente desde el mapa.';
+
+                    estadoDireccion.classList.remove('text-muted', 'text-danger');
+                    estadoDireccion.classList.add('text-success');
+
+                } catch (error) {
+
+                    if (error.name === 'AbortError') {
+                        return;
+                    }
+
+                    estadoDireccion.textContent =
+                        'No se pudo obtener la dirección automáticamente. Puedes escribirla manualmente.';
+
+                    estadoDireccion.classList.remove('text-muted', 'text-success');
+                    estadoDireccion.classList.add('text-danger');
+
+                }
+
+            }, 350);
+        }
+
+        function colocarMarcador(lat, lng, centrar = true, obtenerDireccion = true) {
 
             actualizarCoordenadas(lat, lng);
 
@@ -801,6 +888,11 @@
                         posicion.lng
                     );
 
+                    actualizarDireccion(
+                        posicion.lat,
+                        posicion.lng
+                    );
+
                 });
 
             } else {
@@ -812,12 +904,17 @@
             if (centrar) {
                 mapa.setView([lat, lng], Math.max(mapa.getZoom(), 17));
             }
+
+            if (obtenerDireccion) {
+                actualizarDireccion(lat, lng);
+            }
         }
 
         if (tieneUbicacion) {
             colocarMarcador(
                 latGuardada,
                 lngGuardada,
+                false,
                 false
             );
         }
@@ -827,7 +924,8 @@
             colocarMarcador(
                 evento.latlng.lat,
                 evento.latlng.lng,
-                false
+                false,
+                true
             );
 
         });
@@ -844,6 +942,7 @@
                         colocarMarcador(
                             posicion.coords.latitude,
                             posicion.coords.longitude,
+                            true,
                             true
                         );
 
