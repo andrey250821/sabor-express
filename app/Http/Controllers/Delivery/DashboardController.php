@@ -119,7 +119,9 @@ class DashboardController extends Controller
                     'fecha' => $fecha->toDateString(),
                     'etiqueta' => $fecha->isToday()
                         ? 'Hoy'
-                        : ($fecha->isYesterday() ? 'Ayer' : $fecha->translatedFormat('l d/m')),
+                        : ($fecha->isYesterday()
+                            ? 'Ayer'
+                            : ($diasAtras === 2 ? 'Anteayer' : $fecha->format('d/m'))),
                     'entregas' => $entregas->count(),
                     'comision' => round(
                         $entregas->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)),
