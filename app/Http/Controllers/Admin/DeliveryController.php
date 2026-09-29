@@ -260,8 +260,19 @@ $delivery->estado = $request->estado;
         $delivery = User::where('role_id', 3)
             ->findOrFail($id);
 
-        $delivery->estado = 'inactivo';
+        $tienePedidoActivo = AsignacionDelivery::query()
+            ->where('delivery_id', $delivery->id)
+            ->whereIn('estado', ['aceptado', 'en_camino'])
+            ->exists();
 
+        if ($tienePedidoActivo) {
+            return back()->with(
+                'error',
+                'No se puede desactivar este Delivery porque tiene un pedido asignado o en camino. Debe finalizar la entrega primero.'
+            );
+        }
+
+        $delivery->estado = 'inactivo';
         $delivery->save();
 
         return back()->with(
