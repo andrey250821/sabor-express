@@ -368,6 +368,70 @@
 
 
     {{-- =========================================================
+         RESUMEN ECONÓMICO
+    ========================================================== --}}
+    <section class="delivery-dashboard-financial mb-4">
+
+        <div class="delivery-financial-header">
+
+            <div>
+                <span class="delivery-financial-kicker">
+                    MIS INGRESOS
+                </span>
+
+                <h2>
+                    Resumen económico
+                </h2>
+
+                <p>
+                    Información calculada a partir de tus pedidos entregados.
+                </p>
+            </div>
+
+            <div class="delivery-financial-icon">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+        </div>
+
+        <div class="delivery-financial-grid">
+
+            <div class="delivery-financial-card">
+                <span>
+                    Total cobrado por entregas
+                </span>
+
+                <strong>
+                    Bs {{ number_format($totalDeliveryGenerado, 2) }}
+                </strong>
+            </div>
+
+            <div class="delivery-financial-card commission">
+                <span>
+                    Mi comisión
+                </span>
+
+                <strong>
+                    Bs {{ number_format($comisionDelivery, 2) }}
+                </strong>
+            </div>
+
+            <div class="delivery-financial-card restaurant">
+                <span>
+                    Parte restaurante
+                </span>
+
+                <strong>
+                    Bs {{ number_format($parteRestaurante, 2) }}
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    {{-- =========================================================
          ACCIONES RÁPIDAS
     ========================================================== --}}
     <section class="delivery-dashboard-panel mb-4">
