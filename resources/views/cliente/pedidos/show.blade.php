@@ -760,18 +760,20 @@
                     </strong>
                 </div>
 
-                <div class="cliente-pedido-show-financial-row">
-                    <span>
-                        Delivery
-                        @if($pedido->distancia_delivery_km !== null)
-                            ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
-                        @endif
-                    </span>
+                @if($pedido->distancia_delivery_km !== null || (float) ($pedido->tarifa_delivery ?? 0) > 0)
+                    <div class="cliente-pedido-show-financial-row">
+                        <span>
+                            Delivery
+                            @if($pedido->distancia_delivery_km !== null)
+                                ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
+                            @endif
+                        </span>
 
-                    <strong>
-                        Bs. {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
-                    </strong>
-                </div>
+                        <strong>
+                            Bs. {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                        </strong>
+                    </div>
+                @endif
 
                 <div class="cliente-pedido-show-total">
                     <div>
