@@ -39,19 +39,19 @@ return new class extends Migration
                 ->after('porcentaje_restaurante_delivery');
         });
 
-        // Compatibilidad con pedidos anteriores al cálculo de Delivery:
-        // se considera que el total antiguo era únicamente de productos.
-        DB::table('pedidos')
-            ->whereNull('subtotal_productos')
-            ->update([
-                'subtotal_productos' => DB::raw('total'),
-                'tarifa_delivery' => 0,
-                'distancia_delivery_km' => null,
-                'porcentaje_delivery' => 0,
-                'monto_delivery' => 0,
-                'porcentaje_restaurante_delivery' => 0,
-                'monto_restaurante_delivery' => 0,
-            ]);
+        // Compatibilidad con pedidos existentes antes de implementar
+        // el cálculo de Delivery: en este punto todos los registros
+        // existentes corresponden al flujo anterior y su total representa
+        // únicamente el importe de los productos.
+        DB::table('pedidos')->update([
+            'subtotal_productos' => DB::raw('total'),
+            'tarifa_delivery' => 0,
+            'distancia_delivery_km' => null,
+            'porcentaje_delivery' => 0,
+            'monto_delivery' => 0,
+            'porcentaje_restaurante_delivery' => 0,
+            'monto_restaurante_delivery' => 0,
+        ]);
     }
 
     public function down(): void
