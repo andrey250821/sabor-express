@@ -807,7 +807,7 @@
                         </div>
 
 
-                        {{-- AVISO DE TARIFA VIGENTE --}}
+                        {{-- AVISO DE TARIFA --}}
                         <div
                             id="aviso-tarifa-delivery"
                             class="cliente-pedido-resumen-tarifa-info">
@@ -815,16 +815,10 @@
                             <i class="bi bi-info-circle-fill"></i>
 
                             <span>
-                                Tarifa vigente:
+                                Distancia por carretera desde el restaurante:
                                 <strong id="aviso-precio-km-delivery">
                                     Bs {{ number_format((float) ($configuracion->precio_km_delivery ?? 3.00), 2) }}
-                                </strong>
-                                por km.
-                                Tarifa mínima:
-                                <strong id="aviso-tarifa-minima-delivery">
-                                    Bs {{ number_format((float) ($configuracion->tarifa_minima_delivery ?? 5.00), 2) }}
-                                </strong>.
-                                El cobro se redondea hacia arriba en múltiplos de Bs 0.50.
+                                </strong>/km.
                             </span>
 
                         </div>
@@ -1219,9 +1213,6 @@
         const avisoPrecioKmDelivery =
             document.getElementById('aviso-precio-km-delivery');
 
-        const avisoTarifaMinimaDelivery =
-            document.getElementById('aviso-tarifa-minima-delivery');
-
         const resumenDeliveryEstado =
             document.getElementById('resumen-delivery-estado');
 
@@ -1295,11 +1286,6 @@
             if (avisoPrecioKmDelivery) {
                 avisoPrecioKmDelivery.textContent =
                     'Bs ' + Number(cotizacion.precio_km_delivery).toFixed(2);
-            }
-
-            if (avisoTarifaMinimaDelivery) {
-                avisoTarifaMinimaDelivery.textContent =
-                    'Bs ' + Number(cotizacion.tarifa_minima_delivery).toFixed(2);
             }
 
             if (avisoTarifaDelivery) {
