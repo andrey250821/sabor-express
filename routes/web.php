@@ -50,6 +50,7 @@ use App\Http\Controllers\Cocinero\PerfilController as CocineroPerfilController;
 
 use App\Http\Controllers\Delivery\DashboardController as DeliveryDashboardController;
 use App\Http\Controllers\Delivery\PedidoController as DeliveryPedidoController;
+use App\Http\Controllers\Delivery\PerfilController as DeliveryPerfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -382,6 +383,8 @@ Route::middleware(['auth', 'role:Delivery'])
     ->prefix('delivery')
     ->group(function () {
         Route::get('/dashboard', [DeliveryDashboardController::class, 'index'])->name('delivery.dashboard');
+        Route::get('/perfil', [DeliveryPerfilController::class, 'edit'])->name('delivery.perfil.edit');
+        Route::patch('/perfil', [DeliveryPerfilController::class, 'update'])->name('delivery.perfil.update');
         Route::get('/pedidos', [DeliveryPedidoController::class, 'index'])->name('delivery.pedidos.index');
         Route::get('/pedidos/{id}', [DeliveryPedidoController::class, 'show'])->name('delivery.pedidos.show');
         Route::get('/mis-pedidos', [DeliveryPedidoController::class, 'misPedidos'])->name('delivery.pedidos.mis');
