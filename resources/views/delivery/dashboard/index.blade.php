@@ -585,7 +585,13 @@
 
                     <div class="delivery-profile-avatar">
 
-                        <i class="bi bi-person"></i>
+                        @if($delivery->foto_perfil_url)
+                            <img
+                                src="{{ $delivery->foto_perfil_url }}"
+                                alt="Foto de {{ $delivery->name ?? auth()->user()->name }}">
+                        @else
+                            {{ strtoupper(substr($delivery->name ?? auth()->user()->name, 0, 1)) }}
+                        @endif
 
                     </div>
 
@@ -596,7 +602,7 @@
                         </strong>
 
                         <span>
-                            Repartidor Delivery
+                            Delivery
                         </span>
 
                     </div>
