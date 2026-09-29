@@ -656,8 +656,8 @@
                                 </div>
 
                                 <div>
-                                    <span>Total</span>
-                                    <strong>Bs {{ number_format($total, 2) }}</strong>
+                                    <span>Total estimado</span>
+                                    <strong id="ocr-total-estimado">Bs {{ number_format($total, 2) }}</strong>
                                 </div>
 
                             </div>
@@ -665,7 +665,8 @@
                             <button
                                 type="button"
                                 id="btn-generar-comprobantes-ocr"
-                                class="cliente-ocr-pruebas-btn">
+                                class="cliente-ocr-pruebas-btn"
+                                disabled>
 
                                 <i class="bi bi-images"></i>
 
@@ -1200,6 +1201,9 @@
         const resultadosOcr =
             document.getElementById('resultados-comprobantes-ocr');
 
+        const ocrTotalEstimado =
+            document.getElementById('ocr-total-estimado');
+
         const rutaGenerarComprobantesOcr =
             @json(route('cliente.pedidos.generar.comprobantes.prueba'));
 
@@ -1242,6 +1246,11 @@
             if (resumenTotalPedido) {
                 resumenTotalPedido.textContent =
                     'Bs. ' + Number(cotizacion.total).toFixed(2);
+            }
+
+            if (ocrTotalEstimado) {
+                ocrTotalEstimado.textContent =
+                    'Bs ' + Number(cotizacion.total).toFixed(2);
             }
 
             if (resumenDeliveryEstado) {
@@ -1293,6 +1302,11 @@
             if (resumenTotalPedido) {
                 resumenTotalPedido.textContent =
                     'Bs. ' + Number(@json($total)).toFixed(2);
+            }
+
+            if (ocrTotalEstimado) {
+                ocrTotalEstimado.textContent =
+                    'Bs ' + Number(@json($total)).toFixed(2);
             }
 
             if (resumenDeliveryEstado) {
