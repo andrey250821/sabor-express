@@ -744,12 +744,16 @@ $cantidadEntregados = $pedidosEntregados->count();
              * La fecha real de finalización se guarda en fecha_entrega.
              */
             $pedidosEntregadosPorFecha = $pedidosEntregados
-                ->sortByDesc('updated_at')
-                ->groupBy(function ($asignacion) {
-                    return $asignacion->updated_at
-                        ? $asignacion->updated_at->toDateString()
-                        : $asignacion->pedido->created_at->toDateString();
-                });
+                 ->sortByDesc(function ($asignacion) {
+                     return $asignacion->fecha_entrega ?? $asignacion->updated_at;
+                 })
+                 ->groupBy(function ($asignacion) {
+                     $fecha = $asignacion->fecha_entrega ?? $asignacion->updated_at;
+
+                     return $fecha
+                         ? $fecha->toDateString()
+                         : $asignacion->pedido->created_at->toDateString();
+                 });
             @endphp
 
             @foreach($pedidosEntregadosPorFecha as $fecha => $pedidosFecha)
