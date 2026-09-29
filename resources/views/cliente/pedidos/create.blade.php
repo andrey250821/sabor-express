@@ -807,6 +807,29 @@
                         </div>
 
 
+                        {{-- AVISO DE TARIFA VIGENTE --}}
+                        <div
+                            id="aviso-tarifa-delivery"
+                            class="cliente-pedido-resumen-tarifa-info">
+
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            <span>
+                                Tarifa vigente:
+                                <strong id="aviso-precio-km-delivery">
+                                    Bs {{ number_format((float) ($configuracion->precio_km_delivery ?? 3.00), 2) }}
+                                </strong>
+                                por km.
+                                Tarifa mínima:
+                                <strong id="aviso-tarifa-minima-delivery">
+                                    Bs {{ number_format((float) ($configuracion->tarifa_minima_delivery ?? 5.00), 2) }}
+                                </strong>.
+                                El cobro se redondea hacia arriba en múltiplos de Bs 0.50.
+                            </span>
+
+                        </div>
+
+
                         <div class="cliente-pedido-resumen-separador"></div>
 
 
@@ -839,18 +862,6 @@
 
 
                         {{-- INFORMACIÓN --}}
-
-                        <div class="cliente-pedido-resumen-info">
-
-                            <i class="bi bi-shield-check"></i>
-
-                            <span>
-                                Tu pedido será enviado al restaurante
-                                después de validar el comprobante.
-                            </span>
-
-                        </div>
-
 
                         {{-- CONFIRMAR --}}
 
@@ -1070,6 +1081,30 @@
         color: #fff;
     }
 
+    .cliente-pedido-resumen-tarifa-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(139, 30, 69, .06);
+        border: 1px solid rgba(139, 30, 69, .14);
+        color: #5d4a52;
+        font-size: .78rem;
+        line-height: 1.45;
+    }
+
+    .cliente-pedido-resumen-tarifa-info > i {
+        flex: 0 0 auto;
+        margin-top: 2px;
+        color: #8b1e45;
+    }
+
+    .cliente-pedido-resumen-tarifa-info strong {
+        color: #3f2931;
+    }
+
     @media (max-width: 768px) {
         .cliente-ocr-pruebas-info {
             grid-template-columns: 1fr;
@@ -1178,6 +1213,15 @@
         const resumenTotalPedido =
             document.getElementById('resumen-total-pedido');
 
+        const avisoTarifaDelivery =
+            document.getElementById('aviso-tarifa-delivery');
+
+        const avisoPrecioKmDelivery =
+            document.getElementById('aviso-precio-km-delivery');
+
+        const avisoTarifaMinimaDelivery =
+            document.getElementById('aviso-tarifa-minima-delivery');
+
         const resumenDeliveryEstado =
             document.getElementById('resumen-delivery-estado');
 
@@ -1246,6 +1290,20 @@
             if (resumenTotalPedido) {
                 resumenTotalPedido.textContent =
                     'Bs. ' + Number(cotizacion.total).toFixed(2);
+            }
+
+            if (avisoPrecioKmDelivery) {
+                avisoPrecioKmDelivery.textContent =
+                    'Bs ' + Number(cotizacion.precio_km_delivery).toFixed(2);
+            }
+
+            if (avisoTarifaMinimaDelivery) {
+                avisoTarifaMinimaDelivery.textContent =
+                    'Bs ' + Number(cotizacion.tarifa_minima_delivery).toFixed(2);
+            }
+
+            if (avisoTarifaDelivery) {
+                avisoTarifaDelivery.hidden = false;
             }
 
             if (ocrTotalEstimado) {
