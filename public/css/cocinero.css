@@ -4548,3 +4548,97 @@ body.cocinero-layout::-webkit-scrollbar-thumb:hover {
     }
 
 }
+
+
+/* =========================================================
+   ESTADO DE TRABAJO DEL COCINERO
+========================================================= */
+.cocinero-status.activo,
+.cocinero-status.inactivo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.cocinero-status.activo {
+    background: rgba(53, 208, 127, 0.06);
+    border-color: rgba(53, 208, 127, 0.16);
+}
+
+.cocinero-status.inactivo {
+    background: rgba(220, 53, 69, 0.055);
+    border-color: rgba(220, 53, 69, 0.18);
+}
+
+.cocinero-status-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.cocinero-status-info > div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cocinero-status.activo .cocinero-status-dot {
+    background: var(--cocinero-green);
+    box-shadow: 0 0 0 4px rgba(53, 208, 127, 0.08);
+}
+
+.cocinero-status.inactivo .cocinero-status-dot {
+    background: #dc3545;
+    box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.08);
+    animation: none;
+}
+
+.cocinero-status.inactivo strong {
+    color: #ffd9dd;
+}
+
+.cocinero-status-form {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.cocinero-status-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 6px 9px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.cocinero-status-toggle.desactivar {
+    border-color: rgba(220, 53, 69, .35);
+    background: rgba(220, 53, 69, .14);
+    color: #ffb8be;
+}
+
+.cocinero-status-toggle.desactivar:hover {
+    background: rgba(220, 53, 69, .24);
+    border-color: rgba(220, 53, 69, .55);
+}
+
+.cocinero-status-toggle.activar {
+    border-color: rgba(53, 208, 127, .35);
+    background: rgba(53, 208, 127, .14);
+    color: #a9ffd0;
+}
+
+.cocinero-status-toggle.activar:hover {
+    background: rgba(53, 208, 127, .24);
+    border-color: rgba(53, 208, 127, .55);
+}
