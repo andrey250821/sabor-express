@@ -741,8 +741,7 @@ $cantidadEntregados = $pedidosEntregados->count();
              * El historial se agrupa por la fecha en que la asignación
              * pasó a estado "entregado".
              *
-             * No hace falta una migración nueva: updated_at corresponde
-             * al momento en que se marcó la asignación como entregada.
+             * La fecha real de finalización se guarda en fecha_entrega.
              */
             $pedidosEntregadosPorFecha = $pedidosEntregados
                 ->sortByDesc('updated_at')
@@ -900,14 +899,17 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                                     <div>
                                         <strong>
-                                            Bs {{ number_format($pedido->total, 2) }}
+                                            Ruta:
+                                            Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
                                         </strong>
 
                                         <small class="delivery-delivered-financial">
-                                            Delivery:
-                                            Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
-                                            · Mi comisión:
+                                            Mi comisión:
                                             Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                                            ({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%)
+                                            · Restaurante:
+                                            Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
+                                            ({{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%)
                                         </small>
                                     </div>
 
