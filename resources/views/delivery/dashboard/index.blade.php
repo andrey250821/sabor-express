@@ -786,4 +786,32 @@
 
 </div>
 
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const boton = document.getElementById('toggle-historial-delivery');
+    const historial = document.getElementById('historial-delivery');
+
+    if (!boton || !historial) {
+        return;
+    }
+
+    boton.addEventListener('click', function () {
+        const oculto = historial.hasAttribute('hidden');
+
+        if (oculto) {
+            historial.removeAttribute('hidden');
+            boton.setAttribute('aria-expanded', 'true');
+            boton.innerHTML = '<i class="bi bi-calendar-week"></i> Ocultar historial';
+        } else {
+            historial.setAttribute('hidden', '');
+            boton.setAttribute('aria-expanded', 'false');
+            boton.innerHTML = '<i class="bi bi-calendar-week"></i> Ver historial';
+        }
+    });
+});
+</script>
+@endpush
+
 @endsection
