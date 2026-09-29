@@ -8483,3 +8483,133 @@ a {
     font-size: 11px;
 
 }
+
+/* ============================================================
+   DELIVERY - INFORMACIÓN ECONÓMICA
+   ============================================================ */
+
+.delivery-dashboard-financial {
+    padding: 1.35rem;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.delivery-financial-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+}
+
+.delivery-financial-kicker {
+    display: block;
+    color: #8b1e45;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.delivery-financial-header h2 {
+    margin: 0.25rem 0 0;
+    color: #242028;
+    font-size: 1.3rem;
+}
+
+.delivery-financial-header p {
+    margin: 0.35rem 0 0;
+    color: #746a72;
+}
+
+.delivery-financial-icon {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f6e8ee;
+    color: #8b1e45;
+    font-size: 1.2rem;
+}
+
+.delivery-financial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.delivery-financial-card {
+    padding: 1rem;
+    border-radius: 14px;
+    background: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.delivery-financial-card span,
+.delivery-financial-card strong {
+    display: block;
+}
+
+.delivery-financial-card span {
+    color: #716770;
+    font-size: 0.83rem;
+}
+
+.delivery-financial-card strong {
+    margin-top: 0.4rem;
+    color: #242028;
+    font-size: 1.22rem;
+}
+
+.delivery-financial-card.commission strong {
+    color: #22723c;
+}
+
+.delivery-financial-card.restaurant strong {
+    color: #8b1e45;
+}
+
+.delivery-financial-breakdown {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 14px;
+    background: #fbfafb;
+    border: 1px solid rgba(139, 30, 69, 0.08);
+}
+
+.delivery-financial-breakdown > div:not(.delivery-total) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    color: #6d646b;
+}
+
+.delivery-financial-breakdown > div strong {
+    color: #272229;
+}
+
+.delivery-financial-my-share {
+    color: #22723c !important;
+}
+
+.delivery-financial-breakdown small {
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .delivery-financial-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .delivery-financial-breakdown > div:not(.delivery-total) {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
