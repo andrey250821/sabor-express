@@ -391,14 +391,22 @@ Route::middleware(['auth', 'role:Cliente'])
 Route::middleware(['auth', 'role:Delivery'])
     ->prefix('delivery')
     ->group(function () {
-        Route::get('/dashboard', [DeliveryDashboardController::class, 'index'])->name('delivery.dashboard');
+
+        // El perfil y el cambio de estado siguen disponibles
+        // para que un Delivery inactivo pueda volver a activarse.
         Route::get('/perfil', [DeliveryPerfilController::class, 'edit'])->name('delivery.perfil.edit');
         Route::patch('/perfil', [DeliveryPerfilController::class, 'update'])->name('delivery.perfil.update');
-        Route::get('/pedidos', [DeliveryPedidoController::class, 'index'])->name('delivery.pedidos.index');
-        Route::get('/pedidos/{id}', [DeliveryPedidoController::class, 'show'])->name('delivery.pedidos.show');
-        Route::get('/mis-pedidos', [DeliveryPedidoController::class, 'misPedidos'])->name('delivery.pedidos.mis');
-        Route::put('/pedidos/{id}/iniciar', [DeliveryPedidoController::class, 'iniciar'])->name('delivery.pedidos.iniciar');
-        Route::put('/pedidos/{id}/entregar', [DeliveryPedidoController::class, 'entregar'])->name('delivery.pedidos.entregar');
+        Route::patch('/estado', [DeliveryPerfilController::class, 'alternarEstado'])->name('delivery.estado.alternar');
+
+        // Solo Deliverys activos pueden acceder al trabajo operativo.
+        Route::middleware('personal.activo')->group(function () {
+            Route::get('/dashboard', [DeliveryDashboardController::class, 'index'])->name('delivery.dashboard');
+            Route::get('/pedidos', [DeliveryPedidoController::class, 'index'])->name('delivery.pedidos.index');
+            Route::get('/pedidos/{id}', [DeliveryPedidoController::class, 'show'])->name('delivery.pedidos.show');
+            Route::get('/mis-pedidos', [DeliveryPedidoController::class, 'misPedidos'])->name('delivery.pedidos.mis');
+            Route::put('/pedidos/{id}/iniciar', [DeliveryPedidoController::class, 'iniciar'])->name('delivery.pedidos.iniciar');
+            Route::put('/pedidos/{id}/entregar', [DeliveryPedidoController::class, 'entregar'])->name('delivery.pedidos.entregar');
+        });
     });
 
 
@@ -411,13 +419,21 @@ Route::middleware(['auth', 'role:Delivery'])
 Route::middleware(['auth', 'role:Cocinero'])
     ->prefix('cocinero')
     ->group(function () {
-        Route::get('/dashboard', [CocineroDashboardController::class, 'index'])->name('cocinero.dashboard');
+
+        // El perfil y el cambio de estado siguen disponibles
+        // para que un Cocinero inactivo pueda volver a activarse.
         Route::get('/perfil', [CocineroPerfilController::class, 'edit'])->name('cocinero.perfil.edit');
         Route::patch('/perfil', [CocineroPerfilController::class, 'update'])->name('cocinero.perfil.update');
-        Route::get('/pedidos', [CocineroPedidoController::class, 'index'])->name('cocinero.pedidos.index');
-        Route::get('/pedidos/{id}', [CocineroPedidoController::class, 'show'])->name('cocinero.pedidos.show');
-        Route::put('/pedidos/{id}/preparar', [CocineroPedidoController::class, 'preparar'])->name('cocinero.pedidos.preparar');
-        Route::put('/pedidos/{id}/listo', [CocineroPedidoController::class, 'listo'])->name('cocinero.pedidos.listo');
+        Route::patch('/estado', [CocineroPerfilController::class, 'alternarEstado'])->name('cocinero.estado.alternar');
+
+        // Solo Cocineros activos pueden acceder al trabajo operativo.
+        Route::middleware('personal.activo')->group(function () {
+            Route::get('/dashboard', [CocineroDashboardController::class, 'index'])->name('cocinero.dashboard');
+            Route::get('/pedidos', [CocineroPedidoController::class, 'index'])->name('cocinero.pedidos.index');
+            Route::get('/pedidos/{id}', [CocineroPedidoController::class, 'show'])->name('cocinero.pedidos.show');
+            Route::put('/pedidos/{id}/preparar', [CocineroPedidoController::class, 'preparar'])->name('cocinero.pedidos.preparar');
+            Route::put('/pedidos/{id}/listo', [CocineroPedidoController::class, 'listo'])->name('cocinero.pedidos.listo');
+        });
     });
 
 
