@@ -823,12 +823,6 @@ $estadoPedido === 'en_camino'
             </div>
 
 
-            <div class="delivery-product-subtotal">
-
-                Bs {{ number_format((float) $detalle->subtotal, 2) }}
-
-            </div>
-
         </div>
 
         @empty
