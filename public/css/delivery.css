@@ -8625,3 +8625,267 @@ a {
 .delivery-delivered-financial strong {
     color: #22723c;
 }
+
+
+/* ==========================================================================
+   HISTORIAL DE COMISIONES DEL DELIVERY
+   ========================================================================== */
+
+.delivery-history-wrapper {
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    padding-top: 1rem;
+}
+
+.delivery-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.delivery-history-header > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.delivery-history-header strong {
+    color: #242028;
+    font-size: 0.95rem;
+}
+
+.delivery-history-header span {
+    color: #746a72;
+    font-size: 0.82rem;
+}
+
+.delivery-history-toggle {
+    border: 1px solid rgba(139, 30, 69, 0.18);
+    background: #fff;
+    color: #8b1e45;
+    border-radius: 10px;
+    padding: 0.55rem 0.85rem;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.delivery-history-toggle:hover {
+    background: #f8eef2;
+}
+
+.delivery-history-content[hidden] {
+    display: none !important;
+}
+
+.delivery-history-days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-top: 1rem;
+}
+
+.delivery-history-day {
+    display: block;
+    text-decoration: none;
+    padding: 0.75rem 0.65rem;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 12px;
+    background: #fafafa;
+    color: #242028;
+    transition: 0.2s ease;
+}
+
+.delivery-history-day:hover {
+    transform: translateY(-1px);
+    border-color: rgba(139, 30, 69, 0.22);
+    background: #fff;
+}
+
+.delivery-history-day.active {
+    border-color: rgba(139, 30, 69, 0.35);
+    background: #f8eef2;
+}
+
+.delivery-history-day-label,
+.delivery-history-day strong,
+.delivery-history-day small {
+    display: block;
+}
+
+.delivery-history-day-label {
+    color: #716770;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.delivery-history-day strong {
+    margin-top: 0.3rem;
+    color: #22723c;
+    font-size: 0.98rem;
+}
+
+.delivery-history-day small {
+    margin-top: 0.15rem;
+    color: #8a8087;
+    font-size: 0.72rem;
+}
+
+.delivery-history-selected {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    background: #fff;
+}
+
+.delivery-history-selected-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.delivery-history-selected-header > div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.delivery-history-selected-header span {
+    color: #716770;
+    font-size: 0.75rem;
+}
+
+.delivery-history-selected-header strong {
+    color: #242028;
+}
+
+.delivery-history-selected-totals {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.delivery-history-selected-totals > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    text-align: right;
+}
+
+.delivery-history-selected-totals small {
+    color: #716770;
+    font-size: 0.72rem;
+}
+
+.delivery-history-selected-totals strong {
+    color: #22723c;
+    font-size: 0.9rem;
+}
+
+.delivery-history-selected-totals > div:last-child strong {
+    color: #8b1e45;
+}
+
+.delivery-history-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.delivery-history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.delivery-history-item:last-child {
+    border-bottom: 0;
+}
+
+.delivery-history-item > div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.delivery-history-item > div:first-child strong {
+    color: #242028;
+    font-size: 0.88rem;
+}
+
+.delivery-history-item > div:first-child small {
+    color: #81767d;
+    font-size: 0.75rem;
+}
+
+.delivery-history-item-values {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.delivery-history-item-values span {
+    color: #716770;
+    font-size: 0.75rem;
+}
+
+.delivery-history-item-values strong {
+    color: #242028;
+}
+
+.delivery-history-empty {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #81767d;
+    padding-top: 1rem;
+    font-size: 0.84rem;
+}
+
+.delivery-financial-card small {
+    display: block;
+    margin-top: 0.25rem;
+    color: #81767d;
+    font-size: 0.72rem;
+}
+
+@media (max-width: 1100px) {
+    .delivery-history-days {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .delivery-history-header,
+    .delivery-history-selected-header,
+    .delivery-history-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .delivery-history-days {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .delivery-history-selected-totals {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .delivery-history-selected-totals > div {
+        text-align: left;
+    }
+
+    .delivery-history-item-values {
+        justify-content: flex-start;
+    }
+}
+
