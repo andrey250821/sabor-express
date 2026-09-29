@@ -212,6 +212,17 @@ class CocineroController extends Controller
         $cocinero = User::where('role_id', 4)
             ->findOrFail($id);
 
+        $tienePreparacionActiva = $cocinero->pedidosCocina()
+            ->where('estado', 'preparando')
+            ->exists();
+
+        if ($tienePreparacionActiva) {
+            return back()->with(
+                'error',
+                'No se puede desactivar este Cocinero porque tiene un pedido en preparación. Debe finalizar primero la preparación.'
+            );
+        }
+
         $cocinero->estado = 'inactivo';
         $cocinero->save();
 
