@@ -263,6 +263,70 @@
 
     </div>
 
+    <div class="dashboard-section dashboard-delivery-financial-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-eyebrow">DELIVERY</span>
+                <h3>Resumen económico de entregas</h3>
+            </div>
+
+            <a
+                href="{{ route('admin.deliverys.index') }}"
+                class="dashboard-link">
+
+                Ver Deliverys
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+        <div class="dashboard-delivery-financial-grid">
+
+            <div class="dashboard-delivery-financial-card">
+                <span>
+                    <i class="bi bi-cash-stack"></i>
+                    Total cobrado por entregas
+                </span>
+
+                <strong>
+                    Bs {{ number_format($ingresosDelivery, 2) }}
+                </strong>
+            </div>
+
+            <div class="dashboard-delivery-financial-card">
+                <span>
+                    <i class="bi bi-person-badge-fill"></i>
+                    Comisión Delivery
+                </span>
+
+                <strong>
+                    Bs {{ number_format($comisionesDelivery, 2) }}
+                </strong>
+            </div>
+
+            <div class="dashboard-delivery-financial-card">
+                <span>
+                    <i class="bi bi-shop-window"></i>
+                    Parte restaurante
+                </span>
+
+                <strong>
+                    Bs {{ number_format($parteRestauranteDelivery, 2) }}
+                </strong>
+            </div>
+
+        </div>
+
+        <p class="dashboard-delivery-financial-note">
+            Estos importes corresponden a pedidos que ya fueron entregados.
+            Cada pedido conserva la tarifa y los porcentajes utilizados al momento de su creación.
+        </p>
+
+    </div>
+
     <div class="dashboard-section chart-section">
 
         <div class="section-heading">
