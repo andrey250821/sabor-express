@@ -21,6 +21,8 @@ class AsignacionDelivery extends Model
 
         'fecha_respuesta',
 
+        'fecha_entrega',
+
     ];
 
 
