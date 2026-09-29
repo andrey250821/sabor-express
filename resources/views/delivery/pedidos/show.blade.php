@@ -450,31 +450,6 @@ $estadoPedido === 'en_camino'
             @endif
 
 
-            @if(!empty($pedido->user->email))
-
-            <div class="delivery-info-item">
-
-                <div class="delivery-info-item-icon">
-
-                    <i class="bi bi-envelope"></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>Correo electrónico</span>
-
-                    <strong>
-                        {{ $pedido->user->email }}
-                    </strong>
-
-                </div>
-
-            </div>
-
-            @endif
-
         </div>
 
         @else
