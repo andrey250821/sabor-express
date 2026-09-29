@@ -71,6 +71,15 @@
 
     <td>
         <div class="delivery-actions">
+
+            <a
+                href="{{ route('admin.deliverys.show', $delivery->id) }}"
+                class="btn-delivery ver"
+                title="Ver estadísticas y detalle">
+
+                <i class="bi bi-bar-chart-fill"></i>
+            </a>
+
             <a
                 href="{{ route('admin.deliverys.edit', $delivery->id) }}"
                 class="btn-delivery editar"
