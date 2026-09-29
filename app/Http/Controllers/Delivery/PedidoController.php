@@ -89,8 +89,6 @@ class PedidoController extends Controller
             ->with([
                 'user',
                 'detallePedidos.producto',
-                'comprobantePago',
-                'asignacionDelivery.delivery',
             ])
             ->findOrFail($id);
 
