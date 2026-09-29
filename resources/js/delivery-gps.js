@@ -2,6 +2,7 @@ import {
     ref,
     set,
     remove,
+    onDisconnect,
 } from 'firebase/database';
 
 import { database } from './firebase';
@@ -81,6 +82,28 @@ document.addEventListener('DOMContentLoaded', () => {
     | Guardar ubicación en Firebase
     |--------------------------------------------------------------------------
     */
+
+    /*
+    |--------------------------------------------------------------------------
+    | LIMPIEZA AUTOMÁTICA SI EL CLIENTE SE DESCONECTA
+    |--------------------------------------------------------------------------
+    |
+    | Firebase ejecutará esta operación aunque el navegador se cierre
+    | o la página se abandone inesperadamente.
+    |
+    |--------------------------------------------------------------------------
+    */
+    async function configurarLimpiezaDesconexion() {
+        try {
+            await onDisconnect(ubicacionRef).remove();
+        } catch (error) {
+            console.error(
+                'GPS Delivery: no se pudo configurar la limpieza al desconectarse.',
+                error
+            );
+        }
+    }
+
 
     async function guardarUbicacion(position) {
 
@@ -266,6 +289,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'Obteniendo ubicación...',
         'normal'
     );
+
+    // Registrar la limpieza de respaldo mientras el GPS está activo.
+    configurarLimpiezaDesconexion();
 
 
     const opciones = {
