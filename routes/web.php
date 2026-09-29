@@ -166,10 +166,13 @@ Route::middleware(['auth', 'role:Administrador'])
 
         Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('admin.configuracion.index');
         Route::put('/configuracion', [ConfiguracionController::class, 'update'])->name('admin.configuracion.update');
+        Route::put('/configuracion/ubicacion', [ConfiguracionController::class, 'updateUbicacion'])->name('admin.configuracion.ubicacion.update');
+        Route::put('/configuracion/delivery', [ConfiguracionController::class, 'updateDelivery'])->name('admin.configuracion.delivery.update');
 
         Route::get('/deliverys', [DeliveryController::class, 'index'])->name('admin.deliverys.index');
         Route::get('/deliverys/create', [DeliveryController::class, 'create'])->name('admin.deliverys.create');
         Route::post('/deliverys', [DeliveryController::class, 'store'])->name('admin.deliverys.store');
+        Route::get('/deliverys/{id}', [DeliveryController::class, 'show'])->name('admin.deliverys.show');
         Route::get('/deliverys/{id}/edit', [DeliveryController::class, 'edit'])->name('admin.deliverys.edit');
         Route::put('/deliverys/{id}', [DeliveryController::class, 'update'])->name('admin.deliverys.update');
         Route::delete('/deliverys/{id}', [DeliveryController::class, 'destroy'])->name('admin.deliverys.destroy');
@@ -334,6 +337,11 @@ Route::middleware(['auth', 'role:Cliente'])
             '/pedido/direccion',
             [ClientePedidoController::class, 'direccion']
         )->name('cliente.pedidos.direccion');
+
+        Route::post(
+            '/pedido/cotizar-delivery',
+            [ClientePedidoController::class, 'cotizarDelivery']
+        )->name('cliente.pedidos.cotizar.delivery');
 
         Route::post(
             '/pedido/generar-comprobantes-prueba',
