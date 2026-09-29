@@ -409,8 +409,12 @@ class PedidoController extends Controller
                     $cotizacion['porcentaje_restaurante_delivery'],
                 'monto_restaurante_delivery' =>
                     $cotizacion['monto_restaurante_delivery'],
+                /*
+                 * El total estimado corresponde al subtotal de los productos
+                 * más la tarifa de Delivery calculada para la ubicación.
+                 */
                 'total' => round(
-                    $cotizacion['tarifa_delivery'],
+                    $subtotal + $cotizacion['tarifa_delivery'],
                     2
                 ),
             ]);
