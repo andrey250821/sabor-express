@@ -58,7 +58,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                 </h1>
 
                 <p>
-                    Administra tus pedidos tomados y consulta
+                    Administra tus pedidos asignados y consulta
                     las entregas que ya completaste.
                 </p>
 
@@ -209,7 +209,7 @@ $cantidadEntregados = $pedidosEntregados->count();
             class="delivery-my-tabs"
             role="tablist">
 
-            {{-- TOMADOS --}}
+            {{-- ASIGNADOS --}}
 
             <button
                 type="button"
