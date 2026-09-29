@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use App\Services\ValidarComprobantePagoService;
+use App\Services\CalcularDeliveryService;
 
 class PedidoController extends Controller
 {
@@ -179,8 +180,15 @@ class PedidoController extends Controller
      * del carrito para que el comprobante CORRECTO pueda utilizarse en la
      * creación real del pedido.
      */
-    public function generarComprobantesPrueba()
-    {
+    public function generarComprobantesPrueba(
+        Request $request,
+        CalcularDeliveryService $calculador
+    ) {
+        $datos = $request->validate([
+            'latitud' => 'required|numeric|between:-90,90',
+            'longitud' => 'required|numeric|between:-180,180',
+        ]);
+
         $carrito = session()->get('carrito', []);
 
         if (count($carrito) === 0) {
@@ -190,77 +198,117 @@ class PedidoController extends Controller
             ], 422);
         }
 
-        $total = 0;
+        try {
+            $subtotal = 0;
 
-        foreach ($carrito as $item) {
-            $total += (float) ($item['cantidad'] ?? 0) * (float) ($item['precio'] ?? 0);
-        }
+            foreach ($carrito as $item) {
+                $producto = Producto::find($item['id'] ?? null);
 
-        if ($total <= 0) {
+                if (!$producto) {
+                    throw new \RuntimeException(
+                        'Uno de los productos del carrito ya no existe.'
+                    );
+                }
+
+                $subtotal += (int) ($item['cantidad'] ?? 0)
+                    * (float) $producto->precio;
+            }
+
+            if ($subtotal <= 0) {
+                throw new \RuntimeException(
+                    'No se pudo calcular el subtotal del carrito.'
+                );
+            }
+
+            $cotizacion = $calculador->cotizar(
+                (float) $datos['latitud'],
+                (float) $datos['longitud']
+            );
+
+            $total = round(
+                $subtotal + $cotizacion['tarifa_delivery'],
+                2
+            );
+
+            $pedidoId = $this->obtenerProximoPedidoId();
+            $cliente = trim(Auth::user()->name ?? 'Cliente');
+
+            $exitCode = Artisan::call('ocr:generar-comprobantes', [
+                '--pedido' => $pedidoId,
+                '--total' => $total,
+                '--cliente' => $cliente,
+            ]);
+
+            if ($exitCode !== 0) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'No se pudieron generar las imágenes de prueba OCR.',
+                    'detalle' => Artisan::output(),
+                ], 500);
+            }
+
+            $clienteArchivo = Str::slug(
+                $cliente !== '' ? $cliente : 'cliente',
+                '_'
+            );
+
+            $tipos = [
+                'correcto' => 'CORRECTO',
+                'monto_incorrecto' => 'MONTO_INCORRECTO',
+                'referencia_duplicada' => 'REFERENCIA_DUPLICADA',
+                'incompleto' => 'INCOMPLETO',
+            ];
+
+            $imagenes = [];
+
+            foreach ($tipos as $clave => $nombreTipo) {
+                $nombreArchivo =
+                    "pedido_{$pedidoId}_cliente_{$clienteArchivo}_{$nombreTipo}.png";
+
+                $rutaArchivo =
+                    storage_path(
+                        'app/public/comprobantes_test/' . $nombreArchivo
+                    );
+
+                if (file_exists($rutaArchivo)) {
+                    $imagenes[] = [
+                        'tipo' => $clave,
+                        'nombre' => $nombreArchivo,
+                        'url' => route(
+                            'cliente.pedidos.comprobante.prueba.imagen',
+                            ['nombreArchivo' => $nombreArchivo]
+                        ),
+                        'ruta' => $rutaArchivo,
+                    ];
+                }
+            }
+
+            if (count($imagenes) !== 4) {
+                return response()->json([
+                    'ok' => false,
+                    'message' =>
+                        'El generador terminó, pero no se encontraron las cuatro imágenes esperadas.',
+                    'imagenes' => $imagenes,
+                    'detalle' => Artisan::output(),
+                ], 500);
+            }
+
+            return response()->json([
+                'ok' => true,
+                'pedido' => $pedidoId,
+                'cliente' => $cliente,
+                'subtotal' => round($subtotal, 2),
+                'distancia_km' => $cotizacion['distancia_delivery_km'],
+                'tarifa_delivery' => $cotizacion['tarifa_delivery'],
+                'total' => $total,
+                'imagenes' => $imagenes,
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'No se pudo calcular el total del carrito.',
+                'message' => $e->getMessage(),
             ], 422);
         }
-
-        $pedidoId = $this->obtenerProximoPedidoId();
-        $cliente = trim(Auth::user()->name ?? 'Cliente');
-
-        $exitCode = Artisan::call('ocr:generar-comprobantes', [
-            '--pedido' => $pedidoId,
-            '--total' => $total,
-            '--cliente' => $cliente,
-        ]);
-
-        if ($exitCode !== 0) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'No se pudieron generar las imágenes de prueba OCR.',
-                'detalle' => Artisan::output(),
-            ], 500);
-        }
-
-        $clienteArchivo = Str::slug($cliente !== '' ? $cliente : 'cliente', '_');
-
-        $tipos = [
-            'correcto' => 'CORRECTO',
-            'monto_incorrecto' => 'MONTO_INCORRECTO',
-            'referencia_duplicada' => 'REFERENCIA_DUPLICADA',
-            'incompleto' => 'INCOMPLETO',
-        ];
-
-        $imagenes = [];
-
-        foreach ($tipos as $clave => $nombreTipo) {
-            $nombreArchivo = "pedido_{$pedidoId}_cliente_{$clienteArchivo}_{$nombreTipo}.png";
-            $rutaArchivo = storage_path('app/public/comprobantes_test/' . $nombreArchivo);
-
-            if (file_exists($rutaArchivo)) {
-                $imagenes[] = [
-                    'tipo' => $clave,
-                    'nombre' => $nombreArchivo,
-                    'url' => route('cliente.pedidos.comprobante.prueba.imagen', ['nombreArchivo' => $nombreArchivo]),
-                    'ruta' => $rutaArchivo,
-                ];
-            }
-        }
-
-        if (count($imagenes) !== 4) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'El generador terminó, pero no se encontraron las cuatro imágenes esperadas.',
-                'imagenes' => $imagenes,
-                'detalle' => Artisan::output(),
-            ], 500);
-        }
-
-        return response()->json([
-            'ok' => true,
-            'pedido' => $pedidoId,
-            'cliente' => $cliente,
-            'total' => round($total, 2),
-            'imagenes' => $imagenes,
-        ]);
     }
 
     /**
@@ -283,7 +331,108 @@ class PedidoController extends Controller
         return (int) (Pedido::max('id') ?? 0) + 1;
     }
 
-    public function store(Request $request, ValidarComprobantePagoService $validador)
+    /**
+     * Cotizar Delivery sin crear el pedido.
+     *
+     * Se utiliza en el checkout para actualizar en tiempo real
+     * la distancia, la tarifa y el total que verá el cliente.
+     */
+    public function cotizarDelivery(
+        Request $request,
+        CalcularDeliveryService $calculador
+    ) {
+        $datos = $request->validate([
+            'latitud' => 'required|numeric|between:-90,90',
+            'longitud' => 'required|numeric|between:-180,180',
+        ]);
+
+        $carrito = session()->get('carrito', []);
+
+        if (count($carrito) === 0) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'El carrito está vacío.',
+            ], 422);
+        }
+
+        try {
+            $subtotal = 0;
+
+            foreach ($carrito as $item) {
+                $producto = Producto::find($item['id'] ?? null);
+
+                if (!$producto) {
+                    throw new \RuntimeException(
+                        'Uno de los productos del carrito ya no existe.'
+                    );
+                }
+
+                $cantidad = (int) ($item['cantidad'] ?? 0);
+
+                if ($cantidad <= 0) {
+                    continue;
+                }
+
+                if (
+                    $producto->estado !== 'disponible'
+                    || (int) $producto->stock < $cantidad
+                ) {
+                    throw new \RuntimeException(
+                        'El producto "' . $producto->nombre . '" ya no está disponible en la cantidad solicitada.'
+                    );
+                }
+
+                $subtotal += $cantidad * (float) $producto->precio;
+            }
+
+            $subtotal = round($subtotal, 2);
+
+            if ($subtotal <= 0) {
+                throw new \RuntimeException(
+                    'No se pudo calcular el subtotal del carrito.'
+                );
+            }
+
+            $cotizacion = $calculador->cotizar(
+                (float) $datos['latitud'],
+                (float) $datos['longitud']
+            );
+
+            return response()->json([
+                'ok' => true,
+                'subtotal_productos' => $subtotal,
+                'distancia_delivery_km' => $cotizacion['distancia_delivery_km'],
+                'tarifa_delivery' => $cotizacion['tarifa_delivery'],
+                'porcentaje_delivery' => $cotizacion['porcentaje_delivery'],
+                'monto_delivery' => $cotizacion['monto_delivery'],
+                'porcentaje_restaurante_delivery' =>
+                    $cotizacion['porcentaje_restaurante_delivery'],
+                'monto_restaurante_delivery' =>
+                    $cotizacion['monto_restaurante_delivery'],
+                'precio_km_delivery' => $cotizacion['precio_km_delivery'],
+                'tarifa_minima_delivery' => $cotizacion['tarifa_minima_delivery'],
+                /*
+                 * El total estimado corresponde al subtotal de los productos
+                 * más la tarifa de Delivery calculada para la ubicación.
+                 */
+                'total' => round(
+                    $subtotal + $cotizacion['tarifa_delivery'],
+                    2
+                ),
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function store(
+        Request $request,
+        ValidarComprobantePagoService $validador,
+        CalcularDeliveryService $calculador
+    )
     {
         $request->validate([
             'direccion_entrega' => 'required|string|max:1000',
@@ -302,24 +451,37 @@ class PedidoController extends Controller
                 ->with('error', 'El carrito está vacío');
         }
 
+        try {
+            $cotizacion = $calculador->cotizar(
+                (float) $request->latitud,
+                (float) $request->longitud
+            );
+        } catch (\Throwable $e) {
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
+
         DB::beginTransaction();
 
         try {
-            $total = 0;
-
-            foreach ($carrito as &$item) {
-
-                $item['subtotal'] =
-                    $item['cantidad'] * $item['precio'];
-
-                $total += $item['subtotal'];
-            }
-
-            unset($item);
+            $subtotal = 0;
 
             $pedido = Pedido::create([
                 'user_id' => Auth::id(),
-                'total' => $total,
+                'subtotal_productos' => 0.00,
+                'tarifa_delivery' => $cotizacion['tarifa_delivery'],
+                'distancia_delivery_km' => $cotizacion['distancia_delivery_km'],
+                'porcentaje_delivery' => $cotizacion['porcentaje_delivery'],
+                'monto_delivery' => $cotizacion['monto_delivery'],
+                'porcentaje_restaurante_delivery' =>
+                    $cotizacion['porcentaje_restaurante_delivery'],
+                'monto_restaurante_delivery' =>
+                    $cotizacion['monto_restaurante_delivery'],
+                'total' => round(
+                    $subtotal + $cotizacion['tarifa_delivery'],
+                    2
+                ),
                 'estado' => 'comprobante_enviado',
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
@@ -376,14 +538,30 @@ class PedidoController extends Controller
 
                 $producto->save();
 
+                $subtotal += round(
+                    $cantidadSolicitada * (float) $producto->precio,
+                    2
+                );
+
                 DetallePedido::create([
                     'pedido_id' => $pedido->id,
                     'producto_id' => $producto->id,
                     'cantidad' => $cantidadSolicitada,
                     'precio' => $producto->precio,
-                    'subtotal' => $cantidadSolicitada * (float) $producto->precio,
+                    'subtotal' => round(
+                        $cantidadSolicitada * (float) $producto->precio,
+                        2
+                    ),
                 ]);
             }
+
+            $pedido->update([
+                'subtotal_productos' => round($subtotal, 2),
+                'total' => round(
+                    $subtotal + $cotizacion['tarifa_delivery'],
+                    2
+                ),
+            ]);
 
             $imagen = $request->file('comprobante')->store('comprobantes', 'public');
 

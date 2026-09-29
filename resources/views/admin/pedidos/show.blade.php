@@ -565,18 +565,53 @@
                     </div>
 
 
-                    <div class="pedido-total-wrapper">
+                    <div class="pedido-financial-breakdown">
 
-                        <div class="pedido-total">
-
-                            <span>
-                                Total del pedido
-                            </span>
-
+                        <div>
+                            <span>Subtotal de productos</span>
                             <strong>
-                                Bs {{ number_format($pedido->total, 2) }}
+                                Bs {{ number_format((float) ($pedido->subtotal_productos ?? $pedido->total), 2) }}
                             </strong>
+                        </div>
 
+                        @if($pedido->distancia_delivery_km !== null || (float) ($pedido->tarifa_delivery ?? 0) > 0)
+                            <div>
+                                <span>
+                                    Delivery
+                                    @if($pedido->distancia_delivery_km !== null)
+                                        ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
+                                    @endif
+                                </span>
+
+                                <strong>
+                                    Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                                </strong>
+                            </div>
+                        @endif
+
+                        <div>
+                            <span>Comisión Delivery</span>
+                            <strong class="text-success">
+                                Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                                <small>({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 2) }}%)</small>
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Parte restaurante</span>
+                            <strong>
+                                Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
+                                <small>({{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 2) }}%)</small>
+                            </strong>
+                        </div>
+
+                        <div class="pedido-total-wrapper">
+                            <div class="pedido-total">
+                                <span>Total del pedido</span>
+                                <strong>
+                                    Bs {{ number_format((float) $pedido->total, 2) }}
+                                </strong>
+                            </div>
                         </div>
 
                     </div>

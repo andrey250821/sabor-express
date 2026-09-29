@@ -12651,3 +12651,518 @@ body {
     }
 
 }
+
+/* ============================================================
+   CONFIGURACIÓN - UBICACIÓN Y DELIVERY
+   ============================================================ */
+
+.configuracion-location-icon,
+.configuracion-delivery-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.configuracion-map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(139, 30, 69, 0.12);
+    border-radius: 12px;
+    background: #faf7f9;
+}
+
+.configuracion-map-header strong,
+.configuracion-map-header span {
+    display: block;
+}
+
+.configuracion-map-header strong {
+    color: #242027;
+    margin-bottom: 0.2rem;
+}
+
+.configuracion-map-header span {
+    color: #756b73;
+    font-size: 0.9rem;
+}
+
+.configuracion-restaurante-mapa {
+    width: 100%;
+    min-height: 390px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #eef1f4;
+}
+
+.configuracion-mapa-cargando {
+    min-height: 390px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    color: #756b73;
+}
+
+.configuracion-mapa-cargando i {
+    font-size: 2rem;
+}
+
+.configuracion-location-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+    border-radius: 12px;
+}
+
+.configuracion-location-status i {
+    font-size: 1.15rem;
+    margin-top: 0.1rem;
+}
+
+.configuracion-location-status strong,
+.configuracion-location-status span {
+    display: block;
+}
+
+.configuracion-location-status strong {
+    margin-bottom: 0.15rem;
+}
+
+.configuracion-location-status span {
+    color: #665d64;
+    font-size: 0.9rem;
+}
+
+.configuracion-location-status-ok {
+    background: #eef9f1;
+    border: 1px solid #cde8d3;
+    color: #1e6b35;
+}
+
+.configuracion-location-status-warning {
+    background: #fff8e8;
+    border: 1px solid #f0dfaa;
+    color: #8b6500;
+}
+
+.configuracion-location-actions {
+    padding-top: 0;
+}
+
+.configuracion-money-input,
+.configuracion-percent-input {
+    display: flex;
+    align-items: stretch;
+}
+
+.configuracion-money-input > span,
+.configuracion-percent-input > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    padding: 0 0.85rem;
+    border: 1px solid #ced4da;
+    background: #f8f9fa;
+    color: #5f5660;
+    font-weight: 700;
+}
+
+.configuracion-money-input > span {
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+}
+
+.configuracion-percent-input > span {
+    border-left: 0;
+    border-radius: 0 10px 10px 0;
+}
+
+.configuracion-money-input .configuracion-input {
+    border-radius: 0 10px 10px 0;
+}
+
+.configuracion-percent-input .configuracion-input {
+    border-radius: 10px 0 0 10px;
+}
+
+.configuracion-delivery-formula {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+    border-radius: 12px;
+    border: 1px dashed rgba(139, 30, 69, 0.25);
+    background: #fffafb;
+}
+
+.configuracion-delivery-formula > i {
+    color: #8b1e45;
+    font-size: 1.2rem;
+    margin-top: 0.15rem;
+}
+
+.configuracion-delivery-formula strong,
+.configuracion-delivery-formula span,
+.configuracion-delivery-formula small {
+    display: block;
+}
+
+.configuracion-delivery-formula span {
+    color: #5f5660;
+    margin-top: 0.15rem;
+}
+
+.configuracion-delivery-formula small {
+    color: #8a7f87;
+    margin-top: 0.2rem;
+}
+
+.dashboard-delivery-financial-section {
+    margin-top: 1.5rem;
+}
+
+.dashboard-delivery-financial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.dashboard-delivery-financial-card {
+    padding: 1.25rem;
+    border-radius: 16px;
+    border: 1px solid rgba(139, 30, 69, 0.1);
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-delivery-financial-card span,
+.dashboard-delivery-financial-card strong {
+    display: block;
+}
+
+.dashboard-delivery-financial-card span {
+    color: #706670;
+    font-size: 0.88rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-delivery-financial-card strong {
+    font-size: 1.35rem;
+    color: #202027;
+}
+
+.dashboard-delivery-financial-note {
+    margin: 0.85rem 0 0;
+    color: #776d75;
+    font-size: 0.9rem;
+}
+
+.delivery-admin-detail-page {
+    padding-bottom: 2rem;
+}
+
+.delivery-admin-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.delivery-admin-detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.75rem;
+    color: #8b1e45;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.delivery-admin-detail-back:hover {
+    color: #6d1536;
+}
+
+.delivery-admin-detail-eyebrow,
+.delivery-admin-history-header > div > span {
+    display: block;
+    color: #8b1e45;
+    font-weight: 800;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.delivery-admin-detail-title {
+    margin: 0;
+    color: #202027;
+    font-weight: 800;
+}
+
+.delivery-admin-detail-subtitle {
+    margin: 0.35rem 0 0;
+    color: #716770;
+}
+
+.delivery-admin-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 16px;
+    background: #fff;
+}
+
+.delivery-admin-profile-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex: 0 0 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3e6ec;
+    color: #8b1e45;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.delivery-admin-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.delivery-admin-profile-info strong,
+.delivery-admin-profile-info span {
+    display: block;
+}
+
+.delivery-admin-profile-info strong {
+    color: #252129;
+    font-size: 1.05rem;
+}
+
+.delivery-admin-profile-info span {
+    margin-top: 0.2rem;
+    color: #716770;
+    font-size: 0.9rem;
+}
+
+.delivery-admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.delivery-admin-stat-card {
+    min-height: 135px;
+    padding: 1.15rem;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.delivery-admin-stat-card span,
+.delivery-admin-stat-card strong {
+    display: block;
+}
+
+.delivery-admin-stat-card span {
+    color: #716770;
+    font-size: 0.86rem;
+}
+
+.delivery-admin-stat-card strong {
+    margin-top: 0.65rem;
+    color: #252129;
+    font-size: 1.35rem;
+}
+
+.delivery-admin-stat-card.financial strong,
+.delivery-admin-stat-card.commission strong {
+    color: #1f7a3b;
+}
+
+.delivery-admin-stat-card.restaurant strong {
+    color: #8b1e45;
+}
+
+.delivery-admin-history-card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    background: #fff;
+}
+
+.delivery-admin-history-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem;
+}
+
+.delivery-admin-history-header h3 {
+    margin: 0.3rem 0 0;
+    color: #242028;
+    font-size: 1.15rem;
+}
+
+.delivery-admin-history-count {
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: #f7edf1;
+    color: #8b1e45;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.delivery-admin-history-table thead th {
+    white-space: nowrap;
+    color: #625962;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #faf9fa;
+}
+
+.delivery-admin-history-table td {
+    color: #4c454c;
+}
+
+.delivery-admin-order-link {
+    color: #8b1e45;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.delivery-admin-state {
+    display: inline-flex;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: #f0eef0;
+    color: #625962;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.delivery-admin-state.assigned {
+    background: #f1ecff;
+    color: #6546a6;
+}
+
+.delivery-admin-state.route {
+    background: #eaf4ff;
+    color: #1e5d99;
+}
+
+.delivery-admin-state.delivered {
+    background: #eaf8ee;
+    color: #28743e;
+}
+
+.delivery-admin-empty {
+    padding: 2.5rem !important;
+    text-align: center;
+    color: #7b7178;
+}
+
+.btn-delivery.ver {
+    background: #eef4ff;
+    color: #315c9b;
+}
+
+.btn-delivery.ver:hover {
+    background: #dfeaff;
+    color: #264b82;
+}
+
+@media (max-width: 1100px) {
+    .delivery-admin-stat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .dashboard-delivery-financial-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .configuracion-map-header,
+    .delivery-admin-detail-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .configuracion-restaurante-mapa,
+    .configuracion-mapa-cargando {
+        min-height: 320px;
+    }
+
+    .delivery-admin-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .delivery-admin-profile-card {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 520px) {
+    .delivery-admin-stat-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   PEDIDOS ADMIN - DESGLOSE ECONÓMICO DE DELIVERY
+   ============================================================ */
+
+.pedido-financial-breakdown {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(139, 30, 69, 0.08);
+    background: #fbfafb;
+}
+
+.pedido-financial-breakdown > div:not(.pedido-total-wrapper) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.38rem 0;
+    color: #6b626a;
+}
+
+.pedido-financial-breakdown > div strong {
+    color: #252129;
+}
+
+.pedido-financial-breakdown > div strong.text-success {
+    color: #26773f !important;
+}
+
+.pedido-financial-breakdown small {
+    color: #837982;
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .pedido-financial-breakdown > div:not(.pedido-total-wrapper) {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\ComprobantePago;
+use App\Models\AsignacionDelivery;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -140,6 +141,43 @@ class DashboardController extends Controller
             ->whereDoesntHave('asignacionDelivery')
             ->count();
 
+        /*
+        |--------------------------------------------------------------------------
+        | RESUMEN ECONÓMICO DE DELIVERY
+        |--------------------------------------------------------------------------
+        |
+        | Solo se contabilizan entregas finalizadas para que las
+        | estadísticas representen ingresos efectivamente realizados.
+        |
+        */
+        $entregasFinalizadas = AsignacionDelivery::query()
+            ->where('estado', 'entregado')
+            ->with([
+                'pedido:id,tarifa_delivery,monto_delivery,monto_restaurante_delivery'
+            ])
+            ->get();
+
+        $ingresosDelivery = round(
+            $entregasFinalizadas->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->tarifa_delivery ?? 0)
+            ),
+            2
+        );
+
+        $comisionesDelivery = round(
+            $entregasFinalizadas->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)
+            ),
+            2
+        );
+
+        $parteRestauranteDelivery = round(
+            $entregasFinalizadas->sum(
+                fn ($asignacion) => (float) ($asignacion->pedido?->monto_restaurante_delivery ?? 0)
+            ),
+            2
+        );
+
 
         /*
         |--------------------------------------------------------------------------
@@ -166,7 +204,10 @@ class DashboardController extends Controller
                 'ultimosPedidos',
                 'ventasSemana',
                 'comprobantesEnRevision',
-                'pedidosEnColaDelivery'
+                'pedidosEnColaDelivery',
+                'ingresosDelivery',
+                'comisionesDelivery',
+                'parteRestauranteDelivery'
             )
         );
     }

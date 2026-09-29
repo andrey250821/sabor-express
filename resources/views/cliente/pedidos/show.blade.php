@@ -751,24 +751,43 @@
 
             {{-- TOTAL --}}
 
-            <div class="cliente-pedido-show-total">
+            <div class="cliente-pedido-show-financial">
 
-                <div>
-
-                    <span>
-                        Total del pedido
-                    </span>
-
-                    <small>
-                        {{ $pedido->detallePedidos->sum('cantidad') }}
-                        producto(s)
-                    </small>
-
+                <div class="cliente-pedido-show-financial-row">
+                    <span>Subtotal de productos</span>
+                    <strong>
+                        Bs. {{ number_format((float) ($pedido->subtotal_productos ?? $pedido->total), 2) }}
+                    </strong>
                 </div>
 
-                <strong>
-                    Bs. {{ number_format($pedido->total, 2) }}
-                </strong>
+                @if($pedido->distancia_delivery_km !== null || (float) ($pedido->tarifa_delivery ?? 0) > 0)
+                    <div class="cliente-pedido-show-financial-row">
+                        <span>
+                            Delivery
+                            @if($pedido->distancia_delivery_km !== null)
+                                ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
+                            @endif
+                        </span>
+
+                        <strong>
+                            Bs. {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                        </strong>
+                    </div>
+                @endif
+
+                <div class="cliente-pedido-show-total">
+                    <div>
+                        <span>Total del pedido</span>
+                        <small>
+                            {{ $pedido->detallePedidos->sum('cantidad') }}
+                            producto(s)
+                        </small>
+                    </div>
+
+                    <strong>
+                        Bs. {{ number_format((float) $pedido->total, 2) }}
+                    </strong>
+                </div>
 
             </div>
 

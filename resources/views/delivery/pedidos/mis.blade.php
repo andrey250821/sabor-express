@@ -450,16 +450,59 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                             <div class="delivery-my-info-item">
 
-                                <i class="bi bi-cash-stack"></i>
+                                <i class="bi bi-signpost-split"></i>
 
                                 <div>
 
                                     <span>
-                                        Total
+                                        Costo de la ruta
+                                        @if($pedido->distancia_delivery_km !== null)
+                                            · {{ number_format((float) $pedido->distancia_delivery_km, 2) }} km
+                                        @endif
                                     </span>
 
                                     <strong>
-                                        Bs {{ number_format($pedido->total, 2) }}
+                                        Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="delivery-my-info-item">
+
+                                <i class="bi bi-person-badge-fill"></i>
+
+                                <div>
+
+                                    <span>
+                                        Mi comisión
+                                        ({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%)
+                                    </span>
+
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="delivery-my-info-item">
+
+                                <i class="bi bi-shop"></i>
+
+                                <div>
+
+                                    <span>
+                                        Parte restaurante
+                                        ({{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%)
+                                    </span>
+
+                                    <strong>
+                                        Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
                                     </strong>
 
                                 </div>
@@ -698,16 +741,19 @@ $cantidadEntregados = $pedidosEntregados->count();
              * El historial se agrupa por la fecha en que la asignación
              * pasó a estado "entregado".
              *
-             * No hace falta una migración nueva: updated_at corresponde
-             * al momento en que se marcó la asignación como entregada.
+             * La fecha real de finalización se guarda en fecha_entrega.
              */
             $pedidosEntregadosPorFecha = $pedidosEntregados
-                ->sortByDesc('updated_at')
-                ->groupBy(function ($asignacion) {
-                    return $asignacion->updated_at
-                        ? $asignacion->updated_at->toDateString()
-                        : $asignacion->pedido->created_at->toDateString();
-                });
+                 ->sortByDesc(function ($asignacion) {
+                     return $asignacion->fecha_entrega ?? $asignacion->updated_at;
+                 })
+                 ->groupBy(function ($asignacion) {
+                     $fecha = $asignacion->fecha_entrega ?? $asignacion->updated_at;
+
+                     return $fecha
+                         ? $fecha->toDateString()
+                         : $asignacion->pedido->created_at->toDateString();
+                 });
             @endphp
 
             @foreach($pedidosEntregadosPorFecha as $fecha => $pedidosFecha)
@@ -855,9 +901,21 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                                 <div class="delivery-delivered-bottom">
 
-                                    <strong>
-                                        Bs {{ number_format($pedido->total, 2) }}
-                                    </strong>
+                                    <div>
+                                        <strong>
+                                            Ruta:
+                                            Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                                        </strong>
+
+                                        <small class="delivery-delivered-financial">
+                                            Mi comisión:
+                                            Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                                            ({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%)
+                                            · Restaurante:
+                                            Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
+                                            ({{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%)
+                                        </small>
+                                    </div>
 
                                     <a
                                         href="{{ route('delivery.pedidos.show', $pedido->id) }}"

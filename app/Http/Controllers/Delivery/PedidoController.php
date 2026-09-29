@@ -89,8 +89,6 @@ class PedidoController extends Controller
             ->with([
                 'user',
                 'detallePedidos.producto',
-                'comprobantePago',
-                'asignacionDelivery.delivery',
             ])
             ->findOrFail($id);
 
@@ -242,6 +240,7 @@ class PedidoController extends Controller
 
             $asignacion->update([
                 'estado' => 'entregado',
+                'fecha_entrega' => now(),
             ]);
 
             $pedido->update([

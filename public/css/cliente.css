@@ -10471,3 +10471,55 @@ body {
 .cliente-delivery-legend-icon.destino {
     background: #dc3545;
 }
+
+/* ============================================================
+   CHECKOUT - COTIZACIÓN DE DELIVERY
+   ============================================================ */
+
+.cliente-pedido-resumen-delivery-estado {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-top: 1rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 10px;
+    background: #f8f5f7;
+    color: #746a72;
+    font-size: 0.84rem;
+    line-height: 1.45;
+}
+
+.cliente-pedido-resumen-delivery-estado i {
+    margin-top: 0.1rem;
+}
+
+.cliente-pedido-resumen-delivery-ok {
+    background: #edf9f1;
+    color: #27703d;
+}
+
+.cliente-ocr-pruebas-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.cliente-pedido-show-financial {
+    margin-top: 0.8rem;
+    padding: 0.9rem;
+    border-radius: 12px;
+    background: #faf7f9;
+    border: 1px solid rgba(139, 30, 69, 0.08);
+}
+
+.cliente-pedido-show-financial-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    color: #645b62;
+}
+
+.cliente-pedido-show-financial-row strong {
+    color: #2b262b;
+}

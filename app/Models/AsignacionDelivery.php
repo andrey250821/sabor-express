@@ -9,6 +9,15 @@ class AsignacionDelivery extends Model
 {
     protected $table = 'asignaciones_delivery';
 
+    protected function casts(): array
+    {
+        return [
+            'fecha_asignacion' => 'datetime',
+            'fecha_respuesta' => 'datetime',
+            'fecha_entrega' => 'datetime',
+        ];
+    }
+
     protected $fillable = [
 
         'pedido_id',
@@ -20,6 +29,8 @@ class AsignacionDelivery extends Model
         'fecha_asignacion',
 
         'fecha_respuesta',
+
+        'fecha_entrega',
 
     ];
 

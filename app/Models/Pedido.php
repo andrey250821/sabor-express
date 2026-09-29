@@ -18,6 +18,13 @@ class Pedido extends Model
         'user_id',
         'cocinero_id',
         'total',
+        'subtotal_productos',
+        'tarifa_delivery',
+        'distancia_delivery_km',
+        'porcentaje_delivery',
+        'monto_delivery',
+        'porcentaje_restaurante_delivery',
+        'monto_restaurante_delivery',
         'estado',
         'fecha_listo',
         'latitud',
@@ -31,6 +38,14 @@ class Pedido extends Model
     {
         return [
             'fecha_listo' => 'datetime',
+            'subtotal_productos' => 'decimal:2',
+            'tarifa_delivery' => 'decimal:2',
+            'distancia_delivery_km' => 'decimal:2',
+            'porcentaje_delivery' => 'decimal:2',
+            'monto_delivery' => 'decimal:2',
+            'porcentaje_restaurante_delivery' => 'decimal:2',
+            'monto_restaurante_delivery' => 'decimal:2',
+            'total' => 'decimal:2',
         ];
     }
 
