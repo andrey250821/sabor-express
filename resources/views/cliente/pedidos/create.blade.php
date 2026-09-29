@@ -759,17 +759,30 @@
                         <div class="cliente-pedido-resumen-linea">
 
                             <span>
-
                                 <i class="bi bi-calculator-fill"></i>
-
                                 Subtotal
-
                             </span>
 
-                            <strong>
-
+                            <strong id="resumen-subtotal-productos">
                                 Bs. {{ number_format($total, 2) }}
+                            </strong>
 
+                        </div>
+
+
+                        {{-- DISTANCIA --}}
+
+                        <div class="cliente-pedido-resumen-linea">
+
+                            <span>
+                                <i class="bi bi-signpost-split-fill"></i>
+                                Distancia
+                            </span>
+
+                            <strong
+                                id="resumen-distancia-delivery"
+                                class="cliente-resumen-pendiente">
+                                Selecciona tu ubicación
                             </strong>
 
                         </div>
@@ -780,17 +793,14 @@
                         <div class="cliente-pedido-resumen-linea">
 
                             <span>
-
                                 <i class="bi bi-bicycle"></i>
-
                                 Delivery
-
                             </span>
 
-                            <strong class="cliente-resumen-pendiente">
-
-                                Se calculará después
-
+                            <strong
+                                id="resumen-tarifa-delivery"
+                                class="cliente-resumen-pendiente">
+                                Se calculará automáticamente
                             </strong>
 
                         </div>
@@ -807,9 +817,22 @@
                                 Total
                             </span>
 
-                            <strong>
+                            <strong id="resumen-total-pedido">
                                 Bs. {{ number_format($total, 2) }}
                             </strong>
+
+                        </div>
+
+
+                        <div
+                            id="resumen-delivery-estado"
+                            class="cliente-pedido-resumen-delivery-estado">
+
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            <span>
+                                Selecciona tu ubicación para calcular el costo de Delivery.
+                            </span>
 
                         </div>
 
@@ -1142,6 +1165,25 @@
         const botonConfirmar =
             document.getElementById('btn-confirmar-pedido');
 
+        const resumenSubtotalProductos =
+            document.getElementById('resumen-subtotal-productos');
+
+        const resumenDistanciaDelivery =
+            document.getElementById('resumen-distancia-delivery');
+
+        const resumenTarifaDelivery =
+            document.getElementById('resumen-tarifa-delivery');
+
+        const resumenTotalPedido =
+            document.getElementById('resumen-total-pedido');
+
+        const resumenDeliveryEstado =
+            document.getElementById('resumen-delivery-estado');
+
+        let cotizacionDeliveryActual = null;
+        let controladorCotizacion = null;
+        let temporizadorCotizacion = null;
+
 
         /*
         |--------------------------------------------------------------------------
@@ -1161,8 +1203,224 @@
         const rutaGenerarComprobantesOcr =
             @json(route('cliente.pedidos.generar.comprobantes.prueba'));
 
+        const rutaCotizarDelivery =
+            @json(route('cliente.pedidos.cotizar.delivery'));
+
         const tokenCsrf =
             @json(csrf_token());
+
+
+        function actualizarResumenDelivery(cotizacion) {
+
+            if (!cotizacion) {
+                return;
+            }
+
+            if (resumenSubtotalProductos) {
+                resumenSubtotalProductos.textContent =
+                    'Bs. ' + Number(cotizacion.subtotal_productos).toFixed(2);
+            }
+
+            if (resumenDistanciaDelivery) {
+                resumenDistanciaDelivery.textContent =
+                    Number(cotizacion.distancia_delivery_km).toFixed(2) + ' km';
+
+                resumenDistanciaDelivery.classList.remove(
+                    'cliente-resumen-pendiente'
+                );
+            }
+
+            if (resumenTarifaDelivery) {
+                resumenTarifaDelivery.textContent =
+                    'Bs. ' + Number(cotizacion.tarifa_delivery).toFixed(2);
+
+                resumenTarifaDelivery.classList.remove(
+                    'cliente-resumen-pendiente'
+                );
+            }
+
+            if (resumenTotalPedido) {
+                resumenTotalPedido.textContent =
+                    'Bs. ' + Number(cotizacion.total).toFixed(2);
+            }
+
+            if (resumenDeliveryEstado) {
+                resumenDeliveryEstado.innerHTML = `
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>
+                        Distancia por carretera calculada automáticamente.
+                        El precio se ha actualizado antes de confirmar el pedido.
+                    </span>
+                `;
+
+                resumenDeliveryEstado.classList.add(
+                    'cliente-pedido-resumen-delivery-ok'
+                );
+            }
+
+            cotizacionDeliveryActual = cotizacion;
+
+            if (botonGenerarOcr) {
+                botonGenerarOcr.disabled = false;
+            }
+        }
+
+
+        function limpiarCotizacionDelivery(
+            mensaje = 'Selecciona tu ubicación para calcular el costo de Delivery.'
+        ) {
+
+            cotizacionDeliveryActual = null;
+
+            if (resumenDistanciaDelivery) {
+                resumenDistanciaDelivery.textContent =
+                    'Selecciona tu ubicación';
+
+                resumenDistanciaDelivery.classList.add(
+                    'cliente-resumen-pendiente'
+                );
+            }
+
+            if (resumenTarifaDelivery) {
+                resumenTarifaDelivery.textContent =
+                    'Se calculará automáticamente';
+
+                resumenTarifaDelivery.classList.add(
+                    'cliente-resumen-pendiente'
+                );
+            }
+
+            if (resumenTotalPedido) {
+                resumenTotalPedido.textContent =
+                    'Bs. ' + Number(@json($total)).toFixed(2);
+            }
+
+            if (resumenDeliveryEstado) {
+                resumenDeliveryEstado.innerHTML = `
+                    <i class="bi bi-info-circle-fill"></i>
+                    <span>${mensaje}</span>
+                `;
+
+                resumenDeliveryEstado.classList.remove(
+                    'cliente-pedido-resumen-delivery-ok'
+                );
+            }
+
+            if (botonGenerarOcr) {
+                botonGenerarOcr.disabled = true;
+            }
+        }
+
+
+        async function cotizarDelivery(latitud, longitud) {
+
+            if (!latitud || !longitud) {
+                limpiarCotizacionDelivery();
+                return;
+            }
+
+            if (controladorCotizacion) {
+                controladorCotizacion.abort();
+            }
+
+            controladorCotizacion = new AbortController();
+
+            if (resumenDeliveryEstado) {
+                resumenDeliveryEstado.innerHTML = `
+                    <i class="bi bi-hourglass-split"></i>
+                    <span>Calculando distancia y tarifa de Delivery...</span>
+                `;
+
+                resumenDeliveryEstado.classList.remove(
+                    'cliente-pedido-resumen-delivery-ok'
+                );
+            }
+
+            try {
+
+                const respuesta = await fetch(
+                    rutaCotizarDelivery,
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': tokenCsrf
+                        },
+
+                        body: JSON.stringify({
+                            latitud: latitud,
+                            longitud: longitud
+                        }),
+
+                        signal: controladorCotizacion.signal
+                    }
+                );
+
+                const datos = await respuesta.json();
+
+                if (!respuesta.ok || !datos.ok) {
+                    throw new Error(
+                        datos.message || 'No se pudo calcular el Delivery.'
+                    );
+                }
+
+                actualizarResumenDelivery(datos);
+
+                mostrarEstado(
+                    '✅ Ubicación seleccionada. Distancia y Delivery calculados correctamente.'
+                );
+
+            } catch (error) {
+
+                if (error.name === 'AbortError') {
+                    return;
+                }
+
+                console.error(
+                    'Error al cotizar Delivery:',
+                    error
+                );
+
+                limpiarCotizacionDelivery(
+                    error.message ||
+                    'No se pudo calcular la tarifa de Delivery.'
+                );
+
+                mostrarEstado(
+                    error.message ||
+                    'No se pudo calcular la tarifa de Delivery.',
+                    true
+                );
+            }
+        }
+
+
+        function programarCotizacionDelivery() {
+
+            if (temporizadorCotizacion) {
+                clearTimeout(temporizadorCotizacion);
+            }
+
+            const latitud = latitudInput?.value;
+            const longitud = longitudInput?.value;
+
+            if (!latitud || !longitud) {
+                limpiarCotizacionDelivery();
+                return;
+            }
+
+            temporizadorCotizacion = setTimeout(function () {
+
+                cotizarDelivery(
+                    latitud,
+                    longitud
+                );
+
+            }, 250);
+        }
 
 
         function escaparHtmlOcr(valor) {
@@ -1463,6 +1721,16 @@
 
                     try {
 
+                        if (
+                            !latitudInput?.value ||
+                            !longitudInput?.value ||
+                            !cotizacionDeliveryActual
+                        ) {
+                            throw new Error(
+                                'Primero selecciona tu ubicación para calcular el Delivery.'
+                            );
+                        }
+
                         const respuesta =
                             await fetch(
                                 rutaGenerarComprobantesOcr,
@@ -1471,9 +1739,15 @@
 
                                     headers: {
                                         'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
                                         'X-Requested-With': 'XMLHttpRequest',
                                         'X-CSRF-TOKEN': tokenCsrf
-                                    }
+                                    },
+
+                                    body: JSON.stringify({
+                                        latitud: latitudInput.value,
+                                        longitud: longitudInput.value
+                                    })
                                 }
                             );
 
@@ -1497,6 +1771,8 @@
                         mostrarEstadoOcr(
                             '✅ Generados los 4 comprobantes para <strong>pedido #'
                             + datos.pedido
+                            + '</strong> con total <strong>Bs '
+                            + Number(datos.total).toFixed(2)
                             + '</strong>. Puedes pulsar <strong>Usar</strong> para cargar cualquiera de ellos en el comprobante principal.'
                         );
 
@@ -1649,6 +1925,8 @@
 
             longitudInput.value =
                 coordenadas.lng.toFixed(7);
+
+            programarCotizacionDelivery();
 
         }
 
@@ -2695,6 +2973,30 @@
 
                         return;
 
+                    }
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Cotización de Delivery
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (!cotizacionDeliveryActual) {
+
+                        evento.preventDefault();
+
+                        mostrarEstado(
+                            'Espera a que se calcule la tarifa de Delivery antes de confirmar el pedido.',
+                            true
+                        );
+
+                        document.getElementById('resumen-delivery-estado')?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+
+                        return;
                     }
 
 
