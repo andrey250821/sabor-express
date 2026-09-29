@@ -410,7 +410,7 @@ class PedidoController extends Controller
                 'monto_restaurante_delivery' =>
                     $cotizacion['monto_restaurante_delivery'],
                 'total' => round(
-                    $subtotal + $cotizacion['tarifa_delivery'],
+                    $cotizacion['tarifa_delivery'],
                     2
                 ),
             ]);
@@ -461,19 +461,9 @@ class PedidoController extends Controller
         try {
             $subtotal = 0;
 
-            foreach ($carrito as &$item) {
-
-                $item['subtotal'] =
-                    $item['cantidad'] * $item['precio'];
-
-                $subtotal += $item['subtotal'];
-            }
-
-            unset($item);
-
             $pedido = Pedido::create([
                 'user_id' => Auth::id(),
-                'subtotal_productos' => round($subtotal, 2),
+                'subtotal_productos' => 0.00,
                 'tarifa_delivery' => $cotizacion['tarifa_delivery'],
                 'distancia_delivery_km' => $cotizacion['distancia_delivery_km'],
                 'porcentaje_delivery' => $cotizacion['porcentaje_delivery'],
@@ -542,6 +532,11 @@ class PedidoController extends Controller
 
                 $producto->save();
 
+                $subtotal += round(
+                    $cantidadSolicitada * (float) $producto->precio,
+                    2
+                );
+
                 DetallePedido::create([
                     'pedido_id' => $pedido->id,
                     'producto_id' => $producto->id,
@@ -553,6 +548,14 @@ class PedidoController extends Controller
                     ),
                 ]);
             }
+
+            $pedido->update([
+                'subtotal_productos' => round($subtotal, 2),
+                'total' => round(
+                    $subtotal + $cotizacion['tarifa_delivery'],
+                    2
+                ),
+            ]);
 
             $imagen = $request->file('comprobante')->store('comprobantes', 'public');
 
