@@ -8613,3 +8613,15 @@ a {
     }
 }
 
+
+.delivery-delivered-financial {
+    display: block;
+    margin-top: 0.25rem;
+    color: #716770;
+    font-size: 0.76rem;
+    line-height: 1.45;
+}
+
+.delivery-delivered-financial strong {
+    color: #22723c;
+}
