@@ -15,10 +15,25 @@ class Configuracion extends Model
     /**
      * Campos permitidos para insertar.
      */
+    protected $casts = [
+        'latitud_restaurante' => 'float',
+        'longitud_restaurante' => 'float',
+        'tarifa_minima_delivery' => 'decimal:2',
+        'precio_km_delivery' => 'decimal:2',
+        'porcentaje_delivery' => 'decimal:2',
+        'porcentaje_restaurante_delivery' => 'decimal:2',
+    ];
+
     protected $fillable = [
         'nombre_restaurante',
         'telefono',
         'direccion',
+        'latitud_restaurante',
+        'longitud_restaurante',
+        'tarifa_minima_delivery',
+        'precio_km_delivery',
+        'porcentaje_delivery',
+        'porcentaje_restaurante_delivery',
         'logo',
         'qr_pago',
     ];
