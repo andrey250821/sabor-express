@@ -9,7 +9,15 @@
     <td>
         <div class="delivery-person">
             <div class="delivery-avatar">
-                <i class="bi bi-person-fill"></i>
+                @if($delivery->foto_perfil_url)
+                    <img
+                        src="{{ $delivery->foto_perfil_url }}"
+                        alt="Foto de {{ $delivery->name }}">
+                @else
+                    <span>
+                        {{ strtoupper(substr($delivery->name, 0, 1)) }}
+                    </span>
+                @endif
             </div>
 
             <div>
