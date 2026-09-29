@@ -693,103 +693,197 @@ $cantidadEntregados = $pedidosEntregados->count();
 
             @else
 
-            <div class="row g-3">
+            @php
+            /*
+             * El historial se agrupa por la fecha en que la asignación
+             * pasó a estado "entregado".
+             *
+             * No hace falta una migración nueva: updated_at corresponde
+             * al momento en que se marcó la asignación como entregada.
+             */
+            $pedidosEntregadosPorFecha = $pedidosEntregados
+                ->sortByDesc('updated_at')
+                ->groupBy(function ($asignacion) {
+                    return $asignacion->updated_at
+                        ? $asignacion->updated_at->toDateString()
+                        : $asignacion->pedido->created_at->toDateString();
+                });
+            @endphp
 
-                @foreach($pedidosEntregados as $asignacion)
+            @foreach($pedidosEntregadosPorFecha as $fecha => $pedidosFecha)
 
-                @php
-                $pedido = $asignacion->pedido;
-                $cliente = $pedido->user;
-                @endphp
+            @php
+            $fechaCarbon = \Carbon\Carbon::parse($fecha)->locale('es');
 
-                <div class="col-12 col-md-6 col-xl-4">
+            if ($fechaCarbon->isToday()) {
+                $tituloFecha = 'Hoy';
+                $subtituloFecha = 'Entregas realizadas hoy';
+                $fechaHoy = true;
+            } elseif ($fechaCarbon->isYesterday()) {
+                $tituloFecha = 'Ayer';
+                $subtituloFecha = 'Entregas realizadas ayer';
+                $fechaHoy = false;
+            } elseif ($fechaCarbon->isSameDay(now()->subDays(2))) {
+                $tituloFecha = 'Anteayer';
+                $subtituloFecha = 'Entregas realizadas anteayer';
+                $fechaHoy = false;
+            } else {
+                $tituloFecha = ucfirst($fechaCarbon->translatedFormat('l, d \\d\\e F \\d\\e Y'));
+                $subtituloFecha = 'Entregas realizadas en esta fecha';
+                $fechaHoy = false;
+            }
 
-                    <article class="delivery-delivered-card">
+            $collapseId = 'entregados-' . str_replace('-', '', $fecha);
+            @endphp
 
-                        <div class="delivery-delivered-top">
+            <section class="delivery-delivered-date-section mb-4">
 
-                            <div class="delivery-delivered-number">
+                <div class="delivery-delivered-date-header">
 
-                                <div>
-                                    <i class="bi bi-check-lg"></i>
-                                </div>
+                    <div>
+                        <span class="delivery-my-section-label delivered">
+                            HISTORIAL DE ENTREGAS
+                        </span>
 
-                                <span>
-                                    Pedido #{{ $pedido->id }}
-                                </span>
+                        <h3 class="delivery-delivered-date-title">
+                            <i class="bi bi-calendar-check"></i>
+                            {{ $tituloFecha }}
+                        </h3>
 
-                            </div>
+                        <p class="delivery-delivered-date-subtitle">
+                            {{ $subtituloFecha }}
+                        </p>
+                    </div>
 
-                            <span class="delivery-delivered-badge">
-                                Entregado
-                            </span>
+                    <div class="delivery-delivered-date-actions">
 
-                        </div>
+                        <span class="delivery-my-section-count delivered">
+                            {{ $pedidosFecha->count() }}
+                        </span>
 
+                        @unless($fechaHoy)
+                        <button
+                            type="button"
+                            class="delivery-delivered-toggle collapsed"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#{{ $collapseId }}"
+                            aria-expanded="false"
+                            aria-controls="{{ $collapseId }}">
 
-                        <div class="delivery-delivered-client">
+                            <i class="bi bi-chevron-down"></i>
+                            Ver pedidos
 
-                            <div class="delivery-delivered-avatar">
-                                @if($cliente?->foto_perfil_url)
-                                    <img
-                                        src="{{ $cliente->foto_perfil_url }}"
-                                        alt="Foto de {{ $cliente->name }}">
-                                @else
-                                    {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
-                                @endif
-                            </div>
+                        </button>
+                        @endunless
 
-                            <div>
-
-                                <span>
-                                    Cliente
-                                </span>
-
-                                <strong>
-                                    {{ $cliente->name ?? 'Cliente eliminado' }}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="delivery-delivered-address">
-
-                            <i class="bi bi-geo-alt-fill"></i>
-
-                            <span>
-                                {{ $pedido->direccion_entrega ?? 'Sin dirección' }}
-                            </span>
-
-                        </div>
-
-
-                        <div class="delivery-delivered-bottom">
-
-                            <strong>
-                                Bs {{ number_format($pedido->total, 2) }}
-                            </strong>
-
-                            <a
-                                href="{{ route('delivery.pedidos.show', $pedido->id) }}"
-                                class="delivery-delivered-detail">
-
-                                Ver detalle
-
-                                <i class="bi bi-arrow-right"></i>
-
-                            </a>
-
-                        </div>
-
-                    </article>
+                    </div>
 
                 </div>
 
-                @endforeach
+                <div
+                    id="{{ $collapseId }}"
+                    class="{{ $fechaHoy ? '' : 'collapse' }}">
 
-            </div>
+                    <div class="row g-3">
+
+                        @foreach($pedidosFecha as $asignacion)
+
+                        @php
+                        $pedido = $asignacion->pedido;
+                        $cliente = $pedido->user;
+                        @endphp
+
+                        <div class="col-12 col-md-6 col-xl-4">
+
+                            <article class="delivery-delivered-card">
+
+                                <div class="delivery-delivered-top">
+
+                                    <div class="delivery-delivered-number">
+
+                                        <div>
+                                            <i class="bi bi-check-lg"></i>
+                                        </div>
+
+                                        <span>
+                                            Pedido #{{ $pedido->id }}
+                                        </span>
+
+                                    </div>
+
+                                    <span class="delivery-delivered-badge">
+                                        Entregado
+                                    </span>
+
+                                </div>
+
+                                <div class="delivery-delivered-client">
+
+                                    <div class="delivery-delivered-avatar">
+                                        @if($cliente?->foto_perfil_url)
+                                            <img
+                                                src="{{ $cliente->foto_perfil_url }}"
+                                                alt="Foto de {{ $cliente->name }}">
+                                        @else
+                                            {{ strtoupper(substr($cliente->name ?? 'C', 0, 1)) }}
+                                        @endif
+                                    </div>
+
+                                    <div>
+
+                                        <span>
+                                            Cliente
+                                        </span>
+
+                                        <strong>
+                                            {{ $cliente->name ?? 'Cliente eliminado' }}
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="delivery-delivered-address">
+
+                                    <i class="bi bi-geo-alt-fill"></i>
+
+                                    <span>
+                                        {{ $pedido->direccion_entrega ?? 'Sin dirección' }}
+                                    </span>
+
+                                </div>
+
+                                <div class="delivery-delivered-bottom">
+
+                                    <strong>
+                                        Bs {{ number_format($pedido->total, 2) }}
+                                    </strong>
+
+                                    <a
+                                        href="{{ route('delivery.pedidos.show', $pedido->id) }}"
+                                        class="delivery-delivered-detail">
+
+                                        Ver detalle
+
+                                        <i class="bi bi-arrow-right"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                        @endforeach
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            @endforeach
 
             @endif
 
