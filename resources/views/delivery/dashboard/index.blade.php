@@ -463,10 +463,10 @@
                     type="button"
                     class="delivery-history-toggle"
                     id="toggle-historial-delivery"
-                    aria-expanded="false"
+                    aria-expanded="{{ request()->filled('fecha') ? 'true' : 'false' }}"
                     aria-controls="historial-delivery">
                     <i class="bi bi-calendar-week"></i>
-                    Ver historial
+                    {{ request()->filled('fecha') ? 'Ocultar historial' : 'Ver historial' }}
                 </button>
 
             </div>
@@ -475,7 +475,7 @@
             <div
                 id="historial-delivery"
                 class="delivery-history-content"
-                hidden>
+                {{ request()->filled('fecha') ? '' : 'hidden' }}>
 
                 <div class="delivery-history-days">
 
