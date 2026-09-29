@@ -46,6 +46,13 @@ return [
         ),
     ],
 
+    'osrm' => [
+        'url' => env(
+            'OSRM_URL',
+            'https://router.project-osrm.org'
+        ),
+    ],
+
     'firebase' => [
         'database_url' => env(
             'FIREBASE_DATABASE_URL',
