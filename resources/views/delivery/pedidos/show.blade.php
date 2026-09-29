@@ -36,7 +36,7 @@ $estados = [
 ],
 
 'asignado' => [
-'texto' => 'Pedido tomado',
+'texto' => 'Pedido asignado',
 'icono' => 'bi-person-check',
 'clase' => 'asignado',
 ],
@@ -853,26 +853,57 @@ $estadoPedido === 'en_camino'
     </div>
 
 
-    <div class="delivery-total">
+    <div class="delivery-financial-breakdown">
 
         <div>
+            <span>Subtotal de productos</span>
 
-            <span>
-                Total del pedido
-            </span>
-
-            <small>
-                Importe total
-            </small>
-
+            <strong>
+                Bs {{ number_format((float) ($pedido->subtotal_productos ?? $pedido->total), 2) }}
+            </strong>
         </div>
 
+        <div>
+            <span>
+                Delivery
+                @if($pedido->distancia_delivery_km !== null)
+                    ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
+                @endif
+            </span>
 
-        <strong>
+            <strong>
+                Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+            </strong>
+        </div>
 
-            Bs {{ number_format((float) $pedido->total, 2) }}
+        <div>
+            <span>Mi comisión</span>
 
-        </strong>
+            <strong class="delivery-financial-my-share">
+                Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                <small>
+                    ({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 2) }}%)
+                </small>
+            </strong>
+        </div>
+
+        <div class="delivery-total">
+
+            <div>
+                <span>
+                    Total del pedido
+                </span>
+
+                <small>
+                    Importe total cobrado al cliente
+                </small>
+            </div>
+
+            <strong>
+                Bs {{ number_format((float) $pedido->total, 2) }}
+            </strong>
+
+        </div>
 
     </div>
 
