@@ -197,6 +197,25 @@
 
                 </a>
 
+                <div class="delivery-nav-title mt-4">
+                    CUENTA
+                </div>
+
+                <a
+                    href="{{ route('delivery.perfil.edit') }}"
+                    class="delivery-nav-link
+                    {{ request()->routeIs('delivery.perfil.*') ? 'active' : '' }}">
+
+                    <span class="delivery-nav-icon">
+                        <i class="bi bi-person-circle"></i>
+                    </span>
+
+                    <span class="delivery-nav-text">
+                        Mi perfil
+                    </span>
+
+                </a>
+
             </nav>
 
 
