@@ -1,17 +1,16 @@
 <?php
 
-use Illuminate\\Database\\Migrations\\Migration;
-use Illuminate\\Support\\Facades\\DB;
-use Illuminate\\Support\\Facades\\Schema;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
         // El flujo anterior usaba estados que ya no existen.
-        // Los registros 'pendiente' que pertenecen a pedidos ya asignados
-        // se normalizan a 'aceptado'. Los demás registros legacy se eliminan
-        // para que la tabla quede coherente con el flujo actual.
+        // Un registro pendiente solo se conserva si el pedido ya aparece
+        // como asignado; en ese caso se normaliza a aceptado.
         $legacy = DB::table('asignaciones_delivery')
             ->whereIn('estado', [
                 'pendiente',
@@ -39,13 +38,14 @@ return new class extends Migration
                 continue;
             }
 
+            // Rechazado y tiempo_expirado son datos del flujo antiguo.
+            // Si un pendiente no pertenece a un pedido ya asignado,
+            // se elimina para dejar el pedido listo para una nueva asignación.
             DB::table('asignaciones_delivery')
                 ->where('id', $asignacion->id)
                 ->delete();
         }
 
-        // El único flujo vigente para una asignación es:
-        // aceptado -> en_camino -> entregado.
         if (Schema::getConnection()->getDriverName() === 'mysql') {
             DB::statement(
                 "ALTER TABLE asignaciones_delivery
@@ -54,45 +54,44 @@ return new class extends Migration
             );
         }
 
-        Schema::table('asignaciones_delivery', function ($table) {
-            $columns = [
-                'fecha_asignacion',
-                'fecha_respuesta',
-                'fecha_entrega',
-            ];
-
-            $existing = array_values(array_filter(
-                $columns,
-                fn ($column) => Schema::hasColumn('asignaciones_delivery', $column)
-            ));
-
-            if (!empty($existing)) {
-                $table->dropColumn($existing);
+        foreach ([
+            'fecha_asignacion',
+            'fecha_respuesta',
+            'fecha_entrega',
+        ] as $column) {
+            if (Schema::hasColumn('asignaciones_delivery', $column)) {
+                Schema::table('asignaciones_delivery', function (Blueprint $table) use ($column) {
+                    $table->dropColumn($column);
+                });
             }
-        });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('asignaciones_delivery', function ($table) {
-            if (!Schema::hasColumn('asignaciones_delivery', 'fecha_asignacion')) {
+        if (!Schema::hasColumn('asignaciones_delivery', 'fecha_asignacion')) {
+            Schema::table('asignaciones_delivery', function (Blueprint $table) {
                 $table->timestamp('fecha_asignacion')
                     ->nullable()
                     ->after('estado');
-            }
+            });
+        }
 
-            if (!Schema::hasColumn('asignaciones_delivery', 'fecha_respuesta')) {
+        if (!Schema::hasColumn('asignaciones_delivery', 'fecha_respuesta')) {
+            Schema::table('asignaciones_delivery', function (Blueprint $table) {
                 $table->timestamp('fecha_respuesta')
                     ->nullable()
                     ->after('fecha_asignacion');
-            }
+            });
+        }
 
-            if (!Schema::hasColumn('asignaciones_delivery', 'fecha_entrega')) {
+        if (!Schema::hasColumn('asignaciones_delivery', 'fecha_entrega')) {
+            Schema::table('asignaciones_delivery', function (Blueprint $table) {
                 $table->timestamp('fecha_entrega')
                     ->nullable()
                     ->after('fecha_respuesta');
-            }
-        });
+            });
+        }
 
         if (Schema::getConnection()->getDriverName() === 'mysql') {
             DB::statement(
