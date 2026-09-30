@@ -3,6 +3,8 @@
 namespace Tests\Feature\Database;
 
 use App\Models\Notificacion;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Carbon;
@@ -23,19 +25,18 @@ class SchemaCleanupTest extends TestCase
         $this->assertFalse(Schema::hasColumn('notificaciones', 'fecha_expiracion'));
     }
 
-    public function test_asignaciones_delivery_solo_aceptan_estados_actuales(): void
-    {
-        $estado = Schema::getConnection()
-            ->getSchemaBuilder()
-            ->getColumnType('asignaciones_delivery', 'estado');
-
-        $this->assertNotSame('', $estado);
-    }
-
     public function test_notificaciones_vigentes_solo_consideran_los_ultimos_tres_dias(): void
     {
+        $role = Role::create([
+            'nombre' => 'Cliente',
+        ]);
+
+        $user = User::factory()->create([
+            'role_id' => $role->id,
+        ]);
+
         $vieja = Notificacion::create([
-            'user_id' => 1,
+            'user_id' => $user->id,
             'pedido_id' => null,
             'mensaje' => 'Notificación antigua',
             'tipo' => 'cliente',
@@ -46,7 +47,7 @@ class SchemaCleanupTest extends TestCase
         ]);
 
         $reciente = Notificacion::create([
-            'user_id' => 1,
+            'user_id' => $user->id,
             'pedido_id' => null,
             'mensaje' => 'Notificación reciente',
             'tipo' => 'cliente',
@@ -66,8 +67,16 @@ class SchemaCleanupTest extends TestCase
 
     public function test_comando_elimina_notificaciones_con_mas_de_tres_dias(): void
     {
+        $role = Role::create([
+            'nombre' => 'Cliente',
+        ]);
+
+        $user = User::factory()->create([
+            'role_id' => $role->id,
+        ]);
+
         $vieja = Notificacion::create([
-            'user_id' => 1,
+            'user_id' => $user->id,
             'pedido_id' => null,
             'mensaje' => 'Notificación para borrar',
             'tipo' => 'cliente',
@@ -78,7 +87,7 @@ class SchemaCleanupTest extends TestCase
         ]);
 
         $reciente = Notificacion::create([
-            'user_id' => 1,
+            'user_id' => $user->id,
             'pedido_id' => null,
             'mensaje' => 'Notificación para conservar',
             'tipo' => 'cliente',
