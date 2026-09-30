@@ -7,7 +7,6 @@ use App\Models\ComprobantePago;
 use App\Models\Pedido;
 use App\Models\Notificacion;
 use App\Models\Producto;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -91,7 +90,6 @@ class ComprobantePagoController extends Controller
 
         $comprobante->update([
             'estado' => 'aprobado',
-            'fecha_revision' => Carbon::now(),
         ]);
 
         $pedido = $comprobante->pedido;
@@ -158,7 +156,6 @@ class ComprobantePagoController extends Controller
 
             $comprobante->update([
                 'estado' => 'rechazado',
-                'fecha_revision' => Carbon::now(),
             ]);
 
             $pedido->update([
