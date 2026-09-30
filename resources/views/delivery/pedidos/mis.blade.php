@@ -17,15 +17,15 @@ $asignaciones = $asignaciones ?? collect();
 
 // Pedidos que todavía están siendo gestionados
 $pedidosAsignados = $asignaciones->filter(function ($asignacion) {
-return in_array($asignacion->estado, [
-'aceptado',
+return in_array($asignacion->pedido?->estado, [
+'asignado',
 'en_camino'
-]);
+], true);
 });
 
 // Pedidos completamente entregados
 $pedidosEntregados = $asignaciones->filter(function ($asignacion) {
-return $asignacion->estado === 'entregado';
+return $asignacion->pedido?->estado === 'entregado';
 });
 
 $cantidadAsignados = $pedidosAsignados->count();
@@ -367,14 +367,14 @@ $cantidadEntregados = $pedidosEntregados->count();
                             </div>
 
 
-                            @if($asignacion->estado === 'aceptado')
+                            @if($pedido->estado === 'aceptado')
 
                             <span class="delivery-my-status accepted">
                                 <span></span>
                                 Aceptado
                             </span>
 
-                            @elseif($asignacion->estado === 'en_camino')
+                            @elseif($pedido->estado === 'en_camino')
 
                             <span class="delivery-my-status route">
                                 <span></span>
@@ -617,7 +617,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                             </a>
 
 
-                            @if($asignacion->estado === 'aceptado')
+                            @if($pedido->estado === 'aceptado')
 
                             <form
                                 action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}"
@@ -638,7 +638,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                             </form>
 
-                            @elseif($asignacion->estado === 'en_camino')
+                            @elseif($pedido->estado === 'en_camino')
 
                             <form
                                 action="{{ route('delivery.pedidos.entregar', $pedido->id) }}"
