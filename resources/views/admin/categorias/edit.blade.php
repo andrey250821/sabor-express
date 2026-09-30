@@ -159,42 +159,6 @@
 
 
 
-                <!-- DESCRIPCIÓN -->
-
-                <div class="mb-4">
-
-                    <label for="descripcion"
-                        class="categorias-label">
-
-                        <i class="bi bi-card-text"></i>
-
-                        Descripción
-
-                    </label>
-
-
-                    <textarea
-                        id="descripcion"
-                        name="descripcion"
-                        class="form-control categorias-input @error('descripcion') is-invalid @enderror"
-                        rows="5"
-                        placeholder="Descripción de la categoría...">{{ old('descripcion', $categoria->descripcion) }}</textarea>
-
-
-                    @error('descripcion')
-
-                    <div class="invalid-feedback">
-
-                        {{ $message }}
-
-                    </div>
-
-                    @enderror
-
-                </div>
-
-
-
                 <!-- INFORMACIÓN -->
 
                 <div class="categorias-info-box mb-4">
