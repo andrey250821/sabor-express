@@ -104,13 +104,11 @@ is_numeric($longitud);
 
 $puedeIniciar =
 $estadoPedido === 'asignado'
-&& $esMiAsignacion
-&& $asignacion->estado === 'aceptado';
+&& $esMiAsignacion;
 
 $puedeEntregar =
 $estadoPedido === 'en_camino'
-&& $esMiAsignacion
-&& $asignacion->estado === 'en_camino';
+&& $esMiAsignacion;
 
 
 @endphp
