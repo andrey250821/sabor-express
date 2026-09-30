@@ -15,9 +15,6 @@ class AsignacionDelivery extends Model
 
         'delivery_id',
 
-        'estado',
-
-
     ];
 
 
