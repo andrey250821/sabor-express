@@ -134,44 +134,6 @@
                 </div>
 
 
-                <!-- DESCRIPCIÓN -->
-                <div class="mb-4">
-
-                    <label for="descripcion"
-                        class="categorias-label">
-
-                        <i class="bi bi-card-text"></i>
-                        Descripción
-
-                    </label>
-
-
-                    <textarea
-                        id="descripcion"
-                        name="descripcion"
-                        class="form-control categorias-input @error('descripcion') is-invalid @enderror"
-                        rows="5"
-                        placeholder="Escribe una breve descripción de la categoría...">{{ old('descripcion') }}</textarea>
-
-
-                    @error('descripcion')
-
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-
-                    @enderror
-
-
-                    <small class="categorias-help">
-
-                        La descripción es opcional.
-
-                    </small>
-
-                </div>
-
-
                 <!-- BOTONES -->
                 <div class="categorias-form-actions">
 
