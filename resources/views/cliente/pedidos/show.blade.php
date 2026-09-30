@@ -1336,24 +1336,6 @@
                 @endif
 
 
-                {{-- FECHA DE REVISIÓN --}}
-
-                @if($pedido->comprobantePago->fecha_revision)
-
-                <div class="cliente-pedido-show-comprobante-fecha">
-
-                    <i class="bi bi-calendar-check"></i>
-
-                    Revisado el
-
-                    {{ \Carbon\Carbon::parse(
-                            $pedido->comprobantePago->fecha_revision
-                        )->format('d/m/Y H:i') }}
-
-                </div>
-
-                @endif
-
                 @else
 
                 {{-- SIN COMPROBANTE DE PAGO --}}
