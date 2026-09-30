@@ -16,7 +16,6 @@ class EstadoTest extends TestCase
     {
         $role = Role::create([
             'nombre' => 'Cocinero',
-            'descripcion' => 'Personal de cocina',
         ]);
 
         $cocinero = User::create([
@@ -46,7 +45,6 @@ class EstadoTest extends TestCase
     {
         $role = Role::create([
             'nombre' => 'Cocinero',
-            'descripcion' => 'Personal de cocina',
         ]);
 
         $cocinero = User::create([
@@ -66,12 +64,10 @@ class EstadoTest extends TestCase
     {
         $cocineroRole = Role::create([
             'nombre' => 'Cocinero',
-            'descripcion' => 'Personal de cocina',
         ]);
 
         $clienteRole = Role::create([
             'nombre' => 'Cliente',
-            'descripcion' => 'Cliente',
         ]);
 
         $cocinero = User::create([
