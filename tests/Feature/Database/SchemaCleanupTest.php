@@ -24,6 +24,8 @@ class SchemaCleanupTest extends TestCase
         $this->assertFalse(Schema::hasColumn('asignaciones_delivery', 'fecha_respuesta'));
         $this->assertFalse(Schema::hasColumn('asignaciones_delivery', 'fecha_entrega'));
         $this->assertFalse(Schema::hasColumn('notificaciones', 'fecha_expiracion'));
+        $this->assertFalse(Schema::hasColumn('pedidos', 'fecha_listo'));
+        $this->assertFalse(Schema::hasColumn('asignaciones_delivery', 'estado'));
     }
 
     public function test_notificaciones_vigentes_solo_consideran_los_ultimos_tres_dias(): void
