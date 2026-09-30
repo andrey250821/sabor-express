@@ -151,7 +151,9 @@ class DashboardController extends Controller
         |
         */
         $entregasFinalizadas = AsignacionDelivery::query()
-            ->where('estado', 'entregado')
+            ->whereHas('pedido', function ($query) {
+                $query->where('estado', 'entregado');
+            })
             ->with([
                 'pedido:id,tarifa_delivery,monto_delivery,monto_restaurante_delivery'
             ])
