@@ -1,0 +1,5 @@
+# Las imágenes de prueba OCR se generan localmente y no deben subirse al repositorio.
+*.png
+*.jpg
+*.jpeg
+*.webp
