@@ -118,11 +118,13 @@ class PedidoController extends Controller
                 'pedido.detallePedidos.producto',
             ])
             ->where('delivery_id', $delivery->id)
-            ->whereIn('estado', [
-                'aceptado',
-                'en_camino',
-                'entregado',
-            ])
+            ->whereHas('pedido', function ($query) {
+                $query->whereIn('estado', [
+                    'asignado',
+                    'en_camino',
+                    'entregado',
+                ]);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -153,12 +155,6 @@ class PedidoController extends Controller
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if ($asignacion->estado !== 'aceptado') {
-                throw new \RuntimeException(
-                    'El pedido no puede iniciar la entrega en este momento.'
-                );
-            }
-
             $pedido = Pedido::query()
                 ->where('id', $id)
                 ->lockForUpdate()
@@ -170,13 +166,11 @@ class PedidoController extends Controller
                 );
             }
 
-            $asignacion->update([
-                'estado' => 'en_camino',
-            ]);
-
             $pedido->update([
                 'estado' => 'en_camino',
             ]);
+
+            $asignacion->touch();
 
             Notificacion::create([
                 'user_id' => $pedido->user_id,
@@ -221,12 +215,6 @@ class PedidoController extends Controller
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if ($asignacion->estado !== 'en_camino') {
-                throw new \RuntimeException(
-                    'El pedido todavía no está en camino.'
-                );
-            }
-
             $pedido = Pedido::query()
                 ->where('id', $id)
                 ->lockForUpdate()
@@ -238,13 +226,13 @@ class PedidoController extends Controller
                 );
             }
 
-            $asignacion->update([
-                'estado' => 'entregado',
-            ]);
-
             $pedido->update([
                 'estado' => 'entregado',
             ]);
+
+            // updated_at representa la última actualización de la asignación.
+            // Al completar la entrega queda como referencia para el historial.
+            $asignacion->touch();
 
             Notificacion::create([
                 'user_id' => $pedido->user_id,
