@@ -46,10 +46,12 @@ class DashboardController extends Controller
 
         // Pedidos que este Delivery tiene actualmente.
         $misPedidos = AsignacionDelivery::where('delivery_id', $deliveryId)
-            ->whereIn('estado', [
-                'aceptado',
-                'en_camino',
-            ])
+            ->whereHas('pedido', function ($query) {
+                $query->whereIn('estado', [
+                    'asignado',
+                    'en_camino',
+                ]);
+            })
             ->count();
 
         /*
@@ -64,7 +66,9 @@ class DashboardController extends Controller
 
         $entregasUltimos7Dias = AsignacionDelivery::query()
             ->where('delivery_id', $deliveryId)
-            ->where('estado', 'entregado')
+            ->whereHas('pedido', function ($query) {
+                $query->where('estado', 'entregado');
+            })
             ->whereBetween('updated_at', [
                 $inicioHistorial,
                 $finHistorial,
@@ -183,7 +187,9 @@ class DashboardController extends Controller
 
         $entregasFinalizadas = AsignacionDelivery::query()
             ->where('delivery_id', $deliveryId)
-            ->where('estado', 'entregado')
+            ->whereHas('pedido', function ($query) {
+                $query->where('estado', 'entregado');
+            })
             ->with([
                 'pedido:id,distancia_delivery_km,tarifa_delivery,monto_delivery,monto_restaurante_delivery,porcentaje_delivery,porcentaje_restaurante_delivery',
             ])
