@@ -240,7 +240,6 @@ class PedidoController extends Controller
 
             $asignacion->update([
                 'estado' => 'entregado',
-                'fecha_entrega' => now(),
             ]);
 
             $pedido->update([
