@@ -12,7 +12,6 @@ class LoginTest extends TestCase
     {
         $role = Role::firstOrCreate(
             ['nombre' => 'Cliente'],
-            ['descripcion' => 'Cliente del sistema']
         );
 
         $user = User::where('email', 'testcliente@saborexpress.com')->first();
