@@ -55,7 +55,6 @@ class PedidoTest extends TestCase
                 'user_id' => $cliente->id,
                 'total' => 10 * $numero,
                 'estado' => 'listo',
-                'fecha_listo' => now()->subMinutes(10 - $numero),
                 'direccion_entrega' => 'Dirección de prueba ' . $numero,
             ]));
         }
@@ -203,7 +202,6 @@ class PedidoTest extends TestCase
             'user_id' => $cliente->id,
             'total' => 85,
             'estado' => 'listo',
-            'fecha_listo' => now(),
             'direccion_entrega' => 'Dirección privada de prueba',
         ]);
 
@@ -263,7 +261,6 @@ class PedidoTest extends TestCase
         AsignacionDelivery::create([
             'pedido_id' => $pedido->id,
             'delivery_id' => $delivery2->id,
-            'estado' => 'aceptado',
         ]);
 
         $this->actingAs($delivery1)
