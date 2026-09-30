@@ -31,7 +31,7 @@ class AsignarPedidoDeliveryService
                 ->where('role_id', 3)
                 ->where('estado', 'activo')
                 ->whereDoesntHave('asignacionesDelivery', function ($query) {
-                    $query->whereIn('estado', ['pendiente', 'aceptado', 'en_camino']);
+                    $query->whereIn('estado', ['aceptado', 'en_camino']);
                 })
                 ->orderBy('id')
                 ->lockForUpdate()
@@ -56,10 +56,6 @@ class AsignarPedidoDeliveryService
                     'pedido_id' => $pedido->id,
                     'delivery_id' => $delivery->id,
                     'estado' => 'aceptado',
-                    'fecha_asignacion' => now(),
-                    // La asignación es automática, por lo tanto la
-                    // respuesta se registra inmediatamente.
-                    'fecha_respuesta' => now(),
                 ]);
 
                 $pedido->update([
