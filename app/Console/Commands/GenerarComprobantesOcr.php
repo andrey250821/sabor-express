@@ -631,17 +631,12 @@ HTML;
             $resultCode !== 0 ||
             !File::exists($outputPath)
         ) {
-            $this->error(
-                "No se pudo generar {$nombreArchivo}"
+            $detalle = trim(implode(PHP_EOL, $output));
+
+            throw new \RuntimeException(
+                "No se pudo generar {$nombreArchivo}."
+                . ($detalle !== '' ? " Detalle de Chrome: {$detalle}" : '')
             );
-
-            if (!empty($output)) {
-                foreach ($output as $line) {
-                    $this->line($line);
-                }
-            }
-
-            return;
         }
 
         $this->line(
