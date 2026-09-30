@@ -16,14 +16,12 @@ class ComprobantePago extends Model
         'motivo_revision',
         'datos_ocr',
         'estado',
-        'fecha_revision',
     ];
 
     protected function casts(): array
     {
         return [
             'datos_ocr' => 'array',
-            'fecha_revision' => 'datetime',
         ];
     }
 
