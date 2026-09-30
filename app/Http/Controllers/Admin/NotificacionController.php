@@ -17,6 +17,7 @@ class NotificacionController extends Controller
     public function index(): View
     {
         $notificaciones = Notificacion::where('user_id', Auth::id())
+            ->vigentes()
             ->whereIn('evento', [
                 'comprobante_en_revision',
                 'nueva_calificacion',
@@ -138,6 +139,7 @@ class NotificacionController extends Controller
     public function marcarLeida(int $id): JsonResponse|RedirectResponse
     {
         $notificacion = Notificacion::where('id', $id)
+            ->vigentes()
             ->where('user_id', Auth::id())
             ->whereIn('evento', [
                 'comprobante_en_revision',
@@ -174,6 +176,7 @@ class NotificacionController extends Controller
     public function marcarTodasLeidas(): JsonResponse|RedirectResponse
     {
         Notificacion::where('user_id', Auth::id())
+            ->vigentes()
             ->whereIn('evento', [
                 'comprobante_en_revision',
                 'nueva_calificacion',
