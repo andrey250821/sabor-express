@@ -96,11 +96,6 @@
                         <th>
                             Categoría
                         </th>
-
-                        <th>
-                            Descripción
-                        </th>
-
                         <th>
                             Estado
                         </th>
@@ -148,15 +143,6 @@
                         </td>
 
 
-                        <td>
-
-                            <span class="categoria-descripcion">
-
-                                {{ $categoria->descripcion ?: 'Sin descripción' }}
-
-                            </span>
-
-                        </td>
 
 
                         <td>
