@@ -87,8 +87,18 @@ class GenerarComprobantesOcr extends Command
             return self::FAILURE;
         }
 
-        // Directorios
-        $htmlDirectory = storage_path('app/ocr-test/html');
+        /*
+         * Las imágenes finales se guardan únicamente en:
+         * storage/app/public/comprobantes_test
+         *
+         * El HTML solo es un archivo temporal necesario para que Chrome
+         * pueda renderizar el comprobante. Se crea en la carpeta temporal
+         * del sistema y se elimina al terminar la generación.
+         */
+        $htmlDirectory = sys_get_temp_dir()
+            . DIRECTORY_SEPARATOR
+            . 'sabor-express-ocr-' . uniqid('', true);
+
         $outputDirectory = storage_path('app/public/comprobantes_test');
 
         File::ensureDirectoryExists($htmlDirectory);
@@ -107,77 +117,88 @@ class GenerarComprobantesOcr extends Command
 
         /*
         |--------------------------------------------------------------------------
-        | 1. COMPROBANTE CORRECTO
+        | Generar las 4 variantes de prueba
         |--------------------------------------------------------------------------
         */
-        $this->generarComprobante(
-            pedido: $pedido,
-            tipo: 'correcto',
-            monto: $totalReal,
-            referencia: $referenciaCorrecta,
-            fecha: $fecha,
-            cliente: $clienteNombre,
-            chrome: $chrome,
-            htmlDirectory: $htmlDirectory,
-            outputDirectory: $outputDirectory
-        );
+        try {
+            /*
+            |--------------------------------------------------------------------------
+            | 1. COMPROBANTE CORRECTO
+            |--------------------------------------------------------------------------
+            */
+            $this->generarComprobante(
+                pedido: $pedido,
+                tipo: 'correcto',
+                monto: $totalReal,
+                referencia: $referenciaCorrecta,
+                fecha: $fecha,
+                cliente: $clienteNombre,
+                chrome: $chrome,
+                htmlDirectory: $htmlDirectory,
+                outputDirectory: $outputDirectory
+            );
 
-        /*
-        |--------------------------------------------------------------------------
-        | 2. MONTO INCORRECTO
-        |--------------------------------------------------------------------------
-        */
-        $montoIncorrecto = $totalReal + 20;
+            /*
+            |--------------------------------------------------------------------------
+            | 2. MONTO INCORRECTO
+            |--------------------------------------------------------------------------
+            */
+            $montoIncorrecto = $totalReal + 20;
 
-        $this->generarComprobante(
-            pedido: $pedido,
-            tipo: 'monto_incorrecto',
-            monto: $montoIncorrecto,
-            referencia: '98452218',
-            fecha: $fecha,
-            cliente: $clienteNombre,
-            chrome: $chrome,
-            htmlDirectory: $htmlDirectory,
-            outputDirectory: $outputDirectory
-        );
+            $this->generarComprobante(
+                pedido: $pedido,
+                tipo: 'monto_incorrecto',
+                monto: $montoIncorrecto,
+                referencia: '98452218',
+                fecha: $fecha,
+                cliente: $clienteNombre,
+                chrome: $chrome,
+                htmlDirectory: $htmlDirectory,
+                outputDirectory: $outputDirectory
+            );
 
-        /*
-        |--------------------------------------------------------------------------
-        | 3. REFERENCIA DUPLICADA
-        |--------------------------------------------------------------------------
-        */
-        $this->generarComprobante(
-            pedido: $pedido,
-            tipo: 'referencia_duplicada',
-            monto: $totalReal,
-            referencia: $referenciaCorrecta,
-            fecha: $fecha,
-            cliente: $clienteNombre,
-            chrome: $chrome,
-            htmlDirectory: $htmlDirectory,
-            outputDirectory: $outputDirectory
-        );
+            /*
+            |--------------------------------------------------------------------------
+            | 3. REFERENCIA DUPLICADA
+            |--------------------------------------------------------------------------
+            */
+            $this->generarComprobante(
+                pedido: $pedido,
+                tipo: 'referencia_duplicada',
+                monto: $totalReal,
+                referencia: $referenciaCorrecta,
+                fecha: $fecha,
+                cliente: $clienteNombre,
+                chrome: $chrome,
+                htmlDirectory: $htmlDirectory,
+                outputDirectory: $outputDirectory
+            );
 
-        /*
-        |--------------------------------------------------------------------------
-        | 4. COMPROBANTE INCOMPLETO
-        |--------------------------------------------------------------------------
-        */
-        $this->generarComprobante(
-            pedido: $pedido,
-            tipo: 'incompleto',
-            monto: $totalReal,
-            referencia: '',
-            fecha: $fecha,
-            cliente: $clienteNombre,
-            chrome: $chrome,
-            htmlDirectory: $htmlDirectory,
-            outputDirectory: $outputDirectory
-        );
+            /*
+            |--------------------------------------------------------------------------
+            | 4. COMPROBANTE INCOMPLETO
+            |--------------------------------------------------------------------------
+            */
+            $this->generarComprobante(
+                pedido: $pedido,
+                tipo: 'incompleto',
+                monto: $totalReal,
+                referencia: '',
+                fecha: $fecha,
+                cliente: $clienteNombre,
+                chrome: $chrome,
+                htmlDirectory: $htmlDirectory,
+                outputDirectory: $outputDirectory
+            );
 
-        $this->info('Imágenes de prueba OCR creadas correctamente.');
+            $this->info('Imágenes de prueba OCR creadas correctamente.');
 
-        return self::SUCCESS;
+            return self::SUCCESS;
+        } finally {
+            // El HTML se usa solo para renderizar las imágenes y no forma
+            // parte de los archivos de prueba que conserva la aplicación.
+            File::deleteDirectory($htmlDirectory);
+        }
     }
 
     /**
