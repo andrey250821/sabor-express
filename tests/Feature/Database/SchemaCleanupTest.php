@@ -5,6 +5,7 @@ namespace Tests\Feature\Database;
 use App\Models\Notificacion;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Carbon;
@@ -31,8 +32,12 @@ class SchemaCleanupTest extends TestCase
             'nombre' => 'Cliente',
         ]);
 
-        $user = User::factory()->create([
+        $user = User::create([
             'role_id' => $role->id,
+            'name' => 'Usuario de prueba',
+            'email' => 'schema-cleanup@test.com',
+            'password' => Hash::make('password'),
+            'estado' => 'activo',
         ]);
 
         $vieja = Notificacion::create([
