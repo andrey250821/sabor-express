@@ -288,7 +288,9 @@ class DeliveryController extends Controller
 
         $tienePedidoActivo = AsignacionDelivery::query()
             ->where('delivery_id', $delivery->id)
-            ->whereIn('estado', ['aceptado', 'en_camino'])
+            ->whereHas('pedido', function ($query) {
+                $query->whereIn('estado', ['asignado', 'en_camino']);
+            })
             ->exists();
 
         if ($tienePedidoActivo) {
