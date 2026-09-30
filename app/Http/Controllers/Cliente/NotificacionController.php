@@ -17,6 +17,7 @@ class NotificacionController extends Controller
     public function index(): View
     {
         $notificaciones = Notificacion::where('user_id', Auth::id())
+            ->vigentes()
             ->where('tipo', 'cliente')
             ->with([
                 'pedido',
@@ -56,6 +57,7 @@ class NotificacionController extends Controller
     public function marcarLeida(int $id): JsonResponse|RedirectResponse
     {
         $notificacion = Notificacion::where('id', $id)
+            ->vigentes()
             ->where('user_id', Auth::id())
             ->where('tipo', 'cliente')
             ->firstOrFail();
@@ -66,6 +68,7 @@ class NotificacionController extends Controller
 
         if (request()->expectsJson()) {
             $noLeidas = Notificacion::where('user_id', Auth::id())
+                ->vigentes()
                 ->where('tipo', 'cliente')
                 ->where('leido', false)
                 ->count();
@@ -86,6 +89,7 @@ class NotificacionController extends Controller
     public function marcarTodasLeidas(): JsonResponse|RedirectResponse
     {
         Notificacion::where('user_id', Auth::id())
+            ->vigentes()
             ->where('tipo', 'cliente')
             ->where('leido', false)
             ->update([
