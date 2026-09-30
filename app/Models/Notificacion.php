@@ -18,10 +18,22 @@ class Notificacion extends Model
         'tipo',
         'evento',
         'leido',
-        'fecha_expiracion',
     ];
 
 
+
+
+    /**
+     * Limitar las notificaciones vigentes a los últimos 3 días.
+     */
+    public function scopeVigentes($query)
+    {
+        return $query->where(
+            'created_at',
+            '>=',
+            now()->subDays(3)
+        );
+    }
 
     /**
      * Una notificación pertenece a un usuario.
