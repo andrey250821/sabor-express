@@ -224,8 +224,8 @@
                             </td>
 
                             <td>
-                                @switch($asignacion->estado)
-                                    @case('aceptado')
+                                @switch($pedido?->estado)
+                                    @case('asignado')
                                         <span class="delivery-admin-state assigned">
                                             Asignado
                                         </span>
@@ -245,7 +245,9 @@
 
                                     @default
                                         <span class="delivery-admin-state">
-                                            {{ ucfirst(str_replace('_', ' ', $asignacion->estado)) }}
+                                            {{ $pedido?->estado
+                                                ? ucfirst(str_replace('_', ' ', $pedido->estado))
+                                                : 'Sin estado' }}
                                         </span>
                                 @endswitch
                             </td>
