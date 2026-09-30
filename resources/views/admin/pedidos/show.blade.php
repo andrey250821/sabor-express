@@ -204,7 +204,7 @@
                                 {{ ucfirst(str_replace(
                                     '_',
                                     ' ',
-                                    $pedido->asignacionDelivery->estado
+                                    $pedido->estado
                                 )) }}
                             </strong>
                         </div>
