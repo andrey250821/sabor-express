@@ -95,7 +95,6 @@ class EstadoTest extends TestCase
         AsignacionDelivery::create([
             'pedido_id' => $pedido->id,
             'delivery_id' => $delivery->id,
-            'estado' => 'aceptado',
         ]);
 
         $this->from('/delivery/perfil')
