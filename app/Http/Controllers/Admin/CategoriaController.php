@@ -49,9 +49,7 @@ class CategoriaController extends Controller
 
         $request->validate([
 
-            'nombre'=>'required',
-
-            'descripcion'=>'nullable'
+            'nombre'=>'required'
 
         ]);
 
@@ -61,8 +59,6 @@ class CategoriaController extends Controller
         Categoria::create([
 
             'nombre'=>$request->nombre,
-
-            'descripcion'=>$request->descripcion,
 
             'estado'=>'activo'
 
@@ -124,9 +120,7 @@ class CategoriaController extends Controller
 
         $request->validate([
 
-            'nombre'=>'required',
-
-            'descripcion'=>'nullable'
+            'nombre'=>'required'
 
         ]);
 
@@ -135,9 +129,7 @@ class CategoriaController extends Controller
 
         $categoria->update([
 
-            'nombre'=>$request->nombre,
-
-            'descripcion'=>$request->descripcion
+            'nombre'=>$request->nombre
 
         ]);
 
