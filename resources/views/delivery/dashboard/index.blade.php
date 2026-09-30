@@ -567,7 +567,7 @@
                                 </strong>
 
                                 <small>
-                                    {{ $asignacion->fecha_entrega?->format('H:i') ?? '—' }}
+                                    {{ $asignacion->updated_at?->format('H:i') ?? '—' }}
                                     ·
                                     {{ number_format((float) ($pedidoHistorico?->distancia_delivery_km ?? 0), 2) }} km
                                 </small>
