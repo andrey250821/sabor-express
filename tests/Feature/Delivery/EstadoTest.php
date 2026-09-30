@@ -16,7 +16,6 @@ class EstadoTest extends TestCase
     {
         $role = Role::create([
             'nombre' => 'Delivery',
-            'descripcion' => 'Personal de Delivery',
         ]);
 
         $delivery = User::create([
@@ -46,7 +45,6 @@ class EstadoTest extends TestCase
     {
         $role = Role::create([
             'nombre' => 'Delivery',
-            'descripcion' => 'Personal de Delivery',
         ]);
 
         $delivery = User::create([
@@ -66,12 +64,10 @@ class EstadoTest extends TestCase
     {
         $deliveryRole = Role::create([
             'nombre' => 'Delivery',
-            'descripcion' => 'Personal de Delivery',
         ]);
 
         $clienteRole = Role::create([
             'nombre' => 'Cliente',
-            'descripcion' => 'Cliente',
         ]);
 
         $delivery = User::create([
@@ -100,8 +96,6 @@ class EstadoTest extends TestCase
             'pedido_id' => $pedido->id,
             'delivery_id' => $delivery->id,
             'estado' => 'aceptado',
-            'fecha_asignacion' => now(),
-            'fecha_respuesta' => now(),
         ]);
 
         $this->from('/delivery/perfil')
