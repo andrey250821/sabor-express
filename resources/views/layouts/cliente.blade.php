@@ -141,6 +141,7 @@
                     @php
                         $notificacionesNoLeidas = auth()->user()
                             ->notificaciones()
+                            ->vigentes()
                             ->where('tipo', 'cliente')
                             ->where('leido', false)
                             ->count();
