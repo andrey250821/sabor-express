@@ -6,46 +6,35 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
-
         Schema::create('comprobantes_pago', function (Blueprint $table) {
-
             $table->id();
-
 
             $table->foreignId('pedido_id')
                 ->constrained('pedidos')
                 ->cascadeOnDelete();
 
-
-            // Imagen del comprobante
             $table->string('imagen');
 
+            $table->string('referencia_bancaria', 50)
+                ->nullable();
+
+            $table->text('motivo_revision')
+                ->nullable();
+
+            $table->json('datos_ocr')
+                ->nullable();
 
             $table->enum('estado', [
-
-                'pendiente',
+                'en_revision',
                 'aprobado',
-                'rechazado'
+                'rechazado',
+            ])->default('en_revision');
 
-            ])
-            ->default('pendiente');
-
-
-            // Fecha en que administrador revisa
-            $table->timestamp('fecha_revision')
-                  ->nullable();
-
-
-            // created_at y updated_at
             $table->timestamps();
-
         });
-
     }
-
 
     public function down(): void
     {

@@ -25,7 +25,13 @@ return new class extends Migration
 
             $table->integer('puntuacion');
 
-            $table->text('comentario')->nullable();
+            $table->text('comentario')
+                ->nullable();
+
+            $table->unique(
+                ['user_id', 'producto_id'],
+                'unique_user_producto_calificacion'
+            );
 
             $table->timestamps();
         });
