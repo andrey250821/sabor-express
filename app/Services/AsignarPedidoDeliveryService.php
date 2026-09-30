@@ -14,7 +14,7 @@ class AsignarPedidoDeliveryService
      * Procesar la cola FIFO de pedidos listos.
      *
      * Mientras existan pedidos en cola y Deliverys libres:
-     * - toma siempre el pedido más antiguo según fecha_listo;
+     * - toma siempre el pedido más antiguo según created_at;
      * - toma un Delivery activo sin pedido activo;
      * - crea la asignación automáticamente;
      * - marca el pedido como asignado.
@@ -31,7 +31,9 @@ class AsignarPedidoDeliveryService
                 ->where('role_id', 3)
                 ->where('estado', 'activo')
                 ->whereDoesntHave('asignacionesDelivery', function ($query) {
-                    $query->whereIn('estado', ['aceptado', 'en_camino']);
+                    $query->whereHas('pedido', function ($pedidoQuery) {
+                        $pedidoQuery->whereIn('estado', ['asignado', 'en_camino']);
+                    });
                 })
                 ->orderBy('id')
                 ->lockForUpdate()
@@ -41,8 +43,6 @@ class AsignarPedidoDeliveryService
                 $pedido = Pedido::query()
                     ->where('estado', 'listo')
                     ->whereDoesntHave('asignacionDelivery')
-                    ->orderByRaw('fecha_listo IS NULL')
-                    ->orderBy('fecha_listo', 'asc')
                     ->orderBy('created_at', 'asc')
                     ->orderBy('id', 'asc')
                     ->lockForUpdate()
@@ -55,7 +55,6 @@ class AsignarPedidoDeliveryService
                 AsignacionDelivery::create([
                     'pedido_id' => $pedido->id,
                     'delivery_id' => $delivery->id,
-                    'estado' => 'aceptado',
                 ]);
 
                 $pedido->update([
