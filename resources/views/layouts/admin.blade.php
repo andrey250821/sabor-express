@@ -245,6 +245,7 @@
 
                 $notificacionesNoLeidas = auth()->user()
                 ->notificaciones()
+                ->vigentes()
                 ->whereIn('evento', [
                 'comprobante_en_revision',
                 'nueva_calificacion',
