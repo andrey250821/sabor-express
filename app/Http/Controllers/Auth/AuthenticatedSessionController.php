@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
                 ->intended(route('cliente.dashboard.index'));
         }
 
-        // REPARTIDOR
+        // DELIVERY
         if ($user->role && $user->role->nombre === 'Delivery') {
 
             return redirect()

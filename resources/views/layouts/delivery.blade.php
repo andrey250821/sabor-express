@@ -110,21 +110,41 @@
                 ESTADO DEL DELIVERY
             ================================================== --}}
 
-            <div class="delivery-status-box">
+            <div class="delivery-status-box {{ Auth::user()->estado === 'activo' ? 'activo' : 'inactivo' }}">
 
-                <span class="delivery-status-indicator"></span>
+                <div class="delivery-status-info">
 
-                <div>
+                    <span class="delivery-status-indicator"></span>
 
-                    <strong>
-                        En servicio
-                    </strong>
+                    <div>
+                        <strong>
+                            {{ Auth::user()->estado === 'activo' ? 'Activo' : 'Inactivo' }}
+                        </strong>
 
-                    <small>
-                        Listo para entregar
-                    </small>
+                        <small>
+                            {{ Auth::user()->estado === 'activo'
+                                ? 'Puedes recibir y realizar entregas'
+                                : 'No puedes recibir ni gestionar pedidos' }}
+                        </small>
+                    </div>
 
                 </div>
+
+                <form
+                    method="POST"
+                    action="{{ route('delivery.estado.alternar') }}"
+                    class="delivery-status-form">
+                    @csrf
+                    @method('PATCH')
+
+                    <button
+                        type="submit"
+                        class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }}"
+                        title="{{ Auth::user()->estado === 'activo' ? 'Ponerte inactivo' : 'Ponerte activo' }}">
+                        <i class="bi {{ Auth::user()->estado === 'activo' ? 'bi-pause-circle-fill' : 'bi-play-circle-fill' }}"></i>
+                        {{ Auth::user()->estado === 'activo' ? 'Inactivo' : 'Activo' }}
+                    </button>
+                </form>
 
             </div>
 

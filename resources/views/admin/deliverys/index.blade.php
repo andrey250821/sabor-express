@@ -46,6 +46,18 @@
 
     @endif
 
+    @if(session('error'))
+
+    <div class="alert alert-danger">
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        {{ session('error') }}
+
+    </div>
+
+    @endif
+
 
     {{-- CARD --}}
     <div class="deliverys-card">
