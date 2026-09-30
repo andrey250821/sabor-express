@@ -55,8 +55,8 @@ class DashboardController extends Controller
         /*
          * Historial económico de los últimos 7 días.
          *
-         * La fecha de referencia es fecha_entrega, registrada cuando
-         * el Delivery completa realmente el pedido.
+         * La fecha de referencia es updated_at, que queda actualizado cuando
+         * el Delivery completa la entrega.
          */
         $hoy = now()->startOfDay();
         $inicioHistorial = $hoy->copy()->subDays(6);
@@ -65,21 +65,21 @@ class DashboardController extends Controller
         $entregasUltimos7Dias = AsignacionDelivery::query()
             ->where('delivery_id', $deliveryId)
             ->where('estado', 'entregado')
-            ->whereBetween('fecha_entrega', [
+            ->whereBetween('updated_at', [
                 $inicioHistorial,
                 $finHistorial,
             ])
             ->with([
                 'pedido:id,distancia_delivery_km,tarifa_delivery,porcentaje_delivery,monto_delivery,porcentaje_restaurante_delivery,monto_restaurante_delivery',
             ])
-            ->orderByDesc('fecha_entrega')
+            ->orderByDesc('updated_at')
             ->get();
 
         $comisionHoy = round(
             $entregasUltimos7Dias
                 ->filter(function ($asignacion) use ($hoy) {
-                    return $asignacion->fecha_entrega
-                        && $asignacion->fecha_entrega->isSameDay($hoy);
+                    return $asignacion->updated_at
+                        && $asignacion->updated_at->isSameDay($hoy);
                 })
                 ->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)),
             2
@@ -88,8 +88,8 @@ class DashboardController extends Controller
         $parteRestauranteHoy = round(
             $entregasUltimos7Dias
                 ->filter(function ($asignacion) use ($hoy) {
-                    return $asignacion->fecha_entrega
-                        && $asignacion->fecha_entrega->isSameDay($hoy);
+                    return $asignacion->updated_at
+                        && $asignacion->updated_at->isSameDay($hoy);
                 })
                 ->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_restaurante_delivery ?? 0)),
             2
@@ -97,8 +97,8 @@ class DashboardController extends Controller
 
         $entregasHoy = $entregasUltimos7Dias
             ->filter(function ($asignacion) use ($hoy) {
-                return $asignacion->fecha_entrega
-                    && $asignacion->fecha_entrega->isSameDay($hoy);
+                return $asignacion->updated_at
+                    && $asignacion->updated_at->isSameDay($hoy);
             })
             ->count();
 
@@ -111,8 +111,8 @@ class DashboardController extends Controller
                 $fecha = $hoy->copy()->subDays($diasAtras);
 
                 $entregas = $entregasUltimos7Dias->filter(function ($asignacion) use ($fecha) {
-                    return $asignacion->fecha_entrega
-                        && $asignacion->fecha_entrega->isSameDay($fecha);
+                    return $asignacion->updated_at
+                        && $asignacion->updated_at->isSameDay($fecha);
                 });
 
                 return [
@@ -164,8 +164,8 @@ class DashboardController extends Controller
 
         $entregasDiaSeleccionado = $entregasUltimos7Dias
             ->filter(function ($asignacion) use ($fechaHistorial) {
-                return $asignacion->fecha_entrega
-                    && $asignacion->fecha_entrega->isSameDay($fechaHistorial);
+                return $asignacion->updated_at
+                    && $asignacion->updated_at->isSameDay($fechaHistorial);
             })
             ->values();
 
