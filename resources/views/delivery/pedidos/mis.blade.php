@@ -741,14 +741,14 @@ $cantidadEntregados = $pedidosEntregados->count();
              * El historial se agrupa por la fecha en que la asignación
              * pasó a estado "entregado".
              *
-             * La fecha real de finalización se guarda en fecha_entrega.
+             * Para las entregas finalizadas se utiliza updated_at, que registra la última modificación del registro.
              */
             $pedidosEntregadosPorFecha = $pedidosEntregados
                  ->sortByDesc(function ($asignacion) {
-                     return $asignacion->fecha_entrega ?? $asignacion->updated_at;
+                     return $asignacion->updated_at;
                  })
                  ->groupBy(function ($asignacion) {
-                     $fecha = $asignacion->fecha_entrega ?? $asignacion->updated_at;
+                     $fecha = $asignacion->updated_at;
 
                      return $fecha
                          ? $fecha->toDateString()
