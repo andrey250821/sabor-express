@@ -132,7 +132,6 @@ class PedidoTest extends TestCase
                 'user_id' => $cliente->id,
                 'total' => 10 * $numero,
                 'estado' => 'listo',
-                'fecha_listo' => now()->subMinutes(10 - $numero),
                 'direccion_entrega' => 'Dirección de prueba ' . $numero,
             ]));
         }
@@ -254,7 +253,6 @@ class PedidoTest extends TestCase
             'user_id' => $cliente->id,
             'total' => 50,
             'estado' => 'listo',
-            'fecha_listo' => now(),
             'direccion_entrega' => 'Dirección privada',
         ]);
 
