@@ -18,12 +18,10 @@ class PedidoTest extends TestCase
     {
         $deliveryRole = Role::create([
             'nombre' => 'Delivery',
-            'descripcion' => 'Delivery del sistema',
         ]);
 
         $clienteRole = Role::create([
             'nombre' => 'Cliente',
-            'descripcion' => 'Cliente del sistema',
         ]);
 
         $delivery1 = User::create([
@@ -98,12 +96,10 @@ class PedidoTest extends TestCase
     {
         $deliveryRole = Role::create([
             'nombre' => 'Delivery',
-            'descripcion' => 'Delivery del sistema',
         ]);
 
         $clienteRole = Role::create([
             'nombre' => 'Cliente',
-            'descripcion' => 'Cliente del sistema',
         ]);
 
         $delivery1 = User::create([
@@ -181,12 +177,10 @@ class PedidoTest extends TestCase
     {
         $deliveryRole = Role::create([
             'nombre' => 'Delivery',
-            'descripcion' => 'Delivery del sistema',
         ]);
 
         $clienteRole = Role::create([
             'nombre' => 'Cliente',
-            'descripcion' => 'Cliente del sistema',
         ]);
 
         $delivery = User::create([
@@ -228,12 +222,10 @@ class PedidoTest extends TestCase
     {
         $deliveryRole = Role::create([
             'nombre' => 'Delivery',
-            'descripcion' => 'Delivery del sistema',
         ]);
 
         $clienteRole = Role::create([
             'nombre' => 'Cliente',
-            'descripcion' => 'Cliente del sistema',
         ]);
 
         $delivery1 = User::create([
@@ -272,8 +264,6 @@ class PedidoTest extends TestCase
             'pedido_id' => $pedido->id,
             'delivery_id' => $delivery2->id,
             'estado' => 'aceptado',
-            'fecha_asignacion' => now(),
-            'fecha_respuesta' => now(),
         ]);
 
         $this->actingAs($delivery1)
