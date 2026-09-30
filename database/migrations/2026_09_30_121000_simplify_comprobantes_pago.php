@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\\Database\\Migrations\\Migration;
-use Illuminate\\Support\\Facades\\DB;
-use Illuminate\\Support\\Facades\\Schema;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -16,7 +16,6 @@ return new class extends Migration
                 'estado' => 'en_revision',
             ]);
 
-        // El flujo vigente solamente utiliza estos tres estados.
         if (Schema::getConnection()->getDriverName() === 'mysql') {
             DB::statement(
                 "ALTER TABLE comprobantes_pago
@@ -26,7 +25,7 @@ return new class extends Migration
         }
 
         if (Schema::hasColumn('comprobantes_pago', 'fecha_revision')) {
-            Schema::table('comprobantes_pago', function ($table) {
+            Schema::table('comprobantes_pago', function (Blueprint $table) {
                 $table->dropColumn('fecha_revision');
             });
         }
@@ -35,7 +34,7 @@ return new class extends Migration
     public function down(): void
     {
         if (!Schema::hasColumn('comprobantes_pago', 'fecha_revision')) {
-            Schema::table('comprobantes_pago', function ($table) {
+            Schema::table('comprobantes_pago', function (Blueprint $table) {
                 $table->timestamp('fecha_revision')
                     ->nullable()
                     ->after('estado');
