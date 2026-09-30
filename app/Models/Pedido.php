@@ -26,7 +26,6 @@ class Pedido extends Model
         'porcentaje_restaurante_delivery',
         'monto_restaurante_delivery',
         'estado',
-        'fecha_listo',
         'latitud',
         'longitud',
         'direccion_entrega',
@@ -37,7 +36,6 @@ class Pedido extends Model
     protected function casts(): array
     {
         return [
-            'fecha_listo' => 'datetime',
             'subtotal_productos' => 'decimal:2',
             'tarifa_delivery' => 'decimal:2',
             'distancia_delivery_km' => 'decimal:2',
