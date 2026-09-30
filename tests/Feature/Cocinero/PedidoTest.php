@@ -13,7 +13,6 @@ class PedidoTest extends TestCase
     {
         $role = Role::firstOrCreate(
             ['nombre' => 'Cocinero'],
-            ['descripcion' => 'Personal de cocina']
         );
 
         $cocinero = User::where('email', 'testcocinero@saborexpress.com')->first();
