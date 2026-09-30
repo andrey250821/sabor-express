@@ -58,11 +58,19 @@ class DeliveryController extends Controller
             ->get();
 
         $pedidosActivos = $asignaciones
-            ->whereIn('estado', ['aceptado', 'en_camino'])
+            ->filter(function ($asignacion) {
+                return in_array(
+                    $asignacion->pedido?->estado,
+                    ['asignado', 'en_camino'],
+                    true
+                );
+            })
             ->count();
 
         $pedidosEntregados = $asignaciones
-            ->where('estado', 'entregado');
+            ->filter(function ($asignacion) {
+                return $asignacion->pedido?->estado === 'entregado';
+            });
 
         $totalDeliveryGenerado = round(
             $pedidosEntregados->sum(
@@ -231,7 +239,9 @@ class DeliveryController extends Controller
         ) {
             $tienePedidoActivo = AsignacionDelivery::query()
                 ->where('delivery_id', $delivery->id)
-                ->whereIn('estado', ['aceptado', 'en_camino'])
+                ->whereHas('pedido', function ($query) {
+                    $query->whereIn('estado', ['asignado', 'en_camino']);
+                })
                 ->exists();
 
             if ($tienePedidoActivo) {
