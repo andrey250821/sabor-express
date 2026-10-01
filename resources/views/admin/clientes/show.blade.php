@@ -223,6 +223,11 @@
     </div>
 
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Historial de pedidos del cliente'
+    ])
+
     {{-- HISTORIAL --}}
     <div class="cliente-historial-header">
 
@@ -283,7 +288,7 @@
                         {{-- FECHA --}}
                         <td>
 
-                            {{ $pedido->created_at->format('d/m/Y H:i') }}
+                            {{ $pedido->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y H:i') }}
 
                         </td>
 
