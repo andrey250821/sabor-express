@@ -6098,13 +6098,13 @@ a {
     border-radius: 50%;
 }
 
-.delivery-my-status.accepted {
+.delivery-my-status.assigned {
     color: #ff4d88;
     background: rgba(139, 30, 69, 0.13);
     border: 1px solid rgba(179, 35, 90, 0.20);
 }
 
-.delivery-my-status.accepted span {
+.delivery-my-status.assigned span {
     background: #ff4d88;
 }
 
