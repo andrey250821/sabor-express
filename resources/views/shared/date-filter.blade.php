@@ -92,8 +92,8 @@
 
 <style>
     .sabor-date-filter {
-        background: rgba(255,255,255,.035);
-        border: 1px solid rgba(255,255,255,.08);
+        background: rgba(127,127,127,.06);
+        border: 1px solid rgba(127,127,127,.18);
         border-radius: 18px;
         padding: 16px;
     }
@@ -122,12 +122,12 @@
 
     .sabor-date-filter-selected {
         flex: 0 0 auto;
-        border: 1px solid rgba(255,255,255,.12);
+        border: 1px solid rgba(127,127,127,.25);
         border-radius: 999px;
         padding: 7px 12px;
         font-size: .82rem;
         font-weight: 700;
-        color: #fff;
+        color: inherit;
     }
 
     .sabor-date-filter-track {
@@ -153,9 +153,9 @@
         gap: 2px;
         padding: 10px 12px;
         border-radius: 14px;
-        border: 1px solid rgba(255,255,255,.09);
-        background: rgba(255,255,255,.025);
-        color: #d5d9e0;
+        border: 1px solid rgba(127,127,127,.18);
+        background: rgba(127,127,127,.035);
+        color: inherit;
         text-decoration: none;
         scroll-snap-align: start;
         transition: transform .15s ease, border-color .15s ease, background .15s ease;
@@ -169,24 +169,25 @@
 
     .sabor-date-filter-day strong {
         font-size: .96rem;
-        color: #fff;
+        color: inherit;
     }
 
     .sabor-date-filter-day:hover {
         transform: translateY(-1px);
-        color: #fff;
-        border-color: rgba(255,255,255,.2);
-        background: rgba(255,255,255,.06);
+        color: inherit;
+        border-color: rgba(127,127,127,.35);
+        background: rgba(127,127,127,.08);
     }
 
     .sabor-date-filter-day.active {
         border-color: #8b1e45;
-        background: linear-gradient(145deg, rgba(139,30,69,.42), rgba(139,30,69,.18));
+        background: #8b1e45;
+        color: #fff;
         box-shadow: 0 8px 20px rgba(139,30,69,.16);
     }
 
     .sabor-date-filter-day.active span {
-        color: #f4b4cb;
+        color: #f8d2df;
     }
 
     .sabor-date-filter-help {
