@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Services\FechaFiltroService;
+use Illuminate\Http\Request;
 
 class CocineroController extends Controller
 {
@@ -45,21 +47,33 @@ class CocineroController extends Controller
     /**
      * Mostrar información del cocinero.
      */
-    public function show($id)
-    {
+    public function show(
+        Request $request,
+        int $id,
+        FechaFiltroService $fechas
+    ) {
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
+            $fechaSeleccionada
+        );
+
         $cocinero = User::where('role_id', 4)
             ->withCount('pedidosCocina')
             ->with([
                 'pedidosCocina' => fn ($query) => $query
+                    ->whereBetween('created_at', [$inicioUtc, $finUtc])
                     ->with('user')
-                    ->latest()
-                    ->take(10),
+                    ->latest(),
             ])
             ->findOrFail($id);
 
         return view(
             'admin.cocineros.show',
-            compact('cocinero')
+            compact(
+                'cocinero',
+                'fechaSeleccionada'
+            )
         );
     }
 
