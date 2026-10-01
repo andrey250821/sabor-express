@@ -7426,3 +7426,1269 @@ input[type="file"].configuracion-input::file-selector-button:hover {
         animation-iteration-count: 1 !important;
     }
 }
+
+
+/* ==========================================================================
+   22. MEJORAS UI — ESTADOS, DELIVERY, CATEGORÍAS Y COCINEROS
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   DASHBOARD — TARJETAS DE ESTADO COMO FILTROS
+   -------------------------------------------------------------------------- */
+
+.order-status-card {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    overflow: visible;
+    background: transparent;
+    border: 0;
+}
+
+.order-status-item {
+    position: relative;
+    min-height: 92px;
+    gap: 11px;
+    padding: 15px 14px;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 15px;
+    overflow: hidden;
+    background: var(--admin-panel);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .16);
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.order-status-item::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: currentColor;
+    opacity: .9;
+}
+
+.order-status-item:hover {
+    transform: translateY(-3px);
+    text-decoration: none;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .25);
+}
+
+.order-status-item .status-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    border-radius: 13px;
+    font-size: 19px;
+    position: relative;
+    z-index: 1;
+}
+
+.order-status-item .status-info {
+    position: relative;
+    z-index: 1;
+}
+
+.order-status-item .status-info strong {
+    font-size: 22px;
+    line-height: 1;
+}
+
+.order-status-item .status-info small {
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #b5bac3;
+}
+
+.status-card-arrow {
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+    color: rgba(255, 255, 255, .42);
+    font-size: 12px;
+    transition: transform .18s ease, color .18s ease;
+}
+
+.order-status-item:hover .status-card-arrow {
+    transform: translateX(3px);
+    color: #fff;
+}
+
+.order-status-item.status-pagado {
+    color: #6ea8fe;
+    background:
+        linear-gradient(135deg, rgba(13, 110, 253, .16), rgba(23, 24, 29, .98) 58%);
+    border-color: rgba(13, 110, 253, .32) !important;
+}
+
+.order-status-item.status-preparando {
+    color: #ffc107;
+    background:
+        linear-gradient(135deg, rgba(255, 193, 7, .15), rgba(23, 24, 29, .98) 58%);
+    border-color: rgba(255, 193, 7, .30) !important;
+}
+
+.order-status-item.status-listo {
+    color: #ffd24d;
+    background:
+        linear-gradient(135deg, rgba(255, 193, 7, .12), rgba(23, 24, 29, .98) 58%);
+    border-color: rgba(255, 193, 7, .28) !important;
+}
+
+.order-status-item.status-asignado {
+    color: #b18be7;
+    background:
+        linear-gradient(135deg, rgba(101, 70, 166, .19), rgba(23, 24, 29, .98) 58%);
+    border-color: rgba(142, 102, 211, .34) !important;
+}
+
+.order-status-item.status-en_camino {
+    color: #66d8e8;
+    background:
+        linear-gradient(135deg, rgba(53, 183, 199, .16), rgba(23, 24, 29, .98) 58%);
+    border-color: rgba(53, 183, 199, .30) !important;
+}
+
+.order-status-item.status-entregado {
+    color: #39d98a;
+    background:
+        linear-gradient(135deg, rgba(25, 135, 84, .17), rgba(23, 24, 29, .98) 58%);
+    border-color: rgba(25, 135, 84, .34) !important;
+}
+
+.order-status-item.status-cancelado {
+    color: #ff6677;
+    background:
+        linear-gradient(135deg, rgba(220, 53, 69, .16), rgba(23, 24, 29, .98) 58%);
+    border-color: rgba(220, 53, 69, .32) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   DASHBOARD — RESUMEN ECONÓMICO DE DELIVERY
+   -------------------------------------------------------------------------- */
+
+.dashboard-financial-heading-help {
+    margin: 5px 0 0;
+    color: var(--admin-text-muted);
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.dashboard-delivery-financial-overview {
+    display: grid;
+    gap: 13px;
+}
+
+.dashboard-delivery-financial-main {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid rgba(196, 44, 99, .30);
+    border-radius: 17px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 10% 20%, rgba(196, 44, 99, .18), transparent 38%),
+        linear-gradient(135deg, #211019, #17181d 63%);
+    box-shadow: var(--admin-shadow);
+}
+
+.dashboard-delivery-financial-main::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    right: -65px;
+    top: -85px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .03);
+}
+
+.financial-main-icon {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: rgba(139, 30, 69, .24);
+    border: 1px solid rgba(255, 77, 136, .28);
+    color: var(--admin-primary-bright);
+    font-size: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.financial-main-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    position: relative;
+    z-index: 1;
+}
+
+.financial-main-content > span {
+    color: #aaaeb7;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.financial-main-content > strong {
+    color: #fff;
+    font-size: 30px;
+    line-height: 1.05;
+    font-weight: 800;
+}
+
+.financial-main-content > small {
+    color: #7e838e;
+    font-size: 10px;
+}
+
+.financial-main-badge {
+    margin-left: auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .08);
+    color: #c8cbd1;
+    font-size: 10px;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-delivery-financial-breakdown {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.dashboard-delivery-financial-card {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 14px;
+    background: var(--admin-panel);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, .14);
+}
+
+.dashboard-delivery-financial-card.financial-commission {
+    border-color: rgba(139, 30, 69, .34);
+    background:
+        linear-gradient(135deg, rgba(139, 30, 69, .15), rgba(23, 24, 29, .98) 65%);
+}
+
+.dashboard-delivery-financial-card.financial-restaurant {
+    border-color: rgba(25, 135, 84, .26);
+    background:
+        linear-gradient(135deg, rgba(25, 135, 84, .10), rgba(23, 24, 29, .98) 65%);
+}
+
+.financial-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 9px;
+}
+
+.financial-card-top > span:first-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #c4c7ce;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.financial-card-top > span:first-child i {
+    color: var(--admin-primary-light);
+}
+
+.financial-restaurant .financial-card-top > span:first-child i {
+    color: var(--admin-success-light);
+}
+
+.financial-percent {
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .055);
+    color: #b6bbc4;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.dashboard-delivery-financial-card > strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #fff;
+    font-size: 23px;
+    line-height: 1.1;
+}
+
+.dashboard-delivery-financial-card > small {
+    display: block;
+    color: #777d88;
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.dashboard-delivery-financial-distribution {
+    padding: 14px 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .018);
+}
+
+.financial-distribution-header,
+.financial-distribution-legend {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.financial-distribution-header {
+    margin-bottom: 8px;
+    color: #a9adb6;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.financial-distribution-header strong {
+    color: #fff;
+}
+
+.financial-distribution-bar {
+    display: flex;
+    width: 100%;
+    height: 12px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #24262d;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+.financial-distribution-delivery {
+    min-width: 0;
+    background: linear-gradient(90deg, #8b1e45, #c42c63);
+}
+
+.financial-distribution-restaurant {
+    min-width: 0;
+    background: linear-gradient(90deg, #16804e, #39d98a);
+}
+
+.financial-distribution-legend {
+    margin-top: 9px;
+    flex-wrap: wrap;
+    color: #7f8490;
+    font-size: 9px;
+}
+
+.financial-distribution-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.financial-distribution-legend span:first-child i {
+    color: #c42c63;
+}
+
+.financial-distribution-legend span:last-child i {
+    color: #39d98a;
+}
+
+.dashboard-delivery-financial-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin: 10px 2px 0;
+    color: #757b86;
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+.dashboard-delivery-financial-note i {
+    color: #9a9faa;
+    margin-top: 1px;
+}
+
+
+/* --------------------------------------------------------------------------
+   DASHBOARD — PEDIDOS FILTRADOS
+   -------------------------------------------------------------------------- */
+
+.pedidos-filtro-activo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid rgba(196, 44, 99, .28);
+    border-radius: 13px;
+    background: rgba(139, 30, 69, .10);
+}
+
+.pedidos-filtro-activo-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.pedidos-filtro-activo-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(255, 77, 136, .14);
+    color: var(--admin-primary-bright);
+}
+
+.pedidos-filtro-activo-info div {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pedidos-filtro-activo-info small {
+    color: #888d97;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 800;
+}
+
+.pedidos-filtro-activo-info strong {
+    color: #fff;
+    font-size: 12px;
+}
+
+.pedidos-filtro-activo-clear {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 9px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    color: #c3c7cf;
+    font-size: 10px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.pedidos-filtro-activo-clear:hover {
+    color: #fff;
+    background: rgba(255,255,255,.07);
+}
+
+
+/* --------------------------------------------------------------------------
+   CATEGORÍAS — ACCIONES COMPLETAS
+   -------------------------------------------------------------------------- */
+
+.categoria-acciones {
+    align-items: stretch;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.categoria-acciones form {
+    display: flex;
+}
+
+.btn-categoria-editar,
+.btn-categoria-eliminar,
+.btn-categoria-inactivar,
+.btn-categoria-activar {
+    width: auto;
+    min-width: 96px;
+    min-height: 36px;
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 11px;
+    border: 0;
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+}
+
+.btn-categoria-editar:hover,
+.btn-categoria-eliminar:hover,
+.btn-categoria-inactivar:hover,
+.btn-categoria-activar:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.07);
+    box-shadow: 0 7px 16px rgba(0,0,0,.20);
+}
+
+.btn-categoria-inactivar {
+    background: #6f5b00;
+    color: #fff4b0;
+}
+
+.btn-categoria-inactivar:hover {
+    background: #876f00;
+    color: #fff8c8;
+}
+
+.btn-categoria-activar {
+    background: var(--admin-success);
+    color: #fff;
+}
+
+.btn-categoria-activar:hover {
+    background: #20a465;
+    color: #fff;
+}
+
+
+/* --------------------------------------------------------------------------
+   DELIVERY / COCINEROS — BOTONES CON TEXTO
+   -------------------------------------------------------------------------- */
+
+.delivery-actions {
+    align-items: stretch;
+    gap: 7px;
+}
+
+.delivery-actions form {
+    display: flex;
+}
+
+.btn-delivery {
+    width: auto;
+    min-width: 74px;
+    min-height: 36px;
+    height: auto;
+    padding: 8px 11px;
+    gap: 6px;
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.btn-delivery.ver {
+    min-width: 74px;
+}
+
+.btn-delivery.editar {
+    min-width: 86px;
+}
+
+.btn-delivery.eliminar,
+.btn-delivery.activar {
+    min-width: 98px;
+}
+
+.btn-delivery span {
+    display: inline;
+}
+
+
+/* --------------------------------------------------------------------------
+   COCINERO — DETALLE
+   -------------------------------------------------------------------------- */
+
+.admin-cocinero-page {
+    color: #fff;
+    width: 100%;
+}
+
+.admin-cocinero-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.admin-cocinero-detail-eyebrow {
+    display: inline-block;
+    margin-bottom: 5px;
+    color: var(--admin-primary-bright);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.admin-cocinero-detail-title {
+    margin: 0;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+.admin-cocinero-detail-title i {
+    color: var(--admin-primary-bright);
+    margin-right: 5px;
+}
+
+.admin-cocinero-detail-subtitle {
+    margin: 5px 0 0;
+    color: var(--admin-text-muted);
+    font-size: 11px;
+}
+
+.admin-cocinero-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 13px;
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    background: rgba(255,255,255,.025);
+    color: #d0d3da;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.admin-cocinero-back:hover {
+    border-color: rgba(196,44,99,.40);
+    background: rgba(139,30,69,.10);
+    color: #fff;
+}
+
+.admin-cocinero-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, .86fr) minmax(0, 1.5fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.admin-cocinero-profile-card,
+.admin-cocinero-activity-card {
+    min-width: 0;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-lg);
+    background: var(--admin-panel);
+    box-shadow: var(--admin-shadow);
+    overflow: hidden;
+}
+
+.admin-cocinero-profile-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px;
+    background:
+        radial-gradient(circle at 10% 0%, rgba(196,44,99,.17), transparent 42%),
+        linear-gradient(135deg, #1d1117, #17181d 70%);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-cocinero-profile-avatar {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    min-width: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 22px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--admin-primary), #4f102b);
+    border: 2px solid rgba(255,255,255,.10);
+    color: #fff;
+    font-size: 29px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 10px 24px rgba(0,0,0,.25);
+}
+
+.admin-cocinero-profile-avatar:hover .admin-cocinero-avatar-overlay {
+    opacity: 1;
+}
+
+.admin-cocinero-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+    background: linear-gradient(transparent 35%, rgba(0,0,0,.72));
+    color: #fff;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity .18s ease;
+}
+
+.admin-cocinero-profile-avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-cocinero-profile-identity {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.admin-cocinero-role-label {
+    color: #8d929d;
+    font-size: 8px;
+    letter-spacing: .12em;
+    font-weight: 800;
+}
+
+.admin-cocinero-profile-identity h3 {
+    margin: 2px 0 4px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.admin-cocinero-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 100%;
+    color: #9ea3ad;
+    font-size: 10px;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-cocinero-email:hover {
+    color: #fff;
+}
+
+.admin-cocinero-status {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.admin-cocinero-status.activo {
+    background: rgba(25,135,84,.14);
+    border: 1px solid rgba(25,135,84,.30);
+    color: var(--admin-success-light);
+}
+
+.admin-cocinero-status.inactivo {
+    background: rgba(220,53,69,.14);
+    border: 1px solid rgba(220,53,69,.30);
+    color: var(--admin-danger-light);
+}
+
+.admin-cocinero-profile-data {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    padding: 16px 20px 4px;
+}
+
+.admin-cocinero-info-box {
+    min-width: 0;
+    min-height: 82px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 12px;
+    background: #121319;
+}
+
+.admin-cocinero-info-box.highlight {
+    border-color: rgba(196,44,99,.30);
+    background:
+        linear-gradient(135deg, rgba(139,30,69,.16), #121319 70%);
+}
+
+.admin-cocinero-info-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #868c98;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.admin-cocinero-info-label i {
+    color: var(--admin-primary-light);
+}
+
+.admin-cocinero-info-box strong {
+    color: #fff;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.admin-cocinero-info-box .admin-cocinero-info-number {
+    color: #fff;
+    font-size: 25px;
+    line-height: 1;
+}
+
+.admin-cocinero-info-box small {
+    color: #686e79;
+    font-size: 8px;
+}
+
+.admin-cocinero-profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 20px 20px;
+}
+
+.admin-cocinero-action-edit,
+.admin-cocinero-action-email {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 8px 12px;
+    border-radius: 9px;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.admin-cocinero-action-edit {
+    background: var(--admin-warning);
+    color: #111;
+}
+
+.admin-cocinero-action-edit:hover {
+    background: #f0b400;
+    color: #111;
+}
+
+.admin-cocinero-action-email {
+    background: rgba(13,110,253,.13);
+    border: 1px solid rgba(13,110,253,.25);
+    color: #8bb8ff;
+}
+
+.admin-cocinero-action-email:hover {
+    background: rgba(13,110,253,.20);
+    color: #b3d2ff;
+}
+
+.admin-cocinero-activity-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 20px 20px 13px;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-cocinero-activity-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.admin-cocinero-activity-header p {
+    margin: 5px 0 0;
+    color: var(--admin-text-muted);
+    font-size: 10px;
+}
+
+.admin-cocinero-activity-count {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(139,30,69,.14);
+    border: 1px solid rgba(139,30,69,.34);
+    color: var(--admin-primary-bright);
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.admin-cocinero-activity-filter {
+    padding: 14px 20px 0;
+}
+
+.admin-cocinero-activity-filter .sabor-date-filter {
+    margin-bottom: 0 !important;
+}
+
+.admin-cocinero-orders {
+    padding: 8px 20px 20px;
+}
+
+.admin-cocinero-order-row {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) auto auto 18px;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 3px;
+    border-bottom: 1px solid rgba(255,255,255,.055);
+    color: inherit;
+    text-decoration: none;
+    transition: background .16s ease, transform .16s ease;
+}
+
+.admin-cocinero-order-row:last-child {
+    border-bottom: 0;
+}
+
+.admin-cocinero-order-row:hover {
+    color: inherit;
+    text-decoration: none;
+    transform: translateX(2px);
+    background: rgba(255,255,255,.025);
+    border-radius: 9px;
+}
+
+.admin-cocinero-order-id {
+    color: var(--admin-primary-bright);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.admin-cocinero-order-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.admin-cocinero-order-main strong {
+    min-width: 0;
+    color: #fff;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-cocinero-order-main small {
+    color: #6f7580;
+    font-size: 8px;
+}
+
+.admin-cocinero-order-total {
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.admin-cocinero-order-state {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    font-size: 8px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.admin-cocinero-order-state.pagado {
+    background: rgba(13,110,253,.12);
+    color: #8bb8ff;
+}
+
+.admin-cocinero-order-state.preparando {
+    background: rgba(255,193,7,.13);
+    color: #ffd866;
+}
+
+.admin-cocinero-order-state.listo {
+    background: rgba(255,193,7,.12);
+    color: #ffd866;
+}
+
+.admin-cocinero-order-state.asignado {
+    background: rgba(101,70,166,.15);
+    color: #c1a1ed;
+}
+
+.admin-cocinero-order-state.camino {
+    background: rgba(53,183,199,.13);
+    color: #73dce8;
+}
+
+.admin-cocinero-order-state.entregado {
+    background: rgba(25,135,84,.13);
+    color: #56e09a;
+}
+
+.admin-cocinero-order-state.cancelado {
+    background: rgba(220,53,69,.13);
+    color: #ff7482;
+}
+
+.admin-cocinero-order-state.default {
+    background: rgba(255,255,255,.05);
+    color: #adb2bb;
+}
+
+.admin-cocinero-order-arrow {
+    color: #545963;
+    font-size: 10px;
+}
+
+.admin-cocinero-empty {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.admin-cocinero-empty-icon {
+    width: 62px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: rgba(139,30,69,.13);
+    border: 1px solid rgba(139,30,69,.28);
+    color: var(--admin-primary-light);
+    font-size: 25px;
+}
+
+.admin-cocinero-empty h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.admin-cocinero-empty p {
+    margin: 5px 0 0;
+    color: #727884;
+    font-size: 9px;
+}
+
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DE LAS MEJORAS
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1199.98px) {
+    .order-status-card {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .admin-cocinero-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .dashboard-delivery-financial-main {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .financial-main-badge {
+        margin-left: auto;
+    }
+
+    .dashboard-delivery-financial-breakdown {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .order-status-card {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 0;
+    }
+
+    .order-status-item {
+        min-height: 84px;
+        padding: 13px 12px;
+    }
+
+    .order-status-item .status-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+    }
+
+    .order-status-item .status-info strong {
+        font-size: 19px;
+    }
+
+    .status-card-arrow {
+        display: none;
+    }
+
+    .dashboard-delivery-financial-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-delivery-financial-main {
+        padding: 16px;
+    }
+
+    .financial-main-content > strong {
+        font-size: 26px;
+    }
+
+    .financial-main-badge {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .pedidos-filtro-activo {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .pedidos-filtro-activo-clear {
+        justify-content: center;
+    }
+
+    .admin-cocinero-profile-head {
+        align-items: flex-start;
+    }
+
+    .admin-cocinero-order-row {
+        grid-template-columns: 54px minmax(0, 1fr) 18px;
+    }
+
+    .admin-cocinero-order-total,
+    .admin-cocinero-order-state {
+        display: none;
+    }
+
+    .admin-cocinero-profile-data {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .order-status-card {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-delivery-financial-main {
+        gap: 12px;
+    }
+
+    .financial-main-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        font-size: 20px;
+    }
+
+    .financial-main-content > strong {
+        font-size: 24px;
+    }
+
+    .financial-distribution-legend {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .categoria-acciones .btn span,
+    .delivery-actions .btn-delivery span {
+        display: inline;
+    }
+
+    .categoria-acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .categoria-acciones form,
+    .categoria-acciones .btn,
+    .delivery-actions,
+    .delivery-actions form,
+    .delivery-actions .btn-delivery {
+        width: 100%;
+    }
+
+    .admin-cocinero-detail-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-cocinero-back {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .admin-cocinero-profile-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin-cocinero-profile-actions {
+        flex-direction: column;
+    }
+
+    .admin-cocinero-profile-actions .btn {
+        width: 100%;
+    }
+
+    .admin-cocinero-activity-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-cocinero-activity-count {
+        align-self: flex-start;
+    }
+
+    .admin-cocinero-orders {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .admin-cocinero-activity-filter {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+}
