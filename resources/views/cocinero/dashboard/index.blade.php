@@ -388,6 +388,13 @@
                             Preparando
                         </span>
 
+                        @elseif($pedido->estado === 'asignado')
+
+                        <span class="cocinero-order-status ready">
+                            <i class="bi bi-bicycle"></i>
+                            Asignado
+                        </span>
+
                         @else
 
                         <span class="cocinero-order-status ready">
