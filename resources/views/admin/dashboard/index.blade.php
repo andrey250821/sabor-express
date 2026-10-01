@@ -431,7 +431,7 @@
 
                 <div class="financial-distribution-header">
                     <span>Distribución del total</span>
-                    <strong>100%</strong>
+                    <strong>{{ $deliveryTotalDia > 0 ? '100%' : 'Sin movimientos' }}</strong>
                 </div>
 
                 <div class="financial-distribution-bar">
