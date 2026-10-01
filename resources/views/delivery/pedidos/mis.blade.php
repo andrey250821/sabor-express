@@ -367,11 +367,11 @@ $cantidadEntregados = $pedidosEntregados->count();
                             </div>
 
 
-                            @if($pedido->estado === 'aceptado')
+                            @if($pedido->estado === 'asignado')
 
-                            <span class="delivery-my-status accepted">
+                            <span class="delivery-my-status assigned">
                                 <span></span>
-                                Aceptado
+                                Asignado
                             </span>
 
                             @elseif($pedido->estado === 'en_camino')
@@ -617,7 +617,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                             </a>
 
 
-                            @if($pedido->estado === 'aceptado')
+                            @if($pedido->estado === 'asignado')
 
                             <form
                                 action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}"
