@@ -117,4 +117,73 @@ class DeliveryQueueTest extends TestCase
             $pedidoEnPreparacion->fresh()->estado
         );
     }
+
+    public function test_pedido_marcado_listo_y_asignado_sigue_apareciendo_en_listos_de_cocina(): void
+    {
+        $cocineroRole = Role::create([
+            'nombre' => 'Cocinero',
+        ]);
+
+        $deliveryRole = Role::create([
+            'nombre' => 'Delivery',
+        ]);
+
+        $clienteRole = Role::create([
+            'nombre' => 'Cliente',
+        ]);
+
+        $cocinero = User::create([
+            'role_id' => $cocineroRole->id,
+            'name' => 'Cocinero de prueba 2',
+            'email' => 'cocinero-queue-2@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $delivery = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery de prueba 2',
+            'email' => 'delivery-queue-2@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente de prueba 2',
+            'email' => 'cliente-queue-2@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $pedido = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 80,
+            'estado' => 'preparando',
+            'cocinero_id' => $cocinero->id,
+            'direccion_entrega' => 'Pedido listo',
+        ]);
+
+        $response = $this->actingAs($cocinero)
+            ->put('/cocinero/pedidos/' . $pedido->id . '/listo');
+
+        $response->assertRedirect();
+
+        $pedido->refresh();
+
+        $this->assertEquals('asignado', $pedido->estado);
+
+        $this->assertDatabaseHas('asignaciones_delivery', [
+            'pedido_id' => $pedido->id,
+            'delivery_id' => $delivery->id,
+        ]);
+
+        $this->assertEquals(
+            1,
+            Pedido::query()
+                ->whereIn('estado', ['listo', 'asignado'])
+                ->where('cocinero_id', $cocinero->id)
+                ->count()
+        );
+    }
 }
