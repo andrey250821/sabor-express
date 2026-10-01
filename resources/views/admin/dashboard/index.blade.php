@@ -19,14 +19,19 @@
         </div>
     </div>
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Actividad del administrador'
+    ])
+
     <div class="dashboard-metrics">
 
         <a href="{{ route('admin.pedidos.index') }}" class="dashboard-metric-card">
             <div class="metric-icon pedidos"><i class="bi bi-bag-check-fill"></i></div>
             <div class="metric-content">
-                <span class="metric-label">Pedidos</span>
+                <span class="metric-label">Pedidos del día</span>
                 <strong class="metric-value">{{ $pedidos }}</strong>
-                <span class="metric-description">Pedidos registrados</span>
+                <span class="metric-description">Pedidos registrados en la fecha seleccionada</span>
             </div>
             <i class="bi bi-arrow-up-right metric-arrow"></i>
         </a>
@@ -34,9 +39,9 @@
         <div class="dashboard-metric-card">
             <div class="metric-icon ventas"><i class="bi bi-cash-stack"></i></div>
             <div class="metric-content">
-                <span class="metric-label">Ventas del mes</span>
-                <strong class="metric-value">Bs {{ number_format($ventasMes, 2) }}</strong>
-                <span class="metric-description">Ventas registradas en el flujo normal</span>
+                <span class="metric-label">Ventas del día</span>
+                <strong class="metric-value">Bs {{ number_format($ventasDia, 2) }}</strong>
+                <span class="metric-description">Ventas del flujo normal de la fecha seleccionada</span>
             </div>
         </div>
 
@@ -67,7 +72,7 @@
         <div class="section-heading">
             <div>
                 <span class="section-eyebrow">OPERACIÓN</span>
-                <h3>Estado de pedidos</h3>
+                <h3>Estado de pedidos · {{ $fechaSeleccionada->format('d/m/Y') }}</h3>
             </div>
 
             <a href="{{ route('admin.pedidos.index') }}" class="dashboard-link">
@@ -143,8 +148,8 @@
 
             <div class="panel-header">
                 <div>
-                    <span class="panel-eyebrow">ACTIVIDAD RECIENTE</span>
-                    <h3>Últimos pedidos</h3>
+                    <span class="panel-eyebrow">ACTIVIDAD DEL DÍA</span>
+                    <h3>Pedidos de la fecha seleccionada</h3>
                 </div>
 
                 <a href="{{ route('admin.pedidos.index') }}" class="panel-action">
@@ -163,7 +168,7 @@
 
                     <div class="order-client">
                         <strong>{{ $pedido->user->name ?? 'Cliente eliminado' }}</strong>
-                        <small>{{ $pedido->created_at->format('d/m/Y H:i') }}</small>
+                        <small>{{ $pedido->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y H:i') }}</small>
                     </div>
 
                     <div class="order-total">
@@ -269,7 +274,7 @@
 
             <div>
                 <span class="section-eyebrow">DELIVERY</span>
-                <h3>Resumen económico de entregas</h3>
+                <h3>Resumen económico de entregas · {{ $fechaSeleccionada->format('d/m/Y') }}</h3>
             </div>
 
             <a
@@ -321,8 +326,9 @@
         </div>
 
         <p class="dashboard-delivery-financial-note">
-            Estos importes corresponden a pedidos que ya fueron entregados.
+            Estos importes corresponden a entregas finalizadas en la fecha seleccionada.
             Cada pedido conserva la tarifa y los porcentajes utilizados al momento de su creación.
+            {{ $entregasDeliveryDia }} {{ $entregasDeliveryDia === 1 ? 'entrega fue' : 'entregas fueron' }} contabilizada{{ $entregasDeliveryDia === 1 ? '' : 's' }} en ese día.
         </p>
 
     </div>
@@ -352,6 +358,16 @@
 </div>
 
 @push('scripts')
+@if($fechaSeleccionada->isToday())
+<script>
+    setInterval(() => {
+        if (document.visibilityState === 'visible') {
+            window.location.reload();
+        }
+    }, 10000);
+</script>
+@endif
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ventas = @json($ventasSemana);
