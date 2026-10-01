@@ -26,7 +26,7 @@
 
     <div class="dashboard-metrics">
 
-        <a href="{{ route('admin.pedidos.index') }}" class="dashboard-metric-card">
+        <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="dashboard-metric-card">
             <div class="metric-icon pedidos"><i class="bi bi-bag-check-fill"></i></div>
             <div class="metric-content">
                 <span class="metric-label">Pedidos del día</span>
@@ -75,7 +75,7 @@
                 <h3>Estado de pedidos · {{ $fechaSeleccionada->format('d/m/Y') }}</h3>
             </div>
 
-            <a href="{{ route('admin.pedidos.index') }}" class="dashboard-link">
+            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="dashboard-link">
                 Ver pedidos
                 <i class="bi bi-arrow-right"></i>
             </a>
@@ -83,7 +83,7 @@
 
         <div class="order-status-card">
 
-            <a href="{{ route('admin.pedidos.index') }}" class="order-status-item">
+            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
                 <span class="status-icon pagado"><i class="bi bi-credit-card-fill"></i></span>
                 <span class="status-info">
                     <strong>{{ $pedidosPagados }}</strong>
@@ -91,7 +91,7 @@
                 </span>
             </a>
 
-            <a href="{{ route('admin.pedidos.index') }}" class="order-status-item">
+            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
                 <span class="status-icon preparando"><i class="bi bi-fire"></i></span>
                 <span class="status-info">
                     <strong>{{ $pedidosPreparando }}</strong>
@@ -99,7 +99,7 @@
                 </span>
             </a>
 
-            <a href="{{ route('admin.pedidos.index') }}" class="order-status-item">
+            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
                 <span class="status-icon listo"><i class="bi bi-check-circle-fill"></i></span>
                 <span class="status-info">
                     <strong>{{ $pedidosListos }}</strong>
@@ -107,7 +107,7 @@
                 </span>
             </a>
 
-            <a href="{{ route('admin.pedidos.index') }}" class="order-status-item">
+            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
                 <span class="status-icon asignado"><i class="bi bi-person-check-fill"></i></span>
                 <span class="status-info">
                     <strong>{{ $pedidosAsignados }}</strong>
@@ -115,7 +115,7 @@
                 </span>
             </a>
 
-            <a href="{{ route('admin.pedidos.index') }}" class="order-status-item">
+            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
                 <span class="status-icon camino"><i class="bi bi-bicycle"></i></span>
                 <span class="status-info">
                     <strong>{{ $pedidosEnCamino }}</strong>
@@ -152,7 +152,7 @@
                     <h3>Pedidos de la fecha seleccionada</h3>
                 </div>
 
-                <a href="{{ route('admin.pedidos.index') }}" class="panel-action">
+                <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="panel-action">
                     Ver todos
                     <i class="bi bi-arrow-right"></i>
                 </a>
