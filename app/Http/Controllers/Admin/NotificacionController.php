@@ -4,20 +4,31 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notificacion;
+use App\Services\FechaFiltroService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class NotificacionController extends Controller
 {
     /**
-     * Mostrar las notificaciones del administrador autenticado.
+     * Mostrar las notificaciones del administrador de la fecha seleccionada.
      */
-    public function index(): View
-    {
+    public function index(
+        Request $request,
+        FechaFiltroService $fechas
+    ): View {
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
+            $fechaSeleccionada
+        );
+
         $notificaciones = Notificacion::where('user_id', Auth::id())
             ->vigentes()
+            ->whereBetween('created_at', [$inicioUtc, $finUtc])
             ->whereIn('evento', [
                 'comprobante_en_revision',
                 'nueva_calificacion',
@@ -32,61 +43,43 @@ class NotificacionController extends Controller
             ->get();
 
         /*
-    |--------------------------------------------------------------------------
-    | Evitar mostrar dos veces la misma calificación
-    |--------------------------------------------------------------------------
-    |
-    | La tabla notificaciones actualmente guarda pedido_id,
-    | pero no guarda calificacion_id.
-    |
-    | Por eso buscamos la calificación correspondiente a cada
-    | notificación y usamos su ID como referencia para evitar
-    | duplicados visuales.
-    |
-    */
-
+        |--------------------------------------------------------------------------
+        | EVITAR DUPLICAR VISUALMENTE UNA MISMA CALIFICACIÓN
+        |--------------------------------------------------------------------------
+        */
         $idsCalificacionesMostradas = [];
 
-        $notificaciones = $notificaciones->filter(function ($notificacion) use (&$idsCalificacionesMostradas) {
+        $notificaciones = $notificaciones
+            ->filter(function ($notificacion) use (&$idsCalificacionesMostradas) {
 
-            if ($notificacion->evento !== 'nueva_calificacion') {
+                if ($notificacion->evento !== 'nueva_calificacion') {
+                    return true;
+                }
+
+                $calificacion = $notificacion->pedido?->calificaciones
+                    ?->filter(function ($calificacion) use ($notificacion) {
+                        return $calificacion->created_at <= $notificacion->created_at;
+                    })
+                    ->sortByDesc('created_at')
+                    ->first();
+
+                if (!$calificacion) {
+                    return true;
+                }
+
+                if (in_array(
+                    $calificacion->id,
+                    $idsCalificacionesMostradas,
+                    true
+                )) {
+                    return false;
+                }
+
+                $idsCalificacionesMostradas[] = $calificacion->id;
+                $notificacion->calificacionRelacionada = $calificacion;
+
                 return true;
-            }
-
-            $calificacion = $notificacion->pedido?->calificaciones
-                ?->filter(function ($calificacion) use ($notificacion) {
-
-                    return $calificacion->created_at <= $notificacion->created_at;
-                })
-                ->sortByDesc('created_at')
-                ->first();
-
-            /*
-        | Si no encontramos una calificación relacionada,
-        | dejamos la notificación visible.
-        */
-            if (!$calificacion) {
-                return true;
-            }
-
-            /*
-        | Si esta calificación ya fue representada por otra
-        | notificación, ocultamos esta duplicada.
-        */
-            if (in_array($calificacion->id, $idsCalificacionesMostradas)) {
-                return false;
-            }
-
-            $idsCalificacionesMostradas[] = $calificacion->id;
-
-            /*
-        | Guardamos la calificación encontrada temporalmente
-        | para utilizarla directamente en la vista.
-        */
-            $notificacion->calificacionRelacionada = $calificacion;
-
-            return true;
-        })
+            })
             ->values();
 
         $noLeidas = $notificaciones
@@ -101,24 +94,12 @@ class NotificacionController extends Controller
             ->where('evento', 'nueva_calificacion')
             ->count();
 
-        /*
-    |--------------------------------------------------------------------------
-    | Agrupar por fecha
-    |--------------------------------------------------------------------------
-    */
-
         $notificacionesAgrupadas = $notificaciones
             ->groupBy(function ($notificacion) {
-
-                if ($notificacion->created_at->isToday()) {
-                    return 'Hoy';
-                }
-
-                if ($notificacion->created_at->isYesterday()) {
-                    return 'Ayer';
-                }
-
-                return $notificacion->created_at->format('d/m/Y');
+                return $notificacion->created_at
+                    ->copy()
+                    ->timezone(FechaFiltroService::TIMEZONE)
+                    ->format('d/m/Y');
             });
 
         return view(
@@ -128,7 +109,8 @@ class NotificacionController extends Controller
                 'noLeidas',
                 'comprobantes',
                 'calificaciones',
-                'notificacionesAgrupadas'
+                'notificacionesAgrupadas',
+                'fechaSeleccionada'
             )
         );
     }
@@ -153,6 +135,7 @@ class NotificacionController extends Controller
 
         if (request()->expectsJson()) {
             $noLeidas = Notificacion::where('user_id', Auth::id())
+                ->vigentes()
                 ->whereIn('evento', [
                     'comprobante_en_revision',
                     'nueva_calificacion',
