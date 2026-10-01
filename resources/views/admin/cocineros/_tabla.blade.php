@@ -67,6 +67,7 @@
                 class="btn-delivery"
                 title="Ver cocinero">
                 <i class="bi bi-eye-fill"></i>
+                <span>Ver</span>
             </a>
 
             <a
@@ -74,6 +75,7 @@
                 class="btn-delivery editar"
                 title="Editar cocinero">
                 <i class="bi bi-pencil-square"></i>
+                <span>Editar</span>
             </a>
 
             @if($cocinero->estado === 'activo')
@@ -89,6 +91,7 @@
                         title="Desactivar"
                         onclick="return confirm('¿Deseas desactivar este Cocinero?')">
                         <i class="bi bi-person-dash"></i>
+                        <span>Inactivar</span>
                     </button>
                 </form>
             @else
@@ -103,6 +106,7 @@
                         class="btn-delivery activar"
                         title="Activar">
                         <i class="bi bi-person-check"></i>
+                        <span>Activar</span>
                     </button>
                 </form>
             @endif
