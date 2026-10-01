@@ -47,6 +47,23 @@
 
     @endif
 
+    @if(session('error'))
+
+    <div class="alert categorias-error alert-dismissible fade show">
+
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+        {{ session('error') }}
+
+        <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert">
+        </button>
+
+    </div>
+
+    @endif
+
 
     {{-- CARD --}}
     <div class="categorias-card">
@@ -176,33 +193,75 @@
 
                             <div class="categoria-acciones">
 
-                                <a href="{{ route('admin.categorias.edit', $categoria->id) }}"
+                                <a
+                                    href="{{ route('admin.categorias.edit', $categoria->id) }}"
                                     class="btn btn-categoria-editar"
-                                    title="Editar">
+                                    title="Editar categoría">
 
                                     <i class="bi bi-pencil"></i>
-
                                     <span>Editar</span>
 
                                 </a>
 
+                                @if($categoria->estado === 'activo')
+
+                                <form
+                                    action="{{ route('admin.categorias.inactivar', $categoria->id) }}"
+                                    method="POST">
+
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-categoria-inactivar"
+                                        title="Inactivar categoría"
+                                        onclick="return confirm('¿Deseas inactivar esta categoría? Los productos asociados conservarán su información.')">
+
+                                        <i class="bi bi-eye-slash-fill"></i>
+                                        <span>Inactivar</span>
+
+                                    </button>
+
+                                </form>
+
+                                @else
+
+                                <form
+                                    action="{{ route('admin.categorias.activar', $categoria->id) }}"
+                                    method="POST">
+
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-categoria-activar"
+                                        title="Activar categoría">
+
+                                        <i class="bi bi-eye-fill"></i>
+                                        <span>Activar</span>
+
+                                    </button>
+
+                                </form>
+
+                                @endif
 
                                 <form
                                     action="{{ route('admin.categorias.destroy', $categoria->id) }}"
                                     method="POST">
 
                                     @csrf
-
                                     @method('DELETE')
 
                                     <button
                                         type="submit"
                                         class="btn btn-categoria-eliminar"
-                                        onclick="return confirm('¿Está seguro de eliminar esta categoría?')"
-                                        title="Eliminar">
+                                        onclick="return confirm('¿Está seguro de eliminar esta categoría? Solo se podrá eliminar si no tiene productos asociados.')"
+                                        title="Eliminar categoría">
 
                                         <i class="bi bi-trash"></i>
-
                                         <span>Eliminar</span>
 
                                     </button>
