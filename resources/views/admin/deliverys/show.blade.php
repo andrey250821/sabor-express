@@ -89,7 +89,7 @@
         <div class="delivery-admin-stat-card">
             <span>
                 <i class="bi bi-check2-all"></i>
-                Pedidos entregados
+                Pedidos entregados de la fecha
             </span>
 
             <strong>{{ $pedidosEntregados->count() }}</strong>
@@ -107,7 +107,7 @@
         <div class="delivery-admin-stat-card financial">
             <span>
                 <i class="bi bi-cash-stack"></i>
-                Total cobrado por entregas
+                Total cobrado por entregas de la fecha
             </span>
 
             <strong>
@@ -140,6 +140,11 @@
     </div>
 
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Actividad económica del Delivery'
+    ])
+
     {{-- HISTORIAL --}}
     <div class="delivery-admin-history-card">
 
@@ -149,7 +154,7 @@
                 <span>HISTORIAL</span>
 
                 <h3>
-                    Pedidos realizados por {{ $delivery->name }}
+                    Actividad de {{ $delivery->name }} · {{ $fechaSeleccionada->format('d/m/Y') }}
                 </h3>
             </div>
 
@@ -168,7 +173,7 @@
                 <thead>
                     <tr>
                         <th>Pedido</th>
-                        <th>Fecha</th>
+                        <th>Fecha de actividad</th>
                         <th>Distancia</th>
                         <th>Tarifa</th>
                         <th>Comisión</th>
@@ -202,7 +207,9 @@
                             </td>
 
                             <td>
-                                {{ $asignacion->created_at?->format('d/m/Y H:i') }}
+                                {{ (($pedido?->estado === 'entregado'
+    ? $asignacion->updated_at
+    : $asignacion->created_at)?->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y H:i')) }}
                             </td>
 
                             <td>
