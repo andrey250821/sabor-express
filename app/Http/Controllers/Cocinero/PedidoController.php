@@ -59,8 +59,8 @@ class PedidoController extends Controller
          * o que posteriormente avanzaron en el flujo (asignado, en camino,
          * entregado o cancelado).
          *
-         * El filtro de fecha usa created_at porque no introducimos
-         * un campo adicional fecha_listo.
+         * El filtro de fecha usa created_at y no agrega columnas nuevas
+         * ni modifica la estructura existente de pedidos.
          */
         $periodosListosValidos = [
             'hoy',
