@@ -22,6 +22,22 @@ class PedidoController extends Controller
             $fechaSeleccionada
         );
 
+        $estadosPermitidos = [
+            'pagado',
+            'preparando',
+            'listo',
+            'asignado',
+            'en_camino',
+            'entregado',
+            'cancelado',
+        ];
+
+        $estadoSeleccionado = $request->input('estado');
+
+        if (!in_array($estadoSeleccionado, $estadosPermitidos, true)) {
+            $estadoSeleccionado = null;
+        }
+
         $pedidos = Pedido::with([
             'user',
             'asignacionDelivery.delivery',
@@ -31,12 +47,38 @@ class PedidoController extends Controller
             ->whereHas('comprobantePago', function ($query) {
                 $query->where('estado', 'aprobado');
             })
+            ->when(
+                $estadoSeleccionado,
+                fn ($query) => $query->where(
+                    'estado',
+                    $estadoSeleccionado
+                )
+            )
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $nombresEstados = [
+            'pagado' => 'Pagados',
+            'preparando' => 'Preparando',
+            'listo' => 'Listos',
+            'asignado' => 'Asignados',
+            'en_camino' => 'En camino',
+            'entregado' => 'Entregados',
+            'cancelado' => 'Cancelados',
+        ];
+
+        $estadoNombre = $estadoSeleccionado
+            ? ($nombresEstados[$estadoSeleccionado] ?? null)
+            : null;
+
         return view(
             'admin.pedidos.index',
-            compact('pedidos', 'fechaSeleccionada')
+            compact(
+                'pedidos',
+                'fechaSeleccionada',
+                'estadoSeleccionado',
+                'estadoNombre'
+            )
         );
     }
 
