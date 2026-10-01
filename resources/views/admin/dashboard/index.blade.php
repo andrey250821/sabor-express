@@ -179,7 +179,7 @@
                 </span>
 
                 <span class="status-info">
-                    <strong>{{ $pedidosEntregado }}</strong>
+                    <strong>{{ $pedidosEntregados }}</strong>
                     <small>Entregados</small>
                 </span>
 
