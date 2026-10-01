@@ -8,6 +8,8 @@ use App\Models\AsignacionDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Services\FechaFiltroService;
+use Illuminate\Http\Request;
 
 class DeliveryController extends Controller
 {
@@ -45,16 +47,38 @@ class DeliveryController extends Controller
     /**
      * Mostrar el detalle y las estadísticas económicas de un Delivery.
      */
-    public function show(int $id)
-    {
+    public function show(
+        Request $request,
+        int $id,
+        FechaFiltroService $fechas
+    ) {
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
+            $fechaSeleccionada
+        );
+
         $delivery = User::query()
             ->where('role_id', 3)
             ->findOrFail($id);
 
+        /*
+         * Un pedido activo puede haber sido asignado antes del día seleccionado
+         * y seguir activo. Por ello se considera actividad de la fecha cuando
+         * la asignación fue creada o actualizada ese día.
+         *
+         * Para los entregados, updated_at corresponde al momento de finalizar
+         * la entrega porque el controlador de Delivery hace touch() al entregar.
+         */
         $asignaciones = AsignacionDelivery::query()
             ->where('delivery_id', $delivery->id)
+            ->where(function ($query) use ($inicioUtc, $finUtc) {
+                $query
+                    ->whereBetween('created_at', [$inicioUtc, $finUtc])
+                    ->orWhereBetween('updated_at', [$inicioUtc, $finUtc]);
+            })
             ->with('pedido')
-            ->orderByDesc('created_at')
+            ->orderByDesc('updated_at')
             ->get();
 
         $pedidosActivos = $asignaciones
@@ -69,8 +93,17 @@ class DeliveryController extends Controller
 
         $pedidosEntregados = $asignaciones
             ->filter(function ($asignacion) {
-                return $asignacion->pedido?->estado === 'entregado';
-            });
+                return $asignacion->pedido?->estado === 'entregado'
+                    && $asignacion->updated_at
+                    && $asignacion->updated_at
+                        ->copy()
+                        ->timezone(FechaFiltroService::TIMEZONE)
+                        ->betweenIncluded(
+                            $inicioUtc->copy()->timezone(FechaFiltroService::TIMEZONE),
+                            $finUtc->copy()->timezone(FechaFiltroService::TIMEZONE)
+                        );
+            })
+            ->values();
 
         $totalDeliveryGenerado = round(
             $pedidosEntregados->sum(
@@ -102,14 +135,12 @@ class DeliveryController extends Controller
                 'pedidosEntregados',
                 'totalDeliveryGenerado',
                 'comisionDelivery',
-                'parteRestaurante'
+                'parteRestaurante',
+                'fechaSeleccionada'
             )
         );
     }
 
-    /**
-     * Mostrar formulario para crear un Delivery
-     */
     public function create()
     {
         return view('admin.deliverys.create');
