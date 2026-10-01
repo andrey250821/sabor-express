@@ -30,26 +30,12 @@
                 <div class="card-body p-4">
 
                     <div class="d-flex align-items-center gap-3 mb-4">
-                        <div
-                            style="
-                                width: 90px;
-                                height: 90px;
-                                flex: 0 0 90px;
-                                border-radius: 50%;
-                                overflow: hidden;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background: #8b1e45;
-                                color: #fff;
-                                font-size: 34px;
-                                font-weight: 700;
-                            ">
+                        <div class="admin-cocinero-profile-avatar">
                             @if($cocinero->foto_perfil_url)
                                 <img
                                     src="{{ $cocinero->foto_perfil_url }}"
                                     alt="Foto de {{ $cocinero->name }}"
-                                    style="width:100%;height:100%;object-fit:cover;display:block;">
+                                    class="admin-cocinero-profile-avatar-image">
                             @else
                                 {{ strtoupper(substr($cocinero->name, 0, 1)) }}
                             @endif
