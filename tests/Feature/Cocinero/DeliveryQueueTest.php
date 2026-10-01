@@ -13,7 +13,7 @@ class DeliveryQueueTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_marcar_pedido_listo_guarda_fecha_y_procesa_la_cola_fifo(): void
+    public function test_marcar_pedido_listo_procesa_la_cola_fifo_usando_created_at(): void
     {
         $cocineroRole = Role::create([
             'nombre' => 'Cocinero',
@@ -59,7 +59,6 @@ class DeliveryQueueTest extends TestCase
             'user_id' => $cliente->id,
             'total' => 50,
             'estado' => 'listo',
-            'fecha_listo' => now()->subMinutes(10),
             'direccion_entrega' => 'Cola 1',
         ]);
 
@@ -67,14 +66,13 @@ class DeliveryQueueTest extends TestCase
             'user_id' => $cliente->id,
             'total' => 60,
             'estado' => 'listo',
-            'fecha_listo' => now()->subMinutes(5),
             'direccion_entrega' => 'Cola 2',
         ]);
 
         /*
          * Este es el pedido que Cocina termina ahora.
-         * Debe guardar su propia fecha_listo, pero NO debe saltarse
-         * los dos pedidos que ya estaban esperando.
+         * Debe quedar detrás de los dos pedidos que ya estaban esperando
+         * porque created_at es posterior a ellos.
          */
         $pedidoEnPreparacion = Pedido::create([
             'user_id' => $cliente->id,
@@ -93,8 +91,6 @@ class DeliveryQueueTest extends TestCase
         $pedidoCola1->refresh();
 
         $this->assertEquals('listo', $pedidoEnPreparacion->estado);
-        $this->assertNotNull($pedidoEnPreparacion->fecha_listo);
-
         // El pedido que ya llevaba más tiempo en cola debe recibir
         // el Delivery disponible.
         $this->assertEquals(
