@@ -4,24 +4,34 @@ namespace App\Http\Controllers\Cliente;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notificacion;
+use App\Services\FechaFiltroService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class NotificacionController extends Controller
 {
     /**
-     * Mostrar únicamente las notificaciones del cliente autenticado.
+     * Mostrar únicamente las notificaciones del cliente autenticado
+     * correspondientes a la fecha seleccionada.
      */
-    public function index(): View
-    {
+    public function index(
+        Request $request,
+        FechaFiltroService $fechas
+    ): View {
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
+            $fechaSeleccionada
+        );
+
         $notificaciones = Notificacion::where('user_id', Auth::id())
             ->vigentes()
+            ->whereBetween('created_at', [$inicioUtc, $finUtc])
             ->where('tipo', 'cliente')
-            ->with([
-                'pedido',
-            ])
+            ->with('pedido')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -29,24 +39,21 @@ class NotificacionController extends Controller
             ->where('leido', false)
             ->count();
 
-        $notificacionesAgrupadas = $notificaciones->groupBy(function ($notificacion) {
-            if ($notificacion->created_at->isToday()) {
-                return 'Hoy';
-            }
-
-            if ($notificacion->created_at->isYesterday()) {
-                return 'Ayer';
-            }
-
-            return $notificacion->created_at->format('d/m/Y');
-        });
+        $notificacionesAgrupadas = $notificaciones
+            ->groupBy(function ($notificacion) {
+                return $notificacion->created_at
+                    ->copy()
+                    ->timezone(FechaFiltroService::TIMEZONE)
+                    ->format('d/m/Y');
+            });
 
         return view(
             'cliente.notificaciones.index',
             compact(
                 'notificaciones',
                 'noLeidas',
-                'notificacionesAgrupadas'
+                'notificacionesAgrupadas',
+                'fechaSeleccionada'
             )
         );
     }
