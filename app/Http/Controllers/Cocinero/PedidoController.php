@@ -24,7 +24,9 @@ class PedidoController extends Controller
      * - Solo los pedidos que el cocinero autenticado comenzó a preparar.
      *
      * Listos:
-     * - Solo los pedidos que el cocinero autenticado terminó.
+     * - Pedidos que este cocinero llevó hasta LISTO o que posteriormente
+     *   avanzaron en el flujo de Delivery.
+     * - Se pueden consultar por fecha mediante ?periodo_listos=hoy|ayer|anteayer|semana.
      *
      * La tarjeta seleccionada se controla mediante ?seccion=pendientes|preparando|listos.
      */
