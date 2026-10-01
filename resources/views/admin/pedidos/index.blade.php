@@ -105,6 +105,27 @@
         'tituloFecha' => 'Pedidos registrados'
     ])
 
+    @if($estadoSeleccionado)
+    <div class="pedidos-filtro-activo">
+        <div class="pedidos-filtro-activo-info">
+            <span class="pedidos-filtro-activo-icon">
+                <i class="bi bi-funnel-fill"></i>
+            </span>
+            <div>
+                <small>Filtro activo</small>
+                <strong>{{ $estadoNombre }} · {{ $fechaSeleccionada->format('d/m/Y') }}</strong>
+            </div>
+        </div>
+
+        <a
+            href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}"
+            class="pedidos-filtro-activo-clear">
+            <i class="bi bi-x-circle"></i>
+            Quitar filtro
+        </a>
+    </div>
+    @endif
+
     {{-- RESPONSIVE --}}
 
             <div class="table-responsive">
