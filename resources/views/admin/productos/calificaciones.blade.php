@@ -20,13 +20,13 @@
             </h1>
 
             <p class="admin-calificaciones-subtitle">
-                Revisa todas las opiniones de los clientes sobre este producto.
+                Revisa las opiniones de los clientes sobre este producto en la fecha seleccionada.
             </p>
 
         </div>
 
         <a
-            href="{{ route('admin.productos.index') }}"
+            href="{{ route('admin.productos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}"
             class="btn btn-outline-light">
             <i class="bi bi-arrow-left me-1"></i>
             Volver a productos
@@ -34,6 +34,11 @@
 
     </div>
 
+
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Opiniones y calificaciones'
+    ])
 
     {{-- PRODUCTO + RESUMEN --}}
     <div class="row g-4 mb-4">
