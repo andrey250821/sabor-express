@@ -30,11 +30,19 @@
 
     </div>
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Comprobantes registrados'
+    ])
+
     {{-- ESTADOS --}}
     <div class="row g-3 mb-4">
 
         <div class="col-12 col-md-4">
-            <a href="{{ route('admin.comprobantes.index', 'en_revision') }}" class="text-decoration-none">
+            <a href="{{ route('admin.comprobantes.index', [
+                'estado' => 'en_revision',
+                'fecha' => $fechaSeleccionada->toDateString()
+            ]) }}" class="text-decoration-none">
                 <div class="comprobante-status-card status-revision {{ $estado === 'en_revision' ? 'active' : '' }}">
 
                     <div class="status-icon">
@@ -52,7 +60,10 @@
         </div>
 
         <div class="col-12 col-md-4">
-            <a href="{{ route('admin.comprobantes.index', 'aprobado') }}" class="text-decoration-none">
+            <a href="{{ route('admin.comprobantes.index', [
+                'estado' => 'aprobado',
+                'fecha' => $fechaSeleccionada->toDateString()
+            ]) }}" class="text-decoration-none">
                 <div class="comprobante-status-card status-aprobado {{ $estado === 'aprobado' ? 'active' : '' }}">
 
                     <div class="status-icon">
@@ -70,7 +81,10 @@
         </div>
 
         <div class="col-12 col-md-4">
-            <a href="{{ route('admin.comprobantes.index', 'rechazado') }}" class="text-decoration-none">
+            <a href="{{ route('admin.comprobantes.index', [
+                'estado' => 'rechazado',
+                'fecha' => $fechaSeleccionada->toDateString()
+            ]) }}" class="text-decoration-none">
                 <div class="comprobante-status-card status-rechazado {{ $estado === 'rechazado' ? 'active' : '' }}">
 
                     <div class="status-icon">
@@ -136,7 +150,7 @@
                         <div class="info-icon"><i class="bi bi-person"></i></div>
                         <div>
                             <small>Cliente</small>
-                            <strong>{{ $comprobante->pedido->user->name ?? 'Cliente eliminado' }}</strong>
+                            <strong>{{ $comprobante->pedido?->user?->name ?? 'Cliente eliminado' }}</strong>
                         </div>
                     </div>
 
