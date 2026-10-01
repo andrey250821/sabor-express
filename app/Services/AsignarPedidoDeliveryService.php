@@ -189,17 +189,16 @@ class AsignarPedidoDeliveryService
                 ->values();
 
             /*
-             * 5. Mantener FIFO estricto.
+             * 5. Mantener FIFO estricto según el orden de creación del pedido.
              *
-             * COALESCE permite que los pedidos antiguos creados antes de esta
-             * mejora, que todavía tengan fecha_listo = NULL, sigan entrando
-             * correctamente usando created_at como respaldo.
+             * created_at ya registra el momento en que el cliente realizó
+             * el pedido, por lo que no necesitamos una segunda fecha para
+             * representar el orden de la cola.
              */
             foreach ($candidatos as $candidato) {
                 $pedido = Pedido::query()
                     ->where('estado', 'listo')
                     ->whereDoesntHave('asignacionDelivery')
-                    ->orderByRaw('COALESCE(fecha_listo, created_at) ASC')
                     ->orderBy('created_at', 'asc')
                     ->orderBy('id', 'asc')
                     ->lockForUpdate()
