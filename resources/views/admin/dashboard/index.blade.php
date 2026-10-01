@@ -94,7 +94,7 @@
                 </span>
 
                 <span class="status-info">
-                    <strong>{{ $pedidosPagado }}</strong>
+                    <strong>{{ $pedidosPagados }}</strong>
                     <small>Pagados</small>
                 </span>
 
@@ -128,7 +128,7 @@
                 </span>
 
                 <span class="status-info">
-                    <strong>{{ $pedidosListo }}</strong>
+                    <strong>{{ $pedidosListos }}</strong>
                     <small>Listos</small>
                 </span>
 
@@ -145,7 +145,7 @@
                 </span>
 
                 <span class="status-info">
-                    <strong>{{ $pedidosAsignado }}</strong>
+                    <strong>{{ $pedidosAsignados }}</strong>
                     <small>Asignados</small>
                 </span>
 
