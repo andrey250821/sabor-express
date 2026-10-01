@@ -37,7 +37,7 @@
             <div>
 
                 <small>
-                    Total de pedidos
+                    Pedidos de la fecha
                 </small>
 
                 <strong>
@@ -100,7 +100,12 @@
 
 
 
-            {{-- RESPONSIVE --}}
+            @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Pedidos registrados'
+    ])
+
+    {{-- RESPONSIVE --}}
 
             <div class="table-responsive">
 
@@ -336,11 +341,11 @@
                                 <div class="pedido-fecha">
 
                                     <strong>
-                                        {{ $pedido->created_at->format('d/m/Y') }}
+                                        {{ $pedido->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y') }}
                                     </strong>
 
                                     <small>
-                                        {{ $pedido->created_at->format('H:i') }}
+                                        {{ $pedido->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('H:i') }}
                                     </small>
 
                                 </div>
