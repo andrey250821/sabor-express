@@ -44,7 +44,7 @@
                 <div>
 
                     <span>
-                        PEDIDOS REALIZADOS
+                        PEDIDOS DE LA FECHA
                     </span>
 
                     <strong>
@@ -57,6 +57,11 @@
 
         </div>
 
+
+        @include('shared.date-filter', [
+            'fechaSeleccionada' => $fechaSeleccionada,
+            'tituloFecha' => 'Mis pedidos'
+        ])
 
         {{-- =====================================================
              MENSAJES
@@ -277,7 +282,7 @@
                             </span>
 
                             <strong>
-                                {{ $pedido->created_at->format('d/m/Y') }}
+                                {{ $pedido->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y') }}
                             </strong>
 
                         </div>
@@ -302,7 +307,7 @@
                             </span>
 
                             <strong>
-                                {{ $pedido->created_at->format('H:i') }}
+                                {{ $pedido->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('H:i') }}
                             </strong>
 
                         </div>
