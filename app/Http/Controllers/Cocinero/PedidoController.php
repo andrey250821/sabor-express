@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\AsignarPedidoDeliveryService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Carbon\Carbon;
 
 class PedidoController extends Controller
 {
@@ -49,12 +50,63 @@ class PedidoController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
+        /*
+         * LISTOS / HISTORIAL
+         *
+         * Se muestran los pedidos que este cocinero llevó hasta LISTO
+         * o que posteriormente avanzaron en el flujo (asignado, en camino,
+         * entregado o cancelado).
+         *
+         * El filtro de fecha usa created_at porque no introducimos
+         * un campo adicional fecha_listo.
+         */
+        $periodosListosValidos = [
+            'hoy',
+            'ayer',
+            'anteayer',
+            'semana',
+        ];
+
+        $periodoListos = $request->query('periodo_listos', 'hoy');
+
+        if (!in_array($periodoListos, $periodosListosValidos, true)) {
+            $periodoListos = 'hoy';
+        }
+
+        $hoy = Carbon::today();
+
+        [$inicioListos, $finListos] = match ($periodoListos) {
+            'ayer' => [
+                $hoy->copy()->subDay()->startOfDay(),
+                $hoy->copy()->subDay()->endOfDay(),
+            ],
+            'anteayer' => [
+                $hoy->copy()->subDays(2)->startOfDay(),
+                $hoy->copy()->subDays(2)->endOfDay(),
+            ],
+            'semana' => [
+                $hoy->copy()->subDays(6)->startOfDay(),
+                $hoy->copy()->endOfDay(),
+            ],
+            default => [
+                $hoy->copy()->startOfDay(),
+                $hoy->copy()->endOfDay(),
+            ],
+        };
+
         $listos = Pedido::with([
             'user',
             'detallePedidos.producto',
         ])
-            ->whereIn('estado', ['listo', 'asignado'])
+            ->whereIn('estado', [
+                'listo',
+                'asignado',
+                'en_camino',
+                'entregado',
+                'cancelado',
+            ])
             ->where('cocinero_id', Auth::id())
+            ->whereBetween('created_at', [$inicioListos, $finListos])
             ->orderBy('created_at', 'asc')
             ->orderBy('id', 'asc')
             ->get();
@@ -71,7 +123,8 @@ class PedidoController extends Controller
             'pendientes',
             'preparando',
             'listos',
-            'seccion'
+            'seccion',
+            'periodoListos'
         ));
     }
 
