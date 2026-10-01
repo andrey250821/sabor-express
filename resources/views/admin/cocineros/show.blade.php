@@ -84,8 +84,8 @@
 
                         <div class="col-6">
                             <div class="p-3 rounded bg-light h-100">
-                                <small class="text-muted d-block">Pedidos de cocina</small>
-                                <strong>{{ $cocinero->pedidos_cocina_count }}</strong>
+                                <small class="text-muted d-block">Pedidos de cocina de la fecha</small>
+                                <strong>{{ $cocinero->pedidos_cocina_fecha_count }}</strong>
                             </div>
                         </div>
 
