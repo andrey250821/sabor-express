@@ -132,68 +132,18 @@ class DashboardController extends Controller
         /*
          * Resumen para la barra de fechas.
          */
-        $historialDias = collect(range(0, 13))
-            ->map(function (int $diasAtras) use (
-                $hoy,
-                $entregasHistorial
-            ) {
-                $fecha = $hoy->copy()->subDays($diasAtras);
 
-                $entregas = $entregasHistorial->filter(
-                    function ($asignacion) use ($fecha) {
-                        return $asignacion->updated_at
-                            && $asignacion->updated_at
-                                ->copy()
-                                ->timezone(FechaFiltroService::TIMEZONE)
-                                ->isSameDay($fecha);
-                    }
-                );
-
-                return [
-                    'fecha' => $fecha->toDateString(),
-                    'etiqueta' => $fecha->isToday()
-                        ? 'Hoy'
-                        : ($fecha->isYesterday()
-                            ? 'Ayer'
-                            : ($diasAtras === 2
-                                ? 'Anteayer'
-                                : $fecha->format('d/m'))),
-                    'entregas' => $entregas->count(),
-                    'comision' => round(
-                        $entregas->sum(
-                            fn ($asignacion) => (float) (
-                                $asignacion->pedido?->monto_delivery ?? 0
-                            )
-                        ),
-                        2
-                    ),
-                ];
-            });
-
-        /*
-         * Este contador representa el total histórico de entregas del Delivery.
-         * Se conserva como referencia secundaria, mientras los importes principales
-         * se muestran siempre por fecha seleccionada.
-         */
-        $pedidosEntregados = AsignacionDelivery::query()
-            ->where('delivery_id', $deliveryId)
-            ->whereHas('pedido', function ($query) {
-                $query->where('estado', 'entregado');
-            })
-            ->count();
 
         return view(
             'delivery.dashboard.index',
             compact(
                 'pedidosEnCola',
                 'misPedidos',
-                'pedidosEntregados',
                 'delivery',
                 'comisionDia',
                 'parteRestauranteDia',
                 'tarifaDeliveryDia',
                 'entregasDia',
-                'historialDias',
                 'fechaSeleccionada',
                 'entregasDiaSeleccionado'
             )
