@@ -156,25 +156,52 @@ class CategoriaController extends Controller
 
     public function destroy($id)
     {
-
-
         $categoria = Categoria::findOrFail($id);
 
+        if ($categoria->productos()->exists()) {
+            return back()->with(
+                'error',
+                'No se puede eliminar esta categoría porque tiene productos asociados. Puedes inactivarla para conservar su información.'
+            );
+        }
 
         $categoria->delete();
 
-
-
         return back()->with(
-
             'success',
-
             'Categoría eliminada correctamente'
-
         );
-
-
     }
 
+    /**
+     * Inactivar categoría sin eliminarla.
+     */
+    public function inactivar($id)
+    {
+        $categoria = Categoria::findOrFail($id);
 
+        $categoria->estado = 'inactivo';
+        $categoria->save();
+
+        return back()->with(
+            'success',
+            'Categoría inactivada correctamente.'
+        );
+    }
+
+    /**
+     * Activar nuevamente una categoría.
+     */
+    public function activar($id)
+    {
+        $categoria = Categoria::findOrFail($id);
+
+        $categoria->estado = 'activo';
+        $categoria->save();
+
+        return back()->with(
+            'success',
+            'Categoría activada correctamente.'
+        );
+    }
 }
