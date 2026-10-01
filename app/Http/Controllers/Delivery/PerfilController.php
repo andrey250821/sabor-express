@@ -35,7 +35,9 @@ class PerfilController extends Controller
 
         $tienePedidoActivo = AsignacionDelivery::query()
             ->where('delivery_id', $user->id)
-            ->whereIn('estado', ['aceptado', 'en_camino'])
+            ->whereHas('pedido', function ($query) {
+                $query->whereIn('estado', ['asignado', 'en_camino']);
+            })
             ->exists();
 
         if ($user->estado === 'activo' && $tienePedidoActivo) {
