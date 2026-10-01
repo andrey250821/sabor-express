@@ -24,14 +24,14 @@ class Notificacion extends Model
 
 
     /**
-     * Limitar las notificaciones vigentes a los últimos 3 días.
+     * Limitar las notificaciones vigentes a los últimos 14 días.
      */
     public function scopeVigentes($query)
     {
         return $query->where(
             'created_at',
             '>=',
-            now()->subDays(3)
+            now()->subDays(14)
         );
     }
 
