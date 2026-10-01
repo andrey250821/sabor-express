@@ -442,7 +442,7 @@
                 </strong>
 
                 <small>
-                    Hoy
+                    {{ $fechaSeleccionada->format('d/m/Y') }}
                 </small>
             </div>
 
@@ -759,3 +759,14 @@ document.addEventListener('DOMContentLoaded', function () {
 @endpush
 
 @endsection
+@push('scripts')
+@if($fechaSeleccionada->isToday())
+<script>
+    setInterval(() => {
+        if (document.visibilityState === 'visible') {
+            window.location.reload();
+        }
+    }, 10000);
+</script>
+@endif
+@endpush
