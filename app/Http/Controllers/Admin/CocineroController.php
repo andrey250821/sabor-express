@@ -58,7 +58,10 @@ class CocineroController extends Controller
         );
 
         $cocinero = User::where('role_id', 4)
-            ->withCount('pedidosCocina')
+            ->withCount([
+                'pedidosCocina as pedidos_cocina_fecha_count' => fn ($query) => $query
+                    ->whereBetween('created_at', [$inicioUtc, $finUtc]),
+            ])
             ->with([
                 'pedidosCocina' => fn ($query) => $query
                     ->whereBetween('created_at', [$inicioUtc, $finUtc])
