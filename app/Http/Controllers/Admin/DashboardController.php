@@ -8,20 +8,30 @@ use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\ComprobantePago;
 use App\Models\AsignacionDelivery;
+use App\Services\FechaFiltroService;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
+    public function index(
+        Request $request,
+        FechaFiltroService $fechas
+    ) {
+        $fechaSeleccionada = $fechas->resolver($request);
+        $hoy = $fechas->hoy();
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc($fechaSeleccionada);
+
         /*
         |--------------------------------------------------------------------------
-        | CONTADORES GENERALES
+        | INDICADORES GENERALES
         |--------------------------------------------------------------------------
+        |
+        | Estos indicadores representan el estado actual de la plataforma,
+        | no una actividad histórica.
+        |
         */
-
-        $pedidos = Pedido::count();
-
         $clientes = User::where('role_id', 2)->count();
 
         $deliverys = User::where('role_id', 3)
@@ -33,34 +43,41 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | PEDIDOS POR ESTADO
+        | ACTIVIDAD DE LA FECHA SELECCIONADA
         |--------------------------------------------------------------------------
         */
+        $pedidosDiaQuery = Pedido::query()
+            ->whereBetween('created_at', [$inicioUtc, $finUtc]);
 
-        $pedidosPagados = Pedido::where('estado', 'pagado')->count();
+        $pedidos = (clone $pedidosDiaQuery)->count();
 
-        $pedidosPreparando = Pedido::where('estado', 'preparando')->count();
+        $pedidosPagados = (clone $pedidosDiaQuery)
+            ->where('estado', 'pagado')
+            ->count();
 
-        $pedidosListos = Pedido::where('estado', 'listo')->count();
+        $pedidosPreparando = (clone $pedidosDiaQuery)
+            ->where('estado', 'preparando')
+            ->count();
 
-        $pedidosAsignados = Pedido::where('estado', 'asignado')->count();
+        $pedidosListos = (clone $pedidosDiaQuery)
+            ->where('estado', 'listo')
+            ->count();
 
-        $pedidosEnCamino = Pedido::where('estado', 'en_camino')->count();
+        $pedidosAsignados = (clone $pedidosDiaQuery)
+            ->where('estado', 'asignado')
+            ->count();
 
-        $pedidosEntregados = Pedido::where('estado', 'entregado')->count();
+        $pedidosEnCamino = (clone $pedidosDiaQuery)
+            ->where('estado', 'en_camino')
+            ->count();
 
-        $pedidosCancelados = Pedido::where('estado', 'cancelado')->count();
+        $pedidosEntregados = (clone $pedidosDiaQuery)
+            ->where('estado', 'entregado')
+            ->count();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | VENTAS DEL MES
-        |--------------------------------------------------------------------------
-        |
-        | Se consideran ventas los pedidos que ya fueron pagados
-        | y que se encuentran dentro del flujo normal del pedido.
-        |
-        */
+        $pedidosCancelados = (clone $pedidosDiaQuery)
+            ->where('estado', 'cancelado')
+            ->count();
 
         $estadosVenta = [
             'pagado',
@@ -71,28 +88,43 @@ class DashboardController extends Controller
             'entregado',
         ];
 
-        $ventasMes = Pedido::whereYear(
-            'created_at',
-            Carbon::now()->year
-        )
-            ->whereMonth(
-                'created_at',
-                Carbon::now()->month
-            )
+        $ventasDia = (clone $pedidosDiaQuery)
             ->whereIn('estado', $estadosVenta)
             ->sum('total');
 
 
         /*
         |--------------------------------------------------------------------------
-        | ÚLTIMOS PEDIDOS
+        | VENTAS DEL MES
+        |--------------------------------------------------------------------------
+        |
+        | Se conserva como referencia secundaria para el gráfico.
+        |
+        */
+        $inicioMes = $hoy->copy()->startOfMonth();
+        $finMes = $hoy->copy()->endOfMonth();
+
+        [$inicioMesUtc, $finMesUtc] = [
+            $inicioMes->copy()->startOfDay()->utc(),
+            $finMes->copy()->endOfDay()->utc(),
+        ];
+
+        $ventasMes = Pedido::query()
+            ->whereBetween('created_at', [$inicioMesUtc, $finMesUtc])
+            ->whereIn('estado', $estadosVenta)
+            ->sum('total');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PEDIDOS DE LA FECHA
         |--------------------------------------------------------------------------
         */
-
         $ultimosPedidos = Pedido::with([
             'user',
             'asignacionDelivery.delivery'
         ])
+            ->whereBetween('created_at', [$inicioUtc, $finUtc])
             ->latest()
             ->take(5)
             ->get();
@@ -100,57 +132,87 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | VENTAS ÚLTIMOS 7 DÍAS
+        | GRÁFICO DE 7 DÍAS TERMINANDO EN LA FECHA SELECCIONADA
         |--------------------------------------------------------------------------
         */
+        $inicioGrafico = $fechaSeleccionada->copy()->subDays(6);
 
-        $ventasSemana = Pedido::selectRaw(
-            'DATE(created_at) as fecha, SUM(total) as total'
-        )
-            ->whereDate(
-                'created_at',
-                '>=',
-                Carbon::now()->subDays(6)
-            )
+        [$inicioGraficoUtc, $finGraficoUtc] = [
+            $inicioGrafico->copy()->startOfDay()->utc(),
+            $fechaSeleccionada->copy()->endOfDay()->utc(),
+        ];
+
+        $pedidosGrafico = Pedido::query()
+            ->select(['created_at', 'total'])
+            ->whereBetween('created_at', [$inicioGraficoUtc, $finGraficoUtc])
             ->whereIn('estado', $estadosVenta)
-            ->groupBy('fecha')
-            ->orderBy('fecha')
             ->get();
+
+        $ventasSemana = collect(range(6, 0))
+            ->map(function (int $diasAtras) use (
+                $fechaSeleccionada,
+                $pedidosGrafico
+            ) {
+                $fecha = $fechaSeleccionada
+                    ->copy()
+                    ->subDays($diasAtras);
+
+                $total = $pedidosGrafico
+                    ->filter(function ($pedido) use ($fecha) {
+                        return $pedido->created_at
+                            && $pedido->created_at
+                                ->copy()
+                                ->timezone(FechaFiltroService::TIMEZONE)
+                                ->isSameDay($fecha);
+                    })
+                    ->sum(fn ($pedido) => (float) $pedido->total);
+
+                return [
+                    'fecha' => $fecha->format('d/m'),
+                    'total' => round($total, 2),
+                ];
+            })
+            ->values();
+
+
         /*
         |--------------------------------------------------------------------------
         | COMPROBANTES EN REVISIÓN
         |--------------------------------------------------------------------------
+        |
+        | Es un indicador operativo actual, por eso no se filtra por fecha.
+        |--------------------------------------------------------------------------
         */
-
         $comprobantesEnRevision = ComprobantePago::where(
             'estado',
             'en_revision'
         )->count();
 
+
         /*
         |--------------------------------------------------------------------------
-        | PEDIDOS EN COLA DE DELIVERY
+        | COLA ACTUAL DE DELIVERY
         |--------------------------------------------------------------------------
-        |
-        | Pedidos listos que todavía no tienen asignación de Delivery.
-        | El administrador solamente supervisa esta cola.
-        |
         */
+        $pedidosEnColaDelivery = $fechaSeleccionada->isSameDay($hoy)
+            ? Pedido::where('estado', 'listo')
+                ->whereDoesntHave('asignacionDelivery')
+                ->count()
+            : 0;
 
-        $pedidosEnColaDelivery = Pedido::where('estado', 'listo')
-            ->whereDoesntHave('asignacionDelivery')
-            ->count();
 
         /*
         |--------------------------------------------------------------------------
-        | RESUMEN ECONÓMICO DE DELIVERY
+        | RESUMEN ECONÓMICO DE DELIVERY DEL DÍA
         |--------------------------------------------------------------------------
         |
-        | Solo se contabilizan entregas finalizadas para que las
-        | estadísticas representen ingresos efectivamente realizados.
-        |
+        | La fecha económica es la fecha en que se completó la entrega.
+        | En el flujo actual se conserva en updated_at de la asignación,
+        | actualizado justo al marcar el pedido como entregado.
+        |--------------------------------------------------------------------------
         */
         $entregasFinalizadas = AsignacionDelivery::query()
+            ->whereBetween('updated_at', [$inicioUtc, $finUtc])
             ->whereHas('pedido', function ($query) {
                 $query->where('estado', 'entregado');
             })
@@ -180,12 +242,8 @@ class DashboardController extends Controller
             2
         );
 
+        $entregasDeliveryDia = $entregasFinalizadas->count();
 
-        /*
-        |--------------------------------------------------------------------------
-        | ENVIAR DATOS A LA VISTA
-        |--------------------------------------------------------------------------
-        */
 
         return view(
             'admin.dashboard.index',
@@ -201,7 +259,7 @@ class DashboardController extends Controller
                 'pedidosEnCamino',
                 'pedidosEntregados',
                 'pedidosCancelados',
-
+                'ventasDia',
                 'ventasMes',
                 'ultimosPedidos',
                 'ventasSemana',
@@ -209,7 +267,9 @@ class DashboardController extends Controller
                 'pedidosEnColaDelivery',
                 'ingresosDelivery',
                 'comisionesDelivery',
-                'parteRestauranteDelivery'
+                'parteRestauranteDelivery',
+                'entregasDeliveryDia',
+                'fechaSeleccionada'
             )
         );
     }
