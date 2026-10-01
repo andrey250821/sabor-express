@@ -18,13 +18,10 @@
 
 :root {
     --admin-bg: #0f1014;
-    --admin-bg-soft: #15161c;
     --admin-panel: #17181d;
     --admin-panel-2: #1b1c22;
-    --admin-panel-3: #202229;
 
     --admin-sidebar: #240b14;
-    --admin-sidebar-dark: #17070d;
 
     --admin-primary: #8b1e45;
     --admin-primary-light: #c42c63;
@@ -34,7 +31,6 @@
     --admin-border-soft: rgba(255, 255, 255, .07);
 
     --admin-text: #ffffff;
-    --admin-text-soft: #ddddE2;
     --admin-text-secondary: #a3a5ae;
     --admin-text-muted: #777983;
 
@@ -47,11 +43,8 @@
     --admin-danger: #dc3545;
     --admin-danger-light: #ff5267;
 
-    --admin-info: #0d6efd;
     --admin-info-light: #6ea8fe;
 
-    --admin-purple: #6546a6;
-    --admin-cyan: #35b7c7;
 
     --admin-radius: 14px;
     --admin-radius-lg: 18px;
