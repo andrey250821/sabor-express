@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Services\FechaFiltroService;
+use App\Services\AsignarPedidoDeliveryService;
 
 class DeliveryController extends Controller
 {
@@ -334,7 +335,10 @@ class DeliveryController extends Controller
     /**
      * Activar nuevamente el Delivery
      */
-    public function activar($id)
+    public function activar(
+        $id,
+        AsignarPedidoDeliveryService $asignador
+    )
     {
         $delivery = User::where('role_id', 3)
             ->findOrFail($id);
@@ -343,9 +347,14 @@ class DeliveryController extends Controller
 
         $delivery->save();
 
-        return back()->with(
-            'success',
-            'Delivery activado correctamente.'
-        );
+        // Si había pedidos listos esperando, la activación de este Delivery
+        // debe liberar inmediatamente un cupo de la cola automática.
+        $asignados = $asignador->procesarCola();
+
+        $mensaje = $asignados > 0
+            ? 'Delivery activado correctamente. Se procesó automáticamente la cola de pedidos.'
+            : 'Delivery activado correctamente. No había pedidos esperando en la cola.';
+
+        return back()->with('success', $mensaje);
     }
 }
