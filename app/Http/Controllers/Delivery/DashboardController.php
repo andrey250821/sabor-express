@@ -3,29 +3,28 @@
 namespace App\Http\Controllers\Delivery;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pedido;
 use App\Models\AsignacionDelivery;
-use Carbon\Carbon;
+use App\Models\Pedido;
+use App\Services\AsignarPedidoDeliveryService;
+use App\Services\FechaFiltroService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\AsignarPedidoDeliveryService;
 
 class DashboardController extends Controller
 {
     public function index(
         Request $request,
-        AsignarPedidoDeliveryService $asignador
-    )
-    {
-        // Verificar que haya un usuario logueado.
+        AsignarPedidoDeliveryService $asignador,
+        FechaFiltroService $fechas
+    ) {
         $deliveryId = Auth::id();
 
         if (!$deliveryId) {
-            return redirect()->route('login')
+            return redirect()
+                ->route('login')
                 ->with('error', 'Debe iniciar sesión.');
         }
 
-        // Verificar que el usuario sea un Delivery activo.
         $delivery = Auth::user();
 
         if (
@@ -36,16 +35,26 @@ class DashboardController extends Controller
             abort(403, 'No tienes permisos para acceder a esta sección.');
         }
 
-        // Procesar cualquier pedido que ya esté en cola y tenga un Delivery libre.
+        /*
+         * Si queda un Delivery libre, el sistema procesa la cola automáticamente.
+         */
         $asignador->procesarCola();
 
-        // Pedidos listos que todavía NO tienen Delivery asignado.
+        $hoy = $fechas->hoy();
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        /*
+         * Pedidos en cola y pedidos actualmente asignados son indicadores
+         * operativos del momento actual.
+         */
         $pedidosEnCola = Pedido::where('estado', 'listo')
             ->whereDoesntHave('asignacionDelivery')
             ->count();
 
-        // Pedidos que este Delivery tiene actualmente.
-        $misPedidos = AsignacionDelivery::where('delivery_id', $deliveryId)
+        $misPedidos = AsignacionDelivery::where(
+            'delivery_id',
+            $deliveryId
+        )
             ->whereHas('pedido', function ($query) {
                 $query->whereIn('estado', [
                     'asignado',
@@ -55,69 +64,90 @@ class DashboardController extends Controller
             ->count();
 
         /*
-         * Historial económico de los últimos 7 días.
+         * Historial económico de los últimos 14 días.
          *
-         * La fecha de referencia es updated_at, que queda actualizado cuando
-         * el Delivery completa la entrega.
+         * Para una entrega finalizada, updated_at de la asignación representa
+         * el momento en que el Delivery la marcó como entregada.
          */
-        $hoy = now()->startOfDay();
-        $inicioHistorial = $hoy->copy()->subDays(6);
-        $finHistorial = $hoy->copy()->endOfDay();
+        $inicioHistorial = $hoy->copy()->subDays(13);
+        [$inicioHistorialUtc, $finHistorialUtc] = [
+            $inicioHistorial->copy()->startOfDay()->utc(),
+            $hoy->copy()->endOfDay()->utc(),
+        ];
 
-        $entregasUltimos7Dias = AsignacionDelivery::query()
+        $entregasHistorial = AsignacionDelivery::query()
             ->where('delivery_id', $deliveryId)
             ->whereHas('pedido', function ($query) {
                 $query->where('estado', 'entregado');
             })
-            ->whereBetween('updated_at', [
-                $inicioHistorial,
-                $finHistorial,
-            ])
+            ->whereBetween(
+                'updated_at',
+                [$inicioHistorialUtc, $finHistorialUtc]
+            )
             ->with([
                 'pedido:id,distancia_delivery_km,tarifa_delivery,porcentaje_delivery,monto_delivery,porcentaje_restaurante_delivery,monto_restaurante_delivery',
             ])
             ->orderByDesc('updated_at')
             ->get();
 
-        $comisionHoy = round(
-            $entregasUltimos7Dias
-                ->filter(function ($asignacion) use ($hoy) {
-                    return $asignacion->updated_at
-                        && $asignacion->updated_at->isSameDay($hoy);
-                })
-                ->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)),
-            2
-        );
-
-        $parteRestauranteHoy = round(
-            $entregasUltimos7Dias
-                ->filter(function ($asignacion) use ($hoy) {
-                    return $asignacion->updated_at
-                        && $asignacion->updated_at->isSameDay($hoy);
-                })
-                ->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_restaurante_delivery ?? 0)),
-            2
-        );
-
-        $entregasHoy = $entregasUltimos7Dias
-            ->filter(function ($asignacion) use ($hoy) {
+        $entregasDiaSeleccionado = $entregasHistorial
+            ->filter(function ($asignacion) use ($fechaSeleccionada) {
                 return $asignacion->updated_at
-                    && $asignacion->updated_at->isSameDay($hoy);
+                    && $asignacion->updated_at
+                        ->copy()
+                        ->timezone(FechaFiltroService::TIMEZONE)
+                        ->isSameDay($fechaSeleccionada);
             })
-            ->count();
+            ->values();
+
+        $comisionDia = round(
+            $entregasDiaSeleccionado->sum(
+                fn ($asignacion) => (float) (
+                    $asignacion->pedido?->monto_delivery ?? 0
+                )
+            ),
+            2
+        );
+
+        $parteRestauranteDia = round(
+            $entregasDiaSeleccionado->sum(
+                fn ($asignacion) => (float) (
+                    $asignacion->pedido?->monto_restaurante_delivery ?? 0
+                )
+            ),
+            2
+        );
+
+        $tarifaDeliveryDia = round(
+            $entregasDiaSeleccionado->sum(
+                fn ($asignacion) => (float) (
+                    $asignacion->pedido?->tarifa_delivery ?? 0
+                )
+            ),
+            2
+        );
+
+        $entregasDia = $entregasDiaSeleccionado->count();
 
         /*
-         * Resumen de cada uno de los 7 días.
-         * Incluye hoy y los seis días anteriores.
+         * Resumen para la barra de fechas.
          */
-        $historialDias = collect(range(0, 6))
-            ->map(function (int $diasAtras) use ($hoy, $entregasUltimos7Dias) {
+        $historialDias = collect(range(0, 13))
+            ->map(function (int $diasAtras) use (
+                $hoy,
+                $entregasHistorial
+            ) {
                 $fecha = $hoy->copy()->subDays($diasAtras);
 
-                $entregas = $entregasUltimos7Dias->filter(function ($asignacion) use ($fecha) {
-                    return $asignacion->updated_at
-                        && $asignacion->updated_at->isSameDay($fecha);
-                });
+                $entregas = $entregasHistorial->filter(
+                    function ($asignacion) use ($fecha) {
+                        return $asignacion->updated_at
+                            && $asignacion->updated_at
+                                ->copy()
+                                ->timezone(FechaFiltroService::TIMEZONE)
+                                ->isSameDay($fecha);
+                    }
+                );
 
                 return [
                     'fecha' => $fecha->toDateString(),
@@ -125,77 +155,32 @@ class DashboardController extends Controller
                         ? 'Hoy'
                         : ($fecha->isYesterday()
                             ? 'Ayer'
-                            : ($diasAtras === 2 ? 'Anteayer' : $fecha->format('d/m'))),
+                            : ($diasAtras === 2
+                                ? 'Anteayer'
+                                : $fecha->format('d/m'))),
                     'entregas' => $entregas->count(),
                     'comision' => round(
-                        $entregas->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)),
-                        2
-                    ),
-                    'restaurante' => round(
-                        $entregas->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_restaurante_delivery ?? 0)),
+                        $entregas->sum(
+                            fn ($asignacion) => (float) (
+                                $asignacion->pedido?->monto_delivery ?? 0
+                            )
+                        ),
                         2
                     ),
                 ];
             });
 
         /*
-         * Día que se quiere consultar desde el historial.
-         * Solo se permiten hoy y los seis días anteriores.
+         * Este contador representa el total histórico de entregas del Delivery.
+         * Se conserva como referencia secundaria, mientras los importes principales
+         * se muestran siempre por fecha seleccionada.
          */
-        $fechaHistorial = null;
-
-        if ($request->filled('fecha')) {
-            try {
-                $fechaSolicitada = Carbon::createFromFormat(
-                    'Y-m-d',
-                    (string) $request->input('fecha')
-                )->startOfDay();
-
-                if (
-                    $fechaSolicitada->greaterThanOrEqualTo($inicioHistorial) &&
-                    $fechaSolicitada->lessThanOrEqualTo($hoy)
-                ) {
-                    $fechaHistorial = $fechaSolicitada;
-                }
-            } catch (\Throwable) {
-                $fechaHistorial = null;
-            }
-        }
-
-        if (!$fechaHistorial) {
-            $fechaHistorial = $hoy->copy();
-        }
-
-        $entregasDiaSeleccionado = $entregasUltimos7Dias
-            ->filter(function ($asignacion) use ($fechaHistorial) {
-                return $asignacion->updated_at
-                    && $asignacion->updated_at->isSameDay($fechaHistorial);
-            })
-            ->values();
-
-        $comisionDiaSeleccionado = round(
-            $entregasDiaSeleccionado
-                ->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_delivery ?? 0)),
-            2
-        );
-
-        $parteRestauranteDiaSeleccionado = round(
-            $entregasDiaSeleccionado
-                ->sum(fn ($asignacion) => (float) ($asignacion->pedido?->monto_restaurante_delivery ?? 0)),
-            2
-        );
-
-        $entregasFinalizadas = AsignacionDelivery::query()
+        $pedidosEntregados = AsignacionDelivery::query()
             ->where('delivery_id', $deliveryId)
             ->whereHas('pedido', function ($query) {
                 $query->where('estado', 'entregado');
             })
-            ->with([
-                'pedido:id,distancia_delivery_km,tarifa_delivery,monto_delivery,monto_restaurante_delivery,porcentaje_delivery,porcentaje_restaurante_delivery',
-            ])
-            ->get();
-
-        $pedidosEntregados = $entregasFinalizadas->count();
+            ->count();
 
         return view(
             'delivery.dashboard.index',
@@ -204,15 +189,13 @@ class DashboardController extends Controller
                 'misPedidos',
                 'pedidosEntregados',
                 'delivery',
-                'comisionHoy',
-                'parteRestauranteHoy',
-                'entregasHoy',
+                'comisionDia',
+                'parteRestauranteDia',
+                'tarifaDeliveryDia',
+                'entregasDia',
                 'historialDias',
-                'fechaHistorial',
-                'entregasDiaSeleccionado',
-                'comisionDiaSeleccionado',
-                'parteRestauranteDiaSeleccionado',
-                'entregasFinalizadas'
+                'fechaSeleccionada',
+                'entregasDiaSeleccionado'
             )
         );
     }
