@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use App\Services\ValidarComprobantePagoService;
 use App\Services\CalcularDeliveryService;
+use App\Services\FechaFiltroService;
 
 class PedidoController extends Controller
 {
@@ -648,14 +649,32 @@ class PedidoController extends Controller
         }
     }
 
-    public function index()
-    {
+    public function index(
+        Request $request,
+        FechaFiltroService $fechas
+    ) {
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
+            $fechaSeleccionada
+        );
+
         $pedidos = Pedido::where('user_id', Auth::id())
-            ->with(['detallePedidos.producto', 'comprobantePago'])
+            ->whereBetween('created_at', [$inicioUtc, $finUtc])
+            ->with([
+                'detallePedidos.producto',
+                'comprobantePago',
+            ])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('cliente.pedidos.index', compact('pedidos'));
+        return view(
+            'cliente.pedidos.index',
+            compact(
+                'pedidos',
+                'fechaSeleccionada'
+            )
+        );
     }
 
     public function show($id)
