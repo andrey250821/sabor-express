@@ -233,7 +233,7 @@
                             </strong>
                             <small>
                                 <i class="bi bi-clock"></i>
-                                {{ $pedido->created_at?->copy()->timezone(AppServicesFechaFiltroService::TIMEZONE)->format('d/m/Y H:i') }}
+                                {{ $pedido->created_at?->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y H:i') }}
                             </small>
                         </div>
 
