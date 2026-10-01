@@ -49,6 +49,11 @@
 
     </div>
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Notificaciones recibidas'
+    ])
+
 
     {{-- RESUMEN --}}
     <div class="row g-3 mb-4">
@@ -459,11 +464,11 @@
 
                             <i class="bi bi-clock"></i>
 
-                            {{ $notificacion->created_at->format('H:i') }}
+                            {{ $notificacion->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('H:i') }}
 
                             <span>•</span>
 
-                            {{ $notificacion->created_at->format('d/m/Y') }}
+                            {{ $notificacion->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y') }}
 
                         </div>
 
