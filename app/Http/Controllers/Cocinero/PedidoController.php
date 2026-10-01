@@ -90,7 +90,7 @@ class PedidoController extends Controller
         ])->findOrFail($id);
 
         if (
-            in_array($pedido->estado, ['preparando', 'listo'], true)
+            in_array($pedido->estado, ['preparando', 'listo', 'asignado'], true)
             && (int) $pedido->cocinero_id !== (int) Auth::id()
         ) {
             abort(403, 'Este pedido pertenece a otro cocinero.');
