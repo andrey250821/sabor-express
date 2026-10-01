@@ -31,6 +31,11 @@
         @endif
     </div>
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Mis notificaciones'
+    ])
+
     @forelse($notificacionesAgrupadas as $fecha => $grupo)
         <div class="mb-4">
             <h2 class="h6 text-uppercase text-muted mb-3">{{ $fecha }}</h2>
@@ -91,7 +96,7 @@
                                         </h3>
 
                                         <small class="text-muted">
-                                            {{ $notificacion->created_at->format('d/m/Y H:i') }}
+                                            {{ $notificacion->created_at->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y H:i') }}
                                         </small>
                                     </div>
 
