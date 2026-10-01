@@ -155,6 +155,11 @@
     </section>
 
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Actividad y ganancias del Delivery'
+    ])
+
     {{-- =========================================================
          ESTADO DEL DELIVERY
     ========================================================== --}}
@@ -337,7 +342,7 @@
                         </span>
 
                         <strong class="delivery-stat-number">
-                            {{ $pedidosEntregados }}
+                            {{ $entregasDia }}
                         </strong>
 
                     </div>
@@ -380,11 +385,11 @@
                 </span>
 
                 <h2>
-                    Resumen de hoy
+                    Resumen de {{ $fechaSeleccionada->format('d/m/Y') }}
                 </h2>
 
                 <p>
-                    Solo se contabilizan las entregas completadas hoy.
+                    Solo se contabilizan las entregas finalizadas en la fecha seleccionada.
                 </p>
             </div>
 
@@ -403,7 +408,7 @@
                 </span>
 
                 <strong>
-                    Bs {{ number_format($comisionHoy, 2) }}
+                    Bs {{ number_format($comisionDia, 2) }}
                 </strong>
 
                 <small>
@@ -418,7 +423,7 @@
                 </span>
 
                 <strong>
-                    Bs {{ number_format($parteRestauranteHoy, 2) }}
+                    Bs {{ number_format($parteRestauranteDia, 2) }}
                 </strong>
 
                 <small>
@@ -433,7 +438,7 @@
                 </span>
 
                 <strong>
-                    {{ $entregasHoy }}
+                    {{ $entregasDia }}
                 </strong>
 
                 <small>
@@ -444,103 +449,47 @@
         </div>
 
 
-        {{-- HISTORIAL DE 7 DÍAS --}}
+        {{-- DETALLE DE LA FECHA SELECCIONADA --}}
         <div class="delivery-history-wrapper mt-4">
 
             <div class="delivery-history-header">
-
                 <div>
                     <strong>
-                        Historial de los últimos 7 días
+                        Entregas del {{ $fechaSeleccionada->format('d/m/Y') }}
                     </strong>
-
                     <span>
-                        Consulta lo generado por fecha.
+                        {{ $entregasDia }} {{ $entregasDia === 1 ? 'entrega completada' : 'entregas completadas' }}
                     </span>
                 </div>
-
-                <button
-                    type="button"
-                    class="delivery-history-toggle"
-                    id="toggle-historial-delivery"
-                    aria-expanded="{{ request()->filled('fecha') ? 'true' : 'false' }}"
-                    aria-controls="historial-delivery">
-                    <i class="bi bi-calendar-week"></i>
-                    {{ request()->filled('fecha') ? 'Ocultar historial' : 'Ver historial' }}
-                </button>
-
             </div>
 
+            <div class="delivery-history-selected mt-3">
 
-            <div
-                id="historial-delivery"
-                class="delivery-history-content"
-                {{ request()->filled('fecha') ? '' : 'hidden' }}>
-
-                <div class="delivery-history-days">
-
-                    @foreach($historialDias as $dia)
-
-                    <a
-                        href="{{ route('delivery.dashboard', ['fecha' => $dia['fecha']]) }}"
-                        class="delivery-history-day {{ $fechaHistorial->toDateString() === $dia['fecha'] ? 'active' : '' }}">
-
-                        <span class="delivery-history-day-label">
-                            {{ $dia['etiqueta'] }}
-                        </span>
-
-                        <strong>
-                            Bs {{ number_format($dia['comision'], 2) }}
-                        </strong>
-
-                        <small>
-                            {{ $dia['entregas'] }}
-                            {{ $dia['entregas'] === 1 ? 'entrega' : 'entregas' }}
-                        </small>
-
-                    </a>
-
-                    @endforeach
-
-                </div>
-
-
-                <div class="delivery-history-selected mt-3">
-
-                    <div class="delivery-history-selected-header">
-
-                        <div>
-                            <span>
-                                Día seleccionado
-                            </span>
-
-                            <strong>
-                                {{ $fechaHistorial->format('d/m/Y') }}
-                            </strong>
-                        </div>
-
-                        <div class="delivery-history-selected-totals">
-
-                            <div>
-                                <small>Mi comisión</small>
-                                <strong>
-                                    Bs {{ number_format($comisionDiaSeleccionado, 2) }}
-                                </strong>
-                            </div>
-
-                            <div>
-                                <small>Restaurante</small>
-                                <strong>
-                                    Bs {{ number_format($parteRestauranteDiaSeleccionado, 2) }}
-                                </strong>
-                            </div>
-
-                        </div>
-
+                <div class="delivery-history-selected-header">
+                    <div>
+                        <span>Día seleccionado</span>
+                        <strong>{{ $fechaSeleccionada->format('d/m/Y') }}</strong>
                     </div>
 
+                    <div class="delivery-history-selected-totals">
+                        <div>
+                            <small>Total cobrado</small>
+                            <strong>Bs {{ number_format($tarifaDeliveryDia, 2) }}</strong>
+                        </div>
 
-                    @if($entregasDiaSeleccionado->isEmpty())
+                        <div>
+                            <small>Mi comisión</small>
+                            <strong>Bs {{ number_format($comisionDia, 2) }}</strong>
+                        </div>
+
+                        <div>
+                            <small>Restaurante</small>
+                            <strong>Bs {{ number_format($parteRestauranteDia, 2) }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                @if($entregasDiaSeleccionado->isEmpty())
 
                     <div class="delivery-history-empty">
                         <i class="bi bi-calendar-x"></i>
@@ -549,71 +498,66 @@
                         </span>
                     </div>
 
-                    @else
+                @else
 
                     <div class="delivery-history-list">
-
                         @foreach($entregasDiaSeleccionado as $asignacion)
 
-                        @php
-                            $pedidoHistorico = $asignacion->pedido;
-                        @endphp
+                            @php
+                                $pedidoHistorico = $asignacion->pedido;
+                            @endphp
 
-                        <div class="delivery-history-item">
+                            <div class="delivery-history-item">
 
-                            <div>
-                                <strong>
-                                    Pedido #{{ $pedidoHistorico?->id ?? '—' }}
-                                </strong>
+                                <div>
+                                    <strong>
+                                        Pedido #{{ $pedidoHistorico?->id ?? '—' }}
+                                    </strong>
 
-                                <small>
-                                    {{ $asignacion->updated_at?->format('H:i') ?? '—' }}
-                                    ·
-                                    {{ number_format((float) ($pedidoHistorico?->distancia_delivery_km ?? 0), 2) }} km
-                                </small>
+                                    <small>
+                                        {{ $asignacion->updated_at?->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('H:i') ?? '—' }}
+                                        ·
+                                        {{ number_format((float) ($pedidoHistorico?->distancia_delivery_km ?? 0), 2) }} km
+                                    </small>
+                                </div>
+
+                                <div class="delivery-history-item-values">
+
+                                    <span>
+                                        Ruta:
+                                        <strong>
+                                            Bs {{ number_format((float) ($pedidoHistorico?->tarifa_delivery ?? 0), 2) }}
+                                        </strong>
+                                    </span>
+
+                                    <span>
+                                        Tú:
+                                        <strong>
+                                            Bs {{ number_format((float) ($pedidoHistorico?->monto_delivery ?? 0), 2) }}
+                                            ({{ number_format((float) ($pedidoHistorico?->porcentaje_delivery ?? 0), 0) }}%)
+                                        </strong>
+                                    </span>
+
+                                    <span>
+                                        Restaurante:
+                                        <strong>
+                                            Bs {{ number_format((float) ($pedidoHistorico?->monto_restaurante_delivery ?? 0), 2) }}
+                                            ({{ number_format((float) ($pedidoHistorico?->porcentaje_restaurante_delivery ?? 0), 0) }}%)
+                                        </strong>
+                                    </span>
+
+                                </div>
+
                             </div>
-
-                            <div class="delivery-history-item-values">
-
-                                <span>
-                                    Ruta:
-                                    <strong>
-                                        Bs {{ number_format((float) ($pedidoHistorico?->tarifa_delivery ?? 0), 2) }}
-                                    </strong>
-                                </span>
-
-                                <span>
-                                    Tú:
-                                    <strong>
-                                        Bs {{ number_format((float) ($pedidoHistorico?->monto_delivery ?? 0), 2) }}
-                                        ({{ number_format((float) ($pedidoHistorico?->porcentaje_delivery ?? 0), 0) }}%)
-                                    </strong>
-                                </span>
-
-                                <span>
-                                    Restaurante:
-                                    <strong>
-                                        Bs {{ number_format((float) ($pedidoHistorico?->monto_restaurante_delivery ?? 0), 2) }}
-                                        ({{ number_format((float) ($pedidoHistorico?->porcentaje_restaurante_delivery ?? 0), 0) }}%)
-                                    </strong>
-                                </span>
-
-                            </div>
-
-                        </div>
 
                         @endforeach
-
                     </div>
 
-                    @endif
-
-                </div>
+                @endif
 
             </div>
 
         </div>
-
     </section>
 
 
