@@ -509,7 +509,13 @@
                             <a
                                 href="{{ route(
             'admin.comprobantes.index',
-            ['estado' => 'en_revision']
+            [
+                'estado' => 'en_revision',
+                'fecha' => $notificacion->created_at
+                    ->copy()
+                    ->timezone(\App\Services\FechaFiltroService::TIMEZONE)
+                    ->toDateString()
+            ]
         ) }}"
                                 class="btn btn-outline-primary">
                                 <i class="bi bi-receipt me-1"></i>
@@ -547,7 +553,13 @@
                             <a
                                 href="{{ route(
                                                 'admin.productos.calificaciones',
-                                                $producto->id
+                                                [
+                                                    $producto->id,
+                                                    'fecha' => $notificacion->created_at
+                                                        ->copy()
+                                                        ->timezone(\App\Services\FechaFiltroService::TIMEZONE)
+                                                        ->toDateString()
+                                                ]
                                             ) }}"
                                 class="btn btn-outline-warning">
                                 <i class="bi bi-star me-1"></i>
