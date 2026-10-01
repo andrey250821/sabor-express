@@ -79,6 +79,11 @@ $cantidadEntregados = $pedidosEntregados->count();
     </div>
 
 
+    @include('shared.date-filter', [
+        'fechaSeleccionada' => $fechaSeleccionada,
+        'tituloFecha' => 'Mis pedidos y entregas'
+    ])
+
     {{-- =====================================================
         RESUMEN
     ====================================================== --}}
