@@ -12,6 +12,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Services\FechaFiltroService;
+use Illuminate\Http\Request;
 
 class PedidoController extends Controller
 {
@@ -104,33 +106,48 @@ class PedidoController extends Controller
      * Muestra únicamente asignaciones pertenecientes al Delivery
      * autenticado. Los pedidos históricos también pueden consultarse.
      */
-    public function misPedidos(): View|RedirectResponse
-    {
+    public function misPedidos(
+        Request $request,
+        FechaFiltroService $fechas
+    ): View|RedirectResponse {
         $delivery = $this->verificarDelivery();
 
         if ($delivery instanceof RedirectResponse) {
             return $delivery;
         }
 
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
+            $fechaSeleccionada
+        );
+
+        /*
+         * Actividad de pedidos:
+         * - asignado/en_camino: se considera la fecha de asignación
+         *   o de su última actualización.
+         * - entregado: updated_at corresponde al momento de finalización.
+         */
         $asignaciones = AsignacionDelivery::query()
             ->with([
                 'pedido.user',
                 'pedido.detallePedidos.producto',
             ])
             ->where('delivery_id', $delivery->id)
-            ->whereHas('pedido', function ($query) {
-                $query->whereIn('estado', [
-                    'asignado',
-                    'en_camino',
-                    'entregado',
-                ]);
+            ->where(function ($query) use ($inicioUtc, $finUtc) {
+                $query
+                    ->whereBetween('created_at', [$inicioUtc, $finUtc])
+                    ->orWhereBetween('updated_at', [$inicioUtc, $finUtc]);
             })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('updated_at')
             ->get();
 
         return view(
             'delivery.pedidos.mis',
-            compact('asignaciones')
+            compact(
+                'asignaciones',
+                'fechaSeleccionada'
+            )
         );
     }
 
