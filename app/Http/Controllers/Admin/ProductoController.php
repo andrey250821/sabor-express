@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Calificacion;
+use App\Services\FechaFiltroService;
 
 class ProductoController extends Controller
 {
@@ -213,8 +214,17 @@ class ProductoController extends Controller
     /**
      * Mostrar las calificaciones de un producto.
      */
-    public function calificaciones($id)
-    {
+    public function calificaciones(
+        Request $request,
+        int $id,
+        FechaFiltroService $fechas
+    ) {
+        $fechaSeleccionada = $fechas->resolver($request);
+
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
+            $fechaSeleccionada
+        );
+
         $producto = Producto::with('categoria')
             ->findOrFail($id);
 
@@ -222,6 +232,7 @@ class ProductoController extends Controller
             'producto_id',
             $producto->id
         )
+            ->whereBetween('created_at', [$inicioUtc, $finUtc])
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -245,10 +256,12 @@ class ProductoController extends Controller
                 'calificaciones',
                 'promedio',
                 'totalCalificaciones',
-                'cantidadEstrellas'
+                'cantidadEstrellas',
+                'fechaSeleccionada'
             )
         );
     }
+
     public function destroy($id)
     {
 
