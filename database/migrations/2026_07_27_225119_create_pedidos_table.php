@@ -55,11 +55,6 @@ return new class extends Migration
                 'cancelado',
             ])->default('pendiente');
 
-            // Marca temporal del momento en que el pedido queda listo para Delivery.
-            // Permite mantener el orden FIFO sin crear una tabla adicional.
-            $table->timestamp('fecha_listo')
-                ->nullable();
-
             $table->decimal('latitud', 10, 7)
                 ->nullable();
 
