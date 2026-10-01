@@ -187,6 +187,13 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
                                     </span>
                                 @endif
 
+                                @if($pedido->created_at)
+                                <span>
+                                    <i class="bi bi-clock"></i>
+                                    {{ $pedido->created_at->format('d/m/Y H:i') }}
+                                </span>
+                                @endif
+
                                 <span>
                                     <i class="bi bi-basket-fill"></i>
                                     {{ $pedido->detallePedidos->count() }}
@@ -385,7 +392,8 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
                 </h3>
 
                 <span>
-                    Pedidos terminados por cocina y disponibles para el siguiente paso del flujo.
+                    Consulta los pedidos que llevaste hasta la etapa de listo
+                    y revisa su evolución durante los últimos días.
                 </span>
             </div>
 
@@ -393,6 +401,47 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
                 {{ $cantidadListos }}
                 {{ $cantidadListos == 1 ? 'pedido' : 'pedidos' }}
             </span>
+        </div>
+
+        {{-- FILTRO DE FECHA DEL HISTORIAL --}}
+        <div class="px-4 pb-4">
+            <form
+                method="GET"
+                action="{{ route('cocinero.pedidos.index') }}"
+                class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+
+                <input type="hidden" name="seccion" value="listos">
+
+                <label for="periodo_listos" class="fw-semibold mb-0">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    Ver pedidos de:
+                </label>
+
+                <select
+                    id="periodo_listos"
+                    name="periodo_listos"
+                    class="form-select"
+                    style="max-width: 260px;"
+                    onchange="this.form.submit()">
+
+                    <option value="hoy" {{ $periodoListos === 'hoy' ? 'selected' : '' }}>
+                        Hoy
+                    </option>
+
+                    <option value="ayer" {{ $periodoListos === 'ayer' ? 'selected' : '' }}>
+                        Ayer
+                    </option>
+
+                    <option value="anteayer" {{ $periodoListos === 'anteayer' ? 'selected' : '' }}>
+                        Anteayer
+                    </option>
+
+                    <option value="semana" {{ $periodoListos === 'semana' ? 'selected' : '' }}>
+                        Última semana
+                    </option>
+
+                </select>
+            </form>
         </div>
 
         @if($cantidadListos > 0)
@@ -411,17 +460,41 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
                             <div class="cocinero-order-title">
                                 <h4>Pedido #{{ $pedido->id }}</h4>
 
-                                @if($pedido->estado === 'asignado')
-                                <span class="pedido-status listo">
-                                    <i class="bi bi-bicycle"></i>
-                                    Asignado a Delivery
-                                </span>
-                                @else
-                                <span class="pedido-status listo">
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    Listo
-                                </span>
-                                @endif
+                                @switch($pedido->estado)
+                                    @case('asignado')
+                                        <span class="pedido-status listo">
+                                            <i class="bi bi-bicycle"></i>
+                                            Asignado a Delivery
+                                        </span>
+                                        @break
+
+                                    @case('en_camino')
+                                        <span class="pedido-status preparando">
+                                            <i class="bi bi-truck"></i>
+                                            En camino
+                                        </span>
+                                        @break
+
+                                    @case('entregado')
+                                        <span class="pedido-status listo">
+                                            <i class="bi bi-check2-all"></i>
+                                            Entregado
+                                        </span>
+                                        @break
+
+                                    @case('cancelado')
+                                        <span class="pedido-status pendiente">
+                                            <i class="bi bi-x-circle-fill"></i>
+                                            Cancelado
+                                        </span>
+                                        @break
+
+                                    @default
+                                        <span class="pedido-status listo">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            Listo
+                                        </span>
+                                @endswitch
                             </div>
 
                             <div class="cocinero-order-meta">
@@ -453,10 +526,17 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
                                 <span>Ver</span>
                             </a>
 
+                            @if(in_array($pedido->estado, ['listo', 'asignado'], true))
                             <span class="cocinero-ready-label">
                                 <i class="bi bi-check-circle-fill"></i>
-                                Listo para delivery
+                                {{ $pedido->estado === 'asignado' ? 'Asignado a Delivery' : 'Listo para Delivery' }}
                             </span>
+                            @else
+                            <span class="text-muted small">
+                                <i class="bi bi-clock-history me-1"></i>
+                                Historial del pedido
+                            </span>
+                            @endif
 
                         </div>
 
