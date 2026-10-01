@@ -332,67 +332,139 @@
 
     </div>
 
+    @php
+        $deliveryTotalDia = (float) $ingresosDelivery;
+        $comisionDeliveryPorcentaje = $deliveryTotalDia > 0
+            ? ($comisionesDelivery / $deliveryTotalDia) * 100
+            : 0;
+        $restauranteDeliveryPorcentaje = $deliveryTotalDia > 0
+            ? ($parteRestauranteDelivery / $deliveryTotalDia) * 100
+            : 0;
+    @endphp
+
     <div class="dashboard-section dashboard-delivery-financial-section">
 
         <div class="section-heading">
-
             <div>
                 <span class="section-eyebrow">DELIVERY</span>
                 <h3>Resumen económico de entregas · {{ $fechaSeleccionada->format('d/m/Y') }}</h3>
+                <p class="dashboard-financial-heading-help">
+                    Ingresos generados por las entregas que finalizaron en esta fecha.
+                </p>
             </div>
 
             <a
                 href="{{ route('admin.deliverys.index') }}"
                 class="dashboard-link">
-
                 Ver Deliverys
                 <i class="bi bi-arrow-right"></i>
-
             </a>
-
         </div>
 
-        <div class="dashboard-delivery-financial-grid">
+        <div class="dashboard-delivery-financial-overview">
 
-            <div class="dashboard-delivery-financial-card">
-                <span>
-                    <i class="bi bi-cash-stack"></i>
-                    Total cobrado por entregas
-                </span>
+            <div class="dashboard-delivery-financial-main">
+                <div class="financial-main-icon">
+                    <i class="bi bi-truck"></i>
+                </div>
 
-                <strong>
-                    Bs {{ number_format($ingresosDelivery, 2) }}
-                </strong>
+                <div class="financial-main-content">
+                    <span>Total generado por entregas</span>
+                    <strong>Bs {{ number_format($deliveryTotalDia, 2) }}</strong>
+                    <small>
+                        {{ $entregasDeliveryDia }}
+                        {{ $entregasDeliveryDia === 1 ? 'entrega finalizada' : 'entregas finalizadas' }}
+                    </small>
+                </div>
+
+                <div class="financial-main-badge">
+                    <i class="bi bi-calendar-check"></i>
+                    {{ $fechaSeleccionada->format('d/m/Y') }}
+                </div>
             </div>
 
-            <div class="dashboard-delivery-financial-card">
-                <span>
-                    <i class="bi bi-person-badge-fill"></i>
-                    Comisión Delivery
-                </span>
+            <div class="dashboard-delivery-financial-breakdown">
 
-                <strong>
-                    Bs {{ number_format($comisionesDelivery, 2) }}
-                </strong>
+                <div class="dashboard-delivery-financial-card financial-commission">
+                    <div class="financial-card-top">
+                        <span>
+                            <i class="bi bi-person-badge-fill"></i>
+                            Comisión Delivery
+                        </span>
+                        <span class="financial-percent">
+                            {{ number_format($comisionDeliveryPorcentaje, 0) }}%
+                        </span>
+                    </div>
+
+                    <strong>
+                        Bs {{ number_format($comisionesDelivery, 2) }}
+                    </strong>
+
+                    <small>
+                        Parte correspondiente al personal de Delivery
+                    </small>
+                </div>
+
+                <div class="dashboard-delivery-financial-card financial-restaurant">
+                    <div class="financial-card-top">
+                        <span>
+                            <i class="bi bi-shop-window"></i>
+                            Parte restaurante
+                        </span>
+                        <span class="financial-percent">
+                            {{ number_format($restauranteDeliveryPorcentaje, 0) }}%
+                        </span>
+                    </div>
+
+                    <strong>
+                        Bs {{ number_format($parteRestauranteDelivery, 2) }}
+                    </strong>
+
+                    <small>
+                        Parte correspondiente a Sabor Express
+                    </small>
+                </div>
+
             </div>
 
-            <div class="dashboard-delivery-financial-card">
-                <span>
-                    <i class="bi bi-shop-window"></i>
-                    Parte restaurante
-                </span>
+            <div class="dashboard-delivery-financial-distribution">
 
-                <strong>
-                    Bs {{ number_format($parteRestauranteDelivery, 2) }}
-                </strong>
+                <div class="financial-distribution-header">
+                    <span>Distribución del total</span>
+                    <strong>100%</strong>
+                </div>
+
+                <div class="financial-distribution-bar">
+                    <div
+                        class="financial-distribution-delivery"
+                        style="width: {{ min(100, max(0, $comisionDeliveryPorcentaje)) }}%;">
+                    </div>
+
+                    <div
+                        class="financial-distribution-restaurant"
+                        style="width: {{ min(100, max(0, $restauranteDeliveryPorcentaje)) }}%;">
+                    </div>
+                </div>
+
+                <div class="financial-distribution-legend">
+                    <span>
+                        <i class="bi bi-circle-fill"></i>
+                        Delivery · Bs {{ number_format($comisionesDelivery, 2) }}
+                    </span>
+                    <span>
+                        <i class="bi bi-circle-fill"></i>
+                        Restaurante · Bs {{ number_format($parteRestauranteDelivery, 2) }}
+                    </span>
+                </div>
+
             </div>
 
         </div>
 
         <p class="dashboard-delivery-financial-note">
-            Estos importes corresponden a entregas finalizadas en la fecha seleccionada.
+            <i class="bi bi-info-circle-fill"></i>
             Cada pedido conserva la tarifa y los porcentajes utilizados al momento de su creación.
-            {{ $entregasDeliveryDia }} {{ $entregasDeliveryDia === 1 ? 'entrega fue' : 'entregas fueron' }} contabilizada{{ $entregasDeliveryDia === 1 ? '' : 's' }} en ese día.
+            Este resumen solo contabiliza entregas finalizadas en la fecha seleccionada.
         </p>
 
     </div>
