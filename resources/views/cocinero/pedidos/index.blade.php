@@ -411,10 +411,17 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
                             <div class="cocinero-order-title">
                                 <h4>Pedido #{{ $pedido->id }}</h4>
 
+                                @if($pedido->estado === 'asignado')
+                                <span class="pedido-status listo">
+                                    <i class="bi bi-bicycle"></i>
+                                    Asignado a Delivery
+                                </span>
+                                @else
                                 <span class="pedido-status listo">
                                     <i class="bi bi-check-circle-fill"></i>
                                     Listo
                                 </span>
+                                @endif
                             </div>
 
                             <div class="cocinero-order-meta">
