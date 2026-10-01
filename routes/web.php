@@ -140,6 +140,16 @@ Route::middleware(['auth', 'role:Administrador'])
         Route::resource('productos', ProductoController::class)->names('admin.productos');
         Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
 
+        Route::patch(
+            '/categorias/{id}/inactivar',
+            [CategoriaController::class, 'inactivar']
+        )->name('admin.categorias.inactivar');
+
+        Route::patch(
+            '/categorias/{id}/activar',
+            [CategoriaController::class, 'activar']
+        )->name('admin.categorias.activar');
+
         Route::get('/pedidos', [AdminPedidoController::class, 'index'])->name('admin.pedidos.index');
         Route::get('/pedidos/{id}', [AdminPedidoController::class, 'show'])->name('admin.pedidos.show');
 
