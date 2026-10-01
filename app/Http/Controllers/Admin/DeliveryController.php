@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Services\FechaFiltroService;
-use Illuminate\Http\Request;
 
 class DeliveryController extends Controller
 {
@@ -93,15 +92,7 @@ class DeliveryController extends Controller
 
         $pedidosEntregados = $asignaciones
             ->filter(function ($asignacion) {
-                return $asignacion->pedido?->estado === 'entregado'
-                    && $asignacion->updated_at
-                    && $asignacion->updated_at
-                        ->copy()
-                        ->timezone(FechaFiltroService::TIMEZONE)
-                        ->betweenIncluded(
-                            $inicioUtc->copy()->timezone(FechaFiltroService::TIMEZONE),
-                            $finUtc->copy()->timezone(FechaFiltroService::TIMEZONE)
-                        );
+                return $asignacion->pedido?->estado === 'entregado';
             })
             ->values();
 
