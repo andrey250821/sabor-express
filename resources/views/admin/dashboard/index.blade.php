@@ -83,61 +83,125 @@
 
         <div class="order-status-card">
 
-            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
-                <span class="status-icon pagado"><i class="bi bi-credit-card-fill"></i></span>
+
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString(), 'estado' => 'pagado']) }}"
+                class="order-status-item status-pagado"
+                title="Ver pedidos {{ strtolower('Pagados') }} de la fecha seleccionada">
+
+                <span class="status-icon pagado">
+                    <i class="bi bi-credit-card-fill"></i>
+                </span>
+
                 <span class="status-info">
-                    <strong>{{ $pedidosPagados }}</strong>
+                    <strong>{{ $pedidosPagado }}</strong>
                     <small>Pagados</small>
                 </span>
+
+                <i class="bi bi-chevron-right status-card-arrow"></i>
             </a>
 
-            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
-                <span class="status-icon preparando"><i class="bi bi-fire"></i></span>
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString(), 'estado' => 'preparando']) }}"
+                class="order-status-item status-preparando"
+                title="Ver pedidos {{ strtolower('Preparando') }} de la fecha seleccionada">
+
+                <span class="status-icon preparando">
+                    <i class="bi bi-fire"></i>
+                </span>
+
                 <span class="status-info">
                     <strong>{{ $pedidosPreparando }}</strong>
                     <small>Preparando</small>
                 </span>
+
+                <i class="bi bi-chevron-right status-card-arrow"></i>
             </a>
 
-            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
-                <span class="status-icon listo"><i class="bi bi-check-circle-fill"></i></span>
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString(), 'estado' => 'listo']) }}"
+                class="order-status-item status-listo"
+                title="Ver pedidos {{ strtolower('Listos') }} de la fecha seleccionada">
+
+                <span class="status-icon listo">
+                    <i class="bi bi-check-circle-fill"></i>
+                </span>
+
                 <span class="status-info">
-                    <strong>{{ $pedidosListos }}</strong>
+                    <strong>{{ $pedidosListo }}</strong>
                     <small>Listos</small>
                 </span>
+
+                <i class="bi bi-chevron-right status-card-arrow"></i>
             </a>
 
-            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
-                <span class="status-icon asignado"><i class="bi bi-person-check-fill"></i></span>
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString(), 'estado' => 'asignado']) }}"
+                class="order-status-item status-asignado"
+                title="Ver pedidos {{ strtolower('Asignados') }} de la fecha seleccionada">
+
+                <span class="status-icon asignado">
+                    <i class="bi bi-person-check-fill"></i>
+                </span>
+
                 <span class="status-info">
-                    <strong>{{ $pedidosAsignados }}</strong>
+                    <strong>{{ $pedidosAsignado }}</strong>
                     <small>Asignados</small>
                 </span>
+
+                <i class="bi bi-chevron-right status-card-arrow"></i>
             </a>
 
-            <a href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}" class="order-status-item">
-                <span class="status-icon camino"><i class="bi bi-bicycle"></i></span>
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString(), 'estado' => 'en_camino']) }}"
+                class="order-status-item status-en_camino"
+                title="Ver pedidos {{ strtolower('En camino') }} de la fecha seleccionada">
+
+                <span class="status-icon camino">
+                    <i class="bi bi-bicycle"></i>
+                </span>
+
                 <span class="status-info">
                     <strong>{{ $pedidosEnCamino }}</strong>
                     <small>En camino</small>
                 </span>
+
+                <i class="bi bi-chevron-right status-card-arrow"></i>
             </a>
 
-            <div class="order-status-item">
-                <span class="status-icon entregado"><i class="bi bi-check2-all"></i></span>
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString(), 'estado' => 'entregado']) }}"
+                class="order-status-item status-entregado"
+                title="Ver pedidos {{ strtolower('Entregados') }} de la fecha seleccionada">
+
+                <span class="status-icon entregado">
+                    <i class="bi bi-check2-all"></i>
+                </span>
+
                 <span class="status-info">
-                    <strong>{{ $pedidosEntregados }}</strong>
+                    <strong>{{ $pedidosEntregado }}</strong>
                     <small>Entregados</small>
                 </span>
-            </div>
 
-            <div class="order-status-item">
-                <span class="status-icon cancelado"><i class="bi bi-x-circle-fill"></i></span>
+                <i class="bi bi-chevron-right status-card-arrow"></i>
+            </a>
+
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString(), 'estado' => 'cancelado']) }}"
+                class="order-status-item status-cancelado"
+                title="Ver pedidos {{ strtolower('Cancelados') }} de la fecha seleccionada">
+
+                <span class="status-icon cancelado">
+                    <i class="bi bi-x-circle-fill"></i>
+                </span>
+
                 <span class="status-info">
-                    <strong>{{ $pedidosCancelados }}</strong>
+                    <strong>{{ $pedidosCancelado }}</strong>
                     <small>Cancelados</small>
                 </span>
-            </div>
+
+                <i class="bi bi-chevron-right status-card-arrow"></i>
+            </a>
 
         </div>
     </div>
