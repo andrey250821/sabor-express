@@ -193,6 +193,7 @@ class PedidoController extends Controller
 
                 $pedido->update([
                     'estado' => 'listo',
+                    'fecha_listo' => now(),
                 ]);
             });
 
