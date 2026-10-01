@@ -43,7 +43,7 @@ class DashboardController extends Controller
             'user',
             'detallePedidos.producto',
         ])
-            ->where('estado', 'listo')
+            ->whereIn('estado', ['listo', 'asignado'])
             ->where('cocinero_id', Auth::id())
             ->orderBy('created_at', 'asc')
             ->orderBy('id', 'asc')
