@@ -110,6 +110,13 @@
             </div>
         </div>
 
+        <div class="col-12">
+            @include('shared.date-filter', [
+                'fechaSeleccionada' => $fechaSeleccionada,
+                'tituloFecha' => 'Actividad de cocina'
+            ])
+        </div>
+
         <div class="col-12 col-xl-7">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body p-4">
@@ -137,7 +144,7 @@
                             <div class="small text-muted mt-1">
                                 Cliente:
                                 {{ $pedido->user?->name ?? 'No disponible' }}
-                                · {{ $pedido->created_at?->format('d/m/Y H:i') }}
+                                · {{ $pedido->created_at?->copy()->timezone(\App\Services\FechaFiltroService::TIMEZONE)->format('d/m/Y H:i') }}
                             </div>
                         </div>
                     @empty
