@@ -196,7 +196,7 @@
                 </span>
 
                 <span class="status-info">
-                    <strong>{{ $pedidosCancelado }}</strong>
+                    <strong>{{ $pedidosCancelados }}</strong>
                     <small>Cancelados</small>
                 </span>
 
