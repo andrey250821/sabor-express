@@ -1617,3 +1617,205 @@
             0 10px 26px rgba(255,47,118,.10);
     }
 }
+
+
+/* --------------------------------------------------------------------------
+   FILTRO DE FECHA COMPARTIDO · VISTA CLIENTE
+   -------------------------------------------------------------------------- */
+
+.cliente-app .sabor-date-filter {
+    position: relative;
+    overflow: hidden;
+    border-color: rgba(255,255,255,.08) !important;
+    border-radius: 18px !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.018)) !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,.14);
+}
+
+.cliente-app .sabor-date-filter::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,47,118,.75),
+        rgba(255,159,67,.55),
+        transparent
+    );
+    pointer-events: none;
+}
+
+.cliente-app .sabor-date-filter-kicker {
+    color: rgba(255,47,118,.88) !important;
+}
+
+.cliente-app .sabor-date-filter-selected {
+    border-color: rgba(255,47,118,.22) !important;
+    background: rgba(255,47,118,.06);
+    color: #fff !important;
+}
+
+.cliente-app .sabor-date-filter-day {
+    border-color: rgba(255,255,255,.08) !important;
+    background: rgba(255,255,255,.025) !important;
+    color: #fff !important;
+}
+
+.cliente-app .sabor-date-filter-day:hover {
+    border-color: rgba(255,47,118,.25) !important;
+    background: rgba(255,47,118,.055) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 20px rgba(255,47,118,.07);
+}
+
+.cliente-app .sabor-date-filter-day.active {
+    border-color: transparent !important;
+    background: linear-gradient(135deg, var(--cliente-primary), var(--cliente-primary-3)) !important;
+    color: #fff !important;
+    box-shadow:
+        0 10px 22px rgba(255,47,118,.20),
+        inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.cliente-app .sabor-date-filter-day.active span {
+    color: rgba(255,255,255,.78) !important;
+}
+
+.cliente-app .sabor-date-filter-help {
+    color: rgba(255,255,255,.42) !important;
+}
+
+/* --------------------------------------------------------------------------
+   ENCABEZADOS BOOTSTRAP DE NOTIFICACIONES Y PERFIL
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-notificaciones-page > .d-flex:first-child,
+.cliente-app .cliente-configuracion-page > .mb-4:first-child {
+    position: relative;
+    padding: 22px 24px;
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 20px;
+    background:
+        radial-gradient(circle at 90% 20%, rgba(255,47,118,.10), transparent 24%),
+        linear-gradient(145deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-notificaciones-page > .d-flex:first-child h1,
+.cliente-app .cliente-configuracion-page > .mb-4:first-child h1 {
+    color: #fff;
+    letter-spacing: -.035em;
+}
+
+.cliente-app .cliente-notificaciones-page > .d-flex:first-child .text-muted,
+.cliente-app .cliente-configuracion-page > .mb-4:first-child .text-muted {
+    color: rgba(255,255,255,.50) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .border-primary {
+    border-color: rgba(255,47,118,.34) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .text-primary {
+    color: #ff5b92 !important;
+}
+
+.cliente-app .cliente-notificaciones-page .btn-outline-primary {
+    color: #ff5b92 !important;
+    border-color: rgba(255,47,118,.36) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .btn-outline-primary:hover {
+    color: #fff !important;
+    background: linear-gradient(135deg, var(--cliente-primary), var(--cliente-primary-3)) !important;
+    border-color: transparent !important;
+}
+
+/* --------------------------------------------------------------------------
+   DASHBOARD · ACENTO EXTRA
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-dashboard {
+    position: relative;
+}
+
+.cliente-app .cliente-dashboard::after {
+    content: "";
+    position: fixed;
+    width: 240px;
+    height: 240px;
+    right: -120px;
+    top: 42%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,47,118,.08), transparent 68%);
+    filter: blur(10px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* --------------------------------------------------------------------------
+   ACCIONES DE PRODUCTOS · JERARQUÍA VISUAL
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-producto-bottom {
+    position: relative;
+    z-index: 2;
+}
+
+.cliente-app .cliente-producto-precio {
+    color: #fff !important;
+    text-shadow: 0 0 18px rgba(255,159,67,.08);
+}
+
+.cliente-app .cliente-producto-calificacion-total {
+    color: rgba(255,255,255,.46) !important;
+}
+
+/* --------------------------------------------------------------------------
+   CARRITO · RESUMEN STICKY EN ESCRITORIO
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 992px) {
+    .cliente-app .cliente-carrito-resumen,
+    .cliente-app .cliente-pedido-resumen {
+        position: sticky;
+        top: 100px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   CALIFICACIONES · VISUAL DE PUNTUACIÓN
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-calificaciones-average-number {
+    color: #fff !important;
+    text-shadow: 0 0 24px rgba(255,47,118,.14);
+}
+
+.cliente-app .cliente-calificaciones-total,
+.cliente-app .cliente-rating-count {
+    color: rgba(255,255,255,.48) !important;
+}
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS TÁCTILES
+   -------------------------------------------------------------------------- */
+
+@media (hover: none) and (pointer: coarse) {
+    .cliente-app .cliente-dashboard-card:hover,
+    .cliente-app .cliente-producto-card:hover,
+    .cliente-app .cliente-carrito-item:hover,
+    .cliente-app .cliente-mis-pedidos-card:hover,
+    .cliente-app .cliente-calificaciones-review-card:hover {
+        transform: none;
+    }
+
+    .cliente-app .cliente-btn-agregar:not(:disabled):hover {
+        animation: none;
+    }
+}
