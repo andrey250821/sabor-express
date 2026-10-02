@@ -843,12 +843,10 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                         <div class="col-12 col-md-6 col-xl-4">
 
-                            <article
-                                 class="delivery-delivered-card pedido-card-clickable"
-                                 role="link"
-                                 tabindex="0"
-                                 onclick="window.location.href='{{ route('delivery.pedidos.show', $pedido->id) }}';"
-                                 onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); window.location.href='{{ route('delivery.pedidos.show', $pedido->id) }}'; }">
+                            <a
+                                href="{{ route('delivery.pedidos.show', $pedido->id) }}"
+                                class="delivery-delivered-card pedido-card-clickable"
+                                aria-label="Ver detalle del pedido #{{ $pedido->id }}">
 
                                 <div class="delivery-delivered-top">
 
@@ -928,7 +926,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                                 </div>
 
-                            </article>
+                            </a>
 
                         </div>
 
