@@ -1,0 +1,3 @@
+# URL local que Expose compartirá con una URL HTTPS pública.
+# No contiene credenciales ni claves privadas.
+local-url: http://127.0.0.1:8000
