@@ -105,6 +105,63 @@
         'tituloFecha' => 'Pedidos registrados'
     ])
 
+    {{-- FILTRO POR ESTADO --}}
+    <div class="pedidos-filtros-panel">
+        <div class="pedidos-filtros-heading">
+            <div class="pedidos-filtros-icon">
+                <i class="bi bi-funnel-fill"></i>
+            </div>
+            <div>
+                <span>Filtros de pedidos</span>
+                <small>Filtra los pedidos por su estado actual</small>
+            </div>
+        </div>
+
+        <form
+            action="{{ route('admin.pedidos.index') }}"
+            method="GET"
+            class="pedidos-filtros-form">
+
+            <input
+                type="hidden"
+                name="fecha"
+                value="{{ $fechaSeleccionada->toDateString() }}">
+
+            <div class="pedidos-filtro-field">
+                <label for="estado-pedido-filtro">
+                    <i class="bi bi-activity"></i>
+                    Estado
+                </label>
+
+                <select
+                    id="estado-pedido-filtro"
+                    name="estado"
+                    class="pedidos-filtro-select">
+                    <option value="">Todos los estados</option>
+                    <option value="pagado" {{ $estadoSeleccionado === 'pagado' ? 'selected' : '' }}>Pagado</option>
+                    <option value="preparando" {{ $estadoSeleccionado === 'preparando' ? 'selected' : '' }}>Preparando</option>
+                    <option value="listo" {{ $estadoSeleccionado === 'listo' ? 'selected' : '' }}>Listo</option>
+                    <option value="asignado" {{ $estadoSeleccionado === 'asignado' ? 'selected' : '' }}>Asignado</option>
+                    <option value="en_camino" {{ $estadoSeleccionado === 'en_camino' ? 'selected' : '' }}>En camino</option>
+                    <option value="entregado" {{ $estadoSeleccionado === 'entregado' ? 'selected' : '' }}>Entregado</option>
+                    <option value="cancelado" {{ $estadoSeleccionado === 'cancelado' ? 'selected' : '' }}>Cancelado</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn pedidos-filtro-submit">
+                <i class="bi bi-funnel-fill"></i>
+                Aplicar filtro
+            </button>
+
+            <a
+                href="{{ route('admin.pedidos.index', ['fecha' => $fechaSeleccionada->toDateString()]) }}"
+                class="btn pedidos-filtro-reset">
+                <i class="bi bi-arrow-counterclockwise"></i>
+                Ver todos
+            </a>
+        </form>
+    </div>
+
     @if($estadoSeleccionado)
     <div class="pedidos-filtro-activo">
         <div class="pedidos-filtro-activo-info">
@@ -251,21 +308,21 @@
 
                                 $estadoClase = match($pedido->estado) {
 
-                                'pagado' => 'estado-pagado',
+                                'pagado' => 'pagado',
 
-                                'preparando' => 'estado-preparando',
+                                'preparando' => 'preparando',
 
-                                'listo' => 'estado-listo',
+                                'listo' => 'listo',
 
-                                'asignado' => 'estado-asignado',
+                                'asignado' => 'asignado',
 
-                                'en_camino' => 'estado-camino',
+                                'en_camino' => 'en_camino',
 
-                                'entregado' => 'estado-entregado',
+                                'entregado' => 'entregado',
 
-                                'cancelado' => 'estado-cancelado',
+                                'cancelado' => 'cancelado',
 
-                                default => 'estado-default',
+                                default => 'default',
 
                                 };
 
@@ -327,7 +384,7 @@
 
                                     @default
 
-                                    {{ ucfirst($pedido->estado) }}
+                                    {{ ucfirst(str_replace('_', ' ', $pedido->estado)) }}
 
                                     @endswitch
 
