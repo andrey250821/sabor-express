@@ -41,6 +41,11 @@
         rel="stylesheet"
         href="{{ asset('css/admin.css') }}">
 
+    {{-- Capa visual transversal para todas las vistas del Admin --}}
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/admin-enhancements.css') }}">
+
 
     @stack('styles')
 
@@ -508,6 +513,9 @@
 
     {{-- Vite / JavaScript de la aplicación --}}
     @vite('resources/js/app.js')
+
+    {{-- Microinteracciones del panel administrativo --}}
+    <script src="{{ asset('js/admin-ui-enhancements.js') }}"></script>
 
 
 </body>
