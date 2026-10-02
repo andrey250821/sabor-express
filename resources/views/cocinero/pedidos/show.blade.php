@@ -7,145 +7,105 @@
 @section('content')
 
 @php
-$estado = strtolower($pedido->estado ?? '');
+    $estado = strtolower($pedido->estado ?? '');
 
-$estadoTexto = match ($estado) {
-'pagado' => 'Pendiente',
-'preparando' => 'Preparando',
-'listo' => 'Listo',
-'asignado' => 'Asignado',
-'en_camino' => 'En camino',
-'entregado' => 'Entregado',
-default => ucfirst($estado ?: 'Sin estado'),
-};
+    $estadoTexto = match ($estado) {
+        'pagado' => 'En cola',
+        'preparando' => 'Preparando',
+        'listo' => 'Listo',
+        'asignado' => 'Asignado',
+        'en_camino' => 'En camino',
+        'entregado' => 'Entregado',
+        'cancelado' => 'Cancelado',
+        default => ucfirst($estado ?: 'Sin estado'),
+    };
 
-$estadoClase = match ($estado) {
-'pagado' => 'pendiente',
-'preparando' => 'preparando',
-'listo' => 'listo',
-default => 'otro',
-};
+    $estadoClase = match ($estado) {
+        'pagado' => 'pendiente',
+        'preparando' => 'preparando',
+        'listo', 'asignado', 'entregado' => 'listo',
+        default => 'otro',
+    };
 
-$estadoIcono = match ($estado) {
-'pagado' => 'bi-clock-fill',
-'preparando' => 'bi-fire',
-'listo' => 'bi-check-circle-fill',
-default => 'bi-info-circle-fill',
-};
+    $estadoIcono = match ($estado) {
+        'pagado' => 'bi-clock-fill',
+        'preparando' => 'bi-fire',
+        'listo' => 'bi-check-circle-fill',
+        'asignado' => 'bi-bicycle',
+        'en_camino' => 'bi-truck',
+        'entregado' => 'bi-check2-all',
+        'cancelado' => 'bi-x-circle-fill',
+        default => 'bi-info-circle-fill',
+    };
 
-$cliente = $pedido->user->name ?? 'Cliente';
-
-$detalles = $pedido->detallePedidos ?? collect();
-
-$cantidadProductos = $detalles->sum('cantidad');
+    $cliente = $pedido->user->name ?? 'Cliente';
+    $detalles = $pedido->detallePedidos ?? collect();
+    $cantidadProductos = $detalles->sum('cantidad');
 @endphp
 
+<div class="container-fluid px-0 cocinero-pedido-show">
 
-<div class="container-fluid cocinero-pedido-show">
-
-    {{-- =====================================================
-         CABECERA
-    ====================================================== --}}
-
-    <div class="cocinero-detail-header">
+    {{-- CABECERA --}}
+    <div class="cocinero-detail-header cocinero-reveal">
 
         <div>
 
-            <a href="{{ route('cocinero.pedidos.index') }}"
+            <a
+                href="{{ route('cocinero.pedidos.index') }}"
                 class="cocinero-back-link">
 
                 <i class="bi bi-arrow-left"></i>
-
                 Volver a pedidos
-
             </a>
 
             <div class="cocinero-detail-title">
 
                 <div class="cocinero-detail-order-icon">
-
                     <i class="bi bi-bag-check-fill"></i>
-
                 </div>
 
                 <div>
-
                     <span>Detalle del pedido</span>
 
                     <h2>
-                        Pedido #{{ $pedido->id }}
+                        #{{ $pedido->id }}
                     </h2>
-
                 </div>
-
             </div>
-
         </div>
-
-
-        {{-- Estado --}}
 
         <div class="pedido-detail-status {{ $estadoClase }}">
 
             <i class="bi {{ $estadoIcono }}"></i>
 
             <div>
-
                 <small>Estado actual</small>
-
-                <strong>
-                    {{ $estadoTexto }}
-                </strong>
-
+                <strong>{{ $estadoTexto }}</strong>
             </div>
-
         </div>
-
     </div>
-
-
-    {{-- =====================================================
-         INFORMACIÓN PRINCIPAL
-    ====================================================== --}}
 
     <div class="row g-4">
 
-
-        {{-- =================================================
-             COLUMNA PRINCIPAL
-        ================================================== --}}
-
+        {{-- COLUMNA PRINCIPAL --}}
         <div class="col-12 col-xl-8">
 
-
             {{-- CLIENTE --}}
-
-            <div class="cocinero-detail-card mb-4">
+            <section class="cocinero-detail-card mb-4 cocinero-reveal">
 
                 <div class="cocinero-detail-card-header">
 
                     <div>
-
                         <div class="cocinero-detail-card-icon">
                             <i class="bi bi-person-fill"></i>
                         </div>
 
                         <div>
-
-                            <h3>
-                                Cliente
-                            </h3>
-
-                            <span>
-                                Información del cliente
-                            </span>
-
+                            <h3>Cliente</h3>
+                            <span>Información del cliente</span>
                         </div>
-
                     </div>
-
                 </div>
-
 
                 <div class="cocinero-client-box">
 
@@ -154,628 +114,415 @@ $cantidadProductos = $detalles->sum('cantidad');
                         @if($pedido->user?->foto_perfil_url)
                             <img
                                 src="{{ $pedido->user->foto_perfil_url }}"
-                                alt="Foto de {{ $pedido->user->name }}">
+                                alt="Foto de {{ $cliente }}">
                         @else
                             <i class="bi bi-person-fill"></i>
                         @endif
-
                     </div>
 
                     <div class="cocinero-client-info">
 
-                        <strong>
-                            {{ $cliente }}
-                        </strong>
+                        <strong>{{ $cliente }}</strong>
 
                         @if($pedido->user?->email)
-
-                        <span>
-                            <i class="bi bi-envelope"></i>
-                            {{ $pedido->user->email }}
-                        </span>
-
+                            <span>
+                                <i class="bi bi-envelope"></i>
+                                {{ $pedido->user->email }}
+                            </span>
                         @endif
 
                         @if($pedido->user?->telefono)
-
-                        <span>
-                            <i class="bi bi-telephone"></i>
-                            {{ $pedido->user->telefono }}
-                        </span>
-
+                            <span>
+                                <i class="bi bi-telephone"></i>
+                                {{ $pedido->user->telefono }}
+                            </span>
                         @endif
-
                     </div>
-
                 </div>
-
-            </div>
-
+            </section>
 
             {{-- PRODUCTOS --}}
-
-            <div class="cocinero-detail-card mb-4">
+            <section class="cocinero-detail-card mb-4 cocinero-reveal">
 
                 <div class="cocinero-detail-card-header">
 
                     <div>
-
                         <div class="cocinero-detail-card-icon">
                             <i class="bi bi-basket-fill"></i>
                         </div>
 
                         <div>
-
-                            <h3>
-                                Productos
-                            </h3>
-
-                            <span>
-                                Productos incluidos en el pedido
-                            </span>
-
+                            <h3>Productos</h3>
+                            <span>Productos incluidos en el pedido</span>
                         </div>
-
                     </div>
 
                     <span class="cocinero-detail-count">
-
                         {{ $cantidadProductos }}
-
-                        {{ $cantidadProductos == 1
-                            ? 'producto'
-                            : 'productos' }}
-
+                        {{ $cantidadProductos === 1 ? 'unidad' : 'unidades' }}
                     </span>
-
                 </div>
-
 
                 <div class="cocinero-products-list">
 
                     @forelse($detalles as $detalle)
 
-                    @php
-                    $producto = $detalle->producto;
-                    @endphp
+                        @php
+                            $producto = $detalle->producto;
+                        @endphp
 
-                    <div class="cocinero-product-item">
+                        <div class="cocinero-product-item">
 
-                        <div class="cocinero-product-image">
+                            <div class="cocinero-product-image">
 
-                            @if($producto?->imagen)
+                                @if($producto?->imagen)
 
-                            <img
-                                src="{{ asset('storage/' . $producto->imagen) }}"
-                                alt="{{ $producto->nombre }}">
+                                    <img
+                                        src="{{ asset('storage/' . $producto->imagen) }}"
+                                        alt="{{ $producto->nombre }}">
 
-                            @else
+                                @else
 
-                            <i class="bi bi-image"></i>
+                                    <i class="bi bi-image"></i>
 
-                            @endif
+                                @endif
+                            </div>
 
-                        </div>
+                            <div class="cocinero-product-info">
 
+                                <h4>
+                                    {{ $producto->nombre ?? 'Producto' }}
+                                </h4>
 
-                        <div class="cocinero-product-info">
+                                @if($producto?->descripcion)
+                                    <p>
+                                        {{ $producto->descripcion }}
+                                    </p>
+                                @endif
 
-                            <h4>
-                                {{ $producto->nombre ?? 'Producto' }}
-                            </h4>
+                                <span>
+                                    Cantidad:
+                                    <strong>{{ $detalle->cantidad }}</strong>
+                                </span>
+                            </div>
 
-                            @if($producto?->descripcion)
+                            <div class="cocinero-product-price">
 
-                            <p>
-                                {{ $producto->descripcion }}
-                            </p>
+                                <span>
+                                    Bs {{ number_format($detalle->precio ?? 0, 2) }}
+                                </span>
 
-                            @endif
-
-                            <span>
-
-                                Cantidad:
                                 <strong>
-                                    {{ $detalle->cantidad }}
+                                    Bs {{ number_format($detalle->subtotal ?? 0, 2) }}
                                 </strong>
-
-                            </span>
-
+                            </div>
                         </div>
-
-
-                        <div class="cocinero-product-price">
-
-                            <span>
-                                Bs {{ number_format($detalle->precio ?? 0, 2) }}
-                            </span>
-
-                            <strong>
-                                Bs {{ number_format($detalle->subtotal ?? 0, 2) }}
-                            </strong>
-
-                        </div>
-
-                    </div>
 
                     @empty
 
-                    <div class="cocinero-detail-empty">
-
-                        <i class="bi bi-basket"></i>
-
-                        <span>
-                            No hay productos registrados.
-                        </span>
-
-                    </div>
+                        <div class="cocinero-detail-empty">
+                            <i class="bi bi-basket"></i>
+                            <span>No hay productos registrados.</span>
+                        </div>
 
                     @endforelse
 
                 </div>
 
-
-                {{-- TOTAL --}}
-
                 <div class="cocinero-detail-total">
 
-                    <span>
-                        Total del pedido
-                    </span>
+                    <span>Total del pedido</span>
 
                     <strong>
                         Bs {{ number_format($pedido->total ?? 0, 2) }}
                     </strong>
-
                 </div>
-
-            </div>
-
+            </section>
 
             {{-- OBSERVACIONES --}}
-
             @if($pedido->observacion_cliente)
 
-            <div class="cocinero-detail-card mb-4">
+                <section class="cocinero-detail-card mb-4 cocinero-reveal">
 
-                <div class="cocinero-detail-card-header">
-
-                    <div>
-
-                        <div class="cocinero-detail-card-icon warning">
-                            <i class="bi bi-chat-left-text-fill"></i>
-                        </div>
+                    <div class="cocinero-detail-card-header">
 
                         <div>
+                            <div class="cocinero-detail-card-icon warning">
+                                <i class="bi bi-chat-left-text-fill"></i>
+                            </div>
 
-                            <h3>
-                                Observación del cliente
-                            </h3>
-
-                            <span>
-                                Indicaciones especiales para la preparación
-                            </span>
-
+                            <div>
+                                <h3>Observación del cliente</h3>
+                                <span>Indicaciones especiales para la preparación</span>
+                            </div>
                         </div>
-
                     </div>
 
-                </div>
+                    <div class="cocinero-observation">
 
+                        <i class="bi bi-exclamation-circle-fill"></i>
 
-                <div class="cocinero-observation">
+                        <div>
+                            <strong>Indicaciones</strong>
 
-                    <i class="bi bi-exclamation-circle-fill"></i>
-
-                    <div>
-
-                        <strong>
-                            Indicaciones
-                        </strong>
-
-                        <p>
-                            {{ $pedido->observacion_cliente }}
-                        </p>
-
+                            <p>
+                                {{ $pedido->observacion_cliente }}
+                            </p>
+                        </div>
                     </div>
-
-                </div>
-
-            </div>
+                </section>
 
             @endif
 
         </div>
 
-
-        {{-- =================================================
-             COLUMNA LATERAL
-        ================================================== --}}
-
+        {{-- COLUMNA LATERAL --}}
         <div class="col-12 col-xl-4">
 
-
-            {{-- ACCIONES --}}
-
-            <div class="cocinero-detail-card mb-4">
+            {{-- ACCIÓN DE COCINA --}}
+            <section class="cocinero-detail-card mb-4 cocinero-reveal">
 
                 <div class="cocinero-detail-card-header">
 
                     <div>
-
                         <div class="cocinero-detail-card-icon">
                             <i class="bi bi-lightning-charge-fill"></i>
                         </div>
 
                         <div>
-
-                            <h3>
-                                Acción de cocina
-                            </h3>
-
-                            <span>
-                                Gestiona únicamente el estado de tus pedidos de cocina
-                            </span>
-
+                            <h3>Acción de cocina</h3>
+                            <span>Solo cambia el estado de preparación</span>
                         </div>
-
                     </div>
-
                 </div>
-
 
                 <div class="cocinero-detail-actions">
 
-                    @if(
-                        $estado === 'pagado'
-                        && $pedido->cocinero_id === null
-                    )
+                    @if($estado === 'pagado' && $pedido->cocinero_id === null)
 
-                    <div class="cocinero-action-info pendiente">
+                        <div class="cocinero-action-info pendiente">
 
-                        <i class="bi bi-clock-history"></i>
+                            <i class="bi bi-hourglass-split"></i>
 
-                        <div>
+                            <div>
+                                <strong>Pedido disponible</strong>
 
-                            <strong>
-                                Pedido disponible
-                            </strong>
-
-                            <span>
-                                Este pedido está en la cola de preparación.
-                                Al pulsar <strong>Preparar pedido</strong>, pasará
-                                inmediatamente a tu sección de preparación y dejará
-                                de estar disponible para los demás cocineros.
-                            </span>
-
+                                <span>
+                                    Está en la cola de preparación y respeta el orden de llegada.
+                                </span>
+                            </div>
                         </div>
 
-                    </div>
+                        <form
+                            method="POST"
+                            action="{{ route('cocinero.pedidos.preparar', $pedido->id) }}"
+                            data-confirm="¿Comenzar a preparar el pedido #{{ $pedido->id }}?"
+                            data-loading-text="Preparando...">
 
+                            @csrf
+                            @method('PUT')
 
-                    <form
-                        method="POST"
-                        action="{{ route('cocinero.pedidos.preparar', $pedido->id) }}">
+                            <button
+                                type="submit"
+                                class="btn cocinero-action-btn preparar js-ripple">
 
-                        @csrf
-                        @method('PUT')
+                                <i class="bi bi-fire me-1"></i>
+                                Preparar pedido
+                            </button>
+                        </form>
 
-                        <button
-                            type="submit"
-                            class="btn cocinero-action-btn preparar"
-                            onclick="return confirm('¿Comenzar a preparar el pedido #{{ $pedido->id }}? Se retirará de la cola de los demás cocineros.')">
+                    @elseif($estado === 'preparando' &&
+                        (int) $pedido->cocinero_id === (int) auth()->id())
+
+                        <div class="cocinero-action-info preparando">
 
                             <i class="bi bi-fire"></i>
 
-                            Preparar pedido
+                            <div>
+                                <strong>Pedido en preparación</strong>
 
-                        </button>
-
-                    </form>
-
-
-                    @elseif(
-                        $estado === 'preparando'
-                        && (int) $pedido->cocinero_id === (int) auth()->id()
-                    )
-
-                    <div class="cocinero-action-info preparando">
-
-                        <i class="bi bi-fire"></i>
-
-                        <div>
-
-                            <strong>
-                                Pedido en preparación
-                            </strong>
-
-                            <span>
-                                Este pedido está siendo preparado por ti.
-                                Cuando termines, márcalo como listo.
-                            </span>
-
+                                <span>
+                                    Este pedido está siendo preparado por ti.
+                                    Cuando termines, márcalo como listo.
+                                </span>
+                            </div>
                         </div>
 
-                    </div>
+                        <form
+                            method="POST"
+                            action="{{ route('cocinero.pedidos.listo', $pedido->id) }}"
+                            data-confirm="¿Marcar el pedido #{{ $pedido->id }} como listo?"
+                            data-loading-text="Finalizando...">
 
+                            @csrf
+                            @method('PUT')
 
-                    <form
-                        method="POST"
-                        action="{{ route('cocinero.pedidos.listo', $pedido->id) }}">
+                            <button
+                                type="submit"
+                                class="btn cocinero-action-btn listo js-ripple">
 
-                        @csrf
-                        @method('PUT')
+                                <i class="bi bi-check-lg me-1"></i>
+                                Marcar como listo
+                            </button>
+                        </form>
 
-                        <button
-                            type="submit"
-                            class="btn cocinero-action-btn listo"
-                            onclick="return confirm('¿Marcar el pedido #{{ $pedido->id }} como listo?')">
+                    @elseif($estado === 'listo' &&
+                        (int) $pedido->cocinero_id === (int) auth()->id())
 
-                            <i class="bi bi-check-lg"></i>
+                        <div class="cocinero-action-info listo">
 
-                            Marcar como listo
+                            <i class="bi bi-check-circle-fill"></i>
 
-                        </button>
+                            <div>
+                                <strong>Pedido terminado</strong>
 
-                    </form>
-
-
-                    @elseif(
-                        $estado === 'listo'
-                        && (int) $pedido->cocinero_id === (int) auth()->id()
-                    )
-
-                    <div class="cocinero-action-info listo">
-
-                        <i class="bi bi-check-circle-fill"></i>
-
-                        <div>
-
-                            <strong>
-                                Pedido listo
-                            </strong>
-
-                            <span>
-                                Este pedido fue terminado por ti y ya está
-                                disponible para el siguiente paso del flujo.
-                            </span>
-
+                                <span>
+                                    La cocina terminó este pedido.
+                                    El sistema continúa con el siguiente paso automáticamente.
+                                </span>
+                            </div>
                         </div>
-
-                    </div>
-
 
                     @else
 
-                    <div class="cocinero-action-info">
+                        <div class="cocinero-action-info">
 
-                        <i class="bi bi-info-circle-fill"></i>
+                            <i class="bi bi-info-circle-fill"></i>
 
-                        <div>
+                            <div>
+                                <strong>Sin acciones disponibles</strong>
 
-                            <strong>
-                                Sin acciones disponibles
-                            </strong>
-
-                            <span>
-                                Este pedido ya no se encuentra en una etapa
-                                que pueda ser gestionada desde esta cuenta.
-                            </span>
-
+                                <span>
+                                    Este pedido ya está en una etapa posterior
+                                    o pertenece a otro cocinero.
+                                </span>
+                            </div>
                         </div>
-
-                    </div>
 
                     @endif
 
                 </div>
-
-            </div>
-
+            </section>
 
             {{-- ENTREGA --}}
-
-            <div class="cocinero-detail-card mb-4">
+            <section class="cocinero-detail-card mb-4 cocinero-reveal">
 
                 <div class="cocinero-detail-card-header">
 
                     <div>
-
                         <div class="cocinero-detail-card-icon">
                             <i class="bi bi-geo-alt-fill"></i>
                         </div>
 
                         <div>
-
-                            <h3>
-                                Entrega
-                            </h3>
-
-                            <span>
-                                Información para delivery
-                            </span>
-
+                            <h3>Entrega</h3>
+                            <span>Información registrada para Delivery</span>
                         </div>
-
                     </div>
-
                 </div>
-
 
                 <div class="cocinero-delivery-info">
 
                     @if($pedido->direccion_entrega)
 
-                    <div class="cocinero-info-row">
+                        <div class="cocinero-info-row">
 
-                        <div class="cocinero-info-row-icon">
-                            <i class="bi bi-geo-alt-fill"></i>
+                            <div class="cocinero-info-row-icon">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+
+                            <div>
+                                <small>Dirección</small>
+                                <strong>{{ $pedido->direccion_entrega }}</strong>
+                            </div>
                         </div>
-
-                        <div>
-
-                            <small>
-                                Dirección
-                            </small>
-
-                            <strong>
-                                {{ $pedido->direccion_entrega }}
-                            </strong>
-
-                        </div>
-
-                    </div>
 
                     @endif
-
 
                     @if($pedido->referencia_delivery)
 
-                    <div class="cocinero-info-row">
+                        <div class="cocinero-info-row">
 
-                        <div class="cocinero-info-row-icon">
-                            <i class="bi bi-signpost-2-fill"></i>
+                            <div class="cocinero-info-row-icon">
+                                <i class="bi bi-signpost-2-fill"></i>
+                            </div>
+
+                            <div>
+                                <small>Referencia</small>
+                                <strong>{{ $pedido->referencia_delivery }}</strong>
+                            </div>
                         </div>
-
-                        <div>
-
-                            <small>
-                                Referencia
-                            </small>
-
-                            <strong>
-                                {{ $pedido->referencia_delivery }}
-                            </strong>
-
-                        </div>
-
-                    </div>
 
                     @endif
 
+                    @if($pedido->latitud !== null && $pedido->longitud !== null)
 
-                    @if($pedido->latitud && $pedido->longitud)
+                        <div class="cocinero-coordinates">
 
-                    <div class="cocinero-coordinates">
+                            <i class="bi bi-pin-map-fill"></i>
 
-                        <i class="bi bi-pin-map-fill"></i>
-
-                        <div>
-
-                            <small>
-                                Ubicación registrada
-                            </small>
-
-                            <span>
-                                {{ $pedido->latitud }},
-                                {{ $pedido->longitud }}
-                            </span>
-
+                            <div>
+                                <small>Ubicación registrada</small>
+                                <span>
+                                    {{ $pedido->latitud }},
+                                    {{ $pedido->longitud }}
+                                </span>
+                            </div>
                         </div>
-
-                    </div>
 
                     @endif
 
                 </div>
+            </section>
 
-            </div>
-
-
-            {{-- INFORMACIÓN DEL PEDIDO --}}
-
-            <div class="cocinero-detail-card">
+            {{-- INFORMACIÓN --}}
+            <section class="cocinero-detail-card cocinero-reveal">
 
                 <div class="cocinero-detail-card-header">
 
                     <div>
-
                         <div class="cocinero-detail-card-icon">
                             <i class="bi bi-info-circle-fill"></i>
                         </div>
 
                         <div>
-
-                            <h3>
-                                Información
-                            </h3>
-
-                            <span>
-                                Datos del pedido
-                            </span>
-
+                            <h3>Información</h3>
+                            <span>Datos del pedido</span>
                         </div>
-
                     </div>
-
                 </div>
-
 
                 <div class="cocinero-order-data">
 
                     <div>
-
-                        <span>
-                            Número de pedido
-                        </span>
-
-                        <strong>
-                            #{{ $pedido->id }}
-                        </strong>
-
+                        <span>Número de pedido</span>
+                        <strong>#{{ $pedido->id }}</strong>
                     </div>
 
-
                     <div>
-
-                        <span>
-                            Fecha
-                        </span>
-
-                        <strong>
-                            {{ $pedido->created_at?->format('d/m/Y') }}
-                        </strong>
-
+                        <span>Fecha</span>
+                        <strong>{{ $pedido->created_at?->format('d/m/Y') }}</strong>
                     </div>
 
-
                     <div>
-
-                        <span>
-                            Hora
-                        </span>
-
-                        <strong>
-                            {{ $pedido->created_at?->format('H:i') }}
-                        </strong>
-
+                        <span>Hora</span>
+                        <strong>{{ $pedido->created_at?->format('H:i') }}</strong>
                     </div>
 
-
                     <div>
-
-                        <span>
-                            Estado
-                        </span>
+                        <span>Estado</span>
 
                         <strong class="pedido-status {{ $estadoClase }}">
-
                             <i class="bi {{ $estadoIcono }}"></i>
-
                             {{ $estadoTexto }}
-
                         </strong>
-
                     </div>
 
                 </div>
-
-            </div>
+            </section>
 
         </div>
-
     </div>
-
 </div>
 
 @endsection
