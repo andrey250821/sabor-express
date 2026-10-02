@@ -11415,3 +11415,437 @@ body.admin-menu-open {
     }
 
 }
+
+/* ==========================================================================
+   CORRECCIONES DEFINITIVAS — RESPONSIVE + INTERACCIÓN
+   --------------------------------------------------------------------------
+   Esta capa corrige conflictos de reglas responsive antiguas que podían:
+   - ocultar los nombres del menú en el drawer móvil;
+   - reducir el sidebar a una columna de solo iconos;
+   - empujar los botones de cabecera hacia el centro por culpa del ::after;
+   - generar diferentes comportamientos entre PC, tablet y celular.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. LÍNEA DECORATIVA DE CABECERAS
+   -------------------------------------------------------------------------- */
+
+/*
+ * La línea decorativa era un pseudo-elemento FLEX y se estaba comportando
+ * como si fuera una columna adicional dentro de .deliverys-header,
+ * .productos-header, etc. Eso podía dejar los botones en el centro.
+ */
+.dashboard-header::after,
+.productos-header::after,
+.categorias-header::after,
+.deliverys-header::after,
+.clientes-header::after,
+.notificaciones-header::after,
+.configuracion-header::after,
+.cliente-detalle-header::after,
+.delivery-admin-detail-header::after,
+.admin-cocinero-detail-header::after,
+.pedido-detalle-header::after,
+.pedido-header::after {
+    position: absolute;
+    left: 0;
+    bottom: -11px;
+
+    width: min(180px, 45%);
+    height: 3px;
+
+    margin: 0;
+
+    pointer-events: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. CABECERAS — BOTONES SIEMPRE AL FINAL EN ESCRITORIO
+   -------------------------------------------------------------------------- */
+
+.dashboard-header,
+.productos-header,
+.categorias-header,
+.deliverys-header,
+.clientes-header,
+.notificaciones-header,
+.configuracion-header,
+.cliente-detalle-header,
+.delivery-admin-detail-header,
+.admin-cocinero-detail-header,
+.pedido-detalle-header,
+.pedido-header {
+    position: relative;
+    width: 100%;
+}
+
+.dashboard-header > div:first-child,
+.productos-header > div:first-child,
+.categorias-header > div:first-child,
+.deliverys-header > div:first-child,
+.clientes-header > div:first-child,
+.notificaciones-header > div:first-child,
+.configuracion-header > div:first-child,
+.cliente-detalle-header > div:first-child,
+.delivery-admin-detail-header > div:first-child,
+.admin-cocinero-detail-header > div:first-child,
+.pedido-detalle-header > div:first-child,
+.pedido-header > div:first-child {
+    min-width: 0;
+}
+
+.dashboard-header > .btn,
+.productos-header > .btn,
+.categorias-header > .btn,
+.deliverys-header > .btn,
+.clientes-header > .btn,
+.notificaciones-header > .btn,
+.configuracion-header > .btn,
+.cliente-detalle-header > .btn,
+.delivery-admin-detail-header > .btn,
+.admin-cocinero-detail-header > .btn,
+.pedido-detalle-header > .btn,
+.pedido-header > .btn {
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. DRAWER MÓVIL — MOSTRAR ICONO + TEXTO
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+
+    .admin-sidebar {
+        width: min(300px, 88vw) !important;
+        min-width: min(300px, 88vw) !important;
+        padding: 20px 14px !important;
+    }
+
+    .sidebar-brand {
+        padding: 8px 8px 18px !important;
+    }
+
+    .sidebar-brand-name,
+    .sidebar-brand-subtitle {
+        display: block !important;
+    }
+
+    .sidebar-brand-name {
+        font-size: 20px !important;
+    }
+
+    .sidebar-link {
+        width: 100%;
+        min-height: 48px !important;
+
+        justify-content: flex-start !important;
+        gap: 12px !important;
+
+        padding: 8px 11px !important;
+
+        font-size: 13px !important;
+    }
+
+    .sidebar-link > span:not(.sidebar-icon):not(.badge) {
+        display: inline !important;
+        min-width: 0;
+    }
+
+    .sidebar-icon {
+        width: 35px !important;
+        height: 35px !important;
+        min-width: 35px !important;
+        flex: 0 0 35px;
+    }
+
+    .sidebar-link .badge {
+        position: static !important;
+        margin-left: auto !important;
+        min-width: 22px !important;
+        height: 22px !important;
+        padding: 0 6px !important;
+        font-size: 10px !important;
+        border-width: 2px !important;
+    }
+
+    .sidebar-link.active::before {
+        left: -1px !important;
+    }
+
+    .admin-content {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .admin-sidebar {
+        width: min(292px, 90vw) !important;
+        min-width: min(292px, 90vw) !important;
+    }
+
+    .sidebar-brand-name {
+        font-size: 18px !important;
+    }
+
+    .sidebar-brand-subtitle {
+        font-size: 9px !important;
+    }
+
+    .sidebar-link {
+        min-height: 46px !important;
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   4. BOTONES DE CABECERA — ESCRITORIO, TABLET Y CELULAR
+   -------------------------------------------------------------------------- */
+
+.deliverys-btn-nuevo,
+.productos-btn-nuevo,
+.btn-categoria-nueva {
+    flex: 0 0 auto;
+    align-self: center;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+@media (max-width: 767.98px) {
+
+    .deliverys-header,
+    .productos-header,
+    .categorias-header,
+    .clientes-header,
+    .notificaciones-header,
+    .configuracion-header,
+    .cliente-detalle-header,
+    .delivery-admin-detail-header,
+    .admin-cocinero-detail-header,
+    .pedido-detalle-header,
+    .pedido-header {
+        width: 100%;
+    }
+
+    .deliverys-header .deliverys-btn-nuevo,
+    .productos-header .productos-btn-nuevo,
+    .categorias-header .btn-categoria-nueva {
+        width: auto !important;
+        max-width: 100%;
+        margin-left: auto;
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .deliverys-header .deliverys-btn-nuevo,
+    .productos-header .productos-btn-nuevo,
+    .categorias-header .btn-categoria-nueva {
+        width: auto !important;
+        align-self: flex-start;
+        margin-left: 0;
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   5. INTERACCIÓN VISUAL
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .sidebar-link,
+    .sidebar-icon,
+    .sidebar-icon i,
+    .admin-mobile-toggle,
+    .topbar-logout,
+    .admin-content .btn,
+    .dashboard-metric-card,
+    .order-status-item,
+    .recent-order,
+    .attention-card,
+    .quick-product-link,
+    .pedido-card-clickable,
+    .delivery-admin-history-row,
+    .admin-cocinero-order-row,
+    .producto-imagen,
+    .producto-sin-imagen,
+    .btn-producto,
+    .btn-categoria-editar,
+    .btn-categoria-eliminar,
+    .btn-categoria-inactivar,
+    .btn-categoria-activar,
+    .btn-delivery,
+    .cliente-btn {
+        transition:
+            transform .22s cubic-bezier(.2,.8,.2,1),
+            box-shadow .22s ease,
+            background-color .22s ease,
+            border-color .22s ease,
+            color .22s ease,
+            filter .22s ease;
+    }
+
+    /* Botones: sensación de elevación + pulsación */
+    .admin-content .btn:not(.btn-close),
+    .admin-mobile-toggle,
+    .topbar-logout {
+        position: relative;
+        isolation: isolate;
+    }
+
+    .admin-content .btn:not(.btn-close)::before,
+    .admin-mobile-toggle::before,
+    .topbar-logout::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -120%;
+        width: 55%;
+        height: 100%;
+
+        background: linear-gradient(
+            105deg,
+            transparent,
+            rgba(255,255,255,.18),
+            transparent
+        );
+
+        transform: skewX(-20deg);
+        pointer-events: none;
+        transition: left .42s ease;
+        z-index: -1;
+    }
+
+    .admin-content .btn:not(.btn-close):hover,
+    .admin-mobile-toggle:hover,
+    .topbar-logout:hover {
+        transform: translateY(-2px) scale(1.015);
+    }
+
+    .admin-content .btn:not(.btn-close):hover::before,
+    .admin-mobile-toggle:hover::before,
+    .topbar-logout:hover::before {
+        left: 125%;
+    }
+
+    .admin-content .btn:not(.btn-close):active,
+    .admin-mobile-toggle:active,
+    .topbar-logout:active {
+        transform: translateY(0) scale(.975);
+    }
+
+    /* Menú: el icono responde al acercar el puntero */
+    .sidebar-link:hover .sidebar-icon {
+        transform: translateX(2px) scale(1.08) rotate(-2deg);
+    }
+
+    .sidebar-link:hover .sidebar-icon i {
+        transform: scale(1.12) rotate(3deg);
+    }
+
+    .sidebar-link.active .sidebar-icon i {
+        animation: adminIconFloat 2.8s ease-in-out infinite;
+    }
+
+    /* Tarjetas y filas interactivas */
+    .dashboard-metric-card:hover,
+    .order-status-item:hover,
+    .recent-order:hover,
+    .attention-card:hover,
+    .quick-product-link:hover,
+    .pedido-card-clickable:hover,
+    .delivery-admin-history-row:hover,
+    .admin-cocinero-order-row:hover {
+        transform: translateY(-2px);
+    }
+
+    .dashboard-metric-card:hover {
+        box-shadow:
+            0 15px 34px rgba(0,0,0,.25),
+            0 0 0 1px rgba(255,77,136,.06);
+    }
+
+    .producto-imagen:hover,
+    .producto-sin-imagen:hover {
+        transform: translateY(-2px) scale(1.025);
+        filter: brightness(1.06);
+    }
+
+    /* Acciones pequeñas: reacción rápida al tocar/posar */
+    .btn-producto:hover,
+    .btn-delivery:hover,
+    .cliente-btn:hover,
+    .btn-categoria-editar:hover,
+    .btn-categoria-eliminar:hover,
+    .btn-categoria-inactivar:hover,
+    .btn-categoria-activar:hover {
+        transform: translateY(-3px) scale(1.045);
+    }
+
+    .btn-producto:active,
+    .btn-delivery:active,
+    .cliente-btn:active,
+    .btn-categoria-editar:active,
+    .btn-categoria-eliminar:active,
+    .btn-categoria-inactivar:active,
+    .btn-categoria-activar:active {
+        transform: translateY(0) scale(.94);
+    }
+
+    @keyframes adminIconFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-2px); }
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   6. INTERACCIÓN TÁCTIL
+   -------------------------------------------------------------------------- */
+
+@media (pointer: coarse) {
+
+    .admin-content .btn,
+    .sidebar-link,
+    .admin-mobile-toggle,
+    .btn-producto,
+    .btn-delivery,
+    .cliente-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .sidebar-link:active {
+        background:
+            linear-gradient(
+                90deg,
+                rgba(196, 44, 99, .58),
+                rgba(139, 30, 69, .18)
+            );
+        transform: scale(.985);
+    }
+
+    .admin-content .btn:active {
+        filter: brightness(1.08);
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   7. RESPETAR REDUCCIÓN DE MOVIMIENTO
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sidebar-link.active .sidebar-icon i,
+    .admin-content .btn:not(.btn-close)::before,
+    .admin-mobile-toggle::before,
+    .topbar-logout::before {
+        animation: none !important;
+        transition: none !important;
+    }
+}
