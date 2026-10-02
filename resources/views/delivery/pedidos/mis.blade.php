@@ -619,11 +619,11 @@ $cantidadEntregados = $pedidosEntregados->count();
                             <a
                                 href="{{ route('delivery.pedidos.show', $pedido->id) }}"
                                 class="delivery-my-detail-btn"
-                                aria-label="Ver detalless del pedido #{{ $pedido->id }}">
+                                aria-label="Ver detalles del pedido #{{ $pedido->id }}">
 
                                 <i class="bi bi-eye-fill"></i>
 
-                                Ver detalless
+                                Ver detalles
 
                             </a>
 
