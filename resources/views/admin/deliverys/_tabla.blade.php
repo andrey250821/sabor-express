@@ -21,9 +21,14 @@
             </div>
 
             <div>
-                <strong>
+                <a
+                    href="{{ route('admin.deliverys.show', $delivery->id) }}"
+                    class="delivery-name-link"
+                    title="Ver actividad y estadísticas de {{ $delivery->name }}">
+
                     {{ $delivery->name }}
-                </strong>
+
+                </a>
 
                 <small>
                     Delivery
