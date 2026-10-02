@@ -100,7 +100,7 @@
             <div class="cocinero-profile-info">
 
                 <span class="cocinero-profile-name">
-                    {{ Auth::user()->nombre ?? Auth::user()->name ?? 'Cocinero' }}
+                    {{ Auth::user()->name ?? 'Cocinero' }}
                 </span>
 
                 <span class="cocinero-profile-role">
@@ -310,7 +310,7 @@
                             <div class="d-none d-md-block">
 
                                 <strong>
-                                    {{ Auth::user()->nombre ?? Auth::user()->name ?? 'Cocinero' }}
+                                    {{ Auth::user()->name ?? 'Cocinero' }}
                                 </strong>
 
                                 <small>
