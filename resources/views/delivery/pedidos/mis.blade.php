@@ -922,7 +922,10 @@ $cantidadEntregados = $pedidosEntregados->count();
                                         </small>
                                     </div>
 
-                                    
+                                    <span class="delivery-delivered-view-link">
+                                        <i class="bi bi-eye-fill"></i>
+                                        Ver detalle
+                                    </span>
 
                                 </div>
 
