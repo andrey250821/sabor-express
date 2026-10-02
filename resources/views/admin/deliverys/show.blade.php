@@ -190,7 +190,15 @@
                             $pedido = $asignacion->pedido;
                         @endphp
 
-                        <tr>
+                        <tr
+                            @if($pedido)
+                                class="delivery-admin-history-row"
+                                data-href="{{ route('admin.pedidos.show', $pedido->id) }}"
+                                tabindex="0"
+                                role="link"
+                                aria-label="Ver detalle del pedido #{{ $pedido->id }}"
+                            @endif
+                        >
 
                             <td>
                                 @if($pedido)
@@ -198,7 +206,8 @@
                                         href="{{ route('admin.pedidos.show', $pedido->id) }}"
                                         class="delivery-admin-order-link">
 
-                                        #{{ $pedido->id }}
+                                        <span>Pedido #{{ $pedido->id }}</span>
+                                        <i class="bi bi-box-arrow-up-right ms-1"></i>
 
                                     </a>
                                 @else
@@ -284,6 +293,35 @@
 @endsection
 
 @push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.delivery-admin-history-row').forEach((row) => {
+            const abrirPedido = () => {
+                const url = row.dataset.href;
+
+                if (url) {
+                    window.location.href = url;
+                }
+            };
+
+            row.addEventListener('click', (event) => {
+                if (event.target.closest('a, button')) {
+                    return;
+                }
+
+                abrirPedido();
+            });
+
+            row.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    abrirPedido();
+                }
+            });
+        });
+    });
+</script>
+
 @if($fechaSeleccionada->isToday())
 <script>
     setInterval(() => {
