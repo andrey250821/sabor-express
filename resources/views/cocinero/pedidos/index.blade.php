@@ -157,7 +157,12 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
             <div class="cocinero-orders-list">
 
                 @foreach($pendientes as $pedido)
-                    <article class="cocinero-order-item">
+                    <article
+                        class="cocinero-order-item pedido-card-clickable"
+                        role="link"
+                        tabindex="0"
+                        onclick="if (!event.target.closest('button, a, form, input, select, textarea')) window.location.href='{{ route('cocinero.pedidos.show', $pedido->id) }}';"
+                        onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('button, a, form, input, select, textarea')) { event.preventDefault(); window.location.href='{{ route('cocinero.pedidos.show', $pedido->id) }}'; }">
 
                         <div class="cocinero-order-number">
                             <span>#</span>
@@ -211,11 +216,7 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
 
                         <div class="cocinero-order-actions">
 
-                            <a href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
-                                class="btn cocinero-btn-view">
-                                <i class="bi bi-eye-fill"></i>
-                                <span>Ver</span>
-                            </a>
+                            
 
                             <form
                                 method="POST"
@@ -285,7 +286,12 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
             <div class="cocinero-orders-list">
 
                 @foreach($preparando as $pedido)
-                    <article class="cocinero-order-item">
+                    <article
+                        class="cocinero-order-item pedido-card-clickable"
+                        role="link"
+                        tabindex="0"
+                        onclick="if (!event.target.closest('button, a, form, input, select, textarea')) window.location.href='{{ route('cocinero.pedidos.show', $pedido->id) }}';"
+                        onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('button, a, form, input, select, textarea')) { event.preventDefault(); window.location.href='{{ route('cocinero.pedidos.show', $pedido->id) }}'; }">
 
                         <div class="cocinero-order-number">
                             <span>#</span>
@@ -331,11 +337,7 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
 
                         <div class="cocinero-order-actions">
 
-                            <a href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
-                                class="btn cocinero-btn-view">
-                                <i class="bi bi-eye-fill"></i>
-                                <span>Ver</span>
-                            </a>
+                            
 
                             <form
                                 method="POST"
@@ -449,7 +451,12 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
             <div class="cocinero-orders-list">
 
                 @foreach($listos as $pedido)
-                    <article class="cocinero-order-item">
+                    <article
+                        class="cocinero-order-item pedido-card-clickable"
+                        role="link"
+                        tabindex="0"
+                        onclick="if (!event.target.closest('button, a, form, input, select, textarea')) window.location.href='{{ route('cocinero.pedidos.show', $pedido->id) }}';"
+                        onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('button, a, form, input, select, textarea')) { event.preventDefault(); window.location.href='{{ route('cocinero.pedidos.show', $pedido->id) }}'; }">
 
                         <div class="cocinero-order-number">
                             <span>#</span>
@@ -520,11 +527,7 @@ $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
 
                         <div class="cocinero-order-actions">
 
-                            <a href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
-                                class="btn cocinero-btn-view">
-                                <i class="bi bi-eye-fill"></i>
-                                <span>Ver</span>
-                            </a>
+                            
 
                             @if(in_array($pedido->estado, ['listo', 'asignado'], true))
                             <span class="cocinero-ready-label">
