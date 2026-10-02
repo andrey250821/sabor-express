@@ -616,7 +616,16 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                         <div class="delivery-my-actions">
 
-                            
+                            <a
+                                href="{{ route('delivery.pedidos.show', $pedido->id) }}"
+                                class="delivery-my-detail-btn"
+                                aria-label="Ver detalless del pedido #{{ $pedido->id }}">
+
+                                <i class="bi bi-eye-fill"></i>
+
+                                Ver detalless
+
+                            </a>
 
 
                             @if($pedido->estado === 'asignado')
@@ -846,7 +855,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                             <a
                                 href="{{ url('/delivery/pedidos/' . (int) $pedido->id) }}"
                                 class="delivery-delivered-card pedido-card-clickable"
-                                aria-label="Ver detalle del pedido #{{ $pedido->id }}">
+                                aria-label="Ver detalles del pedido #{{ $pedido->id }}">
 
                                 <div class="delivery-delivered-top">
 
@@ -924,7 +933,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                                     <span class="delivery-delivered-view-link">
                                         <i class="bi bi-eye-fill"></i>
-                                        Ver detalle
+                                        Ver detalles
                                     </span>
 
                                 </div>
