@@ -61,6 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Filtros que deben enviar su formulario al cambiar.
+    document.querySelectorAll('[data-submit-form]').forEach((field) => {
+        field.addEventListener('change', () => {
+            field.form?.requestSubmit();
+        });
+    });
+
     // Confirmaciones centralizadas.
     document.querySelectorAll('form[data-confirm]').forEach((form) => {
         form.addEventListener('submit', (event) => {
