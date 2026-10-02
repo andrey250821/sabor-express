@@ -10132,3 +10132,1720 @@ input[type="file"].configuracion-input::file-selector-button:hover {
         animation: none !important;
     }
 }
+
+
+/* ==========================================================================
+   25. CAPA VISUAL PROFESIONAL — Sabor Express Admin
+   --------------------------------------------------------------------------
+   Esta sección complementa los estilos existentes sin eliminar reglas previas.
+   Usa los breakpoints de Bootstrap 5 y mejora la presentación en escritorio,
+   tablet y celular.
+   ========================================================================== */
+
+:root {
+    --admin-accent-orange: #ff9f43;
+    --admin-accent-cyan: #21d4fd;
+    --admin-accent-blue: #6ea8fe;
+    --admin-accent-purple: #a78bfa;
+    --admin-surface-glass: rgba(255, 255, 255, .035);
+    --admin-surface-glass-strong: rgba(255, 255, 255, .06);
+    --admin-focus-ring: rgba(255, 77, 136, .22);
+}
+
+
+/* --------------------------------------------------------------------------
+   AMBIENTE GENERAL
+   -------------------------------------------------------------------------- */
+
+body {
+    background-color: var(--admin-bg);
+}
+
+.admin-wrapper {
+    position: relative;
+    isolation: isolate;
+}
+
+.admin-wrapper::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    background:
+        radial-gradient(circle at 8% 20%, rgba(255, 159, 67, .045), transparent 22%),
+        radial-gradient(circle at 92% 12%, rgba(33, 212, 253, .04), transparent 22%),
+        radial-gradient(circle at 68% 92%, rgba(167, 139, 250, .035), transparent 24%);
+}
+
+
+/* --------------------------------------------------------------------------
+   SIDEBAR — MÁS PROFESIONAL
+   -------------------------------------------------------------------------- */
+
+.admin-sidebar {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.sidebar-brand {
+    border-radius: 16px;
+}
+
+.sidebar-brand::after {
+    content: "";
+    display: block;
+    width: 74%;
+    height: 1px;
+    margin: 15px auto 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 159, 67, .5),
+        rgba(255, 77, 136, .75),
+        transparent
+    );
+}
+
+.sidebar-link {
+    min-height: 48px;
+}
+
+.sidebar-link.active {
+    background:
+        linear-gradient(
+            100deg,
+            rgba(139, 30, 69, .98),
+            rgba(196, 44, 99, .82) 70%,
+            rgba(255, 159, 67, .28) 100%
+        );
+}
+
+.sidebar-link.active .sidebar-icon {
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, .08),
+        0 7px 18px rgba(0, 0, 0, .18);
+}
+
+
+/* --------------------------------------------------------------------------
+   TOPBAR
+   -------------------------------------------------------------------------- */
+
+.admin-topbar {
+    background:
+        linear-gradient(
+            115deg,
+            rgba(21, 22, 27, .98),
+            rgba(28, 25, 34, .96) 54%,
+            rgba(21, 22, 27, .98)
+        );
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.admin-topbar::after {
+    content: "";
+    position: absolute;
+    right: 24px;
+    bottom: 0;
+    width: 180px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 159, 67, .6),
+        transparent
+    );
+}
+
+.topbar-left {
+    min-width: 0;
+}
+
+.topbar-title {
+    letter-spacing: -.25px;
+}
+
+.topbar-user {
+    padding: 5px 6px 5px 10px;
+    border-radius: 13px;
+    background: var(--admin-surface-glass);
+    border: 1px solid rgba(255, 255, 255, .05);
+}
+
+
+/* --------------------------------------------------------------------------
+   BOTÓN DE MENÚ MÓVIL
+   -------------------------------------------------------------------------- */
+
+.admin-mobile-toggle {
+    display: none;
+
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 255, 255, .11);
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139, 30, 69, .92),
+            rgba(85, 18, 41, .95)
+        );
+
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .22),
+        0 0 16px rgba(139, 30, 69, .12);
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.admin-mobile-toggle:hover {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(196, 44, 99, .98),
+            rgba(139, 30, 69, .96)
+        );
+    transform: translateY(-1px);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, .28),
+        0 0 20px rgba(255, 77, 136, .18);
+}
+
+.admin-mobile-toggle:active {
+    transform: scale(.97);
+}
+
+.admin-mobile-toggle:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 3px var(--admin-focus-ring),
+        0 9px 22px rgba(0, 0, 0, .24);
+}
+
+
+/* --------------------------------------------------------------------------
+   OVERLAY DEL SIDEBAR MÓVIL
+   -------------------------------------------------------------------------- */
+
+.admin-sidebar-overlay {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 1040;
+
+    border: 0;
+
+    background: rgba(4, 4, 7, .62);
+
+    opacity: 0;
+    pointer-events: none;
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    transition: opacity .25s ease;
+}
+
+.admin-sidebar-overlay.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.admin-menu-open {
+    overflow: hidden;
+}
+
+
+/* --------------------------------------------------------------------------
+   ENCABEZADOS DE LOS MÓDULOS
+   -------------------------------------------------------------------------- */
+
+.dashboard-header,
+.productos-header,
+.categorias-header,
+.deliverys-header,
+.clientes-header,
+.notificaciones-header,
+.configuracion-header,
+.cliente-detalle-header,
+.delivery-admin-detail-header,
+.admin-cocinero-detail-header,
+.pedido-detalle-header,
+.pedido-header {
+    position: relative;
+}
+
+.dashboard-header::after,
+.productos-header::after,
+.categorias-header::after,
+.deliverys-header::after,
+.clientes-header::after,
+.notificaciones-header::after,
+.configuracion-header::after,
+.cliente-detalle-header::after,
+.delivery-admin-detail-header::after,
+.admin-cocinero-detail-header::after,
+.pedido-detalle-header::after,
+.pedido-header::after {
+    content: "";
+    display: block;
+
+    width: min(180px, 45%);
+    height: 3px;
+
+    margin-top: 12px;
+
+    border-radius: 999px;
+
+    background: linear-gradient(
+        90deg,
+        var(--admin-primary),
+        var(--admin-primary-light),
+        var(--admin-accent-orange)
+    );
+
+    box-shadow: 0 0 16px rgba(255, 77, 136, .12);
+}
+
+
+/* --------------------------------------------------------------------------
+   PANELES Y CARDS
+   -------------------------------------------------------------------------- */
+
+.admin-content .card,
+.dashboard-panel,
+.chart-section,
+.summary-panel,
+.pedidos-panel,
+.productos-card,
+.categorias-card,
+.deliverys-card,
+.clientes-card,
+.comprobante-card,
+.notificacion-card,
+.configuracion-card,
+.delivery-form-card,
+.admin-cocinero-detail-card,
+.admin-calificaciones-product-card,
+.admin-calificaciones-summary-card,
+.admin-calificaciones-review-card {
+    overflow: hidden;
+}
+
+.admin-content .card-header,
+.productos-card-header,
+.categorias-card-header,
+.notificaciones-header,
+.configuracion-card-header {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, .035),
+            rgba(255, 255, 255, .012)
+        );
+}
+
+.admin-content .card,
+.productos-card,
+.categorias-card,
+.deliverys-card,
+.clientes-card,
+.comprobante-card,
+.notificacion-card,
+.configuracion-card {
+    border-color: rgba(255, 255, 255, .075);
+}
+
+
+/* --------------------------------------------------------------------------
+   BOTONES
+   -------------------------------------------------------------------------- */
+
+.admin-content .btn {
+    min-width: 0;
+    border-radius: 10px;
+    font-weight: 650;
+    letter-spacing: .05px;
+}
+
+.admin-content .btn i {
+    vertical-align: -1px;
+}
+
+.admin-content .btn-warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800) !important;
+    border-color: #ffc107 !important;
+    color: #171717 !important;
+}
+
+.admin-content .btn-warning:hover {
+    background: linear-gradient(135deg, #ffd35a, #f0b400) !important;
+    border-color: #ffd35a !important;
+}
+
+.admin-content .btn-outline-success {
+    color: var(--admin-success-light) !important;
+    border-color: rgba(57, 217, 138, .52) !important;
+}
+
+.admin-content .btn-outline-success:hover {
+    background: var(--admin-success) !important;
+    color: #fff !important;
+}
+
+.admin-content .btn-outline-danger {
+    color: #ff7584 !important;
+    border-color: rgba(255, 82, 103, .48) !important;
+}
+
+.admin-content .btn-outline-danger:hover {
+    background: var(--admin-danger) !important;
+    color: #fff !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   FORMULARIOS
+   -------------------------------------------------------------------------- */
+
+.admin-content input.form-control,
+.admin-content textarea.form-control,
+.admin-content select.form-select {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .018);
+}
+
+.admin-content .form-control:hover,
+.admin-content .form-select:hover {
+    border-color: #4a4d57 !important;
+}
+
+.admin-content .form-control:focus,
+.admin-content .form-select:focus,
+.admin-content .form-check-input:focus {
+    box-shadow:
+        0 0 0 .2rem var(--admin-focus-ring) !important;
+}
+
+.admin-content .form-check-input {
+    background-color: #101114;
+    border-color: #4c4f58;
+}
+
+.admin-content .form-check-input:checked {
+    background-color: var(--admin-primary);
+    border-color: var(--admin-primary);
+}
+
+
+/* --------------------------------------------------------------------------
+   TABLAS — LECTURA MÁS CLARA
+   -------------------------------------------------------------------------- */
+
+.admin-content .table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.admin-content .table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1e2027,
+            #18191f
+        ) !important;
+
+    border-bottom-color: rgba(255, 255, 255, .09);
+    color: #f1f1f4;
+    font-weight: 750;
+    letter-spacing: .25px;
+    text-transform: uppercase;
+}
+
+.admin-content .table tbody tr {
+    transition:
+        background-color .18s ease,
+        transform .18s ease;
+}
+
+.admin-content .table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, .012);
+}
+
+.admin-content .table tbody tr:hover {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(139, 30, 69, .10),
+            rgba(255, 159, 67, .025)
+        ) !important;
+}
+
+.admin-content .table-responsive {
+    border-radius: 12px;
+}
+
+.admin-content .table-responsive::-webkit-scrollbar {
+    height: 7px;
+}
+
+
+/* --------------------------------------------------------------------------
+   BADGES / ESTADOS
+   -------------------------------------------------------------------------- */
+
+.admin-content .badge,
+.estado-badge,
+.categoria-estado,
+.estado-producto,
+.stock-badge {
+    font-weight: 750;
+}
+
+.status-revision,
+.estado-badge.revision,
+.badge-tipo-comprobante {
+    box-shadow: 0 5px 16px rgba(255, 159, 67, .12);
+}
+
+.status-aprobado,
+.estado-badge.aprobado {
+    box-shadow: 0 5px 16px rgba(57, 217, 138, .10);
+}
+
+.status-rechazado,
+.estado-badge.rechazado {
+    box-shadow: 0 5px 16px rgba(220, 53, 69, .10);
+}
+
+
+/* --------------------------------------------------------------------------
+   DASHBOARD
+   -------------------------------------------------------------------------- */
+
+.dashboard-metric-card,
+.order-status-card,
+.dashboard-panel,
+.chart-section,
+.summary-panel {
+    border-color: rgba(255, 255, 255, .075);
+}
+
+.dashboard-metric-card {
+    position: relative;
+}
+
+.dashboard-metric-card::after {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 90px;
+    height: 90px;
+
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, .07),
+        transparent 70%
+    );
+
+    pointer-events: none;
+}
+
+.metric-icon {
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, .17),
+        inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+.chart-container,
+.chart-wrapper {
+    min-width: 0;
+    overflow: hidden;
+}
+
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS
+   -------------------------------------------------------------------------- */
+
+.productos-filtro-card {
+    border-color: rgba(255, 255, 255, .06);
+}
+
+.producto-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.btn-producto {
+    flex: 0 0 auto;
+}
+
+.productos-table td,
+.productos-table th {
+    vertical-align: middle;
+}
+
+.producto-imagen {
+    border: 1px solid rgba(255, 255, 255, .08);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .16);
+}
+
+
+/* --------------------------------------------------------------------------
+   CALIFICACIONES DENTRO DE PRODUCTOS
+   -------------------------------------------------------------------------- */
+
+.admin-calificaciones-header {
+    padding-bottom: 3px;
+}
+
+.admin-calificaciones-product-card,
+.admin-calificaciones-summary-card,
+.admin-calificaciones-review-card {
+    border-color: rgba(255, 255, 255, .075);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .045),
+            rgba(255, 255, 255, .018)
+        );
+}
+
+.admin-calificaciones-stars,
+.admin-calificaciones-stars-large,
+.admin-rating-star-number,
+.puntuacion-numero {
+    color: var(--admin-warning-light);
+}
+
+.admin-calificaciones-avatar {
+    box-shadow:
+        0 7px 18px rgba(0, 0, 0, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+
+
+/* --------------------------------------------------------------------------
+   COMPROBANTES
+   -------------------------------------------------------------------------- */
+
+.comprobante-status-card {
+    border: 1px solid rgba(255, 255, 255, .07);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.comprobante-status-card.active {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, .15);
+}
+
+.comprobante-imagen-container {
+    border: 1px solid rgba(255, 255, 255, .06);
+    background:
+        linear-gradient(
+            135deg,
+            #111217,
+            #0a0b0f
+        );
+}
+
+.comprobante-imagen-container img {
+    object-fit: contain;
+}
+
+
+/* --------------------------------------------------------------------------
+   NOTIFICACIONES
+   -------------------------------------------------------------------------- */
+
+.notificacion-card.no-leida {
+    border-color: rgba(255, 77, 136, .24);
+    box-shadow:
+        0 10px 28px rgba(139, 30, 69, .13),
+        inset 3px 0 0 rgba(255, 77, 136, .8);
+}
+
+.badge-nueva {
+    box-shadow: 0 5px 13px rgba(255, 77, 136, .18);
+}
+
+.notificacion-acciones {
+    gap: 9px;
+}
+
+
+/* --------------------------------------------------------------------------
+   CLIENTES / DELIVERY / COCINEROS
+   -------------------------------------------------------------------------- */
+
+.clientes-card,
+.deliverys-card,
+.delivery-form-card,
+.admin-cocinero-detail-card,
+.delivery-admin-profile-card {
+    border-color: rgba(255, 255, 255, .075);
+}
+
+.cliente-btn,
+.btn-delivery {
+    border-radius: 9px;
+}
+
+.cliente-avatar,
+.delivery-admin-profile-avatar,
+.admin-cocinero-profile-avatar {
+    box-shadow:
+        0 9px 20px rgba(0, 0, 0, .20);
+}
+
+.pedido-card-clickable,
+.delivery-admin-history-row,
+.admin-cocinero-order-row {
+    transition:
+        background-color .18s ease,
+        transform .18s ease;
+}
+
+.pedido-card-clickable:hover,
+.delivery-admin-history-row:hover,
+.admin-cocinero-order-row:hover {
+    transform: translateX(2px);
+}
+
+
+/* --------------------------------------------------------------------------
+   CONFIGURACIÓN / MAPAS
+   -------------------------------------------------------------------------- */
+
+.configuracion-restaurante-mapa,
+.admin-delivery-map {
+    border: 1px solid rgba(255, 255, 255, .08);
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, .18);
+}
+
+.configuracion-map-header {
+    gap: 10px;
+}
+
+.configuracion-delivery-formula {
+    border-color: rgba(255, 159, 67, .18);
+}
+
+
+/* --------------------------------------------------------------------------
+   ACCESIBILIDAD Y ESTADO DE FOCO
+   -------------------------------------------------------------------------- */
+
+.admin-content a:focus-visible,
+.admin-content button:focus-visible,
+.admin-content input:focus-visible,
+.admin-content select:focus-visible,
+.admin-content textarea:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 3px var(--admin-focus-ring) !important;
+}
+
+
+/* ==========================================================================
+   26. RESPONSIVE MOBILE DRAWER — BOOTSTRAP 992px
+   ========================================================================== */
+
+@media (max-width: 991.98px) {
+
+    .admin-mobile-toggle {
+        display: inline-flex;
+    }
+
+    .admin-sidebar-overlay {
+        display: block;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        width: min(300px, 86vw) !important;
+        min-width: min(300px, 86vw) !important;
+        height: 100dvh;
+
+        transform: translateX(-102%);
+
+        transition:
+            transform .28s ease,
+            box-shadow .28s ease;
+
+        box-shadow:
+            20px 0 45px rgba(0, 0, 0, .38);
+
+        overflow: hidden;
+    }
+
+    .admin-sidebar.is-open {
+        transform: translateX(0);
+        box-shadow:
+            24px 0 55px rgba(0, 0, 0, .48),
+            0 0 32px rgba(139, 30, 69, .16);
+    }
+
+    .admin-main {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .admin-topbar {
+        position: sticky;
+        top: 0;
+        min-height: 70px;
+        padding: 12px 18px;
+    }
+
+    .admin-content {
+        padding: 20px;
+    }
+
+    .topbar-user {
+        padding-left: 7px;
+    }
+
+    .topbar-user-info {
+        display: flex;
+    }
+
+    .admin-content .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .productos-header,
+    .categorias-header,
+    .deliverys-header,
+    .clientes-header,
+    .notificaciones-header,
+    .configuracion-header,
+    .cliente-detalle-header,
+    .delivery-admin-detail-header {
+        gap: 14px;
+    }
+
+}
+
+
+/* ==========================================================================
+   27. TABLET
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+
+    .admin-topbar {
+        min-height: 66px;
+        padding: 10px 14px;
+        gap: 10px;
+    }
+
+    .admin-mobile-toggle {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: 19px;
+    }
+
+    .topbar-title {
+        font-size: 17px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .topbar-subtitle {
+        display: none;
+    }
+
+    .topbar-user-info {
+        display: none;
+    }
+
+    .topbar-logout {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        padding: 0;
+    }
+
+    .topbar-logout span {
+        display: none;
+    }
+
+    .admin-content {
+        padding: 16px 13px;
+    }
+
+    .dashboard-header::after,
+    .productos-header::after,
+    .categorias-header::after,
+    .deliverys-header::after,
+    .clientes-header::after,
+    .notificaciones-header::after,
+    .configuracion-header::after,
+    .cliente-detalle-header::after,
+    .delivery-admin-detail-header::after,
+    .admin-cocinero-detail-header::after,
+    .pedido-detalle-header::after,
+    .pedido-header::after {
+        width: 120px;
+        margin-top: 9px;
+    }
+
+    .productos-card-header,
+    .categorias-card-header,
+    .notificaciones-header {
+        padding: 14px !important;
+    }
+
+    .producto-acciones,
+    .categoria-acciones,
+    .delivery-acciones,
+    .cliente-acciones {
+        gap: 6px;
+    }
+
+    .delivery-admin-history-table,
+    .cliente-historial-table,
+    .pedidos-table {
+        min-width: 690px;
+    }
+
+    .pedido-detalle .pedido-table {
+        min-width: 560px;
+    }
+
+    .comprobante-imagen-container {
+        min-height: 210px;
+    }
+
+}
+
+
+/* ==========================================================================
+   28. CELULAR PEQUEÑO
+   ========================================================================== */
+
+@media (max-width: 575.98px) {
+
+    .admin-sidebar {
+        width: min(285px, 88vw) !important;
+        min-width: min(285px, 88vw) !important;
+    }
+
+    .admin-topbar {
+        padding: 9px 10px;
+    }
+
+    .admin-content {
+        padding: 13px 10px;
+    }
+
+    .topbar-title {
+        font-size: 15px;
+    }
+
+    .dashboard-title,
+    .productos-title,
+    .categorias-title,
+    .deliverys-title,
+    .clientes-title,
+    .notificaciones-title,
+    .configuracion-title {
+        font-size: 20px;
+    }
+
+    .admin-content .btn {
+        min-height: 44px;
+    }
+
+    .admin-content .table thead th {
+        font-size: 10px;
+    }
+
+    .productos-header,
+    .categorias-header,
+    .deliverys-header,
+    .clientes-header,
+    .notificaciones-header,
+    .configuracion-header,
+    .cliente-detalle-header,
+    .delivery-admin-detail-header,
+    .pedido-detalle-header {
+        align-items: stretch;
+    }
+
+    .productos-header .btn,
+    .categorias-header .btn,
+    .deliverys-header .btn,
+    .clientes-header .btn,
+    .notificaciones-header .btn,
+    .configuracion-header .btn,
+    .cliente-detalle-header .btn,
+    .delivery-admin-detail-header .btn,
+    .pedido-detalle-header .btn {
+        width: 100%;
+    }
+
+    .notificacion-acciones {
+        flex-direction: column;
+    }
+
+    .notificacion-acciones .btn,
+    .notificacion-acciones form,
+    .notificacion-acciones form button {
+        width: 100%;
+    }
+
+    .comprobante-card {
+        border-radius: 14px;
+    }
+
+    .admin-calificaciones-product-card,
+    .admin-calificaciones-summary-card,
+    .admin-calificaciones-review-card {
+        border-radius: 14px;
+    }
+
+}
+
+
+/* ==========================================================================
+   29. MÓVIL MUY PEQUEÑO
+   ========================================================================== */
+
+@media (max-width: 420px) {
+
+    .admin-mobile-toggle {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+    }
+
+    .admin-topbar {
+        gap: 8px;
+    }
+
+    .topbar-title {
+        font-size: 14px;
+    }
+
+    .admin-content {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+}
+
+
+/* ==========================================================================
+   30. AJUSTES FINALES DE LEGIBILIDAD E INTERACCIÓN
+   ========================================================================== */
+
+/* Inputs de búsqueda/filtros */
+.admin-content .input-group {
+    width: 100%;
+}
+
+.admin-content .input-group-text {
+    min-width: 44px;
+    justify-content: center;
+    border-radius: 10px 0 0 10px;
+}
+
+.admin-content .input-group > .form-control {
+    min-width: 0;
+}
+
+.admin-content input[type="search"] {
+    appearance: none;
+}
+
+.admin-content input[type="search"]::-webkit-search-cancel-button {
+    filter: invert(1);
+    opacity: .65;
+    cursor: pointer;
+}
+
+.admin-content .btn-close {
+    filter: invert(1) grayscale(1);
+    opacity: .82;
+}
+
+.admin-content .btn-close:hover {
+    opacity: 1;
+}
+
+
+/* Acentos de las métricas del dashboard */
+.metric-icon.pedidos {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139, 30, 69, .30),
+            rgba(196, 44, 99, .12)
+        );
+    color: #ff6e9d;
+}
+
+.metric-icon.ventas {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 135, 84, .27),
+            rgba(57, 217, 138, .09)
+        );
+    color: #58e5a0;
+}
+
+.metric-icon.clientes {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13, 110, 253, .25),
+            rgba(110, 168, 254, .08)
+        );
+    color: #79b3ff;
+}
+
+.metric-icon.delivery {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 193, 7, .25),
+            rgba(255, 159, 67, .09)
+        );
+    color: #ffd45b;
+}
+
+
+/* Estado del pedido con lectura por color */
+.status-icon.pagado,
+.status-icon.asignado {
+    box-shadow: 0 0 0 1px rgba(110, 168, 254, .10);
+}
+
+.status-icon.preparando {
+    box-shadow: 0 0 0 1px rgba(255, 159, 67, .12);
+}
+
+.status-icon.listo,
+.status-icon.entregado {
+    box-shadow: 0 0 0 1px rgba(57, 217, 138, .12);
+}
+
+.status-icon.camino {
+    box-shadow: 0 0 0 1px rgba(33, 212, 253, .13);
+}
+
+.status-icon.cancelado {
+    box-shadow: 0 0 0 1px rgba(255, 82, 103, .13);
+}
+
+
+/* Cabeceras de filtros */
+.productos-filtro-card,
+.pedidos-filtros-panel {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .048),
+            rgba(255, 255, 255, .018)
+        );
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .025),
+        0 9px 24px rgba(0, 0, 0, .12);
+}
+
+
+/* Acciones de tablas */
+.producto-acciones .btn,
+.categoria-acciones .btn,
+.cliente-acciones .btn,
+.delivery-acciones .btn,
+.btn-delivery {
+    box-shadow: 0 5px 13px rgba(0, 0, 0, .12);
+}
+
+.producto-acciones .btn:hover,
+.categoria-acciones .btn:hover,
+.cliente-acciones .btn:hover,
+.delivery-acciones .btn:hover,
+.btn-delivery:hover {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+}
+
+
+/* Enlaces de navegación dentro del contenido */
+.dashboard-link,
+.panel-action,
+.pedidos-filtro-activo-clear {
+    font-weight: 700;
+}
+
+.dashboard-link:hover,
+.panel-action:hover {
+    color: #ff73a3;
+}
+
+
+/* Imágenes de producto / comprobantes */
+.producto-imagen,
+.producto-sin-imagen,
+.comprobante-imagen-container,
+.configuracion-preview-container {
+    background-color: #101114;
+}
+
+
+/* Modo de toque: áreas cómodas sin alterar el diseño de escritorio */
+@media (pointer: coarse) {
+
+    .admin-content .btn,
+    .sidebar-link,
+    .admin-mobile-toggle {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .admin-content .btn {
+        min-height: 42px;
+    }
+
+}
+
+
+/* Responsive Bootstrap — evita desbordes horizontales en encabezados */
+@media (max-width: 767.98px) {
+
+    .dashboard-header,
+    .productos-header,
+    .categorias-header,
+    .deliverys-header,
+    .clientes-header,
+    .notificaciones-header,
+    .configuracion-header,
+    .cliente-detalle-header,
+    .delivery-admin-detail-header,
+    .admin-cocinero-detail-header,
+    .pedido-detalle-header {
+        max-width: 100%;
+    }
+
+    .dashboard-title,
+    .productos-title,
+    .categorias-title,
+    .deliverys-title,
+    .clientes-title,
+    .notificaciones-title,
+    .configuracion-title,
+    .admin-cocinero-detail-title {
+        overflow-wrap: anywhere;
+    }
+
+    .admin-content .row {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+
+    .productos-filtro-form,
+    .pedidos-filtros-form,
+    .configuracion-actions,
+    .productos-form-actions,
+    .delivery-form-actions,
+    .categorias-form-actions {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 575.98px) {
+
+    .admin-content .input-group-text {
+        min-width: 42px;
+        padding-left: .65rem;
+        padding-right: .65rem;
+    }
+
+    .admin-content .input-group .form-control {
+        min-height: 44px;
+    }
+
+    .producto-acciones,
+    .categoria-acciones,
+    .cliente-acciones,
+    .delivery-acciones {
+        justify-content: flex-start;
+    }
+
+}
+
+/* ==========================================================================
+   CORRECCIONES DEFINITIVAS — RESPONSIVE + INTERACCIÓN
+   --------------------------------------------------------------------------
+   Esta capa corrige conflictos de reglas responsive antiguas que podían:
+   - ocultar los nombres del menú en el drawer móvil;
+   - reducir el sidebar a una columna de solo iconos;
+   - empujar los botones de cabecera hacia el centro por culpa del ::after;
+   - generar diferentes comportamientos entre PC, tablet y celular.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. LÍNEA DECORATIVA DE CABECERAS
+   -------------------------------------------------------------------------- */
+
+/*
+ * La línea decorativa era un pseudo-elemento FLEX y se estaba comportando
+ * como si fuera una columna adicional dentro de .deliverys-header,
+ * .productos-header, etc. Eso podía dejar los botones en el centro.
+ */
+.dashboard-header::after,
+.productos-header::after,
+.categorias-header::after,
+.deliverys-header::after,
+.clientes-header::after,
+.notificaciones-header::after,
+.configuracion-header::after,
+.cliente-detalle-header::after,
+.delivery-admin-detail-header::after,
+.admin-cocinero-detail-header::after,
+.pedido-detalle-header::after,
+.pedido-header::after {
+    position: absolute;
+    left: 0;
+    bottom: -11px;
+
+    width: min(180px, 45%);
+    height: 3px;
+
+    margin: 0;
+
+    pointer-events: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. CABECERAS — BOTONES SIEMPRE AL FINAL EN ESCRITORIO
+   -------------------------------------------------------------------------- */
+
+.dashboard-header,
+.productos-header,
+.categorias-header,
+.deliverys-header,
+.clientes-header,
+.notificaciones-header,
+.configuracion-header,
+.cliente-detalle-header,
+.delivery-admin-detail-header,
+.admin-cocinero-detail-header,
+.pedido-detalle-header,
+.pedido-header {
+    position: relative;
+    width: 100%;
+}
+
+.dashboard-header > div:first-child,
+.productos-header > div:first-child,
+.categorias-header > div:first-child,
+.deliverys-header > div:first-child,
+.clientes-header > div:first-child,
+.notificaciones-header > div:first-child,
+.configuracion-header > div:first-child,
+.cliente-detalle-header > div:first-child,
+.delivery-admin-detail-header > div:first-child,
+.admin-cocinero-detail-header > div:first-child,
+.pedido-detalle-header > div:first-child,
+.pedido-header > div:first-child {
+    min-width: 0;
+}
+
+.dashboard-header > .btn,
+.productos-header > .btn,
+.categorias-header > .btn,
+.deliverys-header > .btn,
+.clientes-header > .btn,
+.notificaciones-header > .btn,
+.configuracion-header > .btn,
+.cliente-detalle-header > .btn,
+.delivery-admin-detail-header > .btn,
+.admin-cocinero-detail-header > .btn,
+.pedido-detalle-header > .btn,
+.pedido-header > .btn {
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. DRAWER MÓVIL — MOSTRAR ICONO + TEXTO
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+
+    .admin-sidebar {
+        width: min(300px, 88vw) !important;
+        min-width: min(300px, 88vw) !important;
+        padding: 20px 14px !important;
+    }
+
+    .sidebar-brand {
+        padding: 8px 8px 18px !important;
+    }
+
+    .sidebar-brand-name,
+    .sidebar-brand-subtitle {
+        display: block !important;
+    }
+
+    .sidebar-brand-name {
+        font-size: 20px !important;
+    }
+
+    .sidebar-link {
+        width: 100%;
+        min-height: 48px !important;
+
+        justify-content: flex-start !important;
+        gap: 12px !important;
+
+        padding: 8px 11px !important;
+
+        font-size: 13px !important;
+    }
+
+    .sidebar-link > span:not(.sidebar-icon):not(.badge) {
+        display: inline !important;
+        min-width: 0;
+    }
+
+    .sidebar-icon {
+        width: 35px !important;
+        height: 35px !important;
+        min-width: 35px !important;
+        flex: 0 0 35px;
+    }
+
+    .sidebar-link .badge {
+        position: static !important;
+        margin-left: auto !important;
+        min-width: 22px !important;
+        height: 22px !important;
+        padding: 0 6px !important;
+        font-size: 10px !important;
+        border-width: 2px !important;
+    }
+
+    .sidebar-link.active::before {
+        left: -1px !important;
+    }
+
+    .admin-content {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .admin-sidebar {
+        width: min(292px, 90vw) !important;
+        min-width: min(292px, 90vw) !important;
+    }
+
+    .sidebar-brand-name {
+        font-size: 18px !important;
+    }
+
+    .sidebar-brand-subtitle {
+        font-size: 9px !important;
+    }
+
+    .sidebar-link {
+        min-height: 46px !important;
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   4. BOTONES DE CABECERA — ESCRITORIO, TABLET Y CELULAR
+   -------------------------------------------------------------------------- */
+
+.deliverys-btn-nuevo,
+.productos-btn-nuevo,
+.btn-categoria-nueva {
+    flex: 0 0 auto;
+    align-self: center;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+@media (max-width: 767.98px) {
+
+    .deliverys-header,
+    .productos-header,
+    .categorias-header,
+    .clientes-header,
+    .notificaciones-header,
+    .configuracion-header,
+    .cliente-detalle-header,
+    .delivery-admin-detail-header,
+    .admin-cocinero-detail-header,
+    .pedido-detalle-header,
+    .pedido-header {
+        width: 100%;
+    }
+
+    .deliverys-header .deliverys-btn-nuevo,
+    .productos-header .productos-btn-nuevo,
+    .categorias-header .btn-categoria-nueva {
+        width: auto !important;
+        max-width: 100%;
+        margin-left: auto;
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .deliverys-header .deliverys-btn-nuevo,
+    .productos-header .productos-btn-nuevo,
+    .categorias-header .btn-categoria-nueva {
+        width: auto !important;
+        align-self: flex-start;
+        margin-left: 0;
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   5. INTERACCIÓN VISUAL
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .sidebar-link,
+    .sidebar-icon,
+    .sidebar-icon i,
+    .admin-mobile-toggle,
+    .topbar-logout,
+    .admin-content .btn,
+    .dashboard-metric-card,
+    .order-status-item,
+    .recent-order,
+    .attention-card,
+    .quick-product-link,
+    .pedido-card-clickable,
+    .delivery-admin-history-row,
+    .admin-cocinero-order-row,
+    .producto-imagen,
+    .producto-sin-imagen,
+    .btn-producto,
+    .btn-categoria-editar,
+    .btn-categoria-eliminar,
+    .btn-categoria-inactivar,
+    .btn-categoria-activar,
+    .btn-delivery,
+    .cliente-btn {
+        transition:
+            transform .22s cubic-bezier(.2,.8,.2,1),
+            box-shadow .22s ease,
+            background-color .22s ease,
+            border-color .22s ease,
+            color .22s ease,
+            filter .22s ease;
+    }
+
+    /* Botones: sensación de elevación + pulsación */
+    .admin-content .btn:not(.btn-close),
+    .admin-mobile-toggle,
+    .topbar-logout {
+        position: relative;
+        isolation: isolate;
+    }
+
+    .admin-content .btn:not(.btn-close)::before,
+    .admin-mobile-toggle::before,
+    .topbar-logout::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -120%;
+        width: 55%;
+        height: 100%;
+
+        background: linear-gradient(
+            105deg,
+            transparent,
+            rgba(255,255,255,.18),
+            transparent
+        );
+
+        transform: skewX(-20deg);
+        pointer-events: none;
+        transition: left .42s ease;
+        z-index: -1;
+    }
+
+    .admin-content .btn:not(.btn-close):hover,
+    .admin-mobile-toggle:hover,
+    .topbar-logout:hover {
+        transform: translateY(-2px) scale(1.015);
+    }
+
+    .admin-content .btn:not(.btn-close):hover::before,
+    .admin-mobile-toggle:hover::before,
+    .topbar-logout:hover::before {
+        left: 125%;
+    }
+
+    .admin-content .btn:not(.btn-close):active,
+    .admin-mobile-toggle:active,
+    .topbar-logout:active {
+        transform: translateY(0) scale(.975);
+    }
+
+    /* Menú: el icono responde al acercar el puntero */
+    .sidebar-link:hover .sidebar-icon {
+        transform: translateX(2px) scale(1.08) rotate(-2deg);
+    }
+
+    .sidebar-link:hover .sidebar-icon i {
+        transform: scale(1.12) rotate(3deg);
+    }
+
+    .sidebar-link.active .sidebar-icon i {
+        animation: adminIconFloat 2.8s ease-in-out infinite;
+    }
+
+    /* Tarjetas y filas interactivas */
+    .dashboard-metric-card:hover,
+    .order-status-item:hover,
+    .recent-order:hover,
+    .attention-card:hover,
+    .quick-product-link:hover,
+    .pedido-card-clickable:hover,
+    .delivery-admin-history-row:hover,
+    .admin-cocinero-order-row:hover {
+        transform: translateY(-2px);
+    }
+
+    .dashboard-metric-card:hover {
+        box-shadow:
+            0 15px 34px rgba(0,0,0,.25),
+            0 0 0 1px rgba(255,77,136,.06);
+    }
+
+    .producto-imagen:hover,
+    .producto-sin-imagen:hover {
+        transform: translateY(-2px) scale(1.025);
+        filter: brightness(1.06);
+    }
+
+    /* Acciones pequeñas: reacción rápida al tocar/posar */
+    .btn-producto:hover,
+    .btn-delivery:hover,
+    .cliente-btn:hover,
+    .btn-categoria-editar:hover,
+    .btn-categoria-eliminar:hover,
+    .btn-categoria-inactivar:hover,
+    .btn-categoria-activar:hover {
+        transform: translateY(-3px) scale(1.045);
+    }
+
+    .btn-producto:active,
+    .btn-delivery:active,
+    .cliente-btn:active,
+    .btn-categoria-editar:active,
+    .btn-categoria-eliminar:active,
+    .btn-categoria-inactivar:active,
+    .btn-categoria-activar:active {
+        transform: translateY(0) scale(.94);
+    }
+
+    @keyframes adminIconFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-2px); }
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   6. INTERACCIÓN TÁCTIL
+   -------------------------------------------------------------------------- */
+
+@media (pointer: coarse) {
+
+    .admin-content .btn,
+    .sidebar-link,
+    .admin-mobile-toggle,
+    .btn-producto,
+    .btn-delivery,
+    .cliente-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .sidebar-link:active {
+        background:
+            linear-gradient(
+                90deg,
+                rgba(196, 44, 99, .58),
+                rgba(139, 30, 69, .18)
+            );
+        transform: scale(.985);
+    }
+
+    .admin-content .btn:active {
+        filter: brightness(1.08);
+    }
+}
+
+
+/* --------------------------------------------------------------------------
+   7. RESPETAR REDUCCIÓN DE MOVIMIENTO
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sidebar-link.active .sidebar-icon i,
+    .admin-content .btn:not(.btn-close)::before,
+    .admin-mobile-toggle::before,
+    .topbar-logout::before {
+        animation: none !important;
+        transition: none !important;
+    }
+}

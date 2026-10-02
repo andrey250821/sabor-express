@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="delivery-admin-detail-page">
+<div class="delivery-admin-detail-page container-fluid px-0">
 
     <div class="delivery-admin-detail-header">
 

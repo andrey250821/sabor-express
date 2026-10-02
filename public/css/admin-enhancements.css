@@ -1,0 +1,708 @@
+/* ==========================================================================
+   SABOR EXPRESS · CAPA VISUAL ADMINISTRATIVA
+   Mejora transversal para index / show / create / edit / detalles.
+   No reemplaza admin.css: agrega interacción, profundidad y responsive.
+   ========================================================================== */
+
+:root {
+    --se-accent: #8b1e45;
+    --se-accent-strong: #a92a57;
+    --se-accent-soft: rgba(139, 30, 69, .14);
+    --se-surface: rgba(255,255,255,.035);
+    --se-surface-strong: rgba(255,255,255,.055);
+    --se-border: rgba(255,255,255,.08);
+    --se-text-soft: rgba(255,255,255,.66);
+    --se-shadow: 0 16px 42px rgba(0,0,0,.20);
+    --se-shadow-hover: 0 24px 58px rgba(0,0,0,.28);
+}
+
+/* --------------------------------------------------------------------------
+   Estructura general
+   -------------------------------------------------------------------------- */
+
+.admin-main {
+    position: relative;
+    isolation: isolate;
+}
+
+.admin-main::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 82% 8%, rgba(139,30,69,.11), transparent 24%),
+        radial-gradient(circle at 18% 92%, rgba(169,42,87,.07), transparent 22%);
+}
+
+.admin-content {
+    position: relative;
+}
+
+.admin-content > * {
+    animation: sePageEnter .42s ease both;
+}
+
+@keyframes sePageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Tarjetas: index + show + formularios + módulos secundarios
+   -------------------------------------------------------------------------- */
+
+.admin-content :where(
+    .card,
+    .productos-card,
+    .categorias-card,
+    .categorias-form-card,
+    .productos-form-card,
+    .delivery-form-card,
+    .delivery-admin-profile-card,
+    .delivery-admin-history-card,
+    .admin-cocinero-profile-card,
+    .admin-cocinero-activity-card,
+    .cliente-info-card,
+    .cliente-historial-card,
+    .pedido-card,
+    .configuracion-card,
+    .notificacion-card,
+    .notificacion-resumen,
+    .comprobante-status-card,
+    .admin-calificaciones-product-card,
+    .admin-calificaciones-summary-card,
+    .admin-calificaciones-review-card
+) {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--se-border);
+    box-shadow: var(--se-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content :where(
+        .card,
+        .productos-card,
+        .categorias-card,
+        .categorias-form-card,
+        .productos-form-card,
+        .delivery-form-card,
+        .delivery-admin-profile-card,
+        .delivery-admin-history-card,
+        .admin-cocinero-profile-card,
+        .admin-cocinero-activity-card,
+        .cliente-info-card,
+        .cliente-historial-card,
+        .pedido-card,
+        .configuracion-card,
+        .notificacion-card,
+        .notificacion-resumen,
+        .comprobante-status-card,
+        .admin-calificaciones-product-card,
+        .admin-calificaciones-summary-card,
+        .admin-calificaciones-review-card
+    ) {
+        transition:
+            transform .28s cubic-bezier(.2,.8,.2,1),
+            box-shadow .28s ease,
+            border-color .28s ease;
+    }
+
+    .admin-content :where(
+        .card,
+        .productos-card,
+        .categorias-card,
+        .categorias-form-card,
+        .productos-form-card,
+        .delivery-form-card,
+        .delivery-admin-profile-card,
+        .delivery-admin-history-card,
+        .admin-cocinero-profile-card,
+        .admin-cocinero-activity-card,
+        .cliente-info-card,
+        .cliente-historial-card,
+        .pedido-card,
+        .configuracion-card,
+        .notificacion-resumen,
+        .comprobante-status-card,
+        .admin-calificaciones-product-card,
+        .admin-calificaciones-summary-card,
+        .admin-calificaciones-review-card
+    ):hover {
+        transform: translateY(-3px);
+        box-shadow: var(--se-shadow-hover);
+        border-color: rgba(169,42,87,.25);
+    }
+}
+
+.admin-content :where(
+    .card,
+    .productos-card,
+    .categorias-card,
+    .categorias-form-card,
+    .productos-form-card,
+    .delivery-form-card,
+    .delivery-admin-profile-card,
+    .delivery-admin-history-card,
+    .admin-cocinero-profile-card,
+    .admin-cocinero-activity-card,
+    .cliente-info-card,
+    .cliente-historial-card,
+    .pedido-card,
+    .configuracion-card,
+    .notificacion-card,
+    .notificacion-resumen,
+    .comprobante-status-card,
+    .admin-calificaciones-product-card,
+    .admin-calificaciones-summary-card,
+    .admin-calificaciones-review-card
+)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,.045) 42%,
+        transparent 66%
+    );
+    transform: translateX(-120%);
+    transition: transform .7s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content :where(
+        .card,
+        .productos-card,
+        .categorias-card,
+        .categorias-form-card,
+        .productos-form-card,
+        .delivery-form-card,
+        .delivery-admin-profile-card,
+        .delivery-admin-history-card,
+        .admin-cocinero-profile-card,
+        .admin-cocinero-activity-card,
+        .cliente-info-card,
+        .cliente-historial-card,
+        .pedido-card,
+        .configuracion-card,
+        .notificacion-resumen,
+        .comprobante-status-card,
+        .admin-calificaciones-product-card,
+        .admin-calificaciones-summary-card,
+        .admin-calificaciones-review-card
+    ):hover::after {
+        transform: translateX(120%);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Encabezados de páginas / show
+   -------------------------------------------------------------------------- */
+
+.admin-content :where(
+    .cliente-detalle-header,
+    .admin-cocinero-detail-header,
+    .delivery-admin-detail-header,
+    .pedido-detalle-header,
+    .notificaciones-header,
+    .productos-form-header,
+    .categorias-form-header,
+    .delivery-form-header,
+    .configuracion-header
+) {
+    position: relative;
+}
+
+.admin-content :where(
+    .cliente-detalle-title,
+    .admin-cocinero-detail-title,
+    .delivery-admin-detail-title,
+    .notificaciones-title,
+    .configuracion-title,
+    .productos-title,
+    .categorias-title
+) {
+    text-wrap: balance;
+    letter-spacing: -.02em;
+}
+
+@media (min-width: 768px) {
+    .admin-content :where(
+        .cliente-detalle-header,
+        .admin-cocinero-detail-header,
+        .delivery-admin-detail-header,
+        .pedido-detalle-header,
+        .notificaciones-header
+    ) {
+        padding-bottom: 16px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   SHOW: datos, métricas, identidad, historial y estados
+   -------------------------------------------------------------------------- */
+
+.admin-content :where(
+    .cliente-dato,
+    .admin-cocinero-info-box,
+    .delivery-admin-stat-card,
+    .pedido-dato
+) {
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background: var(--se-surface);
+    transition:
+        background-color .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content :where(
+        .cliente-dato,
+        .admin-cocinero-info-box,
+        .delivery-admin-stat-card,
+        .pedido-dato
+    ):hover {
+        background: var(--se-surface-strong);
+        border-color: rgba(169,42,87,.18);
+        transform: translateY(-2px);
+    }
+}
+
+.admin-content :where(
+    .cliente-dato-value,
+    .admin-cocinero-info-number,
+    .delivery-admin-stat-value,
+    .pedido-dato
+) {
+    overflow-wrap: anywhere;
+}
+
+.admin-content :where(
+    .cliente-info-avatar,
+    .admin-cocinero-profile-avatar,
+    .delivery-admin-profile-avatar
+) {
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.25),
+        0 0 0 1px rgba(255,255,255,.06);
+}
+
+.admin-content :where(
+    .delivery-admin-history-row,
+    .admin-cocinero-order-row,
+    .pedido-card-clickable
+) {
+    position: relative;
+    border-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content :where(
+        .delivery-admin-history-row,
+        .admin-cocinero-order-row,
+        .pedido-card-clickable
+    ):hover {
+        transform: translateX(4px);
+        box-shadow: inset 3px 0 0 var(--se-accent);
+        background: rgba(139,30,69,.08);
+    }
+}
+
+.admin-content :where(
+    .pedido-estado,
+    .cliente-estado,
+    .delivery-admin-status,
+    .admin-cocinero-status,
+    .pedido-estado-wrapper
+) {
+    position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   SHOW de pedidos: línea de lectura y mapa
+   -------------------------------------------------------------------------- */
+
+.admin-content .pedido-detalle :where(.pedido-row, .pedido-divider) {
+    position: relative;
+}
+
+.admin-content .pedido-detalle .pedido-divider {
+    opacity: .45;
+}
+
+.admin-content #admin-delivery-map {
+    border: 1px solid rgba(255,255,255,.09);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
+    transition: box-shadow .25s ease, border-color .25s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content #admin-delivery-map:hover {
+        border-color: rgba(169,42,87,.25);
+        box-shadow:
+            inset 0 0 0 1px rgba(169,42,87,.08),
+            0 14px 34px rgba(0,0,0,.22);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Formularios CREATE / EDIT
+   -------------------------------------------------------------------------- */
+
+.admin-content :where(
+    .delivery-input,
+    .producto-input,
+    .categorias-input,
+    .configuracion-input,
+    input.form-control,
+    textarea.form-control,
+    select.form-select,
+    select.productos-filtro-select
+) {
+    border-color: rgba(255,255,255,.11);
+    background-color: rgba(10,11,15,.48);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+.admin-content :where(
+    .delivery-input,
+    .producto-input,
+    .categorias-input,
+    .configuracion-input,
+    input.form-control,
+    textarea.form-control,
+    select.form-select,
+    select.productos-filtro-select
+):focus {
+    border-color: rgba(169,42,87,.72);
+    box-shadow:
+        0 0 0 .2rem rgba(139,30,69,.16),
+        0 10px 26px rgba(0,0,0,.15);
+    outline: none;
+}
+
+.admin-content :where(
+    .delivery-form-label,
+    .producto-form-label,
+    .categorias-label,
+    .configuracion-label
+) {
+    transition: color .18s ease;
+}
+
+.admin-content :where(
+    .delivery-form-body .col-md-6,
+    .productos-form-body > .mb-4,
+    .categorias-form-body .mb-4,
+    .configuracion-card
+) {
+    transition: transform .22s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content :where(
+        .delivery-form-body .col-md-6,
+        .productos-form-body > .mb-4,
+        .categorias-form-body .mb-4
+    ):focus-within {
+        transform: translateY(-2px);
+    }
+}
+
+.admin-content :where(
+    .delivery-info-box,
+    .categorias-info-box,
+    .configuracion-help
+) {
+    border: 1px solid rgba(255,255,255,.08);
+    background: linear-gradient(
+        135deg,
+        rgba(139,30,69,.10),
+        rgba(255,255,255,.025)
+    );
+}
+
+/* --------------------------------------------------------------------------
+   Productos + imágenes + calificaciones
+   -------------------------------------------------------------------------- */
+
+.admin-content :where(
+    .preview-producto,
+    .preview-container,
+    .preview-edit-container,
+    .configuracion-preview-container
+) {
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+}
+
+.admin-content :where(
+    .preview-imagen,
+    .configuracion-logo-preview,
+    .producto-imagen
+) {
+    transition: transform .3s ease, filter .3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content :where(
+        .preview-imagen,
+        .configuracion-logo-preview,
+        .producto-imagen
+    ):hover {
+        transform: scale(1.025);
+        filter: brightness(1.04) saturate(1.05);
+    }
+}
+
+.admin-content .admin-calificaciones-stars i {
+    filter: drop-shadow(0 3px 8px rgba(0,0,0,.25));
+}
+
+.admin-content .admin-calificaciones-review-card {
+    border-left: 3px solid rgba(139,30,69,.48);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content .admin-calificaciones-review-card:hover {
+        border-left-color: var(--se-accent-strong);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Tablas: legibilidad + hover
+   -------------------------------------------------------------------------- */
+
+.admin-content :where(
+    .table > :not(caption) > *,
+    .productos-table tbody tr,
+    .categorias-table tbody tr,
+    .pedidos-table tbody tr,
+    .delivery-admin-history-table tbody tr
+) {
+    transition:
+        background-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.admin-content :where(
+    .productos-table tbody tr,
+    .categorias-table tbody tr,
+    .pedidos-table tbody tr,
+    .delivery-admin-history-table tbody tr
+):hover {
+    background-color: rgba(255,255,255,.025);
+    box-shadow: inset 3px 0 0 rgba(139,30,69,.52);
+}
+
+/* --------------------------------------------------------------------------
+   Notificaciones: sensación de bandeja real
+   -------------------------------------------------------------------------- */
+
+.admin-content .notificacion-card.no-leida {
+    box-shadow:
+        0 0 0 1px rgba(139,30,69,.16),
+        0 16px 40px rgba(0,0,0,.20);
+}
+
+.admin-content .notificacion-card.leida {
+    opacity: .92;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content .notificacion-card.no-leida:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Botones / acciones: comportamiento táctil uniforme
+   -------------------------------------------------------------------------- */
+
+.admin-content :where(
+    .btn,
+    .btn-producto,
+    .btn-categoria-editar,
+    .btn-categoria-eliminar,
+    .btn-categoria-inactivar,
+    .btn-categoria-activar,
+    .btn-delivery,
+    .cliente-btn,
+    .dashboard-link,
+    .pedido-detalle-header a,
+    .delivery-admin-detail-back,
+    .admin-cocinero-back
+):not(.btn-close) {
+    min-height: 40px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content :where(
+        .btn,
+        .btn-producto,
+        .btn-categoria-editar,
+        .btn-categoria-eliminar,
+        .btn-categoria-inactivar,
+        .btn-categoria-activar,
+        .btn-delivery,
+        .cliente-btn,
+        .dashboard-link,
+        .pedido-detalle-header a,
+        .delivery-admin-detail-back,
+        .admin-cocinero-back
+    ):not(.btn-close):hover {
+        transform: translateY(-2px);
+    }
+
+    .admin-content :where(
+        .btn,
+        .btn-producto,
+        .btn-categoria-editar,
+        .btn-categoria-eliminar,
+        .btn-categoria-inactivar,
+        .btn-categoria-activar,
+        .btn-delivery,
+        .cliente-btn,
+        .dashboard-link,
+        .pedido-detalle-header a,
+        .delivery-admin-detail-back,
+        .admin-cocinero-back
+    ):not(.btn-close):active {
+        transform: translateY(0) scale(.97);
+    }
+}
+
+/* Ripple que genera el JS de acompañamiento */
+.se-ripple {
+    position: absolute;
+    border-radius: 999px;
+    transform: scale(0);
+    background: rgba(255,255,255,.25);
+    pointer-events: none;
+    animation: seRipple .55s ease-out forwards;
+}
+
+@keyframes seRipple {
+    to {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* Estado visual al enviar formularios */
+.admin-content form.se-submitting {
+    pointer-events: none;
+}
+
+.admin-content form.se-submitting button[type="submit"],
+.admin-content form.se-submitting input[type="submit"] {
+    opacity: .78;
+}
+
+.admin-content form.se-submitting button[type="submit"]::after,
+.admin-content form.se-submitting input[type="submit"]::after {
+    content: "";
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-left: .5rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    vertical-align: -.15em;
+    animation: seSpin .7s linear infinite;
+}
+
+@keyframes seSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive fino
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767.98px) {
+    .admin-content :where(
+        .cliente-info-card,
+        .delivery-admin-profile-card,
+        .admin-cocinero-profile-card,
+        .pedido-card,
+        .notificacion-card
+    ) {
+        border-radius: 14px;
+    }
+
+    .admin-content :where(
+        .delivery-admin-stat-card,
+        .cliente-dato,
+        .admin-cocinero-info-box,
+        .pedido-dato
+    ) {
+        min-height: 56px;
+    }
+
+    .admin-content :where(
+        .btn,
+        .btn-producto,
+        .btn-delivery,
+        .cliente-btn
+    ):not(.btn-close) {
+        min-height: 42px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-content > *,
+    .se-ripple {
+        animation: none !important;
+    }
+
+    .admin-content :where(
+        .card,
+        .productos-card,
+        .categorias-card,
+        .categorias-form-card,
+        .productos-form-card,
+        .delivery-form-card,
+        .delivery-admin-profile-card,
+        .delivery-admin-history-card,
+        .admin-cocinero-profile-card,
+        .admin-cocinero-activity-card,
+        .cliente-info-card,
+        .cliente-historial-card,
+        .pedido-card,
+        .configuracion-card,
+        .notificacion-card,
+        .notificacion-resumen,
+        .comprobante-status-card,
+        .admin-calificaciones-product-card,
+        .admin-calificaciones-summary-card,
+        .admin-calificaciones-review-card,
+        .btn,
+        .btn-producto,
+        .btn-delivery,
+        .cliente-btn
+    ) {
+        transition: none !important;
+    }
+}

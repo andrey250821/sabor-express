@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="admin-cocinero-page">
+<div class="admin-cocinero-page container-fluid px-0">
 
     {{-- ENCABEZADO --}}
     <div class="admin-cocinero-detail-header">

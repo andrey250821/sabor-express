@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="productos-form-page">
+<div class="productos-form-page container-fluid px-0">
 
     <div class="productos-form-card">
 

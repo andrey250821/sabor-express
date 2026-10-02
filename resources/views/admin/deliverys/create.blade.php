@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="delivery-form-page">
+<div class="delivery-form-page container-fluid px-0">
 
     <div class="delivery-form-card">
 

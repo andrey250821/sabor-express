@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="categorias-form-page">
+<div class="categorias-form-page container-fluid px-0">
 
     <!-- ENCABEZADO -->
     <div class="categorias-form-header mb-4">

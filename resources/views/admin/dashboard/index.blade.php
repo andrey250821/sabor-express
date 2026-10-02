@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="admin-dashboard">
+<div class="admin-dashboard container-fluid px-0">
 
     <div class="dashboard-header">
         <div>
