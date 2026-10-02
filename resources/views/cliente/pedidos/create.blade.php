@@ -2596,120 +2596,284 @@
                 |--------------------------------------------------------------------------
                 | MI UBICACIÓN
                 |--------------------------------------------------------------------------
+                |
+                | En teléfonos, Chrome solo permite geolocalización en un contexto
+                | seguro (HTTPS). "127.0.0.1" es confiable solo en el propio equipo;
+                | desde el celular, una IP LAN por HTTP no genera el diálogo de permiso.
+                |
                 */
+
+                const esContextoSeguro = function() {
+                    return window.isSecureContext === true
+                        || ['localhost', '127.0.0.1', '[::1]'].includes(
+                            window.location.hostname
+                        );
+                };
+
+
+                async function consultarPermisoUbicacion() {
+
+                    if (
+                        !navigator.permissions ||
+                        typeof navigator.permissions.query !== 'function'
+                    ) {
+                        return null;
+                    }
+
+                    try {
+
+                        const permiso =
+                            await navigator.permissions.query({
+                                name: 'geolocation'
+                            });
+
+                        permiso.addEventListener?.(
+                            'change',
+                            function() {
+                                if (
+                                    permiso.state === 'granted' &&
+                                    estadoUbicacion
+                                ) {
+                                    mostrarEstado(
+                                        'Permiso de ubicación habilitado. Puedes obtener tu posición actual.'
+                                    );
+                                }
+                            }
+                        );
+
+                        return permiso.state;
+
+                    } catch (error) {
+
+                        console.debug(
+                            'No se pudo consultar el permiso de geolocalización:',
+                            error
+                        );
+
+                        return null;
+                    }
+                }
+
+
+                function restaurarBotonUbicacion() {
+
+                    if (!btnMiUbicacion) {
+                        return;
+                    }
+
+                    btnMiUbicacion.disabled = false;
+                    btnMiUbicacion.removeAttribute('aria-busy');
+
+                    btnMiUbicacion.innerHTML =
+                        '<i class="bi bi-crosshair"></i>' +
+                        ' Usar mi ubicación';
+                }
+
+
+                function informarProblemaPermisoUbicacion() {
+
+                    mostrarEstado(
+                        '<strong>Chrome bloqueó la ubicación.</strong> ' +
+                        'En el celular abre los permisos del sitio y establece ' +
+                        '<strong>Ubicación → Permitir</strong>; después recarga la página.',
+                        true
+                    );
+
+                    restaurarBotonUbicacion();
+                }
+
 
                 if (btnMiUbicacion) {
 
                     btnMiUbicacion.addEventListener(
                         'click',
-                        function() {
+                        async function() {
 
                             if (
-                                !navigator.geolocation
+                                !navigator.geolocation ||
+                                typeof navigator.geolocation.getCurrentPosition !== 'function'
                             ) {
 
                                 mostrarEstado(
-                                    'Tu navegador no permite obtener tu ubicación.',
+                                    'Este navegador no permite obtener la ubicación.',
                                     true
                                 );
 
                                 return;
-
                             }
 
 
-                            mostrarEstado(
-                                'Obteniendo tu ubicación...'
-                            );
+                            /*
+                            |--------------------------------------------------------------------------
+                            | CONTEXTO SEGURO
+                            |--------------------------------------------------------------------------
+                            */
 
+                            if (!esContextoSeguro()) {
 
-                            btnMiUbicacion.disabled =
-                                true;
-
-
-                            const procesarUbicacion = function(posicion) {
-
-                                const ubicacion = {
-                                    lat: posicion.coords.latitude,
-                                    lng: posicion.coords.longitude
-                                };
-
-                                colocarMarcador(
-                                    ubicacion,
-                                    true,
+                                mostrarEstado(
+                                    '<strong>La ubicación del celular necesita HTTPS.</strong> ' +
+                                    'Si abriste Sabor Express desde una dirección como ' +
+                                    '<strong>http://192.168.x.x:8000</strong>, Chrome no mostrará ' +
+                                    'el permiso de ubicación. Abre la aplicación mediante una URL HTTPS.',
                                     true
                                 );
 
-                                mostrarEstado(
-                                    '✅ Ubicación encontrada. La dirección se está obteniendo automáticamente.'
-                                );
+                                return;
+                            }
 
-                                btnMiUbicacion.disabled = false;
-                            };
 
-                            const manejarErrorUbicacion = function(error) {
+                            /*
+                            |--------------------------------------------------------------------------
+                            | PERMISO PREVIO
+                            |--------------------------------------------------------------------------
+                            */
 
-                                console.error(
-                                    'Geolocation:',
-                                    error
-                                );
+                            const estadoPermiso =
+                                await consultarPermisoUbicacion();
 
-                                if (error.code === error.PERMISSION_DENIED) {
-                                    mostrarEstado(
-                                        'Permiso de ubicación denegado. Activa la ubicación para este sitio en Chrome y vuelve a intentarlo.',
+                            if (estadoPermiso === 'denied') {
+
+                                informarProblemaPermisoUbicacion();
+
+                                return;
+                            }
+
+
+                            btnMiUbicacion.disabled = true;
+                            btnMiUbicacion.setAttribute(
+                                'aria-busy',
+                                'true'
+                            );
+
+                            btnMiUbicacion.innerHTML =
+                                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>' +
+                                ' Solicitando ubicación...';
+
+
+                            mostrarEstado(
+                                estadoPermiso === 'prompt'
+                                    ? 'Chrome solicitará permiso para acceder a tu ubicación.'
+                                    : 'Obteniendo tu ubicación actual...'
+                            );
+
+
+                            const procesarUbicacion =
+                                function(posicion) {
+
+                                    const ubicacion = {
+                                        lat: posicion.coords.latitude,
+                                        lng: posicion.coords.longitude
+                                    };
+
+                                    colocarMarcador(
+                                        ubicacion,
+                                        true,
                                         true
                                     );
 
-                                    btnMiUbicacion.disabled = false;
-                                    return;
-                                }
-
-                                if (error.code === error.TIMEOUT) {
                                     mostrarEstado(
-                                        'La ubicación está tardando demasiado. Intentando con una ubicación aproximada...',
-                                        false
+                                        '✅ Ubicación encontrada. La dirección se está obteniendo automáticamente.'
                                     );
+
+                                    restaurarBotonUbicacion();
+                                };
+
+
+                            const intentarUbicacionAproximada =
+                                function() {
 
                                     navigator.geolocation.getCurrentPosition(
                                         procesarUbicacion,
                                         function(errorSegundoIntento) {
+
                                             console.error(
                                                 'Segundo intento de geolocalización:',
                                                 errorSegundoIntento
                                             );
 
+                                            if (
+                                                errorSegundoIntento.code ===
+                                                errorSegundoIntento.PERMISSION_DENIED
+                                            ) {
+                                                informarProblemaPermisoUbicacion();
+                                                return;
+                                            }
+
                                             mostrarEstado(
-                                                'No se pudo obtener tu ubicación. También puedes hacer clic directamente sobre el mapa.',
+                                                'No se pudo obtener tu ubicación actual. También puedes seleccionar el punto directamente en el mapa.',
                                                 true
                                             );
 
-                                            btnMiUbicacion.disabled = false;
+                                            restaurarBotonUbicacion();
                                         },
                                         {
                                             enableHighAccuracy: false,
-                                            timeout: 20000,
-                                            maximumAge: 120000
+                                            timeout: 30000,
+                                            maximumAge: 0
                                         }
                                     );
+                                };
 
-                                    return;
-                                }
 
-                                mostrarEstado(
-                                    'La ubicación no está disponible. Puedes hacer clic directamente sobre el mapa.',
-                                    true
-                                );
+                            const manejarErrorUbicacion =
+                                function(error) {
 
-                                btnMiUbicacion.disabled = false;
-                            };
+                                    console.error(
+                                        'Geolocation:',
+                                        error
+                                    );
+
+
+                                    if (
+                                        error.code ===
+                                        error.PERMISSION_DENIED
+                                    ) {
+                                        informarProblemaPermisoUbicacion();
+                                        return;
+                                    }
+
+
+                                    if (
+                                        error.code ===
+                                        error.TIMEOUT
+                                    ) {
+
+                                        mostrarEstado(
+                                            'La ubicación precisa está tardando demasiado. Intentando obtener una ubicación aproximada...'
+                                        );
+
+                                        intentarUbicacionAproximada();
+
+                                        return;
+                                    }
+
+
+                                    mostrarEstado(
+                                        'El teléfono no pudo determinar tu ubicación. Verifica que la ubicación del dispositivo esté activada y vuelve a intentarlo.',
+                                        true
+                                    );
+
+                                    restaurarBotonUbicacion();
+                                };
+
+
+                            /*
+                            |--------------------------------------------------------------------------
+                            | SOLICITAR POSICIÓN
+                            |--------------------------------------------------------------------------
+                            |
+                            | maximumAge = 0 fuerza una lectura nueva y evita depender
+                            | de una ubicación antigua almacenada en caché.
+                            */
 
                             navigator.geolocation.getCurrentPosition(
                                 procesarUbicacion,
                                 manejarErrorUbicacion,
                                 {
-                                    enableHighAccuracy: false,
-                                    timeout: 12000,
-                                    maximumAge: 120000
+                                    enableHighAccuracy: true,
+                                    timeout: 20000,
+                                    maximumAge: 0
                                 }
                             );
 
