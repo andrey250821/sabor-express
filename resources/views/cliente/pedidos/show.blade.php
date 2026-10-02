@@ -754,7 +754,11 @@
             <div class="cliente-pedido-show-financial">
 
                 <div class="cliente-pedido-show-financial-row">
-                    <span>Subtotal de productos</span>
+                    <span class="cliente-financial-label">
+                        <i class="bi bi-basket3-fill"></i>
+                        <span>Subtotal de productos</span>
+                    </span>
+
                     <strong>
                         Bs. {{ number_format((float) ($pedido->subtotal_productos ?? $pedido->total), 2) }}
                     </strong>
@@ -762,11 +766,14 @@
 
                 @if($pedido->distancia_delivery_km !== null || (float) ($pedido->tarifa_delivery ?? 0) > 0)
                     <div class="cliente-pedido-show-financial-row">
-                        <span>
-                            Delivery
-                            @if($pedido->distancia_delivery_km !== null)
-                                ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
-                            @endif
+                        <span class="cliente-financial-label">
+                            <i class="bi bi-bicycle"></i>
+                            <span>
+                                Delivery
+                                @if($pedido->distancia_delivery_km !== null)
+                                    ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
+                                @endif
+                            </span>
                         </span>
 
                         <strong>
@@ -776,8 +783,11 @@
                 @endif
 
                 <div class="cliente-pedido-show-total">
-                    <div>
-                        <span>Total del pedido</span>
+                    <div class="cliente-total-label">
+                        <span>
+                            <i class="bi bi-receipt-cutoff"></i>
+                            Total del pedido
+                        </span>
                         <small>
                             {{ $pedido->detallePedidos->sum('cantidad') }}
                             producto(s)
