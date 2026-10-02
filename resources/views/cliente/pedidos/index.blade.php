@@ -208,7 +208,10 @@
                          TARJETA DEL PEDIDO
                          ================================================= --}}
 
-            <div class="cliente-mis-pedidos-card">
+            <a
+                href="{{ route('cliente.pedidos.show', $pedido->id) }}"
+                class="cliente-mis-pedidos-card"
+                aria-label="Ver detalle del pedido #{{ $pedido->id }}">
 
 
                 {{-- =================================================
@@ -499,25 +502,9 @@
                         </div>
 
                     </div>
+</div>
 
-
-                    {{-- BOTÓN --}}
-
-                    <a
-                        href="{{ route('cliente.pedidos.show', $pedido->id) }}"
-                        class="cliente-mis-pedidos-btn-detalle">
-
-                        <span>
-                            Ver detalle
-                        </span>
-
-                        <i class="bi bi-arrow-right"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
+            </a>
 
             @endforeach
 
