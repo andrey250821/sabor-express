@@ -170,15 +170,15 @@
                         </div>
                     </div>
 
-                    @if($comprobante->pedido->referencia_delivery)
                     <div class="comprobante-info">
                         <div class="info-icon"><i class="bi bi-pin-map"></i></div>
                         <div>
                             <small>Referencia Delivery</small>
-                            <strong>{{ $comprobante->pedido->referencia_delivery }}</strong>
+                            <strong>
+                                {{ $comprobante->pedido->referencia_delivery ?: 'Sin referencia registrada' }}
+                            </strong>
                         </div>
                     </div>
-                    @endif
 
                     <div class="comprobante-monto">
                         <div>
