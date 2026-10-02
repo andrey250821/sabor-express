@@ -1579,3 +1579,41 @@
         transition-duration: .001ms !important;
     }
 }
+
+
+/* --------------------------------------------------------------------------
+   REVEAL PROGRESIVO CONTROLADO POR JS
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+    .cliente-app .cliente-reveal-item {
+        opacity: .35;
+        transform: translateY(12px);
+        transition:
+            opacity .48s ease,
+            transform .48s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .cliente-app .cliente-reveal-item.cliente-reveal-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .cliente-app .cliente-reveal-item:nth-child(2) {
+        transition-delay: .03s;
+    }
+
+    .cliente-app .cliente-reveal-item:nth-child(3) {
+        transition-delay: .06s;
+    }
+
+    .cliente-app .cliente-reveal-item:nth-child(4) {
+        transition-delay: .09s;
+    }
+
+    .cliente-app .cliente-busqueda-activa {
+        box-shadow:
+            0 0 0 3px rgba(255,47,118,.075),
+            0 10px 26px rgba(255,47,118,.10);
+    }
+}
