@@ -844,7 +844,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                         <div class="col-12 col-md-6 col-xl-4">
 
                             <a
-                                href="{{ route('delivery.pedidos.show', $pedido->id) }}"
+                                href="{{ url('/delivery/pedidos/' . (int) $pedido->id) }}"
                                 class="delivery-delivered-card pedido-card-clickable"
                                 aria-label="Ver detalle del pedido #{{ $pedido->id }}">
 
