@@ -5753,10 +5753,17 @@ textarea.categorias-input {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 12px;
+    align-items: stretch;
 }
 
 .delivery-admin-stat-card {
-    min-height: 120px;
+    min-width: 0;
+    min-height: 128px;
+    height: 128px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     padding: 16px;
 
@@ -5767,25 +5774,49 @@ textarea.categorias-input {
     box-shadow: 0 7px 20px rgba(0, 0, 0, .12);
 }
 
-.delivery-admin-stat-card span {
-    display: block;
+.delivery-admin-stat-label {
+    min-height: 42px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+
     color: #858991;
     font-size: 10px;
+    font-weight: 700;
+    line-height: 1.35;
 }
 
-.delivery-admin-stat-card strong {
+.delivery-admin-stat-label i {
+    flex: 0 0 auto;
+    margin-top: 1px;
+    font-size: 13px;
+}
+
+.delivery-admin-stat-label span {
+    min-width: 0;
     display: block;
+}
+
+.delivery-admin-stat-value {
+    display: flex;
+    align-items: flex-end;
+
+    min-height: 26px;
     margin-top: 8px;
+
     color: #fff;
     font-size: 18px;
+    font-weight: 800;
+    line-height: 1.15;
 }
 
-.delivery-admin-stat-card.financial strong,
-.delivery-admin-stat-card.commission strong {
+.delivery-admin-stat-card.financial .delivery-admin-stat-value,
+.delivery-admin-stat-card.commission .delivery-admin-stat-value {
     color: var(--admin-success-light);
 }
 
-.delivery-admin-stat-card.restaurant strong {
+.delivery-admin-stat-card.restaurant .delivery-admin-stat-value {
     color: var(--admin-primary-bright);
 }
 
