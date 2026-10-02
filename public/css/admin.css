@@ -1201,6 +1201,69 @@ img {
     border-right: none;
 }
 
+.order-status-item.status-pagado {
+    background: rgba(13, 110, 253, .07);
+    border-top: 2px solid rgba(13, 110, 253, .55);
+}
+
+.order-status-item.status-preparando {
+    background: rgba(255, 193, 7, .07);
+    border-top: 2px solid rgba(255, 193, 7, .60);
+}
+
+.order-status-item.status-listo {
+    background: rgba(255, 193, 7, .09);
+    border-top: 2px solid rgba(255, 193, 7, .75);
+}
+
+.order-status-item.status-asignado {
+    background: rgba(101, 70, 166, .08);
+    border-top: 2px solid rgba(101, 70, 166, .60);
+}
+
+.order-status-item.status-en_camino {
+    background: rgba(53, 183, 199, .08);
+    border-top: 2px solid rgba(53, 183, 199, .65);
+}
+
+.order-status-item.status-entregado {
+    background: rgba(25, 135, 84, .08);
+    border-top: 2px solid rgba(25, 135, 84, .60);
+}
+
+.order-status-item.status-cancelado {
+    background: rgba(220, 53, 69, .08);
+    border-top: 2px solid rgba(220, 53, 69, .60);
+}
+
+.order-status-item.status-pagado:hover {
+    background: rgba(13, 110, 253, .13);
+}
+
+.order-status-item.status-preparando:hover {
+    background: rgba(255, 193, 7, .13);
+}
+
+.order-status-item.status-listo:hover {
+    background: rgba(255, 193, 7, .15);
+}
+
+.order-status-item.status-asignado:hover {
+    background: rgba(101, 70, 166, .14);
+}
+
+.order-status-item.status-en_camino:hover {
+    background: rgba(53, 183, 199, .14);
+}
+
+.order-status-item.status-entregado:hover {
+    background: rgba(25, 135, 84, .14);
+}
+
+.order-status-item.status-cancelado:hover {
+    background: rgba(220, 53, 69, .14);
+}
+
 .order-status-item:hover {
     color: inherit;
     text-decoration: none;
@@ -1247,6 +1310,11 @@ img {
 .status-icon.entregado {
     background: rgba(25, 135, 84, .12);
     color: var(--admin-success-light);
+}
+
+.status-icon.cancelado {
+    background: rgba(220, 53, 69, .13);
+    color: var(--admin-danger-light);
 }
 
 .status-info {
