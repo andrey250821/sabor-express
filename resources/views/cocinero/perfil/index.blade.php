@@ -133,7 +133,8 @@
                     <form
                         action="{{ route('cocinero.perfil.update') }}"
                         method="POST"
-                        enctype="multipart/form-data">
+                        enctype="multipart/form-data"
+                        data-loading-text="Guardando...">
 
                         @csrf
                         @method('PATCH')
@@ -210,9 +211,7 @@
 
                         <button
                             type="submit"
-                            class="btn cocinero-save-button w-100 js-ripple"
-                            data-loading-text="Guardando..."
-                            formnovalidate="false">
+                            class="btn cocinero-save-button w-100 js-ripple">
 
                             <i class="bi bi-save me-1"></i>
                             Guardar cambios
