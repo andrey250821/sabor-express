@@ -354,7 +354,7 @@
 
                     @foreach($pedidos->take(5) as $pedido)
 
-                    <a href="{{ route('cocinero.pedidos.index') }}"
+                    <a href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
                         class="cocinero-order">
 
                         <div class="cocinero-order-id">
