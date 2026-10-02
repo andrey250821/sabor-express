@@ -207,9 +207,9 @@
 
             <div class="container-fluid px-3 px-lg-4">
 
-                <div class="d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center justify-content-between gap-3 cocinero-topbar-row">
 
-                    <div class="d-flex align-items-center gap-3 min-w-0">
+                    <div class="d-flex align-items-center gap-3 min-w-0 cocinero-topbar-left">
 
                         <button
                             type="button"
