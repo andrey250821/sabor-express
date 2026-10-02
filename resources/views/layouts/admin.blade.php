@@ -57,7 +57,7 @@
         SIDEBAR
         ====================================================== --}}
 
-        <aside class="admin-sidebar">
+        <aside class="admin-sidebar" id="admin-sidebar" aria-label="Menú principal del administrador">
 
 
             {{-- LOGO / IDENTIDAD --}}
@@ -298,6 +298,15 @@
 
         </aside>
 
+        {{-- FONDO PARA CERRAR EL MENÚ EN CELULAR --}}
+        <button
+            type="button"
+            class="admin-sidebar-overlay"
+            id="admin-sidebar-overlay"
+            aria-label="Cerrar menú"
+            aria-hidden="true">
+        </button>
+
 
         {{-- =====================================================
         CONTENIDO PRINCIPAL
@@ -313,7 +322,18 @@
             <header class="admin-topbar">
 
 
-                <div class="topbar-left">
+                <div class="topbar-left d-flex align-items-center gap-2">
+
+                    {{-- BOTÓN MENÚ MÓVIL --}}
+                    <button
+                        type="button"
+                        class="admin-mobile-toggle"
+                        id="admin-mobile-toggle"
+                        aria-label="Abrir menú"
+                        aria-controls="admin-sidebar"
+                        aria-expanded="false">
+                        <i class="bi bi-list"></i>
+                    </button>
 
                     <div>
 
@@ -414,6 +434,76 @@
 
 
     @stack('scripts')
+
+
+    {{-- NAVEGACIÓN RESPONSIVA DEL PANEL ADMINISTRATIVO --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('admin-sidebar');
+            const toggle = document.getElementById('admin-mobile-toggle');
+            const overlay = document.getElementById('admin-sidebar-overlay');
+
+            if (!sidebar || !toggle || !overlay) {
+                return;
+            }
+
+            const mobileMedia = window.matchMedia('(max-width: 991.98px)');
+
+            const cerrarMenu = () => {
+                sidebar.classList.remove('is-open');
+                overlay.classList.remove('is-visible');
+                toggle.setAttribute('aria-expanded', 'false');
+                overlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('admin-menu-open');
+            };
+
+            const abrirMenu = () => {
+                if (!mobileMedia.matches) {
+                    return;
+                }
+
+                sidebar.classList.add('is-open');
+                overlay.classList.add('is-visible');
+                toggle.setAttribute('aria-expanded', 'true');
+                overlay.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('admin-menu-open');
+            };
+
+            toggle.addEventListener('click', function () {
+                sidebar.classList.contains('is-open')
+                    ? cerrarMenu()
+                    : abrirMenu();
+            });
+
+            overlay.addEventListener('click', cerrarMenu);
+
+            sidebar.querySelectorAll('.sidebar-link').forEach((link) => {
+                link.addEventListener('click', () => {
+                    if (mobileMedia.matches) {
+                        cerrarMenu();
+                    }
+                });
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    cerrarMenu();
+                }
+            });
+
+            const handleBreakpoint = (event) => {
+                if (!event.matches) {
+                    cerrarMenu();
+                }
+            };
+
+            if (typeof mobileMedia.addEventListener === 'function') {
+                mobileMedia.addEventListener('change', handleBreakpoint);
+            } else {
+                mobileMedia.addListener(handleBreakpoint);
+            }
+        });
+    </script>
 
 
     {{-- Vite / JavaScript de la aplicación --}}
