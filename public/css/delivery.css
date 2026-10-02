@@ -6391,6 +6391,40 @@ a {
    ACCIONES
    ========================================================= */
 
+/* =========================================================
+   BOTÓN VER DETALLES — PEDIDOS DEL DELIVERY
+   ========================================================= */
+
+.delivery-my-detail-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid rgba(229, 43, 105, .55);
+    border-radius: 10px;
+    background: rgba(139, 30, 69, .14);
+    color: #ffd7e5 !important;
+    text-decoration: none !important;
+    font-size: 12px;
+    font-weight: 800;
+    transition: all .25s ease;
+    white-space: nowrap;
+}
+
+.delivery-my-detail-btn:hover {
+    transform: translateY(-1px);
+    border-color: #e52b69;
+    background: linear-gradient(135deg, #8b1e45, #c52c63);
+    color: #fff !important;
+    box-shadow: 0 8px 20px rgba(229, 43, 105, .25);
+}
+
+.delivery-my-detail-btn i {
+    font-size: 15px;
+}
+
 .delivery-my-actions {
     display: grid;
 
