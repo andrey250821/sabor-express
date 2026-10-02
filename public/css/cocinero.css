@@ -1313,6 +1313,27 @@ body.cocinero-layout.sidebar-open {
     line-height: 1.55;
 }
 
+.cocinero-pedidos .nav-pills .nav-link {
+    border: 1px solid var(--cocinero-border);
+    background: rgba(255, 255, 255, 0.025);
+    color: #bfc4ce;
+    transition: var(--cocinero-transition);
+}
+
+.cocinero-pedidos .nav-pills .nav-link:hover {
+    border-color: rgba(214, 51, 132, 0.20);
+    background: rgba(214, 51, 132, 0.05);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.cocinero-pedidos .nav-pills .nav-link.active {
+    border-color: rgba(214, 51, 132, 0.30);
+    background: linear-gradient(135deg, rgba(214, 51, 132, 0.28), rgba(255, 138, 61, 0.10));
+    color: #fff;
+    box-shadow: 0 9px 22px rgba(214, 51, 132, 0.12);
+}
+
 /* ==========================================================================
    PEDIDOS · HISTORIAL
    ========================================================================== */
