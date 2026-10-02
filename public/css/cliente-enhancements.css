@@ -1,0 +1,1581 @@
+/* ==========================================================================
+   SABOR EXPRESS · CAPA VISUAL CLIENTE
+   Diseño premium, llamativo, interactivo y responsive.
+   Complementa public/css/cliente.css sin reemplazar su estructura funcional.
+   ========================================================================== */
+
+:root {
+    --cliente-bg-deep: #08090d;
+    --cliente-bg: #0d0f14;
+    --cliente-surface: rgba(255, 255, 255, .045);
+    --cliente-surface-strong: rgba(255, 255, 255, .07);
+    --cliente-surface-soft: rgba(255, 255, 255, .025);
+
+    --cliente-primary: #ff2f76;
+    --cliente-primary-2: #d51f5d;
+    --cliente-primary-3: #8b1e45;
+    --cliente-pink-soft: rgba(255, 47, 118, .14);
+    --cliente-pink-glow: rgba(255, 47, 118, .30);
+
+    --cliente-orange: #ff9f43;
+    --cliente-yellow: #ffd166;
+    --cliente-green: #35d07f;
+    --cliente-blue: #5da9ff;
+    --cliente-red: #ff5a67;
+
+    --cliente-text: #ffffff;
+    --cliente-text-soft: rgba(255, 255, 255, .72);
+    --cliente-text-muted: rgba(255, 255, 255, .50);
+
+    --cliente-border: rgba(255, 255, 255, .09);
+    --cliente-border-strong: rgba(255, 47, 118, .30);
+
+    --cliente-radius: 18px;
+    --cliente-radius-lg: 24px;
+
+    --cliente-shadow: 0 16px 42px rgba(0, 0, 0, .22);
+    --cliente-shadow-hover: 0 24px 58px rgba(0, 0, 0, .34);
+    --cliente-glow: 0 0 32px rgba(255, 47, 118, .14);
+}
+
+/* --------------------------------------------------------------------------
+   BASE
+   -------------------------------------------------------------------------- */
+
+.cliente-app {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 10% 8%, rgba(255,47,118,.10), transparent 22%),
+        radial-gradient(circle at 88% 18%, rgba(255,159,67,.055), transparent 20%),
+        radial-gradient(circle at 50% 100%, rgba(139,30,69,.07), transparent 26%),
+        var(--cliente-bg-deep);
+}
+
+.cliente-app *,
+.cliente-app *::before,
+.cliente-app *::after {
+    box-sizing: border-box;
+}
+
+.cliente-app ::selection {
+    background: var(--cliente-primary);
+    color: #fff;
+}
+
+.cliente-app a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.cliente-app img {
+    max-width: 100%;
+}
+
+.cliente-app button,
+.cliente-app a,
+.cliente-app input,
+.cliente-app select,
+.cliente-app textarea {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.cliente-app .cliente-main {
+    position: relative;
+    isolation: isolate;
+    min-height: calc(100vh - 150px);
+}
+
+.cliente-app .cliente-main::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            115deg,
+            transparent 0%,
+            rgba(255,255,255,.018) 48%,
+            transparent 70%
+        );
+}
+
+.cliente-app .cliente-footer {
+    border-top: 1px solid rgba(255,255,255,.07);
+    background:
+        linear-gradient(180deg, rgba(16,17,22,.72), rgba(8,9,13,.98));
+    box-shadow: 0 -10px 30px rgba(0,0,0,.16);
+}
+
+.cliente-app .cliente-footer p {
+    margin: 0;
+    padding: 22px 0;
+    text-align: center;
+    color: var(--cliente-text-muted);
+    font-size: .82rem;
+}
+
+/* --------------------------------------------------------------------------
+   NAVBAR
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    background:
+        linear-gradient(110deg, rgba(9,10,14,.96), rgba(23,9,16,.94), rgba(9,10,14,.96)) !important;
+    border-bottom: 1px solid rgba(255,255,255,.075);
+    box-shadow:
+        0 12px 34px rgba(0,0,0,.32),
+        inset 0 -1px 0 rgba(255,47,118,.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.cliente-app .cliente-navbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,47,118,.72),
+        rgba(255,159,67,.55),
+        rgba(255,47,118,.72),
+        transparent
+    );
+    opacity: .8;
+}
+
+.cliente-app .cliente-navbar-container {
+    min-height: 78px;
+}
+
+.cliente-app .cliente-logo {
+    position: relative;
+    z-index: 1;
+    letter-spacing: -.025em;
+}
+
+.cliente-app .cliente-logo::after {
+    content: "";
+    position: absolute;
+    left: 22px;
+    right: 0;
+    bottom: -7px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--cliente-primary), transparent);
+    transform: scaleX(.25);
+    transform-origin: left;
+    transition: transform .35s ease;
+}
+
+.cliente-app .cliente-logo:hover::after {
+    transform: scaleX(1);
+}
+
+.cliente-app .cliente-logo i {
+    filter: drop-shadow(0 0 14px rgba(255,47,118,.38));
+}
+
+.cliente-app .cliente-nav-link {
+    border: 1px solid transparent;
+    min-height: 42px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cliente-app .cliente-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--cliente-primary), var(--cliente-orange));
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .25s ease;
+}
+
+.cliente-app .cliente-nav-link:hover::after,
+.cliente-app .cliente-nav-link.active::after {
+    transform: scaleX(1);
+}
+
+.cliente-app .cliente-nav-link.active {
+    box-shadow:
+        0 8px 24px rgba(139,30,69,.24),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.cliente-app .cliente-nav-link:hover i,
+.cliente-app .cliente-nav-link.active i {
+    filter: drop-shadow(0 0 9px rgba(255,47,118,.38));
+}
+
+.cliente-app .cliente-navbar-profile-avatar {
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.06),
+        0 0 0 5px rgba(255,47,118,.05),
+        0 8px 18px rgba(0,0,0,.22);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.cliente-app .cliente-profile-link:hover .cliente-navbar-profile-avatar {
+    transform: translateY(-2px) rotate(-2deg);
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.08),
+        0 0 0 6px rgba(255,47,118,.08),
+        0 10px 22px rgba(0,0,0,.28);
+}
+
+.cliente-app .cliente-btn-logout,
+.cliente-app .cliente-login-link {
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 8px 22px rgba(139,30,69,.24),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.cliente-app .cliente-btn-logout::before,
+.cliente-app .cliente-login-link::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -120%;
+    width: 75%;
+    transform: skewX(-18deg);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.20),
+        transparent
+    );
+    transition: left .65s ease;
+}
+
+.cliente-app .cliente-btn-logout:hover::before,
+.cliente-app .cliente-login-link:hover::before {
+    left: 145%;
+}
+
+/* --------------------------------------------------------------------------
+   BOTONES Y MICROINTERACCIONES
+   -------------------------------------------------------------------------- */
+
+.cliente-app :where(
+    .btn,
+    .cliente-btn-filtrar,
+    .cliente-btn-limpiar,
+    .cliente-btn-agregar,
+    .cliente-secondary-btn,
+    .cliente-carrito-btn-principal,
+    .cliente-carrito-btn-pedido,
+    .cliente-carrito-btn-secundario,
+    .cliente-pedido-btn-confirmar,
+    .cliente-pedido-btn-volver,
+    .cliente-pedido-btn-ubicacion,
+    .cliente-pedido-btn-secundario,
+    .cliente-ocr-pruebas-btn,
+    .cliente-ocr-ver,
+    .cliente-ocr-usar,
+    .cliente-calificaciones-btn-primary,
+    .cliente-mis-pedidos-btn-productos,
+    .cliente-pedido-show-btn-volver,
+    .cliente-pedido-show-btn-mapa
+):not(.btn-close) {
+    position: relative;
+    overflow: hidden;
+    min-height: 42px;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    transition:
+        transform .2s cubic-bezier(.2,.8,.2,1),
+        box-shadow .22s ease,
+        filter .22s ease,
+        border-color .22s ease;
+}
+
+.cliente-app :where(
+    .btn,
+    .cliente-btn-filtrar,
+    .cliente-btn-limpiar,
+    .cliente-btn-agregar,
+    .cliente-secondary-btn,
+    .cliente-carrito-btn-principal,
+    .cliente-carrito-btn-pedido,
+    .cliente-carrito-btn-secundario,
+    .cliente-pedido-btn-confirmar,
+    .cliente-pedido-btn-volver,
+    .cliente-pedido-btn-ubicacion,
+    .cliente-pedido-btn-secundario,
+    .cliente-ocr-pruebas-btn,
+    .cliente-ocr-ver,
+    .cliente-ocr-usar,
+    .cliente-calificaciones-btn-primary,
+    .cliente-mis-pedidos-btn-productos,
+    .cliente-pedido-show-btn-volver,
+    .cliente-pedido-show-btn-mapa
+):not(.btn-close):hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+.cliente-app :where(
+    .btn,
+    .cliente-btn-filtrar,
+    .cliente-btn-limpiar,
+    .cliente-btn-agregar,
+    .cliente-secondary-btn,
+    .cliente-carrito-btn-principal,
+    .cliente-carrito-btn-pedido,
+    .cliente-carrito-btn-secundario,
+    .cliente-pedido-btn-confirmar,
+    .cliente-pedido-btn-volver,
+    .cliente-pedido-btn-ubicacion,
+    .cliente-pedido-btn-secundario,
+    .cliente-ocr-pruebas-btn,
+    .cliente-ocr-ver,
+    .cliente-ocr-usar,
+    .cliente-calificaciones-btn-primary,
+    .cliente-mis-pedidos-btn-productos,
+    .cliente-pedido-show-btn-volver,
+    .cliente-pedido-show-btn-mapa
+):not(.btn-close):active {
+    transform: translateY(0) scale(.975);
+}
+
+.cliente-app .btn-primary,
+.cliente-app .btn-warning,
+.cliente-app .cliente-btn-agregar,
+.cliente-app .cliente-pedido-btn-confirmar,
+.cliente-app .cliente-carrito-btn-pedido {
+    border-color: transparent !important;
+    background:
+        linear-gradient(135deg, var(--cliente-primary), var(--cliente-primary-2)) !important;
+    color: #fff !important;
+    box-shadow:
+        0 12px 28px rgba(255,47,118,.22),
+        inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.cliente-app .btn-primary:hover,
+.cliente-app .btn-warning:hover,
+.cliente-app .cliente-btn-agregar:hover,
+.cliente-app .cliente-pedido-btn-confirmar:hover,
+.cliente-app .cliente-carrito-btn-pedido:hover {
+    box-shadow:
+        0 16px 34px rgba(255,47,118,.31),
+        0 0 0 1px rgba(255,255,255,.04),
+        inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.cliente-app .btn-outline-warning,
+.cliente-app .cliente-ocr-ver,
+.cliente-app .cliente-calificaciones-btn-primary {
+    color: var(--cliente-yellow) !important;
+    border-color: rgba(255,209,102,.48) !important;
+    background: rgba(255,209,102,.045) !important;
+}
+
+.cliente-app .btn-outline-warning:hover,
+.cliente-app .cliente-ocr-ver:hover,
+.cliente-app .cliente-calificaciones-btn-primary:hover {
+    color: #17110a !important;
+    background: linear-gradient(135deg, var(--cliente-yellow), #ffb703) !important;
+}
+
+.cliente-app .btn-outline-secondary,
+.cliente-app .cliente-carrito-btn-secundario {
+    color: rgba(255,255,255,.80) !important;
+    border-color: rgba(255,255,255,.14) !important;
+    background: rgba(255,255,255,.03) !important;
+}
+
+.cliente-app .btn-outline-secondary:hover,
+.cliente-app .cliente-carrito-btn-secundario:hover {
+    color: #fff !important;
+    border-color: rgba(255,255,255,.22) !important;
+    background: rgba(255,255,255,.08) !important;
+}
+
+/* --------------------------------------------------------------------------
+   INPUTS
+   -------------------------------------------------------------------------- */
+
+.cliente-app :where(
+    input.form-control,
+    select.form-select,
+    textarea.form-control,
+    .cliente-busqueda input,
+    .cliente-categoria-select,
+    .cliente-pedido-input,
+    .cliente-pedido-page input,
+    .cliente-pedido-page select,
+    .cliente-pedido-page textarea
+) {
+    border-color: rgba(255,255,255,.10) !important;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.025)) !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.025),
+        0 4px 15px rgba(0,0,0,.08);
+    transition:
+        border-color .2s ease,
+        box-shadow .22s ease,
+        background-color .22s ease,
+        transform .18s ease;
+}
+
+.cliente-app :where(
+    input.form-control,
+    select.form-select,
+    textarea.form-control,
+    .cliente-busqueda input,
+    .cliente-categoria-select,
+    .cliente-pedido-input,
+    .cliente-pedido-page input,
+    .cliente-pedido-page select,
+    .cliente-pedido-page textarea
+):focus {
+    border-color: rgba(255,47,118,.62) !important;
+    box-shadow:
+        0 0 0 .2rem rgba(255,47,118,.12),
+        0 10px 25px rgba(0,0,0,.14),
+        0 0 26px rgba(255,47,118,.08);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.cliente-app :where(
+    input.form-control,
+    textarea.form-control,
+    .cliente-busqueda input
+)::placeholder {
+    color: rgba(255,255,255,.36) !important;
+}
+
+.cliente-app select.form-select option,
+.cliente-app .cliente-categoria-select option {
+    background: #16181e;
+    color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   DASHBOARD
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-dashboard-header,
+.cliente-app .cliente-dashboard-card,
+.cliente-app .cliente-welcome-panel,
+.cliente-app .cliente-info-panel {
+    position: relative;
+    overflow: hidden;
+    border-color: var(--cliente-border) !important;
+    box-shadow: var(--cliente-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.cliente-app .cliente-dashboard-header {
+    background:
+        radial-gradient(circle at 86% 20%, rgba(255,47,118,.14), transparent 28%),
+        linear-gradient(145deg, rgba(29,18,25,.94), rgba(17,18,23,.96)) !important;
+}
+
+.cliente-app .cliente-dashboard-header::after {
+    opacity: .24;
+    filter: blur(8px);
+    box-shadow: 0 0 80px rgba(255,47,118,.12);
+}
+
+.cliente-app .cliente-dashboard-header-icon {
+    box-shadow:
+        0 14px 34px rgba(139,30,69,.35),
+        0 0 35px rgba(255,47,118,.12);
+}
+
+.cliente-app .cliente-dashboard-card {
+    background:
+        linear-gradient(145deg, rgba(24,26,32,.97), rgba(12,14,19,.97)) !important;
+    transition:
+        transform .30s cubic-bezier(.2,.8,.2,1),
+        box-shadow .30s ease,
+        border-color .30s ease;
+}
+
+.cliente-app .cliente-dashboard-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(255,47,118,.25) !important;
+    box-shadow:
+        var(--cliente-shadow-hover),
+        0 0 0 1px rgba(255,47,118,.05),
+        0 0 42px rgba(255,47,118,.07);
+}
+
+.cliente-app .cliente-dashboard-card::after {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    background: radial-gradient(circle, rgba(255,255,255,.055), transparent 58%);
+    transform: translate3d(-28%, -18%, 0);
+    transition: transform .55s ease;
+    pointer-events: none;
+}
+
+.cliente-app .cliente-dashboard-card:hover::after {
+    transform: translate3d(25%, 17%, 0);
+}
+
+.cliente-app .cliente-card-icon {
+    transition:
+        transform .30s ease,
+        box-shadow .30s ease,
+        filter .30s ease;
+}
+
+.cliente-app .cliente-dashboard-card:hover .cliente-card-icon {
+    transform: translateY(-4px) scale(1.05) rotate(-2deg);
+    filter: brightness(1.06);
+}
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-productos-page {
+    position: relative;
+    padding-top: 34px;
+    padding-bottom: 56px;
+}
+
+.cliente-app .cliente-productos-header {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 85% 15%, rgba(255,47,118,.16), transparent 26%),
+        radial-gradient(circle at 12% 100%, rgba(255,159,67,.06), transparent 24%);
+}
+
+.cliente-app .cliente-productos-header::after {
+    content: "";
+    position: absolute;
+    top: 10%;
+    right: 7%;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.07);
+    box-shadow:
+        0 0 0 18px rgba(255,47,118,.025),
+        0 0 0 38px rgba(255,47,118,.012);
+    pointer-events: none;
+}
+
+.cliente-app .cliente-productos-header h1 {
+    text-wrap: balance;
+    letter-spacing: -.04em;
+    text-shadow: 0 4px 24px rgba(0,0,0,.22);
+}
+
+.cliente-app .cliente-productos-filtros {
+    border: 1px solid var(--cliente-border);
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.024));
+    border-radius: var(--cliente-radius);
+    padding: 15px;
+    box-shadow: var(--cliente-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.cliente-app .cliente-busqueda {
+    position: relative;
+    border-radius: 12px;
+    transition: box-shadow .22s ease, transform .22s ease;
+}
+
+.cliente-app .cliente-busqueda:focus-within {
+    transform: translateY(-1px);
+    box-shadow: 0 0 26px rgba(255,47,118,.10);
+}
+
+.cliente-app .cliente-busqueda i {
+    filter: drop-shadow(0 0 8px rgba(255,47,118,.22));
+}
+
+.cliente-app .cliente-producto-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--cliente-border) !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.055), rgba(16,18,23,.96)) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--cliente-shadow);
+    transition:
+        transform .32s cubic-bezier(.2,.8,.2,1),
+        box-shadow .32s ease,
+        border-color .32s ease;
+}
+
+.cliente-app .cliente-producto-card::before {
+    content: "";
+    position: absolute;
+    left: -25%;
+    right: -25%;
+    top: -65%;
+    height: 120%;
+    background:
+        radial-gradient(circle at center, rgba(255,47,118,.10), transparent 58%);
+    opacity: 0;
+    transition: opacity .3s ease, transform .4s ease;
+    pointer-events: none;
+}
+
+.cliente-app .cliente-producto-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255,47,118,.28) !important;
+    box-shadow:
+        var(--cliente-shadow-hover),
+        0 0 34px rgba(255,47,118,.08);
+}
+
+.cliente-app .cliente-producto-card:hover::before {
+    opacity: 1;
+    transform: translateY(16%);
+}
+
+.cliente-app .cliente-producto-imagen img {
+    transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .35s ease;
+}
+
+.cliente-app .cliente-producto-card:hover .cliente-producto-imagen img {
+    transform: scale(1.06);
+    filter: saturate(1.07) contrast(1.02);
+}
+
+.cliente-app .cliente-producto-calificacion-estrellas i {
+    filter: drop-shadow(0 2px 8px rgba(255,209,102,.18));
+    transition: transform .22s ease, filter .22s ease;
+}
+
+.cliente-app .cliente-producto-card:hover .cliente-producto-calificacion-estrellas i {
+    transform: translateY(-1px);
+    filter: drop-shadow(0 3px 10px rgba(255,209,102,.28));
+}
+
+.cliente-app .cliente-btn-agregar {
+    margin-top: auto;
+}
+
+.cliente-app .cliente-btn-agregar:not(:disabled):hover {
+    animation: clienteButtonPulse 1.7s ease-in-out infinite;
+}
+
+@keyframes clienteButtonPulse {
+    0%, 100% {
+        box-shadow: 0 12px 28px rgba(255,47,118,.22);
+    }
+    50% {
+        box-shadow: 0 14px 34px rgba(255,47,118,.34);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   CARRITO
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-carrito-page {
+    padding-top: 34px;
+    padding-bottom: 56px;
+}
+
+.cliente-app .cliente-carrito-header,
+.cliente-app .cliente-carrito-card,
+.cliente-app .cliente-carrito-resumen,
+.cliente-app .cliente-carrito-vacio {
+    position: relative;
+    overflow: hidden;
+}
+
+.cliente-app .cliente-carrito-header {
+    background:
+        radial-gradient(circle at 84% 20%, rgba(255,47,118,.13), transparent 28%),
+        linear-gradient(145deg, rgba(29,18,25,.90), rgba(13,15,20,.96));
+    border: 1px solid var(--cliente-border);
+    box-shadow: var(--cliente-shadow);
+    border-radius: var(--cliente-radius-lg);
+}
+
+.cliente-app .cliente-carrito-card,
+.cliente-app .cliente-carrito-resumen {
+    border: 1px solid var(--cliente-border) !important;
+    border-radius: 20px !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.05), rgba(15,17,22,.97)) !important;
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-carrito-item {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,.065);
+    transition:
+        background-color .22s ease,
+        transform .22s ease,
+        padding-left .22s ease;
+}
+
+.cliente-app .cliente-carrito-item:hover {
+    background: linear-gradient(90deg, rgba(255,47,118,.055), rgba(255,255,255,.018));
+}
+
+.cliente-app .cliente-carrito-imagen img {
+    transition: transform .32s ease, filter .3s ease;
+}
+
+.cliente-app .cliente-carrito-item:hover .cliente-carrito-imagen img {
+    transform: scale(1.04) rotate(-1deg);
+    filter: saturate(1.06);
+}
+
+.cliente-app .cliente-cantidad-btn {
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.cliente-app .cliente-cantidad-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 4px rgba(255,47,118,.08);
+}
+
+.cliente-app .cliente-item-subtotal {
+    text-shadow: 0 0 18px rgba(255,159,67,.12);
+}
+
+.cliente-app .cliente-carrito-btn-pedido {
+    min-height: 54px !important;
+    font-size: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   CHECKOUT / PEDIDO
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-pedido-page {
+    padding-top: 32px;
+    padding-bottom: 60px;
+}
+
+.cliente-app .cliente-pedido-header,
+.cliente-app .cliente-pedido-card,
+.cliente-app .cliente-pedido-resumen,
+.cliente-app .cliente-comprobante-area,
+.cliente-app .cliente-ocr-herramienta {
+    position: relative;
+    overflow: hidden;
+}
+
+.cliente-app .cliente-pedido-header {
+    border: 1px solid var(--cliente-border);
+    border-radius: var(--cliente-radius-lg);
+    background:
+        radial-gradient(circle at 86% 18%, rgba(255,47,118,.15), transparent 28%),
+        linear-gradient(145deg, rgba(29,18,25,.92), rgba(14,16,21,.97));
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-pedido-card,
+.cliente-app .cliente-pedido-resumen {
+    border: 1px solid var(--cliente-border) !important;
+    border-radius: 20px !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.05), rgba(13,15,20,.98)) !important;
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-pedido-card-header,
+.cliente-app .cliente-pedido-resumen-header {
+    background:
+        linear-gradient(90deg, rgba(255,47,118,.09), rgba(255,159,67,.025), transparent);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-pedido-mapa,
+.cliente-app #mapa-pedido {
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.025),
+        0 10px 30px rgba(0,0,0,.20);
+}
+
+.cliente-app .cliente-pedido-mapa-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cliente-app .cliente-pedido-btn-ubicacion {
+    background:
+        linear-gradient(135deg, rgba(255,47,118,.96), rgba(139,30,69,.98)) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: 0 10px 24px rgba(255,47,118,.20);
+}
+
+.cliente-app .cliente-pago-contenedor,
+.cliente-app .cliente-comprobante-area,
+.cliente-app .cliente-ocr-herramienta {
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.08);
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
+}
+
+.cliente-app .cliente-pago-qr-imagen img {
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow:
+        0 16px 34px rgba(0,0,0,.24),
+        0 0 32px rgba(255,47,118,.08);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.cliente-app .cliente-pago-qr-imagen img:hover {
+    transform: translateY(-3px) scale(1.015);
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.30),
+        0 0 38px rgba(255,47,118,.12);
+}
+
+.cliente-app .cliente-comprobante-preview {
+    border-color: rgba(255,47,118,.16) !important;
+    background:
+        radial-gradient(circle at center, rgba(255,47,118,.075), transparent 60%),
+        rgba(255,255,255,.018);
+}
+
+.cliente-app .cliente-ocr-herramienta {
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.15),
+        0 0 30px rgba(255,47,118,.05);
+}
+
+.cliente-app .cliente-ocr-herramienta-cabecera {
+    background:
+        linear-gradient(90deg, rgba(255,47,118,.08), rgba(255,159,67,.025), transparent);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-ocr-pruebas-btn {
+    background: linear-gradient(135deg, rgba(255,47,118,.13), rgba(139,30,69,.15));
+    color: #fff;
+    border: 1px solid rgba(255,47,118,.26);
+}
+
+.cliente-app .cliente-ocr-pruebas-btn:hover {
+    box-shadow: 0 10px 26px rgba(255,47,118,.16);
+}
+
+.cliente-app .cliente-ocr-prueba-item {
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 14px;
+    background: rgba(255,255,255,.025);
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.cliente-app .cliente-ocr-prueba-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,47,118,.22);
+    background: rgba(255,47,118,.035);
+}
+
+/* --------------------------------------------------------------------------
+   MIS PEDIDOS
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-mis-pedidos-page {
+    padding-top: 30px;
+    padding-bottom: 60px;
+}
+
+.cliente-app .cliente-mis-pedidos-header,
+.cliente-app .cliente-mis-pedidos-card,
+.cliente-app .cliente-mis-pedidos-vacio {
+    position: relative;
+    overflow: hidden;
+}
+
+.cliente-app .cliente-mis-pedidos-header {
+    border: 1px solid var(--cliente-border);
+    border-radius: var(--cliente-radius-lg);
+    background:
+        radial-gradient(circle at 85% 15%, rgba(255,47,118,.13), transparent 28%),
+        linear-gradient(145deg, rgba(29,18,25,.92), rgba(13,15,20,.97));
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-mis-pedidos-card {
+    border: 1px solid var(--cliente-border) !important;
+    border-radius: 20px !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.05), rgba(14,16,21,.97)) !important;
+    box-shadow: var(--cliente-shadow);
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
+}
+
+.cliente-app .cliente-mis-pedidos-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,47,118,.22) !important;
+    box-shadow: var(--cliente-shadow-hover);
+}
+
+.cliente-app .cliente-mis-pedidos-card-header {
+    background:
+        linear-gradient(90deg, rgba(255,47,118,.065), transparent 70%);
+}
+
+.cliente-app .cliente-mis-pedidos-estado {
+    box-shadow: 0 0 0 1px rgba(255,255,255,.04);
+}
+
+.cliente-app .cliente-mis-pedidos-vacio {
+    border: 1px dashed rgba(255,255,255,.12);
+    border-radius: var(--cliente-radius-lg);
+    background:
+        radial-gradient(circle at center, rgba(255,47,118,.075), transparent 48%),
+        rgba(255,255,255,.018);
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-mis-pedidos-vacio-icono {
+    filter: drop-shadow(0 0 22px rgba(255,47,118,.20));
+}
+
+/* --------------------------------------------------------------------------
+   DETALLE PEDIDO + TRACKING
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-pedido-show-page {
+    padding-top: 30px;
+    padding-bottom: 60px;
+}
+
+.cliente-app .cliente-pedido-show-header,
+.cliente-app .cliente-pedido-show-estado-card,
+.cliente-app .cliente-pedido-show-card,
+.cliente-app .cliente-pedido-show-resumen,
+.cliente-app .cliente-delivery-tracking {
+    position: relative;
+    overflow: hidden;
+}
+
+.cliente-app .cliente-pedido-show-header {
+    border: 1px solid var(--cliente-border);
+    border-radius: var(--cliente-radius-lg);
+    background:
+        radial-gradient(circle at 86% 18%, rgba(255,47,118,.14), transparent 26%),
+        linear-gradient(145deg, rgba(29,18,25,.93), rgba(13,15,20,.97));
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-pedido-show-estado-card,
+.cliente-app .cliente-pedido-show-card,
+.cliente-app .cliente-pedido-show-resumen,
+.cliente-app .cliente-delivery-tracking {
+    border: 1px solid var(--cliente-border) !important;
+    border-radius: 20px !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.05), rgba(14,16,21,.97)) !important;
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-pedido-show-estado-principal {
+    position: relative;
+    isolation: isolate;
+}
+
+.cliente-app .cliente-pedido-show-estado-icono {
+    box-shadow:
+        0 12px 30px rgba(255,47,118,.14),
+        0 0 30px rgba(255,47,118,.08);
+}
+
+.cliente-app .cliente-pedido-show-paso {
+    transition: transform .22s ease, filter .22s ease;
+}
+
+.cliente-app .cliente-pedido-show-paso:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+}
+
+.cliente-app .cliente-pedido-show-producto {
+    border-bottom: 1px solid rgba(255,255,255,.055);
+    transition: background-color .2s ease, transform .2s ease;
+}
+
+.cliente-app .cliente-pedido-show-producto:hover {
+    background: rgba(255,47,118,.035);
+}
+
+.cliente-app .cliente-pedido-show-producto-imagen img {
+    transition: transform .3s ease;
+}
+
+.cliente-app .cliente-pedido-show-producto:hover .cliente-pedido-show-producto-imagen img {
+    transform: scale(1.04);
+}
+
+.cliente-app .cliente-pedido-show-calificacion {
+    border: 1px solid rgba(255,209,102,.15);
+    border-radius: 16px;
+    background:
+        linear-gradient(145deg, rgba(255,209,102,.045), rgba(255,255,255,.018));
+}
+
+.cliente-app .cliente-pedido-show-calificacion-estrellas i {
+    filter: drop-shadow(0 2px 8px rgba(255,209,102,.18));
+}
+
+.cliente-app .cliente-delivery-tracking {
+    border-color: rgba(93,169,255,.16) !important;
+    background:
+        linear-gradient(150deg, rgba(93,169,255,.05), rgba(255,255,255,.025)) !important;
+}
+
+.cliente-app .cliente-delivery-map {
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.02),
+        0 12px 28px rgba(0,0,0,.18);
+}
+
+/* --------------------------------------------------------------------------
+   CALIFICACIONES
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-calificaciones-container {
+    padding-top: 30px;
+    padding-bottom: 60px;
+}
+
+.cliente-app .cliente-calificaciones-product-card,
+.cliente-app .cliente-calificaciones-summary-card,
+.cliente-app .cliente-calificaciones-review-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--cliente-border) !important;
+    border-radius: 20px !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.05), rgba(14,16,21,.97)) !important;
+    box-shadow: var(--cliente-shadow);
+    transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        border-color .28s ease;
+}
+
+.cliente-app .cliente-calificaciones-product-card:hover,
+.cliente-app .cliente-calificaciones-summary-card:hover,
+.cliente-app .cliente-calificaciones-review-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,47,118,.20) !important;
+    box-shadow: var(--cliente-shadow-hover);
+}
+
+.cliente-app .cliente-calificaciones-stars-large i,
+.cliente-app .cliente-calificaciones-stars i {
+    filter: drop-shadow(0 2px 8px rgba(255,209,102,.20));
+}
+
+.cliente-app .cliente-rating-progress-bar {
+    background:
+        linear-gradient(90deg, var(--cliente-primary), var(--cliente-orange)) !important;
+    box-shadow: 0 0 12px rgba(255,47,118,.18);
+}
+
+.cliente-app .cliente-calificaciones-avatar,
+.cliente-app .cliente-calificaciones-avatar-image {
+    box-shadow:
+        0 8px 18px rgba(0,0,0,.24),
+        0 0 0 1px rgba(255,255,255,.06);
+}
+
+.cliente-app .cliente-calificaciones-comment {
+    border-left-color: rgba(255,47,118,.34) !important;
+}
+
+/* --------------------------------------------------------------------------
+   NOTIFICACIONES
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-notificaciones-page {
+    padding-top: 32px;
+    padding-bottom: 60px;
+}
+
+.cliente-app .cliente-notificaciones-page .card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--cliente-border) !important;
+    border-radius: 18px !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.05), rgba(13,15,20,.97)) !important;
+    color: #fff;
+    box-shadow: var(--cliente-shadow);
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.cliente-app .cliente-notificaciones-page .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,47,118,.20) !important;
+    box-shadow: var(--cliente-shadow-hover);
+}
+
+.cliente-app .cliente-notificaciones-page .text-muted {
+    color: var(--cliente-text-muted) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .card-title,
+.cliente-app .cliente-notificaciones-page h2,
+.cliente-app .cliente-notificaciones-page h4,
+.cliente-app .cliente-notificaciones-page h5,
+.cliente-app .cliente-notificaciones-page h6 {
+    color: #fff;
+}
+
+.cliente-app .cliente-notificaciones-page .bg-light {
+    background: rgba(255,255,255,.05) !important;
+    color: #fff !important;
+}
+
+.cliente-app .cliente-notificaciones-page .badge {
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 5px 15px rgba(0,0,0,.18);
+}
+
+.cliente-app .cliente-notificaciones-page .js-marcar-notificacion-cliente,
+.cliente-app #form-marcar-todas-notificaciones-cliente button {
+    min-height: 40px;
+}
+
+.cliente-app .cliente-notificaciones-page .sin-notificaciones,
+.cliente-app .cliente-notificaciones-page .py-5 {
+    border-radius: 20px;
+    background: rgba(255,255,255,.02);
+}
+
+/* --------------------------------------------------------------------------
+   CONFIGURACIÓN / PERFIL
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-configuracion-page {
+    padding-top: 32px;
+    padding-bottom: 60px;
+}
+
+.cliente-app .cliente-configuracion-page .card {
+    border: 1px solid var(--cliente-border) !important;
+    border-radius: 20px !important;
+    background:
+        linear-gradient(160deg, rgba(255,255,255,.05), rgba(13,15,20,.97)) !important;
+    color: #fff;
+    box-shadow: var(--cliente-shadow);
+}
+
+.cliente-app .cliente-configuracion-page .card-header {
+    background:
+        linear-gradient(90deg, rgba(255,47,118,.075), transparent) !important;
+    border-bottom-color: rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-configuracion-page .form-label,
+.cliente-app .cliente-configuracion-page .form-text,
+.cliente-app .cliente-configuracion-page h2,
+.cliente-app .cliente-configuracion-page h4,
+.cliente-app .cliente-configuracion-page h5,
+.cliente-app .cliente-configuracion-page h6,
+.cliente-app .cliente-configuracion-page strong {
+    color: #fff;
+}
+
+.cliente-app .cliente-configuracion-page .form-text {
+    color: var(--cliente-text-muted) !important;
+}
+
+.cliente-app .cliente-perfil-avatar-preview {
+    box-shadow:
+        0 16px 34px rgba(0,0,0,.24),
+        0 0 32px rgba(255,47,118,.11),
+        0 0 0 2px rgba(255,255,255,.05);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.cliente-app .cliente-perfil-avatar-preview:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.30),
+        0 0 38px rgba(255,47,118,.14),
+        0 0 0 2px rgba(255,255,255,.07);
+}
+
+/* --------------------------------------------------------------------------
+   ALERTAS / MENSAJES
+   -------------------------------------------------------------------------- */
+
+.cliente-app :where(
+    .cliente-carrito-alert,
+    .cliente-pedido-alert,
+    .cliente-pedido-show-alert,
+    .cliente-mis-pedidos-alert,
+    .alert
+) {
+    border-radius: 14px !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,.12);
+}
+
+.cliente-app :where(
+    .cliente-carrito-alert-success,
+    .cliente-pedido-alert-success,
+    .cliente-pedido-show-alert-success,
+    .cliente-mis-pedidos-alert-success,
+    .alert-success
+) {
+    border-color: rgba(53,208,127,.28) !important;
+    box-shadow: 0 10px 25px rgba(53,208,127,.06);
+}
+
+.cliente-app :where(
+    .cliente-carrito-alert-error,
+    .cliente-pedido-alert-error,
+    .cliente-pedido-show-alert-error,
+    .cliente-mis-pedidos-alert-error,
+    .alert-danger
+) {
+    border-color: rgba(255,90,103,.30) !important;
+    box-shadow: 0 10px 25px rgba(255,90,103,.06);
+}
+
+/* --------------------------------------------------------------------------
+   ANIMACIÓN DE ENTRADA
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+    .cliente-app .cliente-dashboard-card,
+    .cliente-app .cliente-producto-card,
+    .cliente-app .cliente-carrito-card,
+    .cliente-app .cliente-carrito-resumen,
+    .cliente-app .cliente-mis-pedidos-card,
+    .cliente-app .cliente-pedido-show-card,
+    .cliente-app .cliente-calificaciones-review-card,
+    .cliente-app .cliente-notificaciones-page .card,
+    .cliente-app .cliente-configuracion-page .card {
+        animation: clienteCardEnter .48s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .cliente-app .cliente-producto-card:nth-child(2),
+    .cliente-app .cliente-dashboard-card:nth-child(2) {
+        animation-delay: .04s;
+    }
+
+    .cliente-app .cliente-producto-card:nth-child(3),
+    .cliente-app .cliente-dashboard-card:nth-child(3) {
+        animation-delay: .08s;
+    }
+
+    .cliente-app .cliente-producto-card:nth-child(4) {
+        animation-delay: .12s;
+    }
+
+    .cliente-app .cliente-producto-card:nth-child(5) {
+        animation-delay: .16s;
+    }
+
+    .cliente-app .cliente-producto-card:nth-child(6) {
+        animation-delay: .20s;
+    }
+
+    .cliente-app .cliente-dashboard-header,
+    .cliente-app .cliente-productos-header,
+    .cliente-app .cliente-carrito-header,
+    .cliente-app .cliente-pedido-header,
+    .cliente-app .cliente-mis-pedidos-header,
+    .cliente-app .cliente-pedido-show-header,
+    .cliente-app .cliente-calificaciones-header {
+        animation: clienteHeaderEnter .55s cubic-bezier(.2,.8,.2,1) both;
+    }
+}
+
+@keyframes clienteCardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes clienteHeaderEnter {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   RIPPLE + FOCUS
+   -------------------------------------------------------------------------- */
+
+.cliente-ripple {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: rgba(255,255,255,.24);
+    transform: scale(0);
+    animation: clienteRipple .58s ease-out forwards;
+    z-index: 20;
+}
+
+@keyframes clienteRipple {
+    to {
+        transform: scale(17);
+        opacity: 0;
+    }
+}
+
+.cliente-app :focus-visible {
+    outline: 2px solid rgba(255,47,118,.76) !important;
+    outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   TABLET
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+    .cliente-app .cliente-navbar-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .cliente-app .cliente-navbar-links {
+        margin-left: 0;
+        padding: 12px 0 8px;
+        gap: 4px;
+    }
+
+    .cliente-app .cliente-navbar-user {
+        margin-left: 0;
+        padding: 8px 0 14px;
+        border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .cliente-app .cliente-user-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .cliente-app .cliente-productos-filtros {
+        padding: 12px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   CELULAR
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767.98px) {
+    .cliente-app .cliente-main {
+        min-height: calc(100vh - 132px);
+    }
+
+    .cliente-app .cliente-dashboard-page,
+    .cliente-app .cliente-productos-page,
+    .cliente-app .cliente-carrito-page,
+    .cliente-app .cliente-pedido-page,
+    .cliente-app .cliente-mis-pedidos-page,
+    .cliente-app .cliente-pedido-show-page,
+    .cliente-app .cliente-calificaciones-container,
+    .cliente-app .cliente-notificaciones-page,
+    .cliente-app .cliente-configuracion-page {
+        padding-top: 20px;
+        padding-bottom: 38px;
+    }
+
+    .cliente-app .cliente-dashboard-header,
+    .cliente-app .cliente-carrito-header,
+    .cliente-app .cliente-pedido-header,
+    .cliente-app .cliente-mis-pedidos-header,
+    .cliente-app .cliente-pedido-show-header {
+        border-radius: 18px !important;
+    }
+
+    .cliente-app .cliente-dashboard-header {
+        padding: 25px 22px !important;
+        gap: 18px;
+    }
+
+    .cliente-app .cliente-dashboard-title {
+        font-size: clamp(1.9rem, 8vw, 2.5rem);
+    }
+
+    .cliente-app .cliente-dashboard-subtitle {
+        font-size: .94rem;
+    }
+
+    .cliente-app .cliente-dashboard-header-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 17px;
+        font-size: 24px;
+    }
+
+    .cliente-app .cliente-productos-header h1,
+    .cliente-app .cliente-carrito-header h1,
+    .cliente-app .cliente-pedido-header h1,
+    .cliente-app .cliente-mis-pedidos-header h1,
+    .cliente-app .cliente-pedido-show-header h1 {
+        font-size: clamp(1.65rem, 7vw, 2.25rem);
+    }
+
+    .cliente-app .cliente-productos-filtros {
+        border-radius: 16px;
+    }
+
+    .cliente-app .cliente-filtros-form {
+        gap: 10px !important;
+    }
+
+    .cliente-app .cliente-busqueda,
+    .cliente-app .cliente-categoria-select,
+    .cliente-app .cliente-btn-filtrar,
+    .cliente-app .cliente-btn-limpiar {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-producto-card,
+    .cliente-app .cliente-carrito-card,
+    .cliente-app .cliente-carrito-resumen,
+    .cliente-app .cliente-mis-pedidos-card,
+    .cliente-app .cliente-pedido-show-card,
+    .cliente-app .cliente-calificaciones-product-card,
+    .cliente-app .cliente-calificaciones-summary-card,
+    .cliente-app .cliente-calificaciones-review-card,
+    .cliente-app .cliente-notificaciones-page .card,
+    .cliente-app .cliente-configuracion-page .card {
+        border-radius: 17px !important;
+    }
+
+    .cliente-app .cliente-pedido-mapa-botones {
+        flex-direction: column;
+    }
+
+    .cliente-app .cliente-pedido-mapa-botones > * {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-user-info {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .cliente-app .cliente-profile-link,
+    .cliente-app .cliente-btn-logout,
+    .cliente-app .cliente-login-link {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cliente-app .cliente-nav-link {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   PANTALLAS MUY PEQUEÑAS
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+    .cliente-app .cliente-navbar-container {
+        min-height: 70px;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .cliente-app .cliente-logo {
+        font-size: 18px;
+    }
+
+    .cliente-app .cliente-logo i {
+        font-size: 24px;
+    }
+
+    .cliente-app .cliente-navbar-toggler {
+        width: 40px;
+        height: 38px;
+    }
+
+    .cliente-app .cliente-dashboard-header {
+        padding: 20px 17px !important;
+    }
+
+    .cliente-app .cliente-dashboard-header-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 21px;
+    }
+
+    .cliente-app .cliente-footer p {
+        padding-left: 14px;
+        padding-right: 14px;
+        font-size: .76rem;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .cliente-app *,
+    .cliente-app *::before,
+    .cliente-app *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+    }
+}
