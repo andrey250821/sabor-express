@@ -1149,8 +1149,7 @@ body.cocinero-layout.sidebar-open {
 
 
 .cocinero-btn-preparar:hover,
-.cocinero-btn-listo:hover,
-.cocinero-btn-view:hover {
+.cocinero-btn-listo:hover {
     color: #fff;
     transform: translateY(-2px);
     filter: brightness(1.1);
