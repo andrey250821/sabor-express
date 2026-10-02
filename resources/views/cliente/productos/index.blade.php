@@ -24,6 +24,17 @@
                 nuestros sabores.
             </p>
 
+            <div class="cliente-productos-header-meta">
+                <span>
+                    <i class="bi bi-stars"></i>
+                    Calidad y sabor
+                </span>
+                <span>
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    Pedido rápido
+                </span>
+            </div>
+
         </div>
 
     </div>
@@ -182,9 +193,8 @@
 
                     {{-- CATEGORÍA --}}
                     <span class="cliente-producto-badge">
-
+                        <i class="bi bi-tag-fill"></i>
                         {{ $producto->categoria->nombre ?? 'Sin categoría' }}
-
                     </span>
 
                 </div>
@@ -236,6 +246,10 @@
                         @endphp
 
                         <div class="cliente-producto-calificacion-resumen">
+                            <span class="cliente-producto-rating-chip">
+                                <i class="bi bi-star-fill"></i>
+                                Valoración
+                            </span>
 
                             <span class="cliente-producto-calificacion-estrellas">
 
@@ -315,16 +329,30 @@
 
 
                         {{-- STOCK --}}
-                        <div class="cliente-producto-stock">
+                        @php
+                            $stockClase = $producto->stock <= 0
+                                ? 'agotado'
+                                : ($producto->stock <= 5
+                                    ? 'bajo'
+                                    : ($producto->stock <= 15 ? 'medio' : 'alto'));
+                        @endphp
 
-                            <i class="bi bi-box-seam-fill"></i>
+                        <div class="cliente-producto-stock cliente-producto-stock--{{ $stockClase }}">
 
-                            <span>
-                                Stock disponible:
-                                <strong>
+                            <span class="cliente-producto-stock-icono">
+                                <i class="bi bi-box-seam-fill"></i>
+                            </span>
+
+                            <span class="cliente-producto-stock-texto">
+                                @if($producto->stock <= 0)
+                                    Sin stock
+                                @elseif($producto->stock <= 5)
+                                    Últimas {{ $producto->stock }}
+                                    {{ $producto->stock == 1 ? 'unidad' : 'unidades' }}
+                                @else
                                     {{ $producto->stock }}
-                                </strong>
-                                {{ $producto->stock == 1 ? 'unidad' : 'unidades' }}
+                                    {{ $producto->stock == 1 ? 'unidad disponible' : 'unidades disponibles' }}
+                                @endif
                             </span>
 
                         </div>
@@ -335,17 +363,23 @@
                     {{-- =================================================
                          OPINIONES Y AGREGAR AL CARRITO
                     ================================================== --}}
-                    <div class="d-flex flex-column gap-2">
+                    <div class="cliente-producto-acciones">
 
 
                         {{-- VER OPINIONES --}}
                         <a
                             href="{{ route('cliente.calificaciones.index', $producto->id) }}"
-                            class="btn btn-outline-warning w-100">
+                            class="cliente-btn-opiniones">
 
-                            <i class="bi bi-star-fill me-1"></i>
+                            <span class="cliente-btn-opiniones-icono">
+                                <i class="bi bi-star-fill"></i>
+                            </span>
 
-                            Ver opiniones
+                            <span>
+                                Ver opiniones
+                            </span>
+
+                            <i class="bi bi-chevron-right cliente-btn-opiniones-flecha"></i>
 
                         </a>
 
@@ -362,11 +396,15 @@
                                 type="submit"
                                 class="cliente-btn-agregar w-100">
 
-                                <i class="bi bi-cart-plus"></i>
+                                <span class="cliente-btn-agregar-icono">
+                                    <i class="bi bi-cart-plus"></i>
+                                </span>
 
                                 <span>
                                     Agregar al carrito
                                 </span>
+
+                                <i class="bi bi-arrow-right cliente-btn-agregar-flecha"></i>
 
                             </button>
 
