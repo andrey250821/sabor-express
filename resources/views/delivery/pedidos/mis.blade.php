@@ -345,7 +345,12 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                 <div class="col-12 col-lg-6">
 
-                    <article class="delivery-my-order-card">
+                    <article
+                        class="delivery-my-order-card pedido-card-clickable"
+                        role="link"
+                        tabindex="0"
+                        onclick="if (!event.target.closest('button, a, form, input, select, textarea')) window.location.href='{{ route('delivery.pedidos.show', $pedido->id) }}';"
+                        onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('button, a, form, input, select, textarea')) { event.preventDefault(); window.location.href='{{ route('delivery.pedidos.show', $pedido->id) }}'; }">
 
                         {{-- CABECERA --}}
 
@@ -611,15 +616,7 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                         <div class="delivery-my-actions">
 
-                            <a
-                                href="{{ route('delivery.pedidos.show', $pedido->id) }}"
-                                class="delivery-my-detail-btn">
-
-                                <i class="bi bi-eye"></i>
-
-                                Ver detalles
-
-                            </a>
+                            
 
 
                             @if($pedido->estado === 'asignado')
@@ -846,7 +843,12 @@ $cantidadEntregados = $pedidosEntregados->count();
 
                         <div class="col-12 col-md-6 col-xl-4">
 
-                            <article class="delivery-delivered-card">
+                            <article
+                                 class="delivery-delivered-card pedido-card-clickable"
+                                 role="link"
+                                 tabindex="0"
+                                 onclick="window.location.href='{{ route('delivery.pedidos.show', $pedido->id) }}';"
+                                 onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); window.location.href='{{ route('delivery.pedidos.show', $pedido->id) }}'; }">
 
                                 <div class="delivery-delivered-top">
 
@@ -922,15 +924,7 @@ $cantidadEntregados = $pedidosEntregados->count();
                                         </small>
                                     </div>
 
-                                    <a
-                                        href="{{ route('delivery.pedidos.show', $pedido->id) }}"
-                                        class="delivery-delivered-detail">
-
-                                        Ver detalle
-
-                                        <i class="bi bi-arrow-right"></i>
-
-                                    </a>
+                                    
 
                                 </div>
 
