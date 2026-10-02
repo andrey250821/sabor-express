@@ -6610,8 +6610,13 @@ a {
 
 .delivery-delivered-card {
     display: block;
+    position: relative;
+    z-index: 2;
+
     color: inherit;
     text-decoration: none;
+
+    pointer-events: auto;
 }
 
 .delivery-delivered-card:visited {
