@@ -5861,11 +5861,25 @@ textarea.categorias-input {
     font-size: 10px;
 }
 
-.delivery-admin-history-table tbody tr:hover td {
+.delivery-admin-history-table tbody tr.delivery-admin-history-row {
+    cursor: pointer;
+    transition: background-color .15s ease, transform .15s ease;
+}
+
+.delivery-admin-history-table tbody tr.delivery-admin-history-row:hover td {
     background: #21151b;
 }
 
+.delivery-admin-history-table tbody tr.delivery-admin-history-row:focus {
+    outline: 2px solid var(--admin-primary-bright);
+    outline-offset: -2px;
+}
+
 .delivery-admin-order-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+
     color: var(--admin-primary-bright);
     font-weight: 750;
     text-decoration: none;
