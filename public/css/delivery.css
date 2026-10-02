@@ -6609,6 +6609,17 @@ a {
 }
 
 .delivery-delivered-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.delivery-delivered-card:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+.delivery-delivered-card {
     height: 100%;
 
     padding: 16px;
