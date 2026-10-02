@@ -399,6 +399,7 @@
     border-radius: 10px;
     background: #1b1c22;
     transition: .2s ease;
+    cursor: pointer;
 }
 
 .cocinero-order-item:hover {
