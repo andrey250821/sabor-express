@@ -27,7 +27,7 @@
 
                 <p>
                     Consulta tus pedidos, revisa su estado
-                    y mira todos sus detalles.
+                    y entra a los detalles completos de cada pedido.
                 </p>
 
             </div>
@@ -208,10 +208,10 @@
                          TARJETA DEL PEDIDO
                          ================================================= --}}
 
-            <a
-                href="{{ route('cliente.pedidos.show', $pedido->id) }}"
+            <article
                 class="cliente-mis-pedidos-card"
-                aria-label="Ver detalle del pedido #{{ $pedido->id }}">
+                role="article"
+                aria-label="Pedido #{{ $pedido->id }}">
 
 
                 {{-- =================================================
@@ -502,9 +502,26 @@
                         </div>
 
                     </div>
-</div>
 
-            </a>
+
+                    {{-- VER DETALLES --}}
+
+                    <a
+                        href="{{ route('cliente.pedidos.show', $pedido->id) }}"
+                        class="cliente-mis-pedidos-btn-detalle"
+                        aria-label="Ver detalles del pedido #{{ $pedido->id }}">
+
+                        <i class="bi bi-eye-fill"></i>
+
+                        <span>
+                            Ver detalles
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </article>
 
             @endforeach
 
