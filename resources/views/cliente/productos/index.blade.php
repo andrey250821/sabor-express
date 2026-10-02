@@ -651,6 +651,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // =====================================================
+    // MENSAJES DEL SERVIDOR (RESERVA PARA NAVEGACIÓN SIN JS)
+    // =====================================================
+
+    @if(session('success'))
+        mostrarMensajeCarrito(
+            @json(session('success')),
+            'success'
+        );
+    @endif
+
+    @if(session('error'))
+        mostrarMensajeCarrito(
+            @json(session('error')),
+            'error'
+        );
+    @endif
+
+
+    // =====================================================
     // ACTUALIZAR CONTADOR DEL CARRITO
     // =====================================================
 
