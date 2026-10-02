@@ -927,9 +927,26 @@
     }
 
     .cliente-ocr-herramienta {
-        margin-top: 18px;
-        padding-top: 16px;
-        border-top: 1px solid rgba(139, 30, 69, .16);
+        position: relative;
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid rgba(229, 43, 105, .28);
+        border-radius: 16px;
+        background:
+            radial-gradient(circle at top right, rgba(197, 44, 99, .13), transparent 38%),
+            linear-gradient(145deg, #181117 0%, #121318 70%);
+        box-shadow:
+            0 14px 34px rgba(0, 0, 0, .20),
+            inset 0 1px 0 rgba(255, 255, 255, .04);
+        overflow: hidden;
+    }
+
+    .cliente-ocr-herramienta::before {
+        content: '';
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 3px;
+        background: linear-gradient(90deg, #8b1e45, #ff2f73);
     }
 
     /* Dirección generada automáticamente desde la ubicación */
@@ -949,80 +966,104 @@
     .cliente-ocr-herramienta-cabecera {
         display: flex;
         align-items: flex-start;
-        gap: 10px;
-        margin-bottom: 12px;
-        color: #4d3d45;
+        gap: 12px;
+        margin-bottom: 16px;
+        color: #fff;
     }
 
     .cliente-ocr-herramienta-cabecera > i {
-        margin-top: 2px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        margin-top: 0;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #8b1e45, #e52b69);
+        color: #fff;
         font-size: 1.1rem;
-        color: #8b1e45;
         flex: 0 0 auto;
+        box-shadow: 0 8px 18px rgba(229, 43, 105, .20);
     }
 
     .cliente-ocr-herramienta-cabecera strong {
         display: block;
-        color: #2d1b22;
-        font-size: .92rem;
+        color: #fff;
+        font-size: 1rem;
+        line-height: 1.25;
     }
 
     .cliente-ocr-herramienta-cabecera span {
         display: block;
-        margin-top: 3px;
-        color: #75636b;
+        margin-top: 5px;
+        color: #b7b1b6;
         font-size: .82rem;
-        line-height: 1.45;
+        line-height: 1.5;
     }
 
     .cliente-ocr-pruebas-info {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 10px;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
 
     .cliente-ocr-pruebas-info > div {
-        padding: 10px 12px;
-        background: #fff;
-        border: 1px solid rgba(0,0,0,.06);
-        border-radius: 10px;
+        padding: 12px 13px;
+        background: rgba(255, 255, 255, .045);
+        border: 1px solid rgba(255, 255, 255, .08);
+        border-radius: 12px;
     }
 
     .cliente-ocr-pruebas-info span {
         display: block;
-        margin-bottom: 3px;
-        color: #86747c;
-        font-size: .72rem;
+        margin-bottom: 4px;
+        color: #a69da4;
+        font-size: .68rem;
         text-transform: uppercase;
-        letter-spacing: .04em;
+        letter-spacing: .08em;
+        font-weight: 800;
     }
 
     .cliente-ocr-pruebas-info strong {
-        color: #2d1b22;
+        display: block;
+        color: #fff;
         word-break: break-word;
+        font-size: .88rem;
     }
 
     .cliente-ocr-pruebas-btn {
         width: 100%;
-        border: 0;
-        border-radius: 10px;
+        min-height: 46px;
+        border: 1px solid rgba(255, 255, 255, .06);
+        border-radius: 12px;
         padding: 12px 16px;
-        background: #8b1e45;
+        background: linear-gradient(135deg, #8b1e45, #d92868);
         color: #fff;
-        font-weight: 700;
+        font-weight: 800;
+        box-shadow: 0 8px 20px rgba(139, 30, 69, .22);
+        transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+    .cliente-ocr-pruebas-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        filter: brightness(1.06);
+        box-shadow: 0 12px 24px rgba(229, 43, 105, .24);
     }
 
     .cliente-ocr-pruebas-btn:disabled {
-        opacity: .65;
+        opacity: .58;
         cursor: wait;
+        box-shadow: none;
     }
 
     .cliente-ocr-pruebas-estado {
         min-height: 22px;
-        margin-top: 10px;
-        color: #75636b;
-        font-size: .86rem;
+        margin-top: 11px;
+        padding: 0 2px;
+        color: #c8c0c6;
+        font-size: .82rem;
+        line-height: 1.45;
     }
 
     .cliente-ocr-pruebas-resultados {
@@ -1036,43 +1077,64 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        padding: 10px 12px;
-        background: #fff;
-        border: 1px solid rgba(0,0,0,.07);
-        border-radius: 10px;
+        padding: 12px 13px;
+        background: rgba(255, 255, 255, .04);
+        border: 1px solid rgba(255, 255, 255, .08);
+        border-radius: 12px;
+    }
+
+    .cliente-ocr-prueba-item:hover {
+        border-color: rgba(229, 43, 105, .30);
+        background: rgba(255, 255, 255, .055);
     }
 
     .cliente-ocr-prueba-nombre {
         min-width: 0;
-        color: #4d3d45;
-        font-size: .78rem;
+        color: #f4eef1;
+        font-size: .76rem;
+        line-height: 1.4;
         word-break: break-word;
+        font-weight: 650;
     }
 
     .cliente-ocr-prueba-acciones {
         display: flex;
-        gap: 6px;
+        gap: 7px;
         flex: 0 0 auto;
     }
 
     .cliente-ocr-prueba-acciones a,
     .cliente-ocr-prueba-acciones button {
-        border: 0;
-        border-radius: 8px;
-        padding: 7px 9px;
-        font-size: .75rem;
+        border-radius: 9px;
+        padding: 8px 11px;
+        font-size: .74rem;
+        font-weight: 800;
         text-decoration: none;
         cursor: pointer;
+        transition: all .2s ease;
     }
 
     .cliente-ocr-ver {
-        background: #f0ecef;
-        color: #45363d;
+        border: 1px solid rgba(255, 255, 255, .13) !important;
+        background: rgba(255, 255, 255, .05);
+        color: #eee7eb !important;
+    }
+
+    .cliente-ocr-ver:hover {
+        border-color: rgba(255, 255, 255, .25) !important;
+        background: rgba(255, 255, 255, .10);
     }
 
     .cliente-ocr-usar {
-        background: #198754;
+        border: 1px solid transparent !important;
+        background: linear-gradient(135deg, #198754, #22a56a);
         color: #fff;
+    }
+
+    .cliente-ocr-usar:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.06);
+        box-shadow: 0 7px 16px rgba(25, 135, 84, .22);
     }
 
     .cliente-pedido-resumen-tarifa-info {
@@ -1100,13 +1162,30 @@
     }
 
     @media (max-width: 768px) {
+        .cliente-ocr-herramienta {
+            padding: 16px;
+        }
+
         .cliente-ocr-pruebas-info {
             grid-template-columns: 1fr;
         }
 
         .cliente-ocr-prueba-item {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+        }
+
+        .cliente-ocr-prueba-acciones {
+            width: 100%;
+        }
+
+        .cliente-ocr-prueba-acciones > * {
+            flex: 1 1 0;
+            text-align: center;
+        }
+
+        .cliente-ocr-pruebas-btn {
+            min-height: 48px;
         }
     }
 </style>
