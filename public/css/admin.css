@@ -4635,6 +4635,20 @@ textarea.categorias-input {
     gap: 9px;
 }
 
+.delivery-name-link {
+    display: block;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.delivery-name-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
 .delivery-person strong {
     display: block;
     color: #fff;
