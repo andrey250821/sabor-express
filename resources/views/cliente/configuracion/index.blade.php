@@ -3,7 +3,7 @@
 @section('title', 'Mi perfil')
 
 @section('content')
-<div class="container py-4">
+<div class="container py-4 cliente-configuracion-page">
     <div class="mb-4">
         <span class="text-uppercase small fw-semibold text-muted">Sabor Express</span>
         <h1 class="h2 mb-1">

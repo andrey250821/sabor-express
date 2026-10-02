@@ -312,6 +312,8 @@ class GenerarComprobantesOcr extends Command
 
     <meta charset="UTF-8">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Sabor Express - Comprobante</title>
 
     <style>
@@ -324,127 +326,244 @@ class GenerarComprobantesOcr extends Command
         body {
             margin: 0;
             padding: 0;
-            background: #eeeeee;
+            background: #eceef2;
             font-family: Arial, Helvetica, sans-serif;
+            color: #17191f;
+        }
+
+        body {
+            padding: 24px;
         }
 
         .comprobante {
-            width: 900px;
-            min-height: 1100px;
+            width: 852px;
+            min-height: 1140px;
             margin: 0 auto;
-            padding: 55px;
+            padding: 46px;
             background: #ffffff;
-            color: #222222;
+            border: 1px solid #d8dbe2;
+            border-radius: 18px;
+            box-shadow: 0 18px 55px rgba(18, 20, 27, .13);
         }
 
         .encabezado {
-            text-align: center;
-            border-bottom: 3px solid #222222;
-            padding-bottom: 25px;
-            margin-bottom: 35px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 24px;
+            padding-bottom: 28px;
+            border-bottom: 2px solid #e6e8ee;
         }
 
-        .logo {
-            font-size: 42px;
-            font-weight: bold;
-            letter-spacing: 2px;
+        .marca {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .marca-icono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #8b1e45, #d92d69);
+            color: #ffffff;
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: .5px;
+        }
+
+        .marca-nombre {
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
             color: #8b1e45;
         }
 
-        .subtitulo {
-            margin-top: 10px;
-            font-size: 24px;
-            font-weight: bold;
+        .marca-subtitulo {
+            margin-top: 4px;
+            color: #777c87;
+            font-size: 15px;
+            font-weight: 700;
         }
 
-        .numero-pedido {
-            margin-top: 15px;
-            font-size: 20px;
-            color: #555555;
+        .estado-cabecera {
+            padding: 9px 14px;
+            border: 1px solid #bfe8d3;
+            border-radius: 999px;
+            background: #eefbf4;
+            color: #16744a;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: .04em;
+            white-space: nowrap;
+        }
+
+        .titulo-documento {
+            margin-top: 34px;
+            text-align: center;
+        }
+
+        .titulo-documento h1 {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1.2;
+            letter-spacing: .03em;
+        }
+
+        .titulo-documento p {
+            margin: 10px 0 0;
+            color: #737781;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .pedido-pill {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 9px 16px;
+            border-radius: 999px;
+            background: #f8eaf0;
+            border: 1px solid #f0c9da;
+            color: #8b1e45;
+            font-size: 15px;
+            font-weight: 900;
         }
 
         .seccion {
             margin-top: 30px;
-            border: 2px solid #dddddd;
-            border-radius: 10px;
-            padding: 25px;
+            padding: 24px;
+            border: 1px solid #dfe2e8;
+            border-radius: 14px;
+            background: #fbfbfc;
+        }
+
+        .seccion-titulo {
+            margin-bottom: 10px;
+            color: #8b1e45;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: .10em;
+            text-transform: uppercase;
         }
 
         .fila {
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            align-items: center;
-            padding: 18px 0;
-            border-bottom: 1px solid #eeeeee;
-            font-size: 22px;
+            gap: 24px;
+            padding: 17px 0;
+            border-bottom: 1px solid #e8e9ed;
+            font-size: 20px;
+            line-height: 1.3;
         }
 
         .fila:last-child {
             border-bottom: none;
+            padding-bottom: 0;
         }
 
         .etiqueta {
-            font-weight: bold;
-            color: #555555;
+            color: #6b707b;
+            font-weight: 800;
         }
 
         .valor {
-            font-weight: bold;
+            color: #20232a;
+            font-weight: 900;
             text-align: right;
+            word-break: break-word;
         }
 
         .total {
-            margin-top: 35px;
-            padding: 25px;
-            background: #f3f3f3;
-            border-radius: 10px;
-
             display: flex;
+            align-items: center;
             justify-content: space-between;
+            gap: 24px;
+            margin-top: 30px;
+            padding: 26px 28px;
+            border: 2px solid #8b1e45;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #fff7fa, #f8edf2);
+        }
 
-            font-size: 32px;
-            font-weight: bold;
+        .total-label {
+            color: #6c707a;
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .total-valor {
+            color: #8b1e45;
+            font-size: 37px;
+            font-weight: 900;
+            white-space: nowrap;
         }
 
         .estado {
-            margin-top: 35px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 26px;
+            padding: 19px 22px;
+            border: 2px solid #a7dcbc;
+            border-radius: 12px;
+            background: #effaf3;
+            color: #177448;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: .04em;
+        }
 
-            border: 3px solid #198754;
-            color: #198754;
-
-            padding: 22px;
-
-            font-size: 28px;
-            font-weight: bold;
-
-            border-radius: 10px;
+        .estado-icono {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #1d9a60;
+            color: #fff;
+            font-size: 16px;
         }
 
         .faltante {
-            color: #dc3545;
-            font-weight: bold;
+            color: #c5223e;
+            font-weight: 900;
         }
 
         .pie {
-            margin-top: 50px;
-            padding-top: 25px;
-
-            border-top: 2px dashed #cccccc;
-
+            margin-top: 46px;
+            padding-top: 22px;
+            border-top: 2px dashed #d3d6dd;
             text-align: center;
-
-            color: #666666;
-            font-size: 18px;
+            color: #646a75;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.6;
         }
 
         .nota {
-            margin-top: 25px;
-
+            margin-top: 16px;
             text-align: center;
+            color: #969ba4;
+            font-size: 13px;
+            line-height: 1.5;
+        }
 
-            font-size: 16px;
-            color: #888888;
+        .marca-prueba {
+            margin-top: 18px;
+            text-align: center;
+            color: #a9adb5;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .10em;
+            text-transform: uppercase;
         }
 
     </style>
@@ -457,15 +576,44 @@ class GenerarComprobantesOcr extends Command
 
         <div class="encabezado">
 
-            <div class="logo">
-                SABOR EXPRESS
+            <div class="marca">
+
+                <div class="marca-icono">
+                    SE
+                </div>
+
+                <div>
+
+                    <div class="marca-nombre">
+                        SABOR EXPRESS
+                    </div>
+
+                    <div class="marca-subtitulo">
+                        Comprobantes de pago
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="subtitulo">
-                {$tipoTexto}
+            <div class="estado-cabecera">
+                PAGO REGISTRADO
             </div>
 
-            <div class="numero-pedido">
+        </div>
+
+
+        <div class="titulo-documento">
+
+            <h1>
+                COMPROBANTE DE PAGO
+            </h1>
+
+            <p>
+                Transferencia bancaria · Banco Unión
+            </p>
+
+            <div class="pedido-pill">
                 NUMERO DE PEDIDO: {$numeroPedido}
             </div>
 
@@ -473,6 +621,10 @@ class GenerarComprobantesOcr extends Command
 
 
         <div class="seccion">
+
+            <div class="seccion-titulo">
+                Datos de la operación
+            </div>
 
             <div class="fila">
 
@@ -543,19 +695,25 @@ class GenerarComprobantesOcr extends Command
 
         <div class="total">
 
-            <span>
+            <div class="total-label">
                 Monto pagado
-            </span>
+            </div>
 
-            <span>
+            <div class="total-valor">
                 Bs {$montoFormateado}
-            </span>
+            </div>
 
         </div>
 
 
         <div class="estado">
+
+            <span class="estado-icono">
+                ✓
+            </span>
+
             PAGO REALIZADO
+
         </div>
 
 
@@ -572,9 +730,14 @@ class GenerarComprobantesOcr extends Command
 
         <div class="nota">
 
-            Documento generado automáticamente
-            para pruebas de reconocimiento OCR.
+            Documento generado automáticamente para pruebas
+            de reconocimiento OCR.
 
+        </div>
+
+
+        <div class="marca-prueba">
+            Documento sintético de pruebas · No corresponde a una transacción bancaria real
         </div>
 
     </div>

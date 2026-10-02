@@ -27,16 +27,21 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    {{-- CSS CLIENTE --}}
+    {{-- CSS CLIENTE BASE --}}
     <link
         rel="stylesheet"
         href="{{ asset('css/cliente.css') }}">
+
+    {{-- CAPA VISUAL CLIENTE --}}
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/cliente-enhancements.css') }}">
 
     @stack('styles')
 
 </head>
 
-<body>
+<body class="cliente-app">
 
     {{-- =====================================================
          NAVBAR CLIENTE
@@ -96,7 +101,7 @@
 
                     <a
                         href="{{ route('cliente.dashboard.index') }}"
-                        class="cliente-nav-link nav-link">
+                        class="cliente-nav-link nav-link {{ request()->routeIs('cliente.dashboard.index') ? 'active' : '' }}">
 
                         <i class="bi bi-house"></i>
 
@@ -107,7 +112,7 @@
 
                     <a
                         href="{{ route('cliente.productos.index') }}"
-                        class="cliente-nav-link nav-link">
+                        class="cliente-nav-link nav-link {{ request()->routeIs('cliente.productos.*') ? 'active' : '' }}">
 
                         <i class="bi bi-grid"></i>
 
@@ -118,7 +123,7 @@
 
                     <a
                         href="{{ route('cliente.carrito.index') }}"
-                        class="cliente-nav-link nav-link">
+                        class="cliente-nav-link nav-link {{ request()->routeIs('cliente.carrito.*') ? 'active' : '' }}">
 
                         <i class="bi bi-cart3"></i>
 
@@ -129,7 +134,7 @@
 
                     <a
                         href="{{ route('cliente.pedidos.index') }}"
-                        class="cliente-nav-link nav-link">
+                        class="cliente-nav-link nav-link {{ request()->routeIs('cliente.pedidos.*') ? 'active' : '' }}">
 
                         <i class="bi bi-bag-check"></i>
 
@@ -149,7 +154,7 @@
 
                     <a
                         href="{{ route('cliente.notificaciones.index') }}"
-                        class="cliente-nav-link nav-link d-flex align-items-center gap-1">
+                        class="cliente-nav-link nav-link {{ request()->routeIs('cliente.notificaciones.*') ? 'active' : '' }} d-flex align-items-center gap-1">
 
                         <i class="bi bi-bell"></i>
 
@@ -167,7 +172,7 @@
 
                     <a
                         href="{{ route('cliente.configuracion.edit') }}"
-                        class="cliente-nav-link nav-link">
+                        class="cliente-nav-link nav-link {{ request()->routeIs('cliente.configuracion.*') ? 'active' : '' }}">
 
                         <i class="bi bi-person-gear"></i>
 
@@ -271,6 +276,10 @@
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
     @vite('resources/js/app.js')
+
+    {{-- Microinteracciones exclusivas del Cliente --}}
+    <script src="{{ asset('js/cliente-enhancements.js') }}" defer></script>
+
     @yield('scripts')
 
 </body>

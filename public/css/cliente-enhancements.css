@@ -1,0 +1,3227 @@
+/*
+|--------------------------------------------------------------------------
+| SABOR EXPRESS · CLIENTE UI RESPONSIVE — CAPA VISUAL FINAL
+|--------------------------------------------------------------------------
+| Esta hoja reemplaza la antigua capa de "enhancements" para:
+| - eliminar reglas repetidas/conflictivas de esa capa;
+| - mejorar legibilidad sobre fondos oscuros;
+| - mantener la estructura y lógica existente intactas;
+| - completar componentes que no tenían estilo específico;
+| - asegurar una experiencia coherente en PC, tablet y celular.
+|
+| NOTA:
+| cliente.css se mantiene como base compatible. Esta hoja se carga después
+| y funciona como una capa final de diseño, sin modificar rutas/controladores.
+|--------------------------------------------------------------------------
+*/
+
+/* ==========================================================================
+   1. TOKENS DE DISEÑO
+   ========================================================================== */
+
+:root {
+    --sx-bg-0: #07080c;
+    --sx-bg-1: #0c0e13;
+    --sx-bg-2: #11131a;
+    --sx-bg-3: #171a22;
+
+    --sx-surface: rgba(255, 255, 255, .045);
+    --sx-surface-2: rgba(255, 255, 255, .065);
+    --sx-surface-3: rgba(255, 255, 255, .085);
+
+    --sx-primary: #ff3f7d;
+    --sx-primary-2: #d92062;
+    --sx-primary-3: #8b1e45;
+
+    --sx-orange: #ff9f43;
+    --sx-gold: #ffd166;
+    --sx-green: #39d98a;
+    --sx-blue: #62a8ff;
+    --sx-cyan: #39d7ff;
+    --sx-red: #ff6170;
+
+    --sx-text: #ffffff;
+    --sx-text-soft: rgba(255, 255, 255, .78);
+    --sx-text-muted: rgba(255, 255, 255, .60);
+    --sx-text-faint: rgba(255, 255, 255, .43);
+
+    --sx-border: rgba(255, 255, 255, .085);
+    --sx-border-strong: rgba(255, 63, 125, .34);
+
+    --sx-radius-sm: 10px;
+    --sx-radius: 16px;
+    --sx-radius-lg: 22px;
+    --sx-radius-xl: 28px;
+
+    --sx-shadow: 0 18px 45px rgba(0, 0, 0, .24);
+    --sx-shadow-hover: 0 26px 62px rgba(0, 0, 0, .34);
+    --sx-glow: 0 0 34px rgba(255, 63, 125, .14);
+}
+
+/* ==========================================================================
+   2. BASE Y LEGIBILIDAD
+   ========================================================================== */
+
+.cliente-app {
+    min-height: 100vh;
+    color: var(--sx-text);
+    background:
+        radial-gradient(circle at 8% 4%, rgba(255, 63, 125, .105), transparent 23%),
+        radial-gradient(circle at 91% 15%, rgba(255, 159, 67, .065), transparent 20%),
+        radial-gradient(circle at 50% 100%, rgba(139, 30, 69, .095), transparent 28%),
+        linear-gradient(180deg, var(--sx-bg-1), var(--sx-bg-0));
+}
+
+.cliente-app,
+.cliente-app * {
+    box-sizing: border-box;
+}
+
+.cliente-app ::selection {
+    color: #fff;
+    background: var(--sx-primary);
+}
+
+.cliente-app img {
+    max-width: 100%;
+}
+
+.cliente-app a {
+    color: inherit;
+}
+
+.cliente-app h1,
+.cliente-app h2,
+.cliente-app h3,
+.cliente-app h4,
+.cliente-app h5,
+.cliente-app h6,
+.cliente-app strong,
+.cliente-app label,
+.cliente-app .form-label {
+    color: var(--sx-text);
+}
+
+.cliente-app p {
+    color: var(--sx-text-soft);
+}
+
+.cliente-app .text-muted,
+.cliente-app .text-secondary,
+.cliente-app .form-text,
+.cliente-app small.text-muted {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .text-dark,
+.cliente-app .text-body,
+.cliente-app .text-black {
+    color: var(--sx-text) !important;
+}
+
+.cliente-app .text-white {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-main {
+    min-height: calc(100vh - 150px);
+    position: relative;
+}
+
+.cliente-app .cliente-footer {
+    border-top: 1px solid var(--sx-border);
+    background:
+        linear-gradient(180deg, rgba(17, 19, 26, .92), rgba(7, 8, 12, .98));
+}
+
+.cliente-app .cliente-footer p {
+    color: var(--sx-text-faint);
+}
+
+/* ==========================================================================
+   3. FORMULARIOS — MUY IMPORTANTE PARA EL TEMA OSCURO
+   ========================================================================== */
+
+.cliente-app .form-control,
+.cliente-app .form-select,
+.cliente-app textarea.form-control,
+.cliente-app input.form-control,
+.cliente-app select.form-select {
+    color: #fff !important;
+    caret-color: var(--sx-primary);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .052), rgba(255, 255, 255, .025)) !important;
+    border: 1px solid rgba(255, 255, 255, .10) !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+    min-height: 45px;
+}
+
+.cliente-app textarea.form-control {
+    min-height: 95px;
+    resize: vertical;
+}
+
+.cliente-app .form-control::placeholder,
+.cliente-app textarea.form-control::placeholder {
+    color: rgba(255, 255, 255, .42) !important;
+}
+
+.cliente-app .form-control:focus,
+.cliente-app .form-select:focus,
+.cliente-app textarea.form-control:focus {
+    color: #fff !important;
+    border-color: rgba(255, 63, 125, .66) !important;
+    box-shadow:
+        0 0 0 3px rgba(255, 63, 125, .10),
+        0 10px 28px rgba(0, 0, 0, .16) !important;
+    outline: 0;
+}
+
+.cliente-app .form-control:disabled,
+.cliente-app .form-control[readonly] {
+    color: rgba(255, 255, 255, .72) !important;
+    background: rgba(255, 255, 255, .035) !important;
+    opacity: 1;
+}
+
+.cliente-app .form-control.is-invalid,
+.cliente-app .form-select.is-invalid {
+    border-color: rgba(255, 97, 112, .72) !important;
+    box-shadow: 0 0 0 3px rgba(255, 97, 112, .075) !important;
+}
+
+.cliente-app .form-control.is-valid,
+.cliente-app .form-select.is-valid {
+    border-color: rgba(57, 217, 138, .48) !important;
+}
+
+.cliente-app .invalid-feedback {
+    color: #ff9aa6 !important;
+}
+
+.cliente-app .valid-feedback {
+    color: #74e8ad !important;
+}
+
+.cliente-app .bg-light {
+    color: var(--sx-text) !important;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, .058), rgba(255, 255, 255, .024)) !important;
+    border: 1px solid var(--sx-border) !important;
+}
+
+.cliente-app .bg-light h1,
+.cliente-app .bg-light h2,
+.cliente-app .bg-light h3,
+.cliente-app .bg-light h4,
+.cliente-app .bg-light h5,
+.cliente-app .bg-light h6,
+.cliente-app .bg-light p,
+.cliente-app .bg-light span,
+.cliente-app .bg-light strong {
+    color: inherit;
+}
+
+.cliente-app .form-check-input {
+    background-color: rgba(255, 255, 255, .06);
+    border-color: rgba(255, 255, 255, .18);
+}
+
+.cliente-app .form-check-input:checked {
+    border-color: var(--sx-primary);
+    background-color: var(--sx-primary);
+}
+
+/* ==========================================================================
+   4. TARJETAS / BOOTSTRAP
+   ========================================================================== */
+
+.cliente-app .card {
+    color: var(--sx-text);
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.050), rgba(255,255,255,.022)) !important;
+    border: 1px solid var(--sx-border) !important;
+    box-shadow: var(--sx-shadow) !important;
+    border-radius: var(--sx-radius) !important;
+}
+
+.cliente-app .card h1,
+.cliente-app .card h2,
+.cliente-app .card h3,
+.cliente-app .card h4,
+.cliente-app .card h5,
+.cliente-app .card h6,
+.cliente-app .card p,
+.cliente-app .card span,
+.cliente-app .card small {
+    color: inherit;
+}
+
+.cliente-app .card-body {
+    color: var(--sx-text);
+}
+
+.cliente-app .shadow-sm {
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .border-0 {
+    border-color: transparent !important;
+}
+
+.cliente-app .alert {
+    border-radius: 14px;
+    color: #fff;
+    border-width: 1px;
+}
+
+.cliente-app .alert-success {
+    background: rgba(57,217,138,.09);
+    border-color: rgba(57,217,138,.28);
+    color: #b8f6d5;
+}
+
+.cliente-app .alert-danger {
+    background: rgba(255,97,112,.09);
+    border-color: rgba(255,97,112,.30);
+    color: #ffc1c8;
+}
+
+.cliente-app .alert-warning {
+    background: rgba(255,209,102,.09);
+    border-color: rgba(255,209,102,.30);
+    color: #ffe9aa;
+}
+
+.cliente-app .alert-info {
+    background: rgba(98,168,255,.09);
+    border-color: rgba(98,168,255,.28);
+    color: #c5ddff;
+}
+
+/* ==========================================================================
+   5. NAVBAR — DESKTOP / TABLET / CELULAR
+   ========================================================================== */
+
+.cliente-app .cliente-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    background:
+        linear-gradient(
+            105deg,
+            rgba(7, 8, 12, .975),
+            rgba(28, 8, 17, .955),
+            rgba(7, 8, 12, .975)
+        ) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .085) !important;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, .32),
+        inset 0 -1px 0 rgba(255, 63, 125, .08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.cliente-app .cliente-navbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,63,125,.88),
+            rgba(255,159,67,.55),
+            rgba(255,63,125,.88),
+            transparent
+        );
+    opacity: .75;
+}
+
+.cliente-app .cliente-navbar-container {
+    min-height: 78px;
+}
+
+.cliente-app .cliente-logo {
+    letter-spacing: -.03em;
+    font-weight: 850;
+    text-shadow: 0 5px 20px rgba(0,0,0,.25);
+}
+
+.cliente-app .cliente-logo i {
+    filter: drop-shadow(0 0 12px rgba(255,63,125,.34));
+}
+
+.cliente-app .cliente-logo-image {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.06),
+        0 10px 20px rgba(0,0,0,.20);
+}
+
+.cliente-app .cliente-nav-link {
+    border: 1px solid transparent;
+    overflow: hidden;
+}
+
+.cliente-app .cliente-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, var(--sx-primary), var(--sx-orange));
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .28s ease;
+}
+
+.cliente-app .cliente-nav-link:hover::after,
+.cliente-app .cliente-nav-link.active::after {
+    transform: scaleX(1);
+}
+
+.cliente-app .cliente-nav-link:hover,
+.cliente-app .cliente-nav-link.active {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-nav-link.active {
+    box-shadow:
+        0 8px 25px rgba(139,30,69,.22),
+        inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-nav-link:hover i,
+.cliente-app .cliente-nav-link.active i {
+    filter: drop-shadow(0 0 8px rgba(255,63,125,.38));
+}
+
+.cliente-app .cliente-navbar-profile-avatar {
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.06),
+        0 0 0 5px rgba(255,63,125,.055),
+        0 8px 18px rgba(0,0,0,.20);
+}
+
+.cliente-app .cliente-user-name {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-btn-logout,
+.cliente-app .cliente-login-link {
+    border-radius: 12px;
+    box-shadow:
+        0 9px 24px rgba(139,30,69,.22),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.cliente-app .cliente-navbar-toggler {
+    box-shadow:
+        0 8px 18px rgba(0,0,0,.20),
+        inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+/* ==========================================================================
+   6. BOTONES
+   ========================================================================== */
+
+.cliente-app .btn,
+.cliente-app .cliente-btn-filtrar,
+.cliente-app .cliente-btn-limpiar,
+.cliente-app .cliente-btn-agregar,
+.cliente-app .cliente-secondary-btn,
+.cliente-app .cliente-carrito-btn-principal,
+.cliente-app .cliente-carrito-btn-pedido,
+.cliente-app .cliente-carrito-btn-secundario,
+.cliente-app .cliente-pedido-btn-confirmar,
+.cliente-app .cliente-pedido-btn-volver,
+.cliente-app .cliente-pedido-btn-ubicacion,
+.cliente-app .cliente-pedido-btn-secundario,
+.cliente-app .cliente-ocr-pruebas-btn,
+.cliente-app .cliente-ocr-ver,
+.cliente-app .cliente-ocr-usar,
+.cliente-app .cliente-calificaciones-btn-primary,
+.cliente-app .cliente-mis-pedidos-btn-productos,
+.cliente-app .cliente-pedido-show-btn-volver,
+.cliente-app .cliente-pedido-show-btn-mapa {
+    min-height: 42px;
+    border-radius: 12px;
+    font-weight: 750;
+}
+
+.cliente-app .btn-primary,
+.cliente-app .cliente-btn-agregar,
+.cliente-app .cliente-carrito-btn-pedido,
+.cliente-app .cliente-pedido-btn-confirmar,
+.cliente-app .cliente-calificaciones-btn-primary {
+    color: #fff !important;
+    border-color: transparent !important;
+    background:
+        linear-gradient(135deg, var(--sx-primary), var(--sx-primary-2)) !important;
+    box-shadow:
+        0 12px 28px rgba(255,63,125,.22),
+        inset 0 1px 0 rgba(255,255,255,.13);
+}
+
+.cliente-app .btn-success {
+    color: #07130d !important;
+    border-color: transparent !important;
+    background:
+        linear-gradient(135deg, #49e09a, #2dbb74) !important;
+}
+
+.cliente-app .btn-warning {
+    color: #20180a !important;
+    border-color: transparent !important;
+    background:
+        linear-gradient(135deg, #ffd86d, #ffb74a) !important;
+}
+
+.cliente-app .btn-danger {
+    color: #fff !important;
+    border-color: transparent !important;
+    background:
+        linear-gradient(135deg, #ff6676, #e74459) !important;
+}
+
+.cliente-app .btn-outline-primary,
+.cliente-app .btn-outline-warning,
+.cliente-app .btn-outline-secondary,
+.cliente-app .btn-outline-light,
+.cliente-app .cliente-btn-limpiar,
+.cliente-app .cliente-carrito-btn-secundario,
+.cliente-app .cliente-pedido-btn-secundario,
+.cliente-app .cliente-pedido-btn-volver,
+.cliente-app .cliente-pedido-show-btn-volver {
+    color: var(--sx-text-soft) !important;
+    border-color: rgba(255,255,255,.14) !important;
+    background: rgba(255,255,255,.03) !important;
+}
+
+.cliente-app .btn-outline-primary {
+    color: #9bc4ff !important;
+    border-color: rgba(98,168,255,.34) !important;
+}
+
+.cliente-app .btn-outline-warning {
+    color: var(--sx-gold) !important;
+    border-color: rgba(255,209,102,.34) !important;
+}
+
+.cliente-app .btn-outline-secondary {
+    color: #d4d6db !important;
+}
+
+.cliente-app .btn-outline-light {
+    color: #fff !important;
+}
+
+.cliente-app .btn:hover:not(:disabled) {
+    filter: brightness(1.055);
+    transform: translateY(-2px);
+}
+
+.cliente-app .btn:active:not(:disabled) {
+    transform: translateY(0) scale(.98);
+}
+
+.cliente-app :disabled {
+    cursor: not-allowed !important;
+}
+
+/* ==========================================================================
+   7. DASHBOARD
+   ========================================================================== */
+
+.cliente-app .cliente-dashboard {
+    position: relative;
+}
+
+.cliente-app .cliente-dashboard::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    left: 8%;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,63,125,.085), transparent 68%);
+    filter: blur(8px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.cliente-app .cliente-dashboard-header {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(255,255,255,.09) !important;
+    background:
+        radial-gradient(circle at 92% 18%, rgba(255,159,67,.13), transparent 22%),
+        radial-gradient(circle at 78% 90%, rgba(255,63,125,.10), transparent 27%),
+        linear-gradient(145deg, #171921, #21111a) !important;
+    box-shadow:
+        0 24px 58px rgba(0,0,0,.26),
+        inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+.cliente-app .cliente-dashboard-header::before {
+    content: "";
+    position: absolute;
+    width: 330px;
+    height: 330px;
+    right: -150px;
+    top: -175px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.07);
+    box-shadow:
+        0 0 0 34px rgba(255,255,255,.015),
+        0 0 0 68px rgba(255,255,255,.008);
+    pointer-events: none;
+}
+
+.cliente-app .cliente-dashboard-header-logo {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+}
+
+.cliente-app .cliente-dashboard-header-logo img {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    border-radius: 22px;
+    padding: 8px;
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.085);
+    box-shadow: 0 18px 35px rgba(0,0,0,.18);
+}
+
+.cliente-app .cliente-dashboard-header-logo i {
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 22px;
+    font-size: 34px;
+    color: #fff;
+    background:
+        linear-gradient(145deg, var(--sx-primary-3), var(--sx-primary));
+    box-shadow: 0 18px 35px rgba(255,63,125,.17);
+}
+
+.cliente-app .cliente-dashboard-welcome,
+.cliente-app .cliente-productos-label,
+.cliente-app .cliente-carrito-label,
+.cliente-app .cliente-pedido-label,
+.cliente-app .cliente-mis-pedidos-label,
+.cliente-app .cliente-pedido-show-label,
+.cliente-app .cliente-calificaciones-label {
+    color: #ff8bb0 !important;
+    letter-spacing: .15em;
+    font-weight: 800;
+}
+
+.cliente-app .cliente-dashboard-title,
+.cliente-app .cliente-dashboard-header h1 {
+    color: #fff !important;
+    letter-spacing: -.045em;
+}
+
+.cliente-app .cliente-dashboard-subtitle {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-dashboard-card {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.022)) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-dashboard-card::after {
+    content: "";
+    position: absolute;
+    right: -70px;
+    bottom: -90px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,63,125,.08), transparent 70%);
+    pointer-events: none;
+}
+
+.cliente-app .cliente-card-icon {
+    position: relative;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    width: 58px;
+    height: 58px;
+    font-size: 24px;
+    box-shadow:
+        0 13px 28px rgba(0,0,0,.20),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.cliente-app .cliente-icon-pink {
+    color: #fff;
+    background: linear-gradient(145deg, #a72254, #ff3f7d);
+}
+
+.cliente-app .cliente-icon-blue {
+    color: #fff;
+    background: linear-gradient(145deg, #2b6cca, #62a8ff);
+}
+
+.cliente-app .cliente-icon-green {
+    color: #0d1b13;
+    background: linear-gradient(145deg, #50dfa1, #31bf76);
+}
+
+.cliente-app .cliente-card-content h3 {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-card-content p {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: .25rem;
+    color: #ff8bb0 !important;
+    font-weight: 800;
+}
+
+.cliente-app .cliente-card-link i {
+    transition: transform .25s ease;
+}
+
+.cliente-app .cliente-dashboard-card:hover .cliente-card-link i {
+    transform: translateX(5px);
+}
+
+.cliente-app .cliente-welcome-panel {
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 26px;
+    border: 1px solid rgba(255,255,255,.085);
+    border-radius: var(--sx-radius-lg);
+    background:
+        radial-gradient(circle at 8% 20%, rgba(255,63,125,.11), transparent 23%),
+        linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.018));
+    box-shadow: var(--sx-shadow);
+}
+
+.cliente-app .cliente-welcome-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 23px;
+    background: linear-gradient(145deg, var(--sx-primary-3), var(--sx-primary));
+    box-shadow: 0 15px 28px rgba(255,63,125,.17);
+}
+
+.cliente-app .cliente-welcome-panel h2,
+.cliente-app .cliente-info-panel h3 {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-welcome-panel p,
+.cliente-app .cliente-info-panel p {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff !important;
+    border: 1px solid transparent;
+    background:
+        linear-gradient(135deg, rgba(255,63,125,.92), rgba(139,30,69,.92));
+    box-shadow: 0 12px 25px rgba(255,63,125,.14);
+    text-decoration: none;
+}
+
+.cliente-app .cliente-info-panel {
+    height: 100%;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--sx-radius-lg);
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+    box-shadow: var(--sx-shadow);
+}
+
+.cliente-app .cliente-info-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 17px;
+}
+
+.cliente-app .cliente-info-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(145deg, #2a6bc9, #62a8ff);
+}
+
+.cliente-app .cliente-step {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.cliente-app .cliente-step > span {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    border-radius: 10px;
+    color: #fff;
+    background: rgba(255,63,125,.16);
+    border: 1px solid rgba(255,63,125,.25);
+    font-weight: 800;
+}
+
+.cliente-app .cliente-step p {
+    margin: 0;
+}
+
+/* ==========================================================================
+   8. PRODUCTOS
+   ========================================================================== */
+
+.cliente-app .cliente-productos-page,
+.cliente-app .cliente-carrito-page,
+.cliente-app .cliente-pedido-page,
+.cliente-app .cliente-mis-pedidos-page,
+.cliente-app .cliente-pedido-show-page,
+.cliente-app .cliente-calificaciones-container,
+.cliente-app .cliente-notificaciones-page,
+.cliente-app .cliente-configuracion-page {
+    position: relative;
+}
+
+.cliente-app .cliente-productos-header,
+.cliente-app .cliente-carrito-header,
+.cliente-app .cliente-pedido-header,
+.cliente-app .cliente-mis-pedidos-header,
+.cliente-app .cliente-pedido-show-header {
+    border: 1px solid rgba(255,255,255,.085) !important;
+    box-shadow:
+        0 20px 46px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.cliente-app .cliente-productos-header h1,
+.cliente-app .cliente-carrito-header h1,
+.cliente-app .cliente-pedido-header h1,
+.cliente-app .cliente-mis-pedidos-header h1,
+.cliente-app .cliente-pedido-show-header h1 {
+    color: #fff !important;
+    letter-spacing: -.04em;
+}
+
+.cliente-app .cliente-productos-header p,
+.cliente-app .cliente-carrito-header p,
+.cliente-app .cliente-pedido-header p,
+.cliente-app .cliente-mis-pedidos-header p,
+.cliente-app .cliente-pedido-show-header p {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-productos-filtros {
+    border: 1px solid var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018)) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-busqueda {
+    position: relative;
+}
+
+.cliente-app .cliente-busqueda input {
+    color: #fff !important;
+    padding-left: 42px !important;
+    border-color: rgba(255,255,255,.105) !important;
+}
+
+.cliente-app .cliente-busqueda > i {
+    color: #ff87ad;
+}
+
+.cliente-app .cliente-categoria-select {
+    color: #fff !important;
+    background-color: var(--sx-bg-2) !important;
+}
+
+.cliente-app .cliente-productos-resultados {
+    color: var(--sx-text-soft);
+}
+
+.cliente-app .cliente-productos-resultados strong {
+    color: #fff;
+}
+
+.cliente-app .cliente-productos-resultados > span {
+    color: #ff96b7;
+    font-weight: 800;
+}
+
+.cliente-app .cliente-producto-card {
+    overflow: hidden;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.058), rgba(255,255,255,.018)) !important;
+    border: 1px solid var(--sx-border) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-producto-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.12),
+            transparent 35%,
+            rgba(255,63,125,.10)
+        );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: .6;
+    pointer-events: none;
+}
+
+.cliente-app .cliente-producto-imagen {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.035), rgba(0,0,0,.12));
+}
+
+.cliente-app .cliente-producto-imagen img {
+    width: 100%;
+    object-fit: cover;
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), filter .35s ease;
+}
+
+.cliente-app .cliente-producto-card:hover .cliente-producto-imagen img {
+    transform: scale(1.045);
+    filter: brightness(1.04);
+}
+
+.cliente-app .cliente-producto-badge {
+    color: #fff !important;
+    background: rgba(19, 12, 17, .76) !important;
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 8px 16px rgba(0,0,0,.18);
+    backdrop-filter: blur(8px);
+}
+
+.cliente-app .cliente-producto-nombre {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-producto-descripcion {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-producto-sin-descripcion {
+    color: var(--sx-text-faint) !important;
+}
+
+.cliente-app .cliente-producto-calificacion-resumen {
+    color: var(--sx-text-soft);
+}
+
+.cliente-app .cliente-producto-calificacion-estrellas,
+.cliente-app .cliente-producto-calificacion-estrellas i {
+    color: var(--sx-gold) !important;
+}
+
+.cliente-app .cliente-producto-calificacion-total {
+    color: var(--sx-text-faint) !important;
+}
+
+.cliente-app .cliente-producto-precio,
+.cliente-app .cliente-producto-precio strong {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-producto-precio::before {
+    color: var(--sx-text-faint);
+}
+
+.cliente-app .cliente-producto-stock {
+    color: var(--sx-text-muted);
+}
+
+/* ==========================================================================
+   9. CARRITO
+   ========================================================================== */
+
+.cliente-app .cliente-carrito-card,
+.cliente-app .cliente-carrito-resumen {
+    border: 1px solid var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.052), rgba(255,255,255,.018)) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-carrito-card-header,
+.cliente-app .cliente-carrito-resumen-header {
+    border-bottom: 1px solid rgba(255,255,255,.07) !important;
+    background: rgba(255,255,255,.018) !important;
+}
+
+.cliente-app .cliente-carrito-card-titulo,
+.cliente-app .cliente-carrito-card-titulo strong,
+.cliente-app .cliente-carrito-resumen-header h3,
+.cliente-app .cliente-carrito-resumen-total {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-carrito-card-subtitulo,
+.cliente-app .cliente-carrito-label {
+    color: var(--sx-text-faint) !important;
+}
+
+.cliente-app .cliente-carrito-item {
+    border-color: rgba(255,255,255,.075) !important;
+    background: rgba(255,255,255,.018);
+}
+
+.cliente-app .cliente-carrito-info h3,
+.cliente-app .cliente-carrito-info strong {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-carrito-info p,
+.cliente-app .cliente-carrito-subtotal,
+.cliente-app .cliente-item-subtotal {
+    color: var(--sx-text-soft) !important;
+}
+
+.cliente-app .cliente-carrito-imagen,
+.cliente-app .cliente-carrito-sin-imagen {
+    background: rgba(255,255,255,.035);
+}
+
+.cliente-app .cliente-cantidad-controles {
+    border: 1px solid rgba(255,255,255,.11);
+    border-radius: 12px;
+    background: rgba(255,255,255,.025);
+    overflow: hidden;
+}
+
+.cliente-app .cliente-cantidad-btn {
+    color: #fff !important;
+    border: 0 !important;
+    background: rgba(255,255,255,.04);
+}
+
+.cliente-app .cliente-cantidad-btn:hover:not(:disabled) {
+    background: rgba(255,63,125,.18);
+}
+
+.cliente-app .cliente-cantidad-numero {
+    color: #fff !important;
+    min-width: 38px;
+    text-align: center;
+    font-weight: 800;
+}
+
+.cliente-app .cliente-resumen-linea {
+    color: var(--sx-text-soft);
+}
+
+.cliente-app .cliente-resumen-linea strong {
+    color: #fff;
+}
+
+.cliente-app .cliente-resumen-total {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-resumen-delivery {
+    color: #a8d0ff;
+}
+
+.cliente-app .cliente-resumen-separador {
+    border-color: rgba(255,255,255,.085) !important;
+}
+
+.cliente-app .cliente-btn-vaciar,
+.cliente-app .cliente-eliminar-btn {
+    color: #ff8b9a !important;
+}
+
+/* ==========================================================================
+   10. CHECKOUT / PEDIDO
+   ========================================================================== */
+
+.cliente-app .cliente-pedido-card {
+    border: 1px solid var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.052), rgba(255,255,255,.018)) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-pedido-card-header {
+    border-bottom: 1px solid rgba(255,255,255,.07) !important;
+    background:
+        linear-gradient(90deg, rgba(255,63,125,.055), rgba(255,255,255,.01)) !important;
+}
+
+.cliente-app .cliente-pedido-card-header h2,
+.cliente-app .cliente-pedido-card-header h3,
+.cliente-app .cliente-pedido-card-header strong {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-pedido-card-header p,
+.cliente-app .cliente-pedido-campo small,
+.cliente-app .cliente-pedido-coordenada small,
+.cliente-app .cliente-pedido-label small {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-pedido-card-icono {
+    box-shadow:
+        0 12px 22px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.cliente-app .cliente-pedido-input,
+.cliente-app .cliente-pedido-direccion-bloqueada {
+    min-height: 47px;
+}
+
+.cliente-app .cliente-pedido-direccion-bloqueada {
+    color: rgba(255,255,255,.76) !important;
+}
+
+.cliente-app .cliente-pedido-coordenada {
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.065);
+    border-radius: 14px;
+}
+
+.cliente-app .cliente-pedido-coordenada strong,
+.cliente-app .cliente-pedido-coordenada span {
+    color: #fff;
+}
+
+.cliente-app .cliente-pedido-mapa {
+    min-height: 330px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.10) !important;
+    border-radius: 16px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.025),
+        0 12px 28px rgba(0,0,0,.18);
+}
+
+.cliente-app .cliente-pedido-mapa-cargando,
+.cliente-app .cliente-pedido-mapa-error,
+.cliente-app .cliente-pedido-estado-ubicacion {
+    color: var(--sx-text-soft) !important;
+}
+
+.cliente-app .cliente-pedido-resumen {
+    border: 1px solid var(--sx-border) !important;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(255,63,125,.10), transparent 27%),
+        linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.020)) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-pedido-resumen-header {
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-pedido-resumen-linea {
+    color: var(--sx-text-soft);
+}
+
+.cliente-app .cliente-pedido-resumen-linea strong {
+    color: #fff;
+}
+
+.cliente-app .cliente-pedido-resumen-tarifa-info {
+    color: #b8d8ff !important;
+    background: rgba(98,168,255,.075);
+    border: 1px solid rgba(98,168,255,.16);
+}
+
+.cliente-app .cliente-pedido-resumen-delivery-estado {
+    color: #a6d7ff !important;
+}
+
+.cliente-app .cliente-pedido-resumen-total {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-resumen-pendiente {
+    color: var(--sx-gold) !important;
+}
+
+.cliente-app .cliente-comprobante-area {
+    cursor: pointer;
+    border: 1px dashed rgba(255,255,255,.17) !important;
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,63,125,.10), transparent 30%),
+        rgba(255,255,255,.022);
+}
+
+.cliente-app .cliente-comprobante-area:hover,
+.cliente-app .cliente-comprobante-area.seleccionado {
+    border-color: rgba(255,63,125,.54) !important;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,63,125,.14), transparent 34%),
+        rgba(255,255,255,.035);
+    box-shadow: 0 14px 28px rgba(255,63,125,.08);
+}
+
+.cliente-app .cliente-comprobante-icono {
+    color: #ff7fa6 !important;
+}
+
+.cliente-app .cliente-comprobante-preview {
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+}
+
+.cliente-app .cliente-comprobante-info {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-pago-qr,
+.cliente-app .cliente-pago-restaurante {
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    background: rgba(255,255,255,.025);
+}
+
+.cliente-app .cliente-pago-qr-titulo,
+.cliente-app .cliente-pago-restaurante strong {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-pago-qr-ayuda,
+.cliente-app .cliente-pago-restaurante p {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-pago-qr-imagen {
+    border-radius: 14px;
+    background: #fff;
+}
+
+/* ==========================================================================
+   11. HERRAMIENTA DE PRUEBA OCR
+   ========================================================================== */
+
+.cliente-app .cliente-ocr-herramienta {
+    border: 1px solid rgba(255,209,102,.18) !important;
+    background:
+        radial-gradient(circle at 95% 0%, rgba(255,209,102,.09), transparent 24%),
+        linear-gradient(145deg, rgba(255,209,102,.045), rgba(255,255,255,.018)) !important;
+    box-shadow: 0 14px 30px rgba(0,0,0,.15);
+}
+
+.cliente-app .cliente-ocr-herramienta-cabecera {
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-ocr-herramienta-cabecera > i {
+    color: var(--sx-gold);
+    filter: drop-shadow(0 0 10px rgba(255,209,102,.22));
+}
+
+.cliente-app .cliente-ocr-herramienta-cabecera strong {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-ocr-herramienta-cabecera span {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-ocr-pruebas-info {
+    border: 1px solid rgba(255,255,255,.065);
+    border-radius: 12px;
+    background: rgba(255,255,255,.025);
+}
+
+.cliente-app .cliente-ocr-pruebas-info span {
+    color: var(--sx-text-faint) !important;
+}
+
+.cliente-app .cliente-ocr-pruebas-info strong {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-ocr-pruebas-estado {
+    color: var(--sx-text-soft) !important;
+}
+
+.cliente-app .cliente-ocr-pruebas-resultados {
+    background: rgba(255,255,255,.018);
+    border: 1px solid rgba(255,255,255,.065);
+    border-radius: 14px;
+}
+
+.cliente-app .cliente-ocr-prueba-item {
+    border-color: rgba(255,255,255,.06) !important;
+    background: rgba(255,255,255,.020);
+}
+
+.cliente-app .cliente-ocr-prueba-nombre {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-ocr-prueba-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.cliente-app .cliente-ocr-prueba-acciones a,
+.cliente-app .cliente-ocr-prueba-acciones button {
+    min-height: 38px;
+}
+
+.cliente-app .cliente-ocr-ver {
+    color: #ffe39c !important;
+    border-color: rgba(255,209,102,.30) !important;
+}
+
+.cliente-app .cliente-ocr-usar {
+    color: #fff !important;
+    border-color: rgba(255,63,125,.34) !important;
+    background: rgba(255,63,125,.08) !important;
+}
+
+/* ==========================================================================
+   12. MIS PEDIDOS
+   ========================================================================== */
+
+.cliente-app .cliente-mis-pedidos-contador {
+    color: #fff !important;
+    background:
+        linear-gradient(145deg, rgba(255,63,125,.18), rgba(255,63,125,.055));
+    border: 1px solid rgba(255,63,125,.22);
+}
+
+.cliente-app .cliente-mis-pedidos-card {
+    border: 1px solid var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.052), rgba(255,255,255,.018)) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-mis-pedidos-card-header {
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-mis-pedidos-card-header h3,
+.cliente-app .cliente-mis-pedidos-card-identidad strong,
+.cliente-app .cliente-mis-pedidos-info-total {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-mis-pedidos-card-info,
+.cliente-app .cliente-mis-pedidos-info-item,
+.cliente-app .cliente-mis-pedidos-producto-nombre,
+.cliente-app .cliente-mis-pedidos-producto-subtotal {
+    color: var(--sx-text-soft) !important;
+}
+
+.cliente-app .cliente-mis-pedidos-card-footer {
+    border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.cliente-app .cliente-mis-pedidos-comprobante {
+    color: #a6d7ff !important;
+}
+
+.cliente-app .cliente-mis-pedidos-vacio,
+.cliente-app .cliente-mis-pedidos-vacio p {
+    color: var(--sx-text-muted) !important;
+}
+
+/* ==========================================================================
+   13. DETALLE DEL PEDIDO + TRACKING
+   ========================================================================== */
+
+.cliente-app .cliente-pedido-show-card,
+.cliente-app .cliente-pedido-show-resumen,
+.cliente-app .cliente-pedido-show-comprobante,
+.cliente-app .cliente-show-sidebar > * {
+    border-color: var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.052), rgba(255,255,255,.018)) !important;
+    box-shadow: var(--sx-shadow);
+}
+
+.cliente-app .cliente-pedido-show-card-header,
+.cliente-app .cliente-pedido-show-resumen-header,
+.cliente-app .cliente-pedido-show-comprobante-header {
+    border-bottom-color: rgba(255,255,255,.07) !important;
+    background: rgba(255,255,255,.018) !important;
+}
+
+.cliente-app .cliente-pedido-show-card h2,
+.cliente-app .cliente-pedido-show-card h3,
+.cliente-app .cliente-pedido-show-resumen h3,
+.cliente-app .cliente-pedido-show-comprobante h3 {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-pedido-show-producto {
+    border-bottom: 1px solid rgba(255,255,255,.065);
+}
+
+.cliente-app .cliente-pedido-show-producto-info h4,
+.cliente-app .cliente-pedido-show-producto-info strong,
+.cliente-app .cliente-pedido-show-producto-subtotal {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-pedido-show-producto-detalles,
+.cliente-app .cliente-pedido-show-dato span,
+.cliente-app .cliente-pedido-show-coordenadas,
+.cliente-app .cliente-pedido-show-ayuda,
+.cliente-app .cliente-pedido-show-financial-row {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-pedido-show-dato strong,
+.cliente-app .cliente-pedido-show-financial-row strong,
+.cliente-app .cliente-pedido-show-total {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-pedido-show-estado-card {
+    border: 1px solid rgba(255,255,255,.085);
+    background:
+        radial-gradient(circle at 85% 20%, rgba(255,63,125,.10), transparent 28%),
+        rgba(255,255,255,.022);
+}
+
+.cliente-app .cliente-pedido-show-estado-principal {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-pedido-show-progreso {
+    position: relative;
+}
+
+.cliente-app .cliente-pedido-show-paso {
+    color: var(--sx-text-faint);
+}
+
+.cliente-app .cliente-pedido-show-paso-icono {
+    border: 1px solid rgba(255,255,255,.10);
+    color: var(--sx-text-soft);
+    background: rgba(255,255,255,.035);
+}
+
+.cliente-app .cliente-pedido-show-paso.completado .cliente-pedido-show-paso-icono,
+.cliente-app .cliente-pedido-show-paso.activo .cliente-pedido-show-paso-icono {
+    color: #fff !important;
+    border-color: rgba(255,63,125,.35);
+    background: linear-gradient(145deg, var(--sx-primary-3), var(--sx-primary));
+    box-shadow: 0 0 0 5px rgba(255,63,125,.07);
+}
+
+.cliente-app .cliente-delivery-tracking {
+    border: 1px solid rgba(57,215,255,.17) !important;
+    background:
+        radial-gradient(circle at 90% 0%, rgba(57,215,255,.08), transparent 23%),
+        linear-gradient(145deg, rgba(98,168,255,.045), rgba(255,255,255,.016)) !important;
+}
+
+.cliente-app .cliente-delivery-tracking-header {
+    border-bottom: 1px solid rgba(255,255,255,.065);
+}
+
+.cliente-app .cliente-delivery-live {
+    color: #70e6ff !important;
+}
+
+.cliente-app .cliente-delivery-map {
+    min-height: 300px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.10);
+}
+
+.cliente-app .cliente-delivery-status {
+    color: var(--sx-text-soft) !important;
+}
+
+.cliente-app .cliente-delivery-legend-item {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-delivery-legend-icon.delivery {
+    color: #fff;
+    background: linear-gradient(145deg, #2b6cca, #62a8ff);
+}
+
+.cliente-app .cliente-delivery-legend-icon.destino {
+    color: #fff;
+    background: linear-gradient(145deg, var(--sx-primary-3), var(--sx-primary));
+}
+
+.cliente-app .cliente-delivery-tracking-pendiente {
+    border-color: rgba(255,209,102,.18) !important;
+    background:
+        linear-gradient(145deg, rgba(255,209,102,.045), rgba(255,255,255,.016)) !important;
+}
+
+.cliente-app .cliente-pedido-show-comprobante-estado {
+    border-radius: 12px;
+}
+
+.cliente-app .cliente-pedido-show-comprobante-imagen {
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.10);
+    background: #fff;
+}
+
+.cliente-app .cliente-pedido-show-comprobante-sin-imagen,
+.cliente-app .cliente-pedido-show-comprobante-sin-registro {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-pedido-show-calificacion {
+    border-top-color: rgba(255,255,255,.08) !important;
+}
+
+.cliente-app .cliente-pedido-show-calificacion-formulario,
+.cliente-app .cliente-pedido-show-calificacion-realizada {
+    border: 1px solid rgba(255,255,255,.075);
+    border-radius: 14px;
+    background: rgba(255,255,255,.025);
+}
+
+.cliente-app .cliente-pedido-show-calificacion-header strong,
+.cliente-app .cliente-pedido-show-calificacion-puntuacion {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-pedido-show-calificacion-header span {
+    color: #ff8aae !important;
+}
+
+.cliente-app .cliente-pedido-show-calificacion-estrellas,
+.cliente-app .cliente-pedido-show-calificacion-estrellas i,
+.cliente-app .cliente-pedido-show-calificacion-puntuacion {
+    color: var(--sx-gold) !important;
+}
+
+.cliente-app .cliente-pedido-show-calificacion-comentario {
+    color: var(--sx-text-soft) !important;
+    background: rgba(255,255,255,.025);
+    border-left-color: var(--sx-primary);
+}
+
+.cliente-app .cliente-pedido-show-comentario label {
+    color: var(--sx-text-soft) !important;
+}
+
+.cliente-app .cliente-pedido-show-comentario label span {
+    color: var(--sx-text-faint) !important;
+}
+
+.cliente-app .cliente-pedido-show-comentario textarea {
+    color: #fff !important;
+    background: rgba(255,255,255,.025) !important;
+    border-color: rgba(255,255,255,.10) !important;
+}
+
+.cliente-app .cliente-pedido-show-comentario textarea::placeholder {
+    color: rgba(255,255,255,.40) !important;
+}
+
+/* ==========================================================================
+   14. CALIFICACIONES
+   ========================================================================== */
+
+.cliente-app .cliente-calificaciones-product-card,
+.cliente-app .cliente-calificaciones-summary-card,
+.cliente-app .cliente-calificaciones-review-card {
+    border-color: var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.052), rgba(255,255,255,.018)) !important;
+    box-shadow: var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-calificaciones-header {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-calificaciones-title {
+    color: #fff !important;
+    letter-spacing: -.04em;
+}
+
+.cliente-app .cliente-calificaciones-subtitle {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-calificaciones-category,
+.cliente-app .cliente-calificaciones-date {
+    color: var(--sx-text-faint) !important;
+}
+
+.cliente-app .cliente-calificaciones-product-name,
+.cliente-app .cliente-calificaciones-average-number,
+.cliente-app .cliente-calificaciones-user-name {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-calificaciones-product-description,
+.cliente-app .cliente-calificaciones-comment p,
+.cliente-app .cliente-calificaciones-no-comment,
+.cliente-app .cliente-calificaciones-total,
+.cliente-app .cliente-rating-count {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-calificaciones-stars i,
+.cliente-app .cliente-calificaciones-stars-large i,
+.cliente-app .cliente-rating-star-number i {
+    color: var(--sx-gold) !important;
+}
+
+.cliente-app .cliente-rating-row {
+    border-color: rgba(255,255,255,.055);
+}
+
+.cliente-app .cliente-rating-progress {
+    background: rgba(255,255,255,.065);
+}
+
+.cliente-app .cliente-rating-progress-bar {
+    background:
+        linear-gradient(90deg, var(--sx-primary), var(--sx-orange));
+    box-shadow: 0 0 16px rgba(255,63,125,.16);
+}
+
+.cliente-app .cliente-calificaciones-empty-card,
+.cliente-app .cliente-calificaciones-empty-summary {
+    color: var(--sx-text-muted);
+}
+
+/* ==========================================================================
+   15. NOTIFICACIONES
+   ========================================================================== */
+
+.cliente-app .cliente-notificaciones-page .card {
+    border-color: var(--sx-border) !important;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.050), rgba(255,255,255,.018)) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .card.no-leida {
+    border-color: rgba(255,63,125,.32) !important;
+    box-shadow:
+        0 18px 44px rgba(255,63,125,.07),
+        var(--sx-shadow) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .card.leida {
+    opacity: .88;
+}
+
+.cliente-app .cliente-notificaciones-page h1,
+.cliente-app .cliente-notificaciones-page h2,
+.cliente-app .cliente-notificaciones-page h3 {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-notificaciones-page > .mb-4 h2,
+.cliente-app .cliente-notificaciones-page > .mb-4 .text-muted {
+    color: var(--sx-text-faint) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .text-primary {
+    color: #7fb4ff !important;
+}
+
+.cliente-app .cliente-notificaciones-page .text-muted {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-notificaciones-page .badge {
+    font-weight: 800;
+}
+
+.cliente-app .notification-card-cliente .btn-outline-primary {
+    color: #a9caff !important;
+    border-color: rgba(98,168,255,.30) !important;
+}
+
+.cliente-app .notification-card-cliente .btn-outline-secondary {
+    color: #e0e1e5 !important;
+}
+
+/* ==========================================================================
+   16. CONFIGURACIÓN / PERFIL
+   ========================================================================== */
+
+.cliente-app .cliente-configuracion-page > .mb-4:first-child h1 {
+    color: #fff !important;
+    letter-spacing: -.035em;
+}
+
+.cliente-app .cliente-configuracion-page > .mb-4:first-child .text-muted {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-configuracion-page .card {
+    overflow: hidden;
+    position: relative;
+}
+
+.cliente-app .cliente-configuracion-page .card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 2px;
+    background:
+        linear-gradient(90deg, var(--sx-primary), var(--sx-orange), transparent 75%);
+    opacity: .72;
+}
+
+.cliente-app .cliente-configuracion-page .card h2,
+.cliente-app .cliente-configuracion-page .card h3 {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-configuracion-page .card p,
+.cliente-app .cliente-configuracion-page .form-text {
+    color: var(--sx-text-muted) !important;
+}
+
+.cliente-app .cliente-perfil-avatar-preview {
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.06),
+        0 0 0 6px rgba(255,63,125,.06),
+        0 14px 28px rgba(0,0,0,.22);
+}
+
+/* ==========================================================================
+   17. CLASES QUE ANTES QUEDABAN SIN ESTILO PROPIO
+   ========================================================================== */
+
+.cliente-app .cliente-pedido-show-calificacion-puntuacion {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    color: var(--sx-gold) !important;
+    background: rgba(255,209,102,.075);
+    border: 1px solid rgba(255,209,102,.18);
+    font-weight: 850;
+}
+
+.cliente-app .cliente-pedido-show-calificacion-realizada {
+    padding: 15px;
+}
+
+.cliente-app .cliente-pedido-resumen-tarifa-info {
+    border-radius: 13px;
+    padding: 10px 12px;
+    margin-top: 9px;
+}
+
+.cliente-app .cliente-pedido-direccion-bloqueada {
+    position: relative;
+    padding-right: 42px;
+}
+
+.cliente-app .cliente-pedido-direccion-bloqueada::after {
+    content: "✓";
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #75e3ab;
+    font-weight: 900;
+}
+
+.cliente-app .cliente-cantidad-numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cliente-app .cliente-ocr-pruebas-estado,
+.cliente-app .cliente-ocr-pruebas-info,
+.cliente-app .cliente-ocr-pruebas-resultados,
+.cliente-app .cliente-ocr-prueba-item,
+.cliente-app .cliente-ocr-prueba-nombre,
+.cliente-app .cliente-ocr-prueba-acciones {
+    min-width: 0;
+}
+
+/* ==========================================================================
+   18. ANIMACIONES Y MICROINTERACCIONES
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+    .cliente-app .cliente-dashboard-card,
+    .cliente-app .cliente-welcome-panel,
+    .cliente-app .cliente-info-panel,
+    .cliente-app .cliente-producto-card,
+    .cliente-app .cliente-carrito-card,
+    .cliente-app .cliente-carrito-item,
+    .cliente-app .cliente-carrito-resumen,
+    .cliente-app .cliente-mis-pedidos-card,
+    .cliente-app .cliente-pedido-card,
+    .cliente-app .cliente-pedido-show-card,
+    .cliente-app .cliente-pedido-show-resumen,
+    .cliente-app .cliente-pedido-show-comprobante,
+    .cliente-app .cliente-calificaciones-product-card,
+    .cliente-app .cliente-calificaciones-summary-card,
+    .cliente-app .cliente-calificaciones-review-card,
+    .cliente-app .cliente-notificaciones-page .card,
+    .cliente-app .cliente-configuracion-page .card {
+        transition:
+            transform .24s cubic-bezier(.2,.8,.2,1),
+            border-color .24s ease,
+            box-shadow .24s ease,
+            background-color .24s ease,
+            filter .24s ease;
+    }
+
+    .cliente-app .cliente-dashboard-card:hover,
+    .cliente-app .cliente-welcome-panel:hover,
+    .cliente-app .cliente-info-panel:hover,
+    .cliente-app .cliente-producto-card:hover,
+    .cliente-app .cliente-carrito-card:hover,
+    .cliente-app .cliente-carrito-resumen:hover,
+    .cliente-app .cliente-mis-pedidos-card:hover,
+    .cliente-app .cliente-pedido-card:hover,
+    .cliente-app .cliente-pedido-show-card:hover,
+    .cliente-app .cliente-pedido-show-resumen:hover,
+    .cliente-app .cliente-pedido-show-comprobante:hover,
+    .cliente-app .cliente-calificaciones-product-card:hover,
+    .cliente-app .cliente-calificaciones-summary-card:hover,
+    .cliente-app .cliente-calificaciones-review-card:hover,
+    .cliente-app .cliente-notificaciones-page .card:hover,
+    .cliente-app .cliente-configuracion-page .card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(255,63,125,.18) !important;
+        box-shadow: var(--sx-shadow-hover) !important;
+    }
+
+    .cliente-app .cliente-logo,
+    .cliente-app .cliente-nav-link,
+    .cliente-app .cliente-btn-logout,
+    .cliente-app .cliente-login-link,
+    .cliente-app .cliente-card-icon,
+    .cliente-app .cliente-btn-filtrar,
+    .cliente-app .cliente-btn-limpiar,
+    .cliente-app .cliente-btn-agregar,
+    .cliente-app .cliente-secondary-btn,
+    .cliente-app .cliente-cantidad-btn,
+    .cliente-app .cliente-eliminar-btn,
+    .cliente-app .cliente-ocr-pruebas-btn,
+    .cliente-app .cliente-ocr-ver,
+    .cliente-app .cliente-ocr-usar {
+        transition:
+            transform .20s cubic-bezier(.2,.8,.2,1),
+            filter .20s ease,
+            box-shadow .20s ease,
+            background-color .20s ease,
+            border-color .20s ease;
+    }
+
+    .cliente-app .cliente-card-icon {
+        animation: sxFloat 4s ease-in-out infinite;
+    }
+
+    .cliente-app .cliente-dashboard-card:hover .cliente-card-icon {
+        transform: translateY(-3px) rotate(-2deg) scale(1.04);
+        animation-play-state: paused;
+    }
+
+    .cliente-app .cliente-btn-logout::before,
+    .cliente-app .cliente-login-link::before,
+    .cliente-app .cliente-pedido-btn-confirmar::before,
+    .cliente-app .cliente-carrito-btn-pedido::before,
+    .cliente-app .cliente-btn-agregar::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -120%;
+        width: 62%;
+        transform: skewX(-18deg);
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,.19),
+                transparent
+            );
+        transition: left .60s ease;
+        pointer-events: none;
+    }
+
+    .cliente-app .cliente-btn-logout,
+    .cliente-app .cliente-login-link,
+    .cliente-app .cliente-pedido-btn-confirmar,
+    .cliente-app .cliente-carrito-btn-pedido,
+    .cliente-app .cliente-btn-agregar {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    .cliente-app .cliente-btn-logout:hover::before,
+    .cliente-app .cliente-login-link:hover::before,
+    .cliente-app .cliente-pedido-btn-confirmar:hover::before,
+    .cliente-app .cliente-carrito-btn-pedido:hover::before,
+    .cliente-app .cliente-btn-agregar:hover::before {
+        left: 145%;
+    }
+
+    .cliente-app .cliente-logo:hover {
+        transform: translateY(-1px);
+    }
+
+    .cliente-app .cliente-nav-link:hover {
+        transform: translateY(-2px);
+    }
+
+    @keyframes sxFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-3px);
+        }
+    }
+
+    @keyframes sxPulse {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(255,63,125,.00);
+        }
+        50% {
+            box-shadow: 0 0 0 7px rgba(255,63,125,.05);
+        }
+    }
+
+    .cliente-app .cliente-delivery-live {
+        animation: sxPulse 2s ease-in-out infinite;
+        border-radius: 999px;
+        padding: 3px 9px;
+    }
+
+    .cliente-app .cliente-notificaciones-page .no-leida {
+        animation: sxPulse 2.8s ease-in-out infinite;
+    }
+}
+
+/* ==========================================================================
+   19. REVEAL DESDE JAVASCRIPT
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+    .cliente-app .cliente-reveal-item {
+        opacity: .45;
+        transform: translateY(13px);
+        transition:
+            opacity .48s ease,
+            transform .48s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .cliente-app .cliente-reveal-item.cliente-reveal-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .cliente-app .cliente-reveal-item:nth-child(2) {
+        transition-delay: .03s;
+    }
+
+    .cliente-app .cliente-reveal-item:nth-child(3) {
+        transition-delay: .06s;
+    }
+
+    .cliente-app .cliente-reveal-item:nth-child(4) {
+        transition-delay: .09s;
+    }
+}
+
+/* ==========================================================================
+   20. FOCUS / ACCESIBILIDAD
+   ========================================================================== */
+
+.cliente-app :focus-visible {
+    outline: 2px solid rgba(255,63,125,.78) !important;
+    outline-offset: 3px;
+}
+
+.cliente-app input:focus-visible,
+.cliente-app select:focus-visible,
+.cliente-app textarea:focus-visible {
+    outline: 0 !important;
+}
+
+/* ==========================================================================
+   21. RESPONSIVE TABLET
+   ========================================================================== */
+
+@media (max-width: 991.98px) {
+    .cliente-app .cliente-navbar-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .cliente-app .cliente-navbar-links {
+        margin-left: 0;
+        width: 100%;
+        padding: 12px 0 8px;
+        gap: 5px;
+    }
+
+    .cliente-app .cliente-nav-link {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .cliente-app .cliente-navbar-user {
+        width: 100%;
+        margin-left: 0;
+        padding: 10px 0 15px;
+        border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .cliente-app .cliente-user-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .cliente-app .cliente-productos-filtros {
+        padding: 14px;
+    }
+
+    .cliente-app .cliente-dashboard-header {
+        gap: 20px;
+    }
+
+    .cliente-app .cliente-dashboard-header-logo img,
+    .cliente-app .cliente-dashboard-header-logo i {
+        width: 72px;
+        height: 72px;
+    }
+
+    .cliente-app .cliente-pedido-resumen,
+    .cliente-app .cliente-carrito-resumen {
+        position: static;
+    }
+}
+
+/* ==========================================================================
+   22. RESPONSIVE CELULAR
+   ========================================================================== */
+
+@media (max-width: 767.98px) {
+    .cliente-app .cliente-main {
+        min-height: calc(100vh - 130px);
+    }
+
+    .cliente-app .cliente-dashboard,
+    .cliente-app .cliente-productos-page,
+    .cliente-app .cliente-carrito-page,
+    .cliente-app .cliente-pedido-page,
+    .cliente-app .cliente-mis-pedidos-page,
+    .cliente-app .cliente-pedido-show-page,
+    .cliente-app .cliente-calificaciones-container,
+    .cliente-app .cliente-notificaciones-page,
+    .cliente-app .cliente-configuracion-page {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        padding-top: 18px !important;
+        padding-bottom: 34px !important;
+    }
+
+    .cliente-app .cliente-dashboard-header {
+        padding: 23px 19px !important;
+        border-radius: 18px !important;
+        align-items: flex-start;
+    }
+
+    .cliente-app .cliente-dashboard-title {
+        font-size: clamp(1.75rem, 8.2vw, 2.45rem);
+        line-height: 1.04;
+    }
+
+    .cliente-app .cliente-dashboard-subtitle {
+        font-size: .92rem;
+    }
+
+    .cliente-app .cliente-dashboard-header-logo img,
+    .cliente-app .cliente-dashboard-header-logo i {
+        width: 58px;
+        height: 58px;
+        border-radius: 17px;
+        font-size: 23px;
+    }
+
+    .cliente-app .cliente-productos-header,
+    .cliente-app .cliente-carrito-header,
+    .cliente-app .cliente-pedido-header,
+    .cliente-app .cliente-mis-pedidos-header,
+    .cliente-app .cliente-pedido-show-header {
+        border-radius: 18px !important;
+    }
+
+    .cliente-app .cliente-productos-header h1,
+    .cliente-app .cliente-carrito-header h1,
+    .cliente-app .cliente-pedido-header h1,
+    .cliente-app .cliente-mis-pedidos-header h1,
+    .cliente-app .cliente-pedido-show-header h1 {
+        font-size: clamp(1.55rem, 7vw, 2.20rem);
+        line-height: 1.08;
+    }
+
+    .cliente-app .cliente-productos-filtros {
+        border-radius: 16px;
+    }
+
+    .cliente-app .cliente-filtros-form {
+        gap: 10px !important;
+    }
+
+    .cliente-app .cliente-busqueda,
+    .cliente-app .cliente-categoria-select,
+    .cliente-app .cliente-btn-filtrar,
+    .cliente-app .cliente-btn-limpiar {
+        width: 100% !important;
+    }
+
+    .cliente-app .cliente-producto-card,
+    .cliente-app .cliente-carrito-card,
+    .cliente-app .cliente-carrito-resumen,
+    .cliente-app .cliente-mis-pedidos-card,
+    .cliente-app .cliente-pedido-card,
+    .cliente-app .cliente-pedido-show-card,
+    .cliente-app .cliente-pedido-show-resumen,
+    .cliente-app .cliente-pedido-show-comprobante,
+    .cliente-app .cliente-calificaciones-product-card,
+    .cliente-app .cliente-calificaciones-summary-card,
+    .cliente-app .cliente-calificaciones-review-card,
+    .cliente-app .cliente-notificaciones-page .card,
+    .cliente-app .cliente-configuracion-page .card {
+        border-radius: 17px !important;
+    }
+
+    .cliente-app .cliente-pedido-mapa-botones,
+    .cliente-app .cliente-pedido-show-calificacion-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cliente-app .cliente-pedido-mapa-botones > *,
+    .cliente-app .cliente-pedido-show-calificacion-header > * {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-pedido-show-rating-selector {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .cliente-app .cliente-pedido-show-rating-input {
+        justify-content: center;
+    }
+
+    .cliente-app .cliente-ocr-prueba-acciones {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-ocr-prueba-acciones > *,
+    .cliente-app .cliente-ocr-pruebas-btn {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-carrito-item {
+        display: grid !important;
+        grid-template-columns: 72px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .cliente-app .cliente-carrito-item > * {
+        min-width: 0;
+    }
+
+    .cliente-app .cliente-carrito-eliminar {
+        grid-column: 1 / -1;
+        justify-self: flex-end;
+    }
+
+    .cliente-app .cliente-carrito-cantidad,
+    .cliente-app .cliente-carrito-subtotal {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-mis-pedidos-card-footer {
+        gap: 9px;
+    }
+
+    .cliente-app .cliente-mis-pedidos-card-footer > * {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-notificaciones-page > .d-flex:first-child,
+    .cliente-app .cliente-configuracion-page > .mb-4:first-child {
+        padding: 18px 17px !important;
+        border-radius: 18px;
+    }
+
+    .cliente-app .cliente-notificaciones-page .card-body {
+        padding: 17px !important;
+    }
+
+    .cliente-app .cliente-configuracion-page .card-body {
+        padding: 17px !important;
+    }
+
+    .cliente-app .cliente-pago-contenedor {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cliente-app .cliente-pago-qr,
+    .cliente-app .cliente-pago-restaurante {
+        width: 100%;
+    }
+
+    .cliente-app .cliente-perfil-avatar-preview {
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+    }
+}
+
+/* ==========================================================================
+   23. CELULAR PEQUEÑO
+   ========================================================================== */
+
+@media (max-width: 420px) {
+    .cliente-app .cliente-navbar-container {
+        min-height: 68px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .cliente-app .cliente-logo {
+        font-size: 17px;
+    }
+
+    .cliente-app .cliente-logo-image {
+        width: 36px;
+        height: 36px;
+    }
+
+    .cliente-app .cliente-navbar-profile-avatar {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+    .cliente-app .cliente-dashboard,
+    .cliente-app .cliente-productos-page,
+    .cliente-app .cliente-carrito-page,
+    .cliente-app .cliente-pedido-page,
+    .cliente-app .cliente-mis-pedidos-page,
+    .cliente-app .cliente-pedido-show-page,
+    .cliente-app .cliente-calificaciones-container,
+    .cliente-app .cliente-notificaciones-page,
+    .cliente-app .cliente-configuracion-page {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .cliente-app .cliente-dashboard-header {
+        padding: 19px 15px !important;
+        gap: 13px;
+    }
+
+    .cliente-app .cliente-dashboard-title {
+        font-size: 1.72rem;
+    }
+
+    .cliente-app .cliente-dashboard-header-logo img,
+    .cliente-app .cliente-dashboard-header-logo i {
+        width: 48px;
+        height: 48px;
+        border-radius: 15px;
+    }
+
+    .cliente-app .cliente-card-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        font-size: 21px;
+        border-radius: 14px;
+    }
+
+    .cliente-app .cliente-welcome-panel,
+    .cliente-app .cliente-info-panel {
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .cliente-app .cliente-comprobante-area {
+        padding: 18px !important;
+    }
+
+    .cliente-app .cliente-pedido-mapa {
+        min-height: 280px;
+    }
+
+    .cliente-app .cliente-delivery-map {
+        min-height: 270px;
+    }
+
+    .cliente-app .cliente-pedido-show-calificacion-formulario {
+        padding: 14px !important;
+    }
+}
+
+/* ==========================================================================
+   24. TOUCH + REDUCCIÓN DE MOVIMIENTO
+   ========================================================================== */
+
+@media (hover: none) and (pointer: coarse) {
+    .cliente-app .cliente-dashboard-card:hover,
+    .cliente-app .cliente-producto-card:hover,
+    .cliente-app .cliente-carrito-item:hover,
+    .cliente-app .cliente-mis-pedidos-card:hover,
+    .cliente-app .cliente-pedido-card:hover,
+    .cliente-app .cliente-pedido-show-card:hover,
+    .cliente-app .cliente-calificaciones-review-card:hover,
+    .cliente-app .cliente-notificaciones-page .card:hover {
+        transform: none;
+    }
+}
+
+@media (pointer: coarse) {
+    .cliente-app .btn,
+    .cliente-app .cliente-btn-filtrar,
+    .cliente-app .cliente-btn-limpiar,
+    .cliente-app .cliente-btn-agregar,
+    .cliente-app .cliente-cantidad-btn,
+    .cliente-app .cliente-eliminar-btn,
+    .cliente-app .cliente-nav-link {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .cliente-app .btn,
+    .cliente-app .cliente-btn-filtrar,
+    .cliente-app .cliente-btn-limpiar,
+    .cliente-app .cliente-btn-agregar,
+    .cliente-app .cliente-pedido-btn-confirmar,
+    .cliente-app .cliente-carrito-btn-pedido {
+        min-height: 46px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cliente-app *,
+    .cliente-app *::before,
+    .cliente-app *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+    }
+}
+
+
+/* ==========================================================================
+   25. PRODUCTOS + RESUMEN DEL PEDIDO — PULIDO VISUAL FINAL
+   ==========================================================================
+   Esta sección corrige los componentes que todavía heredaban estilos base
+   demasiado simples o claros para el tema oscuro.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS — CABECERA
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-productos-header {
+    background:
+        radial-gradient(circle at 92% 15%, rgba(255, 63, 125, .18), transparent 24%),
+        radial-gradient(circle at 72% 110%, rgba(255, 159, 67, .08), transparent 26%),
+        linear-gradient(135deg, #18131a 0%, #21131b 52%, #12141a 100%) !important;
+    border: 1px solid rgba(255, 63, 125, .18) !important;
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, .28),
+        0 0 35px rgba(255, 63, 125, .06);
+}
+
+.cliente-app .cliente-productos-header-meta {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.cliente-app .cliente-productos-header-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: rgba(255,255,255,.88);
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .2px;
+    backdrop-filter: blur(10px);
+}
+
+.cliente-app .cliente-productos-header-meta span:first-child i {
+    color: var(--sx-gold);
+}
+
+.cliente-app .cliente-productos-header-meta span:last-child i {
+    color: var(--sx-orange);
+}
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS — FILTRO Y RESULTADOS
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-productos-filtros {
+    background:
+        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018)) !important;
+    border: 1px solid rgba(255,255,255,.09) !important;
+    box-shadow:
+        0 14px 34px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.cliente-app .cliente-busqueda input,
+.cliente-app .cliente-categoria-select {
+    border-color: rgba(255,255,255,.11) !important;
+    background:
+        linear-gradient(180deg, rgba(0,0,0,.25), rgba(255,255,255,.02)) !important;
+}
+
+.cliente-app .cliente-busqueda input:hover,
+.cliente-app .cliente-categoria-select:hover {
+    border-color: rgba(255,63,125,.38) !important;
+}
+
+.cliente-app .cliente-productos-resultados {
+    padding: 4px 2px;
+}
+
+.cliente-app .cliente-productos-resultados > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background:
+        linear-gradient(135deg, rgba(255,63,125,.14), rgba(217,32,98,.08)) !important;
+    border-color: rgba(255,63,125,.24) !important;
+    color: #ff8fb0 !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,.13);
+}
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS — TARJETAS
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-productos-grid {
+    align-items: stretch;
+}
+
+.cliente-app .cliente-producto-card {
+    min-height: 100%;
+    isolation: isolate;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255,63,125,.07), transparent 25%),
+        linear-gradient(145deg, #171820 0%, #15161c 56%, #21141c 100%) !important;
+    border: 1px solid rgba(255,255,255,.085) !important;
+    border-radius: 22px !important;
+    box-shadow:
+        0 16px 38px rgba(0,0,0,.26),
+        inset 0 1px 0 rgba(255,255,255,.035) !important;
+    transform: translateZ(0);
+}
+
+.cliente-app .cliente-producto-card::after {
+    content: "";
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    right: -75px;
+    bottom: -95px;
+    border-radius: 50%;
+    background: rgba(255,63,125,.11);
+    filter: blur(26px);
+    opacity: .55;
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity .35s ease, transform .35s ease;
+}
+
+.cliente-app .cliente-producto-card:hover {
+    border-color: rgba(255,63,125,.38) !important;
+    transform: translateY(-9px);
+    box-shadow:
+        0 24px 48px rgba(0,0,0,.34),
+        0 0 34px rgba(255,63,125,.08) !important;
+}
+
+.cliente-app .cliente-producto-card:hover::after {
+    opacity: .95;
+    transform: scale(1.08);
+}
+
+.cliente-app .cliente-producto-imagen {
+    height: 245px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.32)) !important;
+}
+
+.cliente-app .cliente-producto-imagen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(5,6,10,.02) 0%, rgba(5,6,10,0) 48%, rgba(5,6,10,.68) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cliente-app .cliente-producto-badge {
+    left: 16px;
+    bottom: 16px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 7px 12px;
+    color: #fff !important;
+    background:
+        linear-gradient(135deg, rgba(50,18,34,.90), rgba(17,15,21,.88)) !important;
+    border: 1px solid rgba(255,255,255,.13) !important;
+    box-shadow:
+        0 10px 20px rgba(0,0,0,.24),
+        inset 0 1px 0 rgba(255,255,255,.07);
+    backdrop-filter: blur(10px);
+}
+
+.cliente-app .cliente-producto-badge i {
+    color: var(--sx-primary);
+    font-size: 11px;
+}
+
+.cliente-app .cliente-producto-info {
+    padding: 22px 22px 20px;
+}
+
+.cliente-app .cliente-producto-nombre {
+    min-height: 54px;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    font-size: 21px;
+    letter-spacing: -.2px;
+}
+
+.cliente-app .cliente-producto-descripcion {
+    min-height: 56px;
+    color: rgba(255,255,255,.61) !important;
+    margin-bottom: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS — CALIFICACIÓN
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-producto-calificacion-resumen {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-height: 37px;
+    margin-bottom: 3px;
+    padding: 8px 10px;
+    background:
+        linear-gradient(135deg, rgba(255,209,102,.08), rgba(255,255,255,.02)) !important;
+    border: 1px solid rgba(255,209,102,.10);
+    border-radius: 12px;
+}
+
+.cliente-app .cliente-producto-rating-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    border-radius: 999px;
+    color: #2b2108;
+    background: linear-gradient(135deg, #ffd166, #ffb84b);
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .45px;
+    box-shadow: 0 5px 14px rgba(255,209,102,.16);
+}
+
+.cliente-app .cliente-producto-rating-chip i {
+    color: #3e2d06 !important;
+    font-size: 9px;
+}
+
+.cliente-app .cliente-producto-calificacion-resumen strong {
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.cliente-app .cliente-producto-calificacion-total {
+    font-size: 10px !important;
+}
+
+.cliente-app .cliente-producto-sin-calificaciones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 37px;
+    margin-bottom: 3px;
+    padding: 8px 10px;
+    border: 1px dashed rgba(255,255,255,.10);
+    border-radius: 12px;
+    color: rgba(255,255,255,.48) !important;
+    background: rgba(255,255,255,.018);
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.cliente-app .cliente-producto-sin-calificaciones i {
+    color: rgba(255,209,102,.64);
+}
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS — PRECIO Y STOCK
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-producto-bottom {
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: 17px;
+    padding: 15px 0;
+    border-top: 1px solid rgba(255,255,255,.075) !important;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.cliente-app .cliente-producto-precio-label {
+    color: rgba(255,255,255,.42) !important;
+    font-weight: 800;
+}
+
+.cliente-app .cliente-producto-precio {
+    color: #fff !important;
+    font-size: 26px;
+    line-height: 1.05;
+    text-shadow: 0 0 18px rgba(255,63,125,.16);
+}
+
+.cliente-app .cliente-producto-precio::first-letter {
+    color: #ff8cae;
+}
+
+.cliente-app .cliente-producto-stock {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
+    min-height: 38px;
+    max-width: 100%;
+    padding: 7px 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.07);
+    color: rgba(255,255,255,.62) !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    white-space: normal;
+    text-align: right;
+    transition: transform .25s ease, border-color .25s ease, background .25s ease;
+}
+
+.cliente-app .cliente-producto-stock-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 27px;
+    height: 27px;
+    flex: 0 0 27px;
+    border-radius: 9px;
+    background: rgba(255,255,255,.06);
+}
+
+.cliente-app .cliente-producto-stock-icono i {
+    font-size: 12px;
+}
+
+.cliente-app .cliente-producto-stock-texto strong {
+    color: inherit;
+}
+
+.cliente-app .cliente-producto-stock--alto {
+    color: #aaf7d0 !important;
+    border-color: rgba(57,217,138,.18);
+    background:
+        linear-gradient(135deg, rgba(57,217,138,.10), rgba(57,217,138,.035));
+}
+
+.cliente-app .cliente-producto-stock--alto .cliente-producto-stock-icono {
+    color: var(--sx-green);
+    background: rgba(57,217,138,.11);
+}
+
+.cliente-app .cliente-producto-stock--medio {
+    color: #ffe4a1 !important;
+    border-color: rgba(255,209,102,.18);
+    background:
+        linear-gradient(135deg, rgba(255,209,102,.10), rgba(255,159,67,.035));
+}
+
+.cliente-app .cliente-producto-stock--medio .cliente-producto-stock-icono {
+    color: var(--sx-gold);
+    background: rgba(255,209,102,.11);
+}
+
+.cliente-app .cliente-producto-stock--bajo {
+    color: #ffc48f !important;
+    border-color: rgba(255,159,67,.20);
+    background:
+        linear-gradient(135deg, rgba(255,159,67,.11), rgba(255,63,125,.035));
+}
+
+.cliente-app .cliente-producto-stock--bajo .cliente-producto-stock-icono {
+    color: var(--sx-orange);
+    background: rgba(255,159,67,.12);
+}
+
+.cliente-app .cliente-producto-stock--agotado {
+    color: #ffb4bd !important;
+    border-color: rgba(255,97,112,.22);
+    background:
+        linear-gradient(135deg, rgba(255,97,112,.11), rgba(255,63,125,.035));
+}
+
+.cliente-app .cliente-producto-stock--agotado .cliente-producto-stock-icono {
+    color: var(--sx-red);
+    background: rgba(255,97,112,.12);
+}
+
+/* --------------------------------------------------------------------------
+   PRODUCTOS — BOTONES
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-producto-acciones {
+    display: grid;
+    gap: 10px;
+}
+
+.cliente-app .cliente-btn-opiniones {
+    position: relative;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 20px;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 48px;
+    padding: 7px 12px;
+    color: #ffe29a !important;
+    background:
+        linear-gradient(135deg, rgba(255,209,102,.11), rgba(255,159,67,.04)) !important;
+    border: 1px solid rgba(255,209,102,.25) !important;
+    border-radius: 13px;
+    text-decoration: none !important;
+    font-size: 12px;
+    font-weight: 850;
+    overflow: hidden;
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+.cliente-app .cliente-btn-opiniones::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+    transform: translateX(-110%);
+    transition: transform .55s ease;
+}
+
+.cliente-app .cliente-btn-opiniones:hover {
+    transform: translateY(-2px);
+    color: #fff4c8 !important;
+    border-color: rgba(255,209,102,.56) !important;
+    background:
+        linear-gradient(135deg, rgba(255,209,102,.17), rgba(255,159,67,.08)) !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,.22);
+}
+
+.cliente-app .cliente-btn-opiniones:hover::before {
+    transform: translateX(110%);
+}
+
+.cliente-app .cliente-btn-opiniones-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    color: #2f2307;
+    background: linear-gradient(135deg, #ffd166, #ffb84b);
+    box-shadow: 0 7px 17px rgba(255,209,102,.16);
+}
+
+.cliente-app .cliente-btn-opiniones-icono i {
+    color: #2f2307 !important;
+    font-size: 13px;
+}
+
+.cliente-app .cliente-btn-opiniones-flecha {
+    justify-self: end;
+    opacity: .75;
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+.cliente-app .cliente-btn-opiniones:hover .cliente-btn-opiniones-flecha {
+    transform: translateX(3px);
+    opacity: 1;
+}
+
+.cliente-app .cliente-producto-acciones .form-agregar-carrito {
+    width: 100%;
+    margin: 0;
+}
+
+.cliente-app .cliente-btn-agregar {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 20px;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 52px;
+    padding: 8px 12px;
+    border-radius: 14px !important;
+    background:
+        linear-gradient(135deg, #ff3f7d 0%, #e32166 48%, #b91654 100%) !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    color: #fff !important;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .1px;
+    box-shadow:
+        0 12px 28px rgba(255,63,125,.22),
+        inset 0 1px 0 rgba(255,255,255,.14);
+    transform: translateZ(0);
+}
+
+.cliente-app .cliente-btn-agregar::before {
+    content: "";
+    position: absolute;
+    inset: -60% -30%;
+    background: linear-gradient(115deg, transparent 43%, rgba(255,255,255,.17) 50%, transparent 57%);
+    transform: translateX(-55%) rotate(10deg);
+    transition: transform .7s ease;
+    pointer-events: none;
+}
+
+.cliente-app .cliente-btn-agregar:hover {
+    background:
+        linear-gradient(135deg, #ff4e88 0%, #ed2a70 48%, #c91b5d 100%) !important;
+    border-color: rgba(255,255,255,.18) !important;
+    transform: translateY(-3px);
+    box-shadow:
+        0 18px 32px rgba(255,63,125,.27),
+        inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.cliente-app .cliente-btn-agregar:hover::before {
+    transform: translateX(55%) rotate(10deg);
+}
+
+.cliente-app .cliente-btn-agregar:active {
+    transform: translateY(-1px) scale(.99);
+}
+
+.cliente-app .cliente-btn-agregar-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.16);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.cliente-app .cliente-btn-agregar-icono i,
+.cliente-app .cliente-btn-agregar-flecha {
+    color: #fff !important;
+}
+
+.cliente-app .cliente-btn-agregar-icono i {
+    font-size: 15px;
+}
+
+.cliente-app .cliente-btn-agregar-flecha {
+    justify-self: end;
+    opacity: .85;
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+.cliente-app .cliente-btn-agregar:hover .cliente-btn-agregar-flecha {
+    transform: translateX(3px);
+    opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   DETALLE DEL PEDIDO — RESUMEN FINANCIERO
+   -------------------------------------------------------------------------- */
+
+.cliente-app .cliente-pedido-show-financial {
+    position: relative;
+    margin: 0;
+    padding: 17px 22px 21px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 94% 12%, rgba(255,63,125,.12), transparent 27%),
+        radial-gradient(circle at 8% 95%, rgba(255,159,67,.06), transparent 23%),
+        linear-gradient(145deg, #16171e 0%, #151219 55%, #1d1219 100%) !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(255,255,255,.065) !important;
+    border-radius: 0 !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
+}
+
+.cliente-app .cliente-pedido-show-financial::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    right: -100px;
+    bottom: -125px;
+    border-radius: 50%;
+    background: rgba(255,63,125,.13);
+    filter: blur(26px);
+    pointer-events: none;
+}
+
+.cliente-app .cliente-pedido-show-financial-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 48px;
+    margin: 0 0 9px;
+    padding: 10px 13px;
+    color: rgba(255,255,255,.64) !important;
+    background: rgba(255,255,255,.028) !important;
+    border: 1px solid rgba(255,255,255,.055);
+    border-radius: 12px;
+}
+
+.cliente-app .cliente-pedido-show-financial-row:last-of-type {
+    margin-bottom: 0;
+}
+
+.cliente-app .cliente-pedido-show-financial-row .cliente-financial-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    color: rgba(255,255,255,.69) !important;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.cliente-app .cliente-pedido-show-financial-row .cliente-financial-label i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 29px;
+    height: 29px;
+    flex: 0 0 29px;
+    border-radius: 9px;
+    color: #ff90ad;
+    background: rgba(255,63,125,.10);
+    border: 1px solid rgba(255,63,125,.14);
+}
+
+.cliente-app .cliente-pedido-show-financial-row:nth-child(2) .cliente-financial-label i {
+    color: #ffc26f;
+    background: rgba(255,159,67,.10);
+    border-color: rgba(255,159,67,.14);
+}
+
+.cliente-app .cliente-pedido-show-financial-row strong {
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+.cliente-app .cliente-pedido-show-total {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 13px 0 0 !important;
+    padding: 16px 15px !important;
+    background:
+        linear-gradient(135deg, rgba(255,63,125,.17), rgba(217,32,98,.08) 55%, rgba(255,159,67,.06)) !important;
+    border: 1px solid rgba(255,63,125,.22) !important;
+    border-radius: 15px !important;
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.18),
+        inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.cliente-app .cliente-total-label {
+    min-width: 0;
+}
+
+.cliente-app .cliente-total-label > span {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    color: #fff !important;
+    font-size: 14px !important;
+    font-weight: 850 !important;
+}
+
+.cliente-app .cliente-total-label > span i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    border-radius: 10px;
+    color: #2d0c18;
+    background: linear-gradient(135deg, #ffd166, #ffb14f);
+    box-shadow: 0 7px 16px rgba(255,177,79,.14);
+}
+
+.cliente-app .cliente-total-label small {
+    display: inline-flex !important;
+    margin-top: 7px !important;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: rgba(255,255,255,.56) !important;
+    background: rgba(0,0,0,.16);
+    border: 1px solid rgba(255,255,255,.07);
+    font-size: 9px !important;
+    font-weight: 800;
+}
+
+.cliente-app .cliente-pedido-show-total strong {
+    color: #ff78a1 !important;
+    font-size: clamp(1.45rem, 2vw, 1.9rem) !important;
+    font-weight: 950 !important;
+    letter-spacing: -.6px;
+    text-shadow: 0 0 22px rgba(255,63,125,.20);
+    white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE — PRODUCTOS + RESUMEN
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+    .cliente-app .cliente-productos-header-meta {
+        margin-top: 15px;
+    }
+
+    .cliente-app .cliente-producto-imagen {
+        height: 225px;
+    }
+
+    .cliente-app .cliente-producto-nombre {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cliente-app .cliente-productos-header-meta {
+        gap: 7px;
+    }
+
+    .cliente-app .cliente-productos-header-meta span {
+        flex: 1 1 170px;
+        justify-content: center;
+    }
+
+    .cliente-app .cliente-producto-imagen {
+        height: 230px;
+    }
+
+    .cliente-app .cliente-producto-info {
+        padding: 20px 18px 18px;
+    }
+
+    .cliente-app .cliente-producto-bottom {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cliente-app .cliente-producto-stock {
+        width: 100%;
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .cliente-app .cliente-pedido-show-financial {
+        padding: 14px 15px 17px;
+    }
+
+    .cliente-app .cliente-pedido-show-financial-row {
+        min-height: 46px;
+        padding: 9px 10px;
+    }
+
+    .cliente-app .cliente-pedido-show-total {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .cliente-app .cliente-pedido-show-total strong {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cliente-app .cliente-productos-header-meta span {
+        flex: 1 1 100%;
+    }
+
+    .cliente-app .cliente-productos-filtros {
+        padding: 13px !important;
+    }
+
+    .cliente-app .cliente-producto-imagen {
+        height: 220px;
+    }
+
+    .cliente-app .cliente-producto-info {
+        padding: 18px 16px 16px;
+    }
+
+    .cliente-app .cliente-producto-nombre {
+        font-size: 19px;
+    }
+
+    .cliente-app .cliente-producto-descripcion {
+        min-height: 0;
+    }
+
+    .cliente-app .cliente-btn-opiniones {
+        grid-template-columns: 32px minmax(0, 1fr) 16px;
+    }
+
+    .cliente-app .cliente-btn-agregar {
+        grid-template-columns: 32px minmax(0, 1fr) 16px;
+        min-height: 50px;
+    }
+
+    .cliente-app .cliente-btn-agregar-icono {
+        width: 32px;
+        height: 32px;
+    }
+
+    .cliente-app .cliente-pedido-show-financial-row .cliente-financial-label {
+        font-size: 11px;
+    }
+
+    .cliente-app .cliente-pedido-show-financial-row strong {
+        font-size: 12px;
+    }
+
+    .cliente-app .cliente-pedido-show-total strong {
+        font-size: 1.5rem !important;
+    }
+}

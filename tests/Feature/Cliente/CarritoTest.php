@@ -22,7 +22,7 @@ class CarritoTest extends TestCase
             ->firstOrFail();
 
         $response = $this->actingAs($user)
-            ->post('/carrito/agregar/' . $producto->id);
+            ->postJson('/carrito/agregar/' . $producto->id);
 
         $response->assertStatus(200);
 
@@ -41,4 +41,23 @@ class CarritoTest extends TestCase
             session('carrito.' . $producto->id . '.id')
         );
     }
+
+    public function test_formulario_normal_redirige_y_muestra_mensaje_en_vez_de_json(): void
+    {
+        $user = User::where('email', 'testcliente@saborexpress.com')->firstOrFail();
+
+        $producto = Producto::where('estado', 'disponible')
+            ->where('stock', '>', 0)
+            ->firstOrFail();
+
+        $response = $this->actingAs($user)
+            ->post('/carrito/agregar/' . $producto->id);
+
+        $response->assertRedirect();
+        $response->assertSessionHas(
+            'success',
+            'Producto agregado al carrito.'
+        );
+    }
+
 }
