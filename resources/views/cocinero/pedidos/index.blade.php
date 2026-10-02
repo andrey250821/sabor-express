@@ -202,12 +202,12 @@
                     class="nav-link {{ $seccion === 'listos' ? 'active' : '' }} rounded-3 text-start px-3 py-3">
 
                     <div class="fw-bold small">
-                        <i class="bi bi-check2-circle me-1"></i>
-                        Listos
+                        <i class="bi bi-clock-history me-1"></i>
+                        Seguimiento
                     </div>
 
                     <small class="opacity-75">
-                        {{ $cantidadListos }} en seguimiento
+                        {{ $cantidadListos }} registrados
                     </small>
                 </a>
 
