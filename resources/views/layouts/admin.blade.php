@@ -41,13 +41,13 @@
         rel="stylesheet"
         href="{{ asset('css/admin.css') }}">
 
-    {{-- Capa visual transversal para todas las vistas del Admin --}}
+    @stack('styles')
+
+
+    {{-- Capa visual transversal: se carga al final para reforzar vistas show/create/edit --}}
     <link
         rel="stylesheet"
         href="{{ asset('css/admin-enhancements.css') }}">
-
-
-    @stack('styles')
 
 </head>
 
