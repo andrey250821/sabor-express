@@ -416,76 +416,8 @@
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
-
-
-    {{-- =====================================================
-         SIDEBAR MOBILE
-    ====================================================== --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const sidebar = document.getElementById('cocineroSidebar');
-            const overlay = document.getElementById('cocineroOverlay');
-
-            const openButton = document.getElementById('cocineroSidebarOpen');
-            const closeButton = document.getElementById('cocineroSidebarClose');
-
-
-            function openSidebar() {
-
-                if (!sidebar) return;
-
-                sidebar.classList.add('show');
-                overlay?.classList.add('show');
-
-                document.body.classList.add('sidebar-open');
-            }
-
-
-            function closeSidebar() {
-
-                if (!sidebar) return;
-
-                sidebar.classList.remove('show');
-                overlay?.classList.remove('show');
-
-                document.body.classList.remove('sidebar-open');
-            }
-
-
-            openButton?.addEventListener('click', openSidebar);
-
-            closeButton?.addEventListener('click', closeSidebar);
-
-            overlay?.addEventListener('click', closeSidebar);
-
-
-            // Cerrar automáticamente al seleccionar una opción
-            document.querySelectorAll('.cocinero-nav-link').forEach(function(link) {
-
-                link.addEventListener('click', function() {
-
-                    if (window.innerWidth < 992) {
-                        closeSidebar();
-                    }
-
-                });
-
-            });
-
-
-            // Si cambia a escritorio, limpiamos el estado móvil
-            window.addEventListener('resize', function() {
-
-                if (window.innerWidth >= 992) {
-                    closeSidebar();
-                }
-
-            });
-
-        });
-    </script>
-
+    {{-- Interacciones y animaciones del panel --}}
+    <script src="{{ asset('js/cocinero-ui.js') }}" defer></script>
 
     @stack('scripts')
 
