@@ -256,7 +256,7 @@
                                 @endif
                             </div>
 
-                            <div class="d-none d-md-block">
+                            <div class="cocinero-topbar-user-info">
 
                                 <strong>
                                     {{ Auth::user()->name ?? 'Cocinero' }}
