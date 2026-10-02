@@ -5563,6 +5563,10 @@ textarea.categorias-input {
 .cliente-historial-table tbody tr:hover td {
     background: #202126;
 }
+.cliente-historial-table tbody tr.pedido-card-clickable {
+    cursor: pointer;
+}
+
 
 .cliente-total {
     color: var(--admin-primary-bright);
