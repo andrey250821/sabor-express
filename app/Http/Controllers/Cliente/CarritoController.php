@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cliente;
 
 use App\Http\Controllers\Controller;
 use App\Models\Producto;
+use Illuminate\Http\Request;
 
 class CarritoController extends Controller
 {
@@ -39,7 +40,7 @@ class CarritoController extends Controller
     /**
      * Agregar producto al carrito.
      */
-    public function agregar($id)
+    public function agregar(Request $request, $id)
     {
         $producto = Producto::findOrFail($id);
 
@@ -47,10 +48,16 @@ class CarritoController extends Controller
             $producto->estado !== 'disponible' ||
             $producto->stock <= 0
         ) {
-            return response()->json([
-                'success' => false,
-                'message' => 'El producto no está disponible.'
-            ], 422);
+            $mensaje = 'El producto no está disponible.';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $mensaje,
+                ], 422);
+            }
+
+            return back()->with('error', $mensaje);
         }
 
         $carrito = session()->get('carrito', []);
@@ -58,10 +65,16 @@ class CarritoController extends Controller
         if (isset($carrito[$id])) {
 
             if ($carrito[$id]['cantidad'] >= $producto->stock) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No hay más unidades disponibles de este producto.'
-                ], 422);
+                $mensaje = 'No hay más unidades disponibles de este producto.';
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $mensaje,
+                    ], 422);
+                }
+
+                return back()->with('error', $mensaje);
             }
 
             $carrito[$id]['cantidad']++;
@@ -84,11 +97,20 @@ class CarritoController extends Controller
 
         session()->put('carrito', $carrito);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Producto agregado al carrito.',
-            'cantidadCarrito' => $this->cantidadTotal($carrito)
-        ]);
+        $mensaje = 'Producto agregado al carrito.';
+        $cantidadCarrito = $this->cantidadTotal($carrito);
+
+        // AJAX/fetch: conservar la respuesta JSON que usa la interfaz de PC.
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $mensaje,
+                'cantidadCarrito' => $cantidadCarrito,
+            ]);
+        }
+
+        // Formulario HTML normal: evitar mostrar JSON en navegadores móviles.
+        return back()->with('success', $mensaje);
     }
 
     /**
