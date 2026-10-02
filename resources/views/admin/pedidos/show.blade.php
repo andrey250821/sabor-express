@@ -75,14 +75,14 @@
 
                         @php
                         $estadoClase = match($pedido->estado) {
-                        'pagado' => 'estado-pagado',
-                        'preparando' => 'estado-preparando',
-                        'listo' => 'estado-listo',
-                        'asignado' => 'estado-asignado',
-                        'en_camino' => 'estado-camino',
-                        'entregado' => 'estado-entregado',
-                        'cancelado' => 'estado-cancelado',
-                        default => 'estado-default',
+                        'pagado' => 'pagado',
+                        'preparando' => 'preparando',
+                        'listo' => 'listo',
+                        'asignado' => 'asignado',
+                        'en_camino' => 'en_camino',
+                        'entregado' => 'entregado',
+                        'cancelado' => 'cancelado',
+                        default => 'default',
                         };
                         @endphp
 
