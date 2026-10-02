@@ -6646,6 +6646,29 @@ a {
     border-color: rgba(53, 208, 127, 0.35);
 }
 
+/* Enlace explícito al detalle del pedido entregado. */
+.delivery-delivered-view-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 11px;
+
+    border: 1px solid rgba(53, 208, 127, 0.35);
+    border-radius: 9px;
+
+    color: #35d07f;
+    background: rgba(53, 208, 127, 0.08);
+
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.delivery-delivered-card:hover .delivery-delivered-view-link {
+    background: rgba(53, 208, 127, 0.14);
+}
+
 .delivery-delivered-top {
     display: flex;
     align-items: center;
