@@ -7662,6 +7662,13 @@ body {
 }
 
 
+a.cliente-mis-pedidos-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
 .cliente-mis-pedidos-card:hover {
 
     transform: translateY(-4px);
