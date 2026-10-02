@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="deliverys-page">
+<div class="deliverys-page container-fluid px-0">
 
     {{-- CABECERA --}}
     <div class="deliverys-header">
