@@ -251,12 +251,9 @@
 
                 <thead>
 
-                    <tr
-                        class="pedido-card-clickable"
-                        role="link"
-                        tabindex="0"
-                        onclick="if (!event.target.closest('a, button, form, input, select, textarea')) window.location.href='{{ route('admin.pedidos.show', $pedido->id) }}';"
-                        onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('a, button, form, input, select, textarea')) { event.preventDefault(); window.location.href='{{ route('admin.pedidos.show', $pedido->id) }}'; }">
+                    <tr>
+
+
 
                         <th>ID</th>
 
@@ -277,8 +274,24 @@
 
                     @forelse($cliente->pedidos as $pedido)
 
-                    <tr>
 
+
+                    <tr
+
+
+                        class="pedido-card-clickable"
+
+
+                        role="link"
+
+
+                        tabindex="0"
+
+
+                        onclick="if (!event.target.closest('a, button, form, input, select, textarea')) window.location.href='{{ route('admin.pedidos.show', $pedido->id) }}';"
+
+
+                        onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('a, button, form, input, select, textarea')) { event.preventDefault(); window.location.href='{{ route('admin.pedidos.show', $pedido->id) }}'; }">
 
                         {{-- ID --}}
                         <td>
