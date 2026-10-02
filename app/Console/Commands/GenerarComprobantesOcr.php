@@ -332,12 +332,12 @@ class GenerarComprobantesOcr extends Command
         }
 
         body {
-            padding: 30px;
+            padding: 24px;
         }
 
         .comprobante {
-            width: 900px;
-            min-height: 1180px;
+            width: 852px;
+            min-height: 1140px;
             margin: 0 auto;
             padding: 46px;
             background: #ffffff;
