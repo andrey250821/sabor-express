@@ -1532,6 +1532,30 @@ body.cocinero-layout.sidebar-open {
     height: 58px;
 }
 
+.pedido-card-clickable {
+    cursor: pointer;
+}
+
+.pedido-card-clickable::after {
+    content: "Ver detalle";
+    position: absolute;
+    right: 1rem;
+    bottom: .55rem;
+    color: #737b87;
+    font-size: .54rem;
+    font-weight: 800;
+    opacity: 0;
+    transform: translateY(3px);
+    transition: var(--coc-transition);
+}
+
+.pedido-card-clickable:hover::after,
+.pedido-card-clickable:focus-visible::after {
+    color: var(--coc-pink-light);
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* =========================================================
    PEDIDO — DETALLE
    ========================================================= */
