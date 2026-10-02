@@ -251,7 +251,12 @@
 
                 <thead>
 
-                    <tr>
+                    <tr
+                        class="pedido-card-clickable"
+                        role="link"
+                        tabindex="0"
+                        onclick="if (!event.target.closest('a, button, form, input, select, textarea')) window.location.href='{{ route('admin.pedidos.show', $pedido->id) }}';"
+                        onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('a, button, form, input, select, textarea')) { event.preventDefault(); window.location.href='{{ route('admin.pedidos.show', $pedido->id) }}'; }">
 
                         <th>ID</th>
 
@@ -308,9 +313,37 @@
                         {{-- ESTADO --}}
                         <td>
 
-                            <span class="cliente-pedido-estado">
+                            @php
+                            $estadoClase = match($pedido->estado) {
+                                'comprobante_enviado',
+                                'en_revision' => 'pagado',
+                                'pagado' => 'pagado',
+                                'preparando' => 'preparando',
+                                'listo' => 'listo',
+                                'asignado' => 'asignado',
+                                'en_camino' => 'en_camino',
+                                'entregado' => 'entregado',
+                                'cancelado' => 'cancelado',
+                                default => 'default',
+                            };
 
-                                {{ ucfirst($pedido->estado) }}
+                            $estadoTexto = match($pedido->estado) {
+                                'comprobante_enviado',
+                                'en_revision' => 'Pago en revisión',
+                                'pagado' => 'Pagado',
+                                'preparando' => 'Preparando',
+                                'listo' => 'Listo',
+                                'asignado' => 'Asignado',
+                                'en_camino' => 'En camino',
+                                'entregado' => 'Entregado',
+                                'cancelado' => 'Cancelado',
+                                default => ucfirst(str_replace('_', ' ', $pedido->estado)),
+                            };
+                            @endphp
+
+                            <span class="pedido-estado {{ $estadoClase }}">
+
+                                {{ $estadoTexto }}
 
                             </span>
 
