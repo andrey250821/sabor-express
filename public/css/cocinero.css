@@ -528,19 +528,8 @@ body.cocinero-layout.sidebar-open {
     background: rgba(255, 255, 255, 0.035);
 }
 
-.cocinero-hero-glow {
-    position: absolute;
-    width: 230px;
-    height: 230px;
-    right: 22%;
-    top: -130px;
-    border-radius: 50%;
-    background: rgba(214, 51, 132, 0.17);
-    filter: blur(12px);
-}
 
-.cocinero-kicker,
-.cocinero-dashboard-kicker {
+.cocinero-kicker {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -926,13 +915,6 @@ body.cocinero-layout.sidebar-open {
 
 .cocinero-panel,
 .cocinero-orders-card,
-.cocinero-card {
-    overflow: hidden;
-    border: 1px solid var(--cocinero-border);
-    border-radius: var(--cocinero-radius);
-    background: var(--cocinero-surface);
-    box-shadow: 0 11px 32px rgba(0, 0, 0, 0.15);
-}
 
 .cocinero-panel-header,
 .cocinero-orders-header {
@@ -1152,18 +1134,6 @@ body.cocinero-layout.sidebar-open {
 
 .cocinero-btn-preparar,
 .cocinero-btn-listo,
-.cocinero-btn-view {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-height: 38px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 10px;
-    font-weight: 800;
-    transition: var(--cocinero-transition);
-}
 
 .cocinero-btn-preparar {
     border: 1px solid rgba(255, 200, 87, 0.18);
@@ -1177,11 +1147,6 @@ body.cocinero-layout.sidebar-open {
     color: #b2ffd5;
 }
 
-.cocinero-btn-view {
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    background: rgba(255, 255, 255, 0.045);
-    color: #e7eaf0;
-}
 
 .cocinero-btn-preparar:hover,
 .cocinero-btn-listo:hover,
