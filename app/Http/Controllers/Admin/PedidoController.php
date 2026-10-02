@@ -44,8 +44,12 @@ class PedidoController extends Controller
             'comprobantePago',
         ])
             ->whereBetween('created_at', [$inicioUtc, $finUtc])
-            ->whereHas('comprobantePago', function ($query) {
-                $query->where('estado', 'aprobado');
+            ->where(function ($query) {
+                $query
+                    ->whereHas('comprobantePago', function ($subQuery) {
+                        $subQuery->where('estado', 'aprobado');
+                    })
+                    ->orWhere('estado', 'cancelado');
             })
             ->when(
                 $estadoSeleccionado,
