@@ -7,7 +7,11 @@
     </td>
 
     <td>
-        <div class="delivery-person">
+        <a
+            href="{{ route('admin.deliverys.show', $delivery->id) }}"
+            class="delivery-person delivery-person-link"
+            title="Ver actividad y estadísticas de {{ $delivery->name }}">
+
             <div class="delivery-avatar">
                 @if($delivery->foto_perfil_url)
                     <img
@@ -21,20 +25,16 @@
             </div>
 
             <div>
-                <a
-                    href="{{ route('admin.deliverys.show', $delivery->id) }}"
-                    class="delivery-name-link"
-                    title="Ver actividad y estadísticas de {{ $delivery->name }}">
-
+                <strong>
                     {{ $delivery->name }}
-
-                </a>
+                </strong>
 
                 <small>
-                    Delivery
+                    Delivery · Ver actividad
                 </small>
             </div>
-        </div>
+
+        </a>
     </td>
 
     <td>
