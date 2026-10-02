@@ -52,7 +52,7 @@
 
             <a
                 href="{{ route('cocinero.dashboard') }}"
-                class="btn cocinero-btn-secondary js-ripple w-100 w-lg-auto">
+                class="btn cocinero-btn-secondary js-ripple d-inline-flex align-items-center">
 
                 <i class="bi bi-grid-1x2-fill me-1"></i>
                 Dashboard
@@ -533,7 +533,7 @@
                             id="periodo_listos"
                             name="periodo_listos"
                             class="form-select form-select-sm cocinero-select"
-                            onchange="this.form.submit()">
+                            data-submit-form>
 
                             <option value="hoy" {{ $periodoListos === 'hoy' ? 'selected' : '' }}>
                                 Hoy
