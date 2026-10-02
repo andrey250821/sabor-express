@@ -1928,11 +1928,6 @@ img {
     color: var(--admin-danger-light);
 }
 
-.pedido-estado.comprobante_enviado {
-    background: rgba(255, 193, 7, .10);
-    color: #ffd866;
-}
-
 .pedido-direccion {
     display: flex;
     align-items: flex-start;
@@ -8349,8 +8344,7 @@ input[type="file"].configuracion-input::file-selector-button:hover {
     padding: 12px 20px 20px;
 }
 
-.admin-cocinero-action-edit,
-.admin-cocinero-action-email {
+.admin-cocinero-action-edit {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -8370,17 +8364,6 @@ input[type="file"].configuracion-input::file-selector-button:hover {
 .admin-cocinero-action-edit:hover {
     background: #f0b400;
     color: #111;
-}
-
-.admin-cocinero-action-email {
-    background: rgba(13,110,253,.13);
-    border: 1px solid rgba(13,110,253,.25);
-    color: #8bb8ff;
-}
-
-.admin-cocinero-action-email:hover {
-    background: rgba(13,110,253,.20);
-    color: #b3d2ff;
 }
 
 .admin-cocinero-activity-header {
@@ -8758,5 +8741,476 @@ input[type="file"].configuracion-input::file-selector-button:hover {
     .admin-cocinero-activity-filter {
         padding-left: 13px;
         padding-right: 13px;
+    }
+}
+
+/* ========================================================================
+   23. PULIDO VISUAL FINAL — ADMIN
+   ======================================================================== */
+
+/* ------------------------------------------------------------------------
+   Base visual: jerarquía, profundidad y estados
+   ------------------------------------------------------------------------ */
+
+.admin-main {
+    position: relative;
+}
+
+.admin-content {
+    position: relative;
+    isolation: isolate;
+}
+
+.admin-content::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 78% 14%, rgba(196, 44, 99, .055), transparent 30%),
+        radial-gradient(circle at 12% 86%, rgba(139, 30, 69, .045), transparent 28%);
+}
+
+.admin-topbar {
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .18);
+}
+
+.sidebar-link {
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.sidebar-link:hover {
+    border-color: rgba(255, 77, 136, .14);
+}
+
+.sidebar-link.active {
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 77, 136, .13),
+        0 8px 22px rgba(0, 0, 0, .18);
+}
+
+.card,
+.dashboard-panel,
+.chart-section,
+.summary-panel,
+.productos-card,
+.comprobante-card,
+.pedidos-card,
+.admin-cocinero-profile-card,
+.admin-cocinero-activity-card {
+    border-color: rgba(255, 255, 255, .07);
+    box-shadow:
+        0 12px 34px rgba(0, 0, 0, .18),
+        0 2px 8px rgba(139, 30, 69, .045);
+}
+
+.card:hover,
+.dashboard-panel:hover,
+.chart-section:hover,
+.summary-panel:hover,
+.productos-card:hover,
+.comprobante-card:hover {
+    box-shadow:
+        0 18px 44px rgba(0, 0, 0, .24),
+        0 4px 18px rgba(196, 44, 99, .07);
+}
+
+/* ------------------------------------------------------------------------
+   Filtro de pedidos
+   ------------------------------------------------------------------------ */
+
+.pedidos-filtros-panel {
+    margin: 0 20px 20px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, .035), rgba(139, 30, 69, .055));
+    border: 1px solid rgba(255, 255, 255, .075);
+    border-radius: 16px;
+}
+
+.pedidos-filtros-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 210px;
+}
+
+.pedidos-filtros-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: rgba(196, 44, 99, .13);
+    color: var(--admin-primary-bright);
+    box-shadow: 0 7px 18px rgba(139, 30, 69, .12);
+}
+
+.pedidos-filtros-heading span {
+    display: block;
+    color: #fff;
+    font-size: .84rem;
+    font-weight: 800;
+}
+
+.pedidos-filtros-heading small {
+    display: block;
+    margin-top: 2px;
+    color: var(--admin-text-muted);
+    font-size: .68rem;
+}
+
+.pedidos-filtros-form {
+    flex: 1 1 460px;
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+
+.pedidos-filtro-field {
+    min-width: 235px;
+    flex: 1 1 280px;
+}
+
+.pedidos-filtro-field label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--admin-text-secondary);
+    font-size: .67rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.pedidos-filtro-field label i {
+    margin-right: 5px;
+    color: var(--admin-primary-bright);
+}
+
+.pedidos-filtro-select {
+    width: 100%;
+    min-height: 43px;
+    padding: 9px 37px 9px 12px;
+    appearance: none;
+    background-color: #111218;
+    background-image:
+        linear-gradient(45deg, transparent 50%, #8c8f98 50%),
+        linear-gradient(135deg, #8c8f98 50%, transparent 50%);
+    background-position:
+        calc(100% - 16px) 18px,
+        calc(100% - 11px) 18px;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    border: 1px solid #343640;
+    border-radius: 10px;
+    color: #fff;
+    font-size: .78rem;
+}
+
+.pedidos-filtro-select:focus {
+    outline: 0;
+    border-color: var(--admin-primary-light);
+    box-shadow: 0 0 0 .18rem rgba(139, 30, 69, .17);
+}
+
+.pedidos-filtro-submit,
+.pedidos-filtro-reset {
+    min-height: 43px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: .74rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.pedidos-filtro-submit {
+    border: 1px solid rgba(255, 77, 136, .42);
+    background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light));
+    color: #fff;
+}
+
+.pedidos-filtro-submit:hover {
+    background: linear-gradient(135deg, #9d214f, #d3366c);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.pedidos-filtro-reset {
+    border: 1px solid #3a3c45;
+    background: #191a20;
+    color: #d9dae0;
+}
+
+.pedidos-filtro-reset:hover {
+    border-color: rgba(255, 255, 255, .16);
+    background: #202128;
+    color: #fff;
+}
+
+.pedidos-filtro-activo {
+    margin: 0 20px 20px;
+    padding: 11px 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(255, 193, 7, .07);
+    border: 1px solid rgba(255, 193, 7, .18);
+    border-radius: 12px;
+}
+
+.pedidos-filtro-activo-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.pedidos-filtro-activo-icon {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    border-radius: 9px;
+    background: rgba(255, 193, 7, .14);
+    color: #ffd866;
+}
+
+.pedidos-filtro-activo-info small,
+.pedidos-filtro-activo-info strong {
+    display: block;
+}
+
+.pedidos-filtro-activo-info small {
+    color: #b5a66d;
+    font-size: .63rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.pedidos-filtro-activo-info strong {
+    margin-top: 2px;
+    color: #fff;
+    font-size: .76rem;
+}
+
+.pedidos-filtro-activo-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 193, 7, .20);
+    border-radius: 8px;
+    color: #ffd866;
+    font-size: .68rem;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.pedidos-filtro-activo-clear:hover {
+    background: rgba(255, 193, 7, .09);
+    color: #ffe38f;
+}
+
+/* ------------------------------------------------------------------------
+   Estados: mismo lenguaje visual en listado y detalle
+   ------------------------------------------------------------------------ */
+
+.pedido-estado {
+    min-width: 98px;
+    justify-content: center;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .10);
+}
+
+.pedido-estado.pagado {
+    background: rgba(13, 110, 253, .14);
+    border-color: rgba(110, 168, 254, .22);
+    color: #8bb9ff;
+}
+
+.pedido-estado.preparando {
+    background: rgba(255, 159, 28, .13);
+    border-color: rgba(255, 159, 28, .22);
+    color: #ffbd63;
+}
+
+.pedido-estado.listo {
+    background: rgba(255, 193, 7, .14);
+    border-color: rgba(255, 193, 7, .23);
+    color: #ffd866;
+}
+
+.pedido-estado.asignado {
+    background: rgba(130, 88, 205, .15);
+    border-color: rgba(177, 139, 231, .22);
+    color: #c3a5f2;
+}
+
+.pedido-estado.en_camino {
+    background: rgba(53, 183, 199, .14);
+    border-color: rgba(102, 216, 232, .22);
+    color: #72e0ee;
+}
+
+.pedido-estado.entregado {
+    background: rgba(25, 135, 84, .14);
+    border-color: rgba(57, 217, 138, .22);
+    color: #67e39d;
+}
+
+.pedido-estado.cancelado {
+    background: rgba(220, 53, 69, .14);
+    border-color: rgba(255, 82, 103, .22);
+    color: #ff7180;
+}
+
+.pedido-estado.default {
+    background: rgba(255, 255, 255, .07);
+    border-color: rgba(255, 255, 255, .10);
+    color: #d6d7dc;
+}
+
+/* ------------------------------------------------------------------------
+   Comprobantes: tarjetas y contenido alineados
+   ------------------------------------------------------------------------ */
+
+.comprobante-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.comprobante-card-body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.comprobante-info {
+    min-height: 46px;
+}
+
+.comprobante-info > div:last-child {
+    min-width: 0;
+    flex: 1;
+}
+
+.comprobante-imagen-container {
+    height: 235px;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f1014;
+}
+
+.comprobante-img {
+    object-fit: contain;
+    padding: 10px;
+}
+
+.comprobante-acciones {
+    margin-top: 12px;
+}
+
+/* ------------------------------------------------------------------------
+   Tablas y controles: lectura más clara
+   ------------------------------------------------------------------------ */
+
+.pedidos-table thead th,
+.table thead th {
+    letter-spacing: .03em;
+}
+
+.pedidos-table tbody tr,
+.table tbody tr {
+    transition: background .18s ease, transform .18s ease;
+}
+
+.pedidos-table tbody tr:hover,
+.table tbody tr:hover {
+    transform: translateY(-1px);
+}
+
+.btn {
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease,
+        background-color .18s ease;
+}
+
+.btn:hover {
+    box-shadow: 0 7px 18px rgba(0, 0, 0, .17);
+}
+
+/* ------------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------------ */
+
+@media (max-width: 767.98px) {
+    .pedidos-filtros-panel {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 13px;
+    }
+
+    .pedidos-filtros-heading {
+        width: 100%;
+    }
+
+    .pedidos-filtros-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .pedidos-filtro-field,
+    .pedidos-filtro-submit,
+    .pedidos-filtro-reset {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .pedidos-filtro-activo {
+        margin-left: 0;
+        margin-right: 0;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pedidos-filtro-activo-clear {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .comprobante-imagen-container {
+        height: 205px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+    .pedidos-filtros-form {
+        justify-content: stretch;
+    }
+
+    .pedidos-filtro-field {
+        flex-basis: 220px;
     }
 }
