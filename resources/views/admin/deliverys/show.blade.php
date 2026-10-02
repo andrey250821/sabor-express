@@ -87,54 +87,58 @@
     <div class="delivery-admin-stat-grid mb-4">
 
         <div class="delivery-admin-stat-card">
-            <span>
+            <div class="delivery-admin-stat-label">
                 <i class="bi bi-check2-all"></i>
-                Pedidos entregados de la fecha
-            </span>
+                <span>Pedidos entregados de la fecha</span>
+            </div>
 
-            <strong>{{ $pedidosEntregados->count() }}</strong>
+            <div class="delivery-admin-stat-value">
+                {{ $pedidosEntregados->count() }}
+            </div>
         </div>
 
         <div class="delivery-admin-stat-card">
-            <span>
+            <div class="delivery-admin-stat-label">
                 <i class="bi bi-bicycle"></i>
-                Pedidos activos
-            </span>
+                <span>Pedidos activos</span>
+            </div>
 
-            <strong>{{ $pedidosActivos }}</strong>
+            <div class="delivery-admin-stat-value">
+                {{ $pedidosActivos }}
+            </div>
         </div>
 
         <div class="delivery-admin-stat-card financial">
-            <span>
+            <div class="delivery-admin-stat-label">
                 <i class="bi bi-cash-stack"></i>
-                Total cobrado por entregas de la fecha
-            </span>
+                <span>Total cobrado por entregas de la fecha</span>
+            </div>
 
-            <strong>
+            <div class="delivery-admin-stat-value">
                 Bs {{ number_format($totalDeliveryGenerado, 2) }}
-            </strong>
+            </div>
         </div>
 
         <div class="delivery-admin-stat-card commission">
-            <span>
+            <div class="delivery-admin-stat-label">
                 <i class="bi bi-person-badge-fill"></i>
-                Comisión Delivery
-            </span>
+                <span>Comisión Delivery</span>
+            </div>
 
-            <strong>
+            <div class="delivery-admin-stat-value">
                 Bs {{ number_format($comisionDelivery, 2) }}
-            </strong>
+            </div>
         </div>
 
         <div class="delivery-admin-stat-card restaurant">
-            <span>
+            <div class="delivery-admin-stat-label">
                 <i class="bi bi-shop-window"></i>
-                Parte restaurante
-            </span>
+                <span>Parte restaurante</span>
+            </div>
 
-            <strong>
+            <div class="delivery-admin-stat-value">
                 Bs {{ number_format($parteRestaurante, 2) }}
-            </strong>
+            </div>
         </div>
 
     </div>
