@@ -9267,3 +9267,837 @@ input[type="file"].configuracion-input::file-selector-button:hover {
         flex-basis: 220px;
     }
 }
+
+
+/* ==========================================================================
+   24. REFINAMIENTO VISUAL PROFESIONAL
+   --------------------------------------------------------------------------
+   Capa final de diseño para reforzar:
+   - legibilidad y jerarquía visual
+   - botones más claros y atractivos
+   - tarjetas con profundidad
+   - formularios más cómodos
+   - tablas más fáciles de leer
+   - estados y badges coherentes
+   - interacción sutil y profesional
+   - adaptación a escritorio, tablet y móvil
+   -------------------------------------------------------------------------- */
+
+:root {
+    --admin-surface-hover: #1d1f26;
+    --admin-surface-soft: rgba(255, 255, 255, .035);
+    --admin-input: #111318;
+    --admin-focus-ring: rgba(255, 77, 136, .18);
+    --admin-text-heading: #ffffff;
+    --admin-text-readable: #e4e5e9;
+    --admin-text-meta: #a8aab3;
+    --admin-radius-xl: 22px;
+}
+
+/* --------------------------------------------------------------------------
+   24.1 Tipografía y jerarquía
+   -------------------------------------------------------------------------- */
+
+.admin-content {
+    font-size: 14px;
+    line-height: 1.58;
+    color: var(--admin-text-readable);
+}
+
+.admin-content h1,
+.admin-content h2,
+.admin-content h3,
+.admin-content h4,
+.admin-content h5,
+.admin-content h6 {
+    color: var(--admin-text-heading);
+    letter-spacing: -.01em;
+}
+
+.admin-content h1 {
+    font-size: clamp(1.65rem, 2.2vw, 2rem);
+    font-weight: 850;
+}
+
+.admin-content h2 {
+    font-size: clamp(1.35rem, 1.8vw, 1.65rem);
+    font-weight: 820;
+}
+
+.admin-content h3 {
+    font-size: clamp(1.12rem, 1.5vw, 1.32rem);
+    font-weight: 800;
+}
+
+.admin-content h4 {
+    font-size: 1.08rem;
+    font-weight: 780;
+}
+
+.admin-content h5 {
+    font-size: 1rem;
+    font-weight: 760;
+}
+
+.admin-content p {
+    color: var(--admin-text-secondary);
+    font-size: 14px;
+}
+
+.admin-content small,
+.admin-content .small {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--admin-text-meta);
+}
+
+.admin-content .text-muted {
+    color: var(--admin-text-meta) !important;
+}
+
+/* --------------------------------------------------------------------------
+   24.2 Barra superior
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+    .admin-topbar {
+        min-height: 84px;
+        padding: 15px 30px;
+    }
+
+    .topbar-title {
+        font-size: 24px;
+        font-weight: 820;
+    }
+
+    .topbar-subtitle {
+        font-size: 13px;
+    }
+
+    .topbar-user-info strong {
+        font-size: 14px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   24.3 Sidebar más clara y con mejor interacción
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 992px) {
+    .sidebar-link {
+        min-height: 49px;
+        padding: 9px 12px;
+        font-size: 13.5px;
+        font-weight: 650;
+    }
+
+    .sidebar-icon {
+        width: 37px;
+        height: 37px;
+        min-width: 37px;
+        font-size: 17px;
+    }
+}
+
+.sidebar-link::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 3px;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 77, 136, .24),
+        transparent
+    );
+    opacity: 0;
+    transform: scaleX(.65);
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.sidebar-link:hover::after,
+.sidebar-link.active::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.sidebar-brand-name {
+    text-shadow: 0 4px 18px rgba(0, 0, 0, .28);
+}
+
+/* --------------------------------------------------------------------------
+   24.4 Tarjetas y paneles
+   -------------------------------------------------------------------------- */
+
+.admin-content .card,
+.dashboard-panel,
+.chart-section,
+.summary-panel,
+.pedidos-panel,
+.productos-card,
+.categorias-card,
+.deliverys-card,
+.clientes-card,
+.comprobante-card,
+.notificacion-card,
+.admin-calificaciones-product-card,
+.admin-calificaciones-summary-card,
+.admin-calificaciones-review-card,
+.configuracion-card {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .025),
+            rgba(255, 255, 255, .008)
+        ),
+        var(--admin-panel);
+    border: 1px solid rgba(255, 255, 255, .08) !important;
+    border-radius: var(--admin-radius-lg);
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, .20),
+        0 3px 12px rgba(139, 30, 69, .045);
+}
+
+.admin-content .card::before,
+.dashboard-panel::before,
+.chart-section::before,
+.summary-panel::before,
+.productos-card::before,
+.categorias-card::before,
+.deliverys-card::before,
+.clientes-card::before,
+.comprobante-card::before,
+.notificacion-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 18px;
+    right: 18px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 77, 136, .55),
+        transparent
+    );
+    opacity: .6;
+}
+
+.admin-content .card:hover,
+.dashboard-panel:hover,
+.chart-section:hover,
+.summary-panel:hover,
+.productos-card:hover,
+.categorias-card:hover,
+.deliverys-card:hover,
+.clientes-card:hover,
+.comprobante-card:hover,
+.notificacion-card:hover {
+    border-color: rgba(255, 77, 136, .14) !important;
+    box-shadow:
+        0 18px 46px rgba(0, 0, 0, .25),
+        0 5px 20px rgba(196, 44, 99, .08);
+}
+
+/* --------------------------------------------------------------------------
+   24.5 Cabeceras de tarjetas y secciones
+   -------------------------------------------------------------------------- */
+
+.admin-content .card-header {
+    padding: 15px 18px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139, 30, 69, .18),
+            rgba(255, 255, 255, .018)
+        ) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .07) !important;
+}
+
+.admin-content .card-body {
+    padding: 18px;
+}
+
+.dashboard-panel,
+.chart-section,
+.summary-panel,
+.pedidos-panel {
+    padding: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   24.6 Botones: más visibles, cómodos y profesionales
+   -------------------------------------------------------------------------- */
+
+.admin-content .btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: .62rem 1rem;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: .005em;
+
+    border-width: 1px;
+
+    box-shadow:
+        0 5px 14px rgba(0, 0, 0, .10);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease;
+}
+
+.admin-content .btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 9px 20px rgba(0, 0, 0, .18);
+}
+
+.admin-content .btn:active {
+    transform: translateY(0);
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, .14);
+}
+
+.admin-content .btn i {
+    font-size: 1em;
+}
+
+.admin-content .btn-primary {
+    background:
+        linear-gradient(
+            135deg,
+            var(--admin-primary),
+            var(--admin-primary-light)
+        ) !important;
+    border-color: rgba(255, 77, 136, .46) !important;
+}
+
+.admin-content .btn-primary:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #a52352,
+            #dc3971
+        ) !important;
+}
+
+.admin-content .btn-success {
+    background:
+        linear-gradient(
+            135deg,
+            #177747,
+            #22a966
+        ) !important;
+    border-color: rgba(57, 217, 138, .28) !important;
+}
+
+.admin-content .btn-success:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #1a8950,
+            #29bd73
+        ) !important;
+}
+
+.admin-content .btn-danger {
+    background:
+        linear-gradient(
+            135deg,
+            #b72b3f,
+            #dc3545
+        ) !important;
+    border-color: rgba(255, 82, 103, .30) !important;
+}
+
+.admin-content .btn-danger:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #cf3046,
+            #f04458
+        ) !important;
+}
+
+.admin-content .btn-warning {
+    background:
+        linear-gradient(
+            135deg,
+            #c49300,
+            #e1ae00
+        ) !important;
+    border-color: rgba(255, 216, 102, .32) !important;
+    color: #15110a !important;
+}
+
+.admin-content .btn-secondary {
+    background:
+        linear-gradient(
+            135deg,
+            #2a2c34,
+            #3a3d47
+        ) !important;
+    border-color: #474a54 !important;
+}
+
+.admin-content .btn-outline-primary,
+.admin-content .btn-outline-success,
+.admin-content .btn-outline-danger,
+.admin-content .btn-outline-warning,
+.admin-content .btn-outline-light,
+.admin-content .btn-outline-secondary {
+    background: rgba(255, 255, 255, .018);
+    backdrop-filter: blur(8px);
+}
+
+.admin-content .btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--admin-primary), var(--admin-primary-light)) !important;
+    color: #fff !important;
+}
+
+.admin-content .btn-outline-success {
+    color: #68e29c !important;
+    border-color: rgba(57, 217, 138, .38) !important;
+}
+
+.admin-content .btn-outline-success:hover {
+    background: #177747 !important;
+    color: #fff !important;
+}
+
+.admin-content .btn-outline-danger {
+    color: #ff7383 !important;
+    border-color: rgba(255, 82, 103, .38) !important;
+}
+
+.admin-content .btn-outline-danger:hover {
+    background: #b72b3f !important;
+    color: #fff !important;
+}
+
+.admin-content .btn-outline-secondary {
+    color: #d1d3da !important;
+    border-color: rgba(255, 255, 255, .18) !important;
+}
+
+.admin-content .btn-outline-secondary:hover {
+    background: #2b2e37 !important;
+    color: #fff !important;
+}
+
+/* --------------------------------------------------------------------------
+   24.7 Formularios
+   -------------------------------------------------------------------------- */
+
+.admin-content .form-label {
+    margin-bottom: 7px;
+    color: #f0f0f3;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .03em;
+}
+
+.admin-content .form-control,
+.admin-content .form-select {
+    min-height: 44px;
+    padding: .62rem .78rem;
+
+    background: var(--admin-input) !important;
+    color: #fff !important;
+
+    border: 1px solid #3a3d46 !important;
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease,
+        transform .2s ease;
+}
+
+.admin-content textarea.form-control {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.admin-content .form-control:hover,
+.admin-content .form-select:hover {
+    border-color: #4b4e59 !important;
+}
+
+.admin-content .form-control:focus,
+.admin-content .form-select:focus {
+    border-color: var(--admin-primary-light) !important;
+    box-shadow:
+        0 0 0 .22rem var(--admin-focus-ring),
+        0 7px 18px rgba(0, 0, 0, .10) !important;
+}
+
+.admin-content .form-control::placeholder {
+    color: #7b7e87 !important;
+}
+
+.admin-content .input-group-text {
+    min-height: 44px;
+    border-radius: 10px 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   24.8 Tablas: contraste y lectura
+   -------------------------------------------------------------------------- */
+
+.admin-content .table {
+    font-size: 13px;
+}
+
+.admin-content .table thead th {
+    padding: 13px 12px;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(139, 30, 69, .13),
+            rgba(139, 30, 69, .035)
+        );
+    color: #f7f7f9;
+    border-bottom: 1px solid rgba(255, 255, 255, .11);
+    font-size: 11.5px;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: .065em;
+    white-space: nowrap;
+}
+
+.admin-content .table tbody td {
+    padding: 12px;
+    color: #e1e2e6;
+    vertical-align: middle;
+    border-color: rgba(255, 255, 255, .065);
+}
+
+.admin-content .table tbody tr {
+    background: rgba(255, 255, 255, .005);
+}
+
+.admin-content .table tbody tr:hover {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(139, 30, 69, .08),
+            rgba(255, 255, 255, .018)
+        );
+}
+
+.admin-content .table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.admin-content .table-responsive {
+    border-radius: 0 0 var(--admin-radius-lg) var(--admin-radius-lg);
+    scrollbar-width: thin;
+    scrollbar-color: #6e1938 #101114;
+}
+
+.admin-content .table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.admin-content .table-responsive::-webkit-scrollbar-track {
+    background: #101114;
+}
+
+.admin-content .table-responsive::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #6d1737, #b4295d);
+    border-radius: 999px;
+}
+
+/* --------------------------------------------------------------------------
+   24.9 Badges y estados
+   -------------------------------------------------------------------------- */
+
+.admin-content .badge {
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .01em;
+}
+
+/* --------------------------------------------------------------------------
+   24.10 Alertas
+   -------------------------------------------------------------------------- */
+
+.admin-content .alert {
+    position: relative;
+    padding: 13px 15px 13px 17px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 650;
+    box-shadow: 0 7px 18px rgba(0, 0, 0, .10);
+}
+
+.admin-content .alert::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 0;
+    width: 3px;
+    border-radius: 0 4px 4px 0;
+    background: currentColor;
+    opacity: .85;
+}
+
+/* --------------------------------------------------------------------------
+   24.11 Navegación por pestañas (especialmente comprobantes)
+   -------------------------------------------------------------------------- */
+
+.admin-content .nav-tabs {
+    gap: 5px;
+    border-bottom-color: rgba(255, 255, 255, .08);
+}
+
+.admin-content .nav-tabs .nav-link {
+    padding: 10px 14px;
+    border: 1px solid transparent;
+    border-radius: 10px 10px 0 0;
+    color: #aaaeb7;
+    font-size: 12.5px;
+    font-weight: 750;
+    transition:
+        color .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+}
+
+.admin-content .nav-tabs .nav-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .035);
+}
+
+.admin-content .nav-tabs .nav-link.active {
+    color: #fff;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139, 30, 69, .30),
+            rgba(196, 44, 99, .08)
+        );
+    border-color: rgba(255, 77, 136, .23) rgba(255, 77, 136, .23) var(--admin-bg);
+}
+
+/* --------------------------------------------------------------------------
+   24.12 Imágenes administrativas
+   -------------------------------------------------------------------------- */
+
+.admin-content img {
+    border-radius: 10px;
+}
+
+.producto-imagen,
+.comprobante-img,
+.admin-calificaciones-product-image img {
+    box-shadow:
+        0 9px 24px rgba(0, 0, 0, .18);
+}
+
+/* --------------------------------------------------------------------------
+   24.13 Foco visible y accesibilidad
+   -------------------------------------------------------------------------- */
+
+.admin-content a:focus-visible,
+.admin-content button:focus-visible,
+.admin-content input:focus-visible,
+.admin-content select:focus-visible,
+.admin-content textarea:focus-visible {
+    outline: 2px solid rgba(255, 77, 136, .72);
+    outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   24.14 Estados de carga/hover suaves
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+    .admin-content .card,
+    .dashboard-panel,
+    .chart-section,
+    .summary-panel,
+    .productos-card,
+    .categorias-card,
+    .deliverys-card,
+    .clientes-card,
+    .comprobante-card,
+    .notificacion-card {
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease,
+            border-color .2s ease;
+    }
+
+    .admin-content .card:hover,
+    .dashboard-panel:hover,
+    .chart-section:hover,
+    .summary-panel:hover,
+    .productos-card:hover,
+    .categorias-card:hover,
+    .deliverys-card:hover,
+    .clientes-card:hover,
+    .comprobante-card:hover,
+    .notificacion-card:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   24.15 Responsive final
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+    .admin-content {
+        font-size: 13.5px;
+    }
+
+    .admin-content .card-body {
+        padding: 16px;
+    }
+
+    .admin-content .btn {
+        min-height: 41px;
+    }
+
+    .admin-content .table thead th {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .admin-content {
+        font-size: 13.5px;
+        line-height: 1.55;
+    }
+
+    .admin-content h1 {
+        font-size: 1.48rem;
+    }
+
+    .admin-content h2 {
+        font-size: 1.28rem;
+    }
+
+    .admin-content h3 {
+        font-size: 1.12rem;
+    }
+
+    .admin-content p {
+        font-size: 13px;
+    }
+
+    .admin-content .btn {
+        min-height: 43px;
+        font-size: 12.5px;
+    }
+
+    .admin-content .form-control,
+    .admin-content .form-select {
+        min-height: 45px;
+        font-size: 13px;
+    }
+
+    .admin-content .card-body {
+        padding: 15px;
+    }
+
+    .admin-content .card-header {
+        padding: 13px 15px;
+    }
+
+    .admin-content .table tbody td {
+        padding: 10px;
+    }
+
+    .sidebar-link::after {
+        display: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .admin-content h1 {
+        font-size: 1.38rem;
+    }
+
+    .admin-content h2 {
+        font-size: 1.2rem;
+    }
+
+    .admin-content h3 {
+        font-size: 1.06rem;
+    }
+
+    .admin-content p {
+        font-size: 12.8px;
+    }
+
+    .admin-content .btn {
+        min-height: 44px;
+        padding: .62rem .9rem;
+    }
+
+    .admin-content .form-label {
+        font-size: 11.5px;
+    }
+
+    .admin-content small,
+    .admin-content .small {
+        font-size: 11.5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-content .btn,
+    .sidebar-link,
+    .sidebar-icon,
+    .sidebar-logo,
+    .admin-content .card,
+    .dashboard-panel,
+    .chart-section,
+    .summary-panel,
+    .productos-card,
+    .categorias-card,
+    .deliverys-card,
+    .clientes-card,
+    .comprobante-card,
+    .notificacion-card {
+        transition: none !important;
+        animation: none !important;
+    }
+}
