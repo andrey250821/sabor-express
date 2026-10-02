@@ -156,13 +156,6 @@
                     Editar cocinero
                 </a>
 
-                <a
-                    href="mailto:{{ $cocinero->email }}"
-                    class="btn admin-cocinero-action-email">
-                    <i class="bi bi-envelope-fill"></i>
-                    Enviar correo
-                </a>
-
             </div>
 
         </div>
