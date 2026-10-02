@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = element.getBoundingClientRect();
             const ripple = document.createElement('span');
             ripple.className = 'cocinero-ripple';
-            ripple.style.left = \`\${event.clientX - rect.left}px\`;
-            ripple.style.top = \`\${event.clientY - rect.top}px\`;
+            ripple.style.left = (event.clientX - rect.left) + 'px';
+            ripple.style.top = (event.clientY - rect.top) + 'px';
             element.appendChild(ripple);
             window.setTimeout(() => ripple.remove(), 600);
         });
@@ -82,11 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const minutes = Math.floor(seconds / 60);
             if (minutes < 60) {
-                element.textContent = \`Hace \${minutes} \${minutes === 1 ? 'minuto' : 'minutos'}\`;
+                element.textContent = 'Hace ' + minutes + ' ' + (minutes === 1 ? 'minuto' : 'minutos');
                 return;
             }
             const hours = Math.floor(minutes / 60);
-            element.textContent = \`Hace \${hours} \${hours === 1 ? 'hora' : 'horas'}\`;
+            element.textContent = 'Hace ' + hours + ' ' + (hours === 1 ? 'hora' : 'horas');
         });
     };
 
