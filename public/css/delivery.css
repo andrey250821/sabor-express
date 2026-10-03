@@ -9035,3 +9035,14 @@ body.delivery-menu-open {
 .delivery-history-empty {
     color: #374151 !important;
 }
+/* ==========================================================================
+   CONTRASTE DEL ENCABEZADO DEL HISTORIAL DIARIO
+   ========================================================================== */
+
+.delivery-history-header strong {
+    color: #ffffff !important;
+}
+
+.delivery-history-header span {
+    color: #e5e7eb !important;
+}
