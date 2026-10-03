@@ -3616,13 +3616,6 @@ a {
         justify-content: center;
     }
 
-
-    .delivery-mini-stats {
-
-        grid-template-columns: 1fr;
-    }
-
-
     .delivery-dashboard-footer-card {
 
         align-items: flex-start;
@@ -8450,5 +8443,19 @@ a {
     .delivery-spinner {
         animation: none;
     }
+}
+
+/* Evitar desplazamiento del fondo cuando el menú móvil está abierto. */
+body.delivery-menu-open {
+    overflow: hidden;
+}
+
+.delivery-profile-account-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,193,7,.045),
+            #17181d 36%
+        );
 }
 
