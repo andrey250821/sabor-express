@@ -5,247 +5,374 @@
 @section('heading', 'Mi perfil')
 
 @section('content')
-<div class="container-fluid py-4">
 
-    <div class="mb-4">
-        <span class="text-uppercase small fw-semibold text-muted">
-            Sabor Express
-        </span>
+<div class="container-fluid delivery-profile-page">
 
-        <h1 class="h2 mb-1">
-            <i class="bi bi-person-circle me-2"></i>
-            Información del Delivery
-        </h1>
+    <header class="delivery-profile-header" data-delivery-animate>
 
-        <p class="text-muted mb-0">
-            Consulta y actualiza la información de tu perfil.
-        </p>
-    </div>
+        <div>
+
+            <span class="delivery-section-label">
+                CUENTA DEL DELIVERY
+            </span>
+
+            <h1>
+                <i class="bi bi-person-circle"></i>
+                Mi perfil
+            </h1>
+
+            <p>
+                Consulta y actualiza tu información personal.
+                El correo, rol y control de disponibilidad pertenecen a la cuenta administrada por el restaurante.
+            </p>
+
+        </div>
+
+        <div class="delivery-profile-status-chip {{ $user->estado === 'activo' ? 'active' : 'inactive' }}">
+
+            <span></span>
+
+            {{ $user->estado === 'activo' ? 'Activo' : 'Inactivo' }}
+
+        </div>
+
+    </header>
+
 
     @if(session('profile_status'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-1"></i>
-            {{ session('profile_status') }}
 
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Cerrar"></button>
-        </div>
+    <div
+        class="delivery-profile-alert success"
+        data-delivery-animate>
+
+        <i class="bi bi-check-circle-fill"></i>
+
+        <span>
+            {{ session('profile_status') }}
+        </span>
+
+    </div>
+
     @endif
 
+
     @if($errors->any())
-        <div class="alert alert-danger">
+
+    <div
+        class="delivery-profile-alert error"
+        data-delivery-animate>
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        <div>
             <strong>Revisa los datos ingresados.</strong>
 
-            <ul class="mb-0 mt-2">
+            <ul>
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
+
+    </div>
+
     @endif
+
 
     <div class="row g-4">
 
         <div class="col-12 col-xl-7">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
 
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div
-                            style="
-                                width: 72px;
-                                height: 72px;
-                                border-radius: 50%;
-                                overflow: hidden;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background: linear-gradient(135deg, #252a33, #171a20);
-                                color: #ff80ab;
-                                font-size: 28px;
-                                font-weight: 700;
-                                flex: 0 0 72px;
-                            ">
+            <section
+                class="delivery-profile-card"
+                data-delivery-animate>
+
+                <div class="delivery-profile-card-header">
+
+                    <div class="delivery-profile-identity">
+
+                        <div class="delivery-profile-avatar">
 
                             @if($user->foto_perfil_url)
-                                <img
-                                    src="{{ $user->foto_perfil_url }}"
-                                    alt="Foto de {{ $user->name }}"
-                                    style="width:100%;height:100%;object-fit:cover;display:block;">
+
+                            <img
+                                src="{{ $user->foto_perfil_url }}"
+                                alt="Foto de {{ $user->name }}">
+
                             @else
-                                {{ strtoupper(substr($user->name, 0, 1)) }}
+
+                            {{ strtoupper(substr($user->name, 0, 1)) }}
+
                             @endif
 
                         </div>
 
                         <div>
-                            <h2 class="h4 mb-1">
+
+                            <span>
+                                PERFIL PERSONAL
+                            </span>
+
+                            <h2>
                                 Datos personales
                             </h2>
 
-                            <p class="text-muted mb-0">
+                            <p>
                                 Estos datos se muestran en tu panel de Delivery.
                             </p>
+
                         </div>
+
                     </div>
 
-                    <form
-                        action="{{ route('delivery.perfil.update') }}"
-                        method="POST"
-                        enctype="multipart/form-data">
+                </div>
 
-                        @csrf
-                        @method('PATCH')
 
-                        <div class="mb-3">
+                <form
+                    action="{{ route('delivery.perfil.update') }}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="delivery-profile-form">
+
+                    @csrf
+                    @method('PATCH')
+
+                    <div class="row g-3">
+
+                        <div class="col-12">
+
                             <label
                                 for="name"
-                                class="form-label fw-semibold">
+                                class="delivery-form-label">
+
                                 Nombre completo
+
                             </label>
 
-                            <input
-                                id="name"
-                                name="name"
-                                type="text"
-                                class="form-control"
-                                value="{{ old('name', $user->name) }}"
-                                maxlength="255"
-                                required>
-                        </div>
+                            <div class="delivery-input-group">
 
-                        <div class="mb-3">
-                            <label
-                                for="telefono"
-                                class="form-label fw-semibold">
-                                Número de teléfono
-                            </label>
+                                <i class="bi bi-person"></i>
 
-                            <input
-                                id="telefono"
-                                name="telefono"
-                                type="text"
-                                class="form-control"
-                                value="{{ old('telefono', $user->telefono) }}"
-                                maxlength="20"
-                                placeholder="Ej. 77777777">
-                        </div>
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    value="{{ old('name', $user->name) }}"
+                                    maxlength="255"
+                                    required>
 
-                        <div class="mb-4">
-                            <label
-                                for="foto_perfil"
-                                class="form-label fw-semibold">
-                                Foto de perfil
-                            </label>
-
-                            <input
-                                id="foto_perfil"
-                                name="foto_perfil"
-                                type="file"
-                                class="form-control @error('foto_perfil') is-invalid @enderror"
-                                accept="image/jpeg,image/png,image/webp">
-
-                            <div class="form-text">
-                                JPG, PNG o WEBP. Máximo 2 MB.
                             </div>
 
-                            @error('foto_perfil')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
                         </div>
+
+
+                        <div class="col-12">
+
+                            <label
+                                for="telefono"
+                                class="delivery-form-label">
+
+                                Número de teléfono
+
+                            </label>
+
+                            <div class="delivery-input-group">
+
+                                <i class="bi bi-telephone"></i>
+
+                                <input
+                                    id="telefono"
+                                    name="telefono"
+                                    type="text"
+                                    value="{{ old('telefono', $user->telefono) }}"
+                                    maxlength="20"
+                                    placeholder="Ej. 77777777">
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <label
+                                for="foto_perfil"
+                                class="delivery-form-label">
+
+                                Foto de perfil
+
+                            </label>
+
+                            <div class="delivery-file-wrapper">
+
+                                <i class="bi bi-camera-fill"></i>
+
+                                <input
+                                    id="foto_perfil"
+                                    name="foto_perfil"
+                                    type="file"
+                                    class="@error('foto_perfil') is-invalid @enderror"
+                                    accept="image/jpeg,image/png,image/webp">
+
+                            </div>
+
+                            <small class="delivery-form-help">
+                                JPG, PNG o WEBP. Máximo 2 MB.
+                            </small>
+
+                            @error('foto_perfil')
+
+                            <div class="delivery-field-error">
+                                {{ $message }}
+                            </div>
+
+                            @enderror
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="delivery-profile-form-footer">
+
+                        <span>
+                            <i class="bi bi-shield-check"></i>
+                            Tus datos están protegidos.
+                        </span>
 
                         <button
                             type="submit"
-                            class="btn btn-primary">
-                            <i class="bi bi-save me-1"></i>
+                            class="delivery-profile-save"
+                            data-delivery-interactive>
+
+                            <i class="bi bi-check2-circle"></i>
                             Guardar cambios
+
                         </button>
 
-                    </form>
+                    </div>
 
-                </div>
-            </div>
+                </form>
+
+            </section>
+
         </div>
 
-        <div class="col-12 col-xl-5">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
 
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="fs-2 text-warning">
+        <div class="col-12 col-xl-5">
+
+            <aside
+                class="delivery-profile-card delivery-profile-account-card"
+                data-delivery-animate>
+
+                <div class="delivery-profile-card-header">
+
+                    <div class="delivery-profile-card-heading">
+
+                        <div class="delivery-profile-heading-icon">
                             <i class="bi bi-person-vcard-fill"></i>
                         </div>
 
                         <div>
-                            <h2 class="h4 mb-1">
-                                Información de la cuenta
+
+                            <span>
+                                CUENTA
+                            </span>
+
+                            <h2>
+                                Información de acceso
                             </h2>
 
-                            <p class="text-muted mb-0">
-                                Datos administrativos de tu cuenta.
-                            </p>
                         </div>
+
                     </div>
 
-                    <div class="mb-3">
-                        <small class="text-muted d-block">
+                </div>
+
+
+                <div class="delivery-account-list">
+
+                    <div class="delivery-account-item">
+
+                        <span>
+                            <i class="bi bi-envelope"></i>
                             Correo electrónico
-                        </small>
+                        </span>
 
                         <strong>
                             {{ $user->email }}
                         </strong>
 
-                        <div class="form-text">
+                        <small>
                             El correo no se modifica desde este apartado.
-                        </div>
+                        </small>
+
                     </div>
 
-                    <div class="mb-3">
-                        <small class="text-muted d-block">
+
+                    <div class="delivery-account-item">
+
+                        <span>
+                            <i class="bi bi-shield-check"></i>
                             Rol
-                        </small>
+                        </span>
 
                         <strong>
                             {{ $user->role?->nombre ?? 'Delivery' }}
                         </strong>
+
                     </div>
 
-                    <div class="mb-3">
-                        <small class="text-muted d-block">
-                            Estado
-                        </small>
 
-                        @if($user->estado === 'activo')
-                            <span class="badge text-bg-success">
-                                Activo
-                            </span>
-                        @else
-                            <span class="badge text-bg-secondary">
-                                Inactivo
-                            </span>
-                        @endif
+                    <div class="delivery-account-item">
+
+                        <span>
+                            <i class="bi bi-activity"></i>
+                            Disponibilidad
+                        </span>
+
+                        <strong>
+                            {{ $user->estado === 'activo'
+                                ? 'Puedes recibir nuevas asignaciones'
+                                : 'No recibirás nuevas asignaciones' }}
+                        </strong>
+
                     </div>
 
-                    <div>
-                        <small class="text-muted d-block">
+
+                    <div class="delivery-account-item">
+
+                        <span>
+                            <i class="bi bi-calendar3"></i>
                             Miembro desde
-                        </small>
+                        </span>
 
                         <strong>
                             {{ $user->created_at?->format('d/m/Y') ?? 'No disponible' }}
                         </strong>
+
                     </div>
 
                 </div>
-            </div>
+
+
+                <div class="delivery-profile-note">
+
+                    <i class="bi bi-info-circle-fill"></i>
+
+                    <span>
+                        Para activar o desactivar tu disponibilidad utiliza el control
+                        de estado ubicado en el menú lateral.
+                    </span>
+
+                </div>
+
+            </aside>
+
         </div>
 
     </div>
+
 </div>
+
 @endsection
