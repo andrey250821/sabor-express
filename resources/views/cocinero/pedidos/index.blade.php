@@ -244,6 +244,14 @@
 
                                 <div class="cocinero-order-actions">
 
+                                <a
+                                    href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
+                                    class="btn cocinero-btn-detalles js-ripple"
+                                    onclick="event.stopPropagation()">
+                                    <i class="bi bi-eye-fill"></i>
+                                    <span>Ver detalles</span>
+                                </a>
+
                                     <form
                                         method="POST"
                                         action="{{ route('cocinero.pedidos.preparar', $pedido->id) }}"
@@ -399,6 +407,14 @@
                                 </div>
 
                                 <div class="cocinero-order-actions">
+
+                                <a
+                                    href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
+                                    class="btn cocinero-btn-detalles js-ripple"
+                                    onclick="event.stopPropagation()">
+                                    <i class="bi bi-eye-fill"></i>
+                                    <span>Ver detalles</span>
+                                </a>
 
                                     <form
                                         method="POST"
@@ -653,6 +669,14 @@
                                 </div>
 
                                 <div class="cocinero-order-actions">
+
+                                <a
+                                    href="{{ route('cocinero.pedidos.show', $pedido->id) }}"
+                                    class="btn cocinero-btn-detalles js-ripple"
+                                    onclick="event.stopPropagation()">
+                                    <i class="bi bi-eye-fill"></i>
+                                    <span>Ver detalles</span>
+                                </a>
 
                                     @if(in_array($pedido->estado, ['listo', 'asignado'], true))
 
