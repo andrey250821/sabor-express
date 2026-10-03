@@ -562,136 +562,6 @@
 
 
     {{-- =========================================================
-         ACCIONES RÁPIDAS
-    ========================================================== --}}
-    <section class="delivery-dashboard-panel mb-4">
-
-        <div class="delivery-panel-header">
-
-            <div>
-
-                <span class="delivery-panel-kicker">
-                    ACCESOS
-                </span>
-
-                <h2>
-
-                    <i class="bi bi-lightning-charge"></i>
-
-                    Acciones rápidas
-
-                </h2>
-
-            </div>
-
-            <span class="delivery-panel-tag">
-                DELIVERY
-            </span>
-
-        </div>
-
-
-        <div class="row g-3">
-
-
-            {{-- PEDIDOS EN COLA --}}
-            <div class="col-12 col-md-4">
-
-                <a href="{{ route('delivery.pedidos.index') }}"
-                    class="delivery-action">
-
-                    <div class="delivery-action-icon pink">
-
-                        <i class="bi bi-box-seam"></i>
-
-                    </div>
-
-                    <div class="delivery-action-content">
-
-                        <strong>
-                            Buscar pedidos
-                        </strong>
-
-                        <span>
-                            Ver cola de pedidos
-                        </span>
-
-                    </div>
-
-                    <i class="bi bi-arrow-right"></i>
-
-                </a>
-
-            </div>
-
-
-            {{-- MIS PEDIDOS --}}
-            <div class="col-12 col-md-4">
-
-                <a href="{{ route('delivery.pedidos.mis') }}"
-                    class="delivery-action">
-
-                    <div class="delivery-action-icon blue">
-
-                        <i class="bi bi-bicycle"></i>
-
-                    </div>
-
-                    <div class="delivery-action-content">
-
-                        <strong>
-                            Mis pedidos
-                        </strong>
-
-                        <span>
-                            Controlar tus entregas actuales
-                        </span>
-
-                    </div>
-
-                    <i class="bi bi-arrow-right"></i>
-
-                </a>
-
-            </div>
-
-
-            {{-- ENTREGA --}}
-            <div class="col-12 col-md-4">
-
-                <a href="{{ route('delivery.pedidos.mis') }}"
-                    class="delivery-action">
-
-                    <div class="delivery-action-icon green">
-
-                        <i class="bi bi-geo-alt"></i>
-
-                    </div>
-
-                    <div class="delivery-action-content">
-
-                        <strong>
-                            Entregas en curso
-                        </strong>
-
-                        <span>
-                            Revisar pedidos que debes entregar
-                        </span>
-
-                    </div>
-
-                    <i class="bi bi-arrow-right"></i>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    {{-- =========================================================
          INFORMACIÓN FINAL
     ========================================================== --}}
     <section class="delivery-dashboard-footer-card">
@@ -710,7 +580,7 @@
 
             <span>
 
-                Cada pedido que tomas forma parte del flujo de
+                Cada entrega que realizas forma parte del flujo de
                 {{ $configuracion->nombre_restaurante ?? 'Sabor Express' }}.
                 Mantén actualizado el estado de tus entregas.
 
@@ -731,32 +601,7 @@
 </div>
 
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const boton = document.getElementById('toggle-historial-delivery');
-    const historial = document.getElementById('historial-delivery');
 
-    if (!boton || !historial) {
-        return;
-    }
-
-    boton.addEventListener('click', function () {
-        const oculto = historial.hasAttribute('hidden');
-
-        if (oculto) {
-            historial.removeAttribute('hidden');
-            boton.setAttribute('aria-expanded', 'true');
-            boton.innerHTML = '<i class="bi bi-calendar-week"></i> Ocultar historial';
-        } else {
-            historial.setAttribute('hidden', '');
-            boton.setAttribute('aria-expanded', 'false');
-            boton.innerHTML = '<i class="bi bi-calendar-week"></i> Ver historial';
-        }
-    });
-});
-</script>
-@endpush
 
 @endsection
 @push('scripts')
