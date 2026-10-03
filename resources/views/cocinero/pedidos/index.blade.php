@@ -216,10 +216,15 @@
                                             </span>
                                         @endif
 
-                                        @if($pedido->created_at)
+                                        @php
+                                            $fechaFinalizacion = $pedido->fecha_listo ?? $pedido->created_at;
+                                        @endphp
+
+                                        @if($fechaFinalizacion)
                                             <span>
-                                                <i class="bi bi-clock"></i>
-                                                {{ $pedido->created_at->format('d/m/Y H:i') }}
+                                                <i class="bi bi-check2-circle"></i>
+                                                Preparado:
+                                                {{ $fechaFinalizacion->copy()->timezone('America/La_Paz')->format('d/m/Y H:i') }}
                                             </span>
                                         @endif
 
