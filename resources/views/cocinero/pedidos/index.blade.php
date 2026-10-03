@@ -125,8 +125,8 @@
                 </span>
 
                 <span class="cocinero-state-link-content">
-                    <strong>Listos e historial</strong>
-                    <small>Pedidos terminados y seguimiento del siguiente paso</small>
+                    <strong>Seguimiento e historial</strong>
+                    <small>Consulta los pedidos que finalizaste y su estado actual</small>
                 </span>
 
                 <span class="cocinero-state-link-count">
@@ -486,11 +486,11 @@
 
                     <h3>
                         <i class="bi bi-check-circle-fill"></i>
-                        Pedidos terminados
+                        Seguimiento de pedidos
                     </h3>
 
                     <span>
-                        Consulta los pedidos que finalizaste y revisa en qué etapa se encuentran.
+                        Consulta los pedidos que finalizaste y revisa su estado actual hasta la entrega.
                     </span>
 
                 </div>
@@ -713,23 +713,7 @@
                                     <span>Ver detalles</span>
                                 </a>
 
-                                    @if(in_array($pedido->estado, ['listo', 'asignado'], true))
 
-                                        <span class="cocinero-ready-label">
-                                            <i class="bi bi-check-circle-fill"></i>
-                                            {{ $pedido->estado === 'asignado'
-                                                ? 'Asignado a Delivery'
-                                                : 'Esperando siguiente paso' }}
-                                        </span>
-
-                                    @else
-
-                                        <span class="cocinero-tracking-label">
-                                            <i class="bi bi-clock-history"></i>
-                                            Seguimiento
-                                        </span>
-
-                                    @endif
 
                                 </div>
 
@@ -756,7 +740,7 @@
                     <h3>No hay pedidos en este periodo</h3>
 
                     <p>
-                        Cuando termines pedidos, aparecerán aquí para seguimiento e historial.
+                        Cuando finalices pedidos, aparecerán aquí para seguimiento e historial.
                     </p>
 
                 </div>
