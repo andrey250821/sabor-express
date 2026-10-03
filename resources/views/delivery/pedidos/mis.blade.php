@@ -195,7 +195,7 @@
         id="panel-asignados"
         class="delivery-my-tab-panel active">
 
-        <div class="delivery-my-section">
+        <div class="delivery-my-section" data-delivery-animate>
 
             <div class="delivery-my-section-header">
 
@@ -254,7 +254,7 @@
                 @endphp
 
                 <div
-                    class="col-12 col-lg-6"
+                    class="col-12 col-lg-6">
 
                     <article
                         class="delivery-my-order-card {{ $estado === 'asignado' ? 'delivery-assigned-locked' : 'delivery-in-route-card' }}"
@@ -445,7 +445,7 @@
 
                                 <span>Teléfono de contacto</span>
 
-                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $cliente->telefono) }}">
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $cliente->telefono) }}" data-delivery-interactive>
                                     {{ $cliente->telefono }}
                                 </a>
 
@@ -701,7 +701,7 @@
                 @endphp
 
                 <div
-                    class="col-12 col-md-6 col-xl-4"
+                    class="col-12 col-md-6 col-xl-4">
 
                     <article
                         class="delivery-delivered-card delivery-delivered-card-static"
