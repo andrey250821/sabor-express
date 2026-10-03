@@ -287,6 +287,8 @@
 
             @else
 
+                <div class="cocinero-empty-state">
+
                     <div class="cocinero-empty-icon">
                         <i class="bi bi-check2-circle"></i>
                     </div>
@@ -296,6 +298,7 @@
                     <p>
                         No hay pedidos pagados esperando preparación.
                     </p>
+
                 </div>
 
             @endif
