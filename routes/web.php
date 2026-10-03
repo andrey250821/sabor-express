@@ -415,6 +415,7 @@ Route::middleware(['auth', 'role:Delivery'])
             Route::get('/pedidos/{id}', [DeliveryPedidoController::class, 'show'])->name('delivery.pedidos.show');
             Route::get('/mis-pedidos', [DeliveryPedidoController::class, 'misPedidos'])->name('delivery.pedidos.mis');
             Route::put('/pedidos/{id}/iniciar', [DeliveryPedidoController::class, 'iniciar'])->name('delivery.pedidos.iniciar');
+            Route::put('/pedidos/{id}/cancelar', [DeliveryPedidoController::class, 'cancelar'])->name('delivery.pedidos.cancelar');
             Route::put('/pedidos/{id}/entregar', [DeliveryPedidoController::class, 'entregar'])->name('delivery.pedidos.entregar');
         });
     });
