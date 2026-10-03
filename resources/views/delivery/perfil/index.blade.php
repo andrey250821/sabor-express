@@ -78,12 +78,12 @@
     @endif
 
 
-    <div class="row g-4">
+    <div class="row g-4 align-items-stretch">
 
-        <div class="col-12 col-xl-9 mx-auto">
+        <div class="col-12 col-xl-6 d-flex">
 
             <section
-                class="delivery-profile-card"
+                class="delivery-profile-card w-100"
                 data-delivery-animate>
 
                 <div class="delivery-profile-card-header">
@@ -255,10 +255,12 @@
 
             </section>
 
-            <div class="delivery-password-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="col-12 col-xl-6 d-flex">
 
             {{-- CAMBIO DE CONTRASEÑA --}}
-            <section class="delivery-password-card" data-delivery-animate>
+            <section class="delivery-password-card w-100" data-delivery-animate>
 
                 <div class="delivery-password-header">
 
@@ -445,8 +447,6 @@
             </section>
 
         </div>
-
-
 
     </div>
 
