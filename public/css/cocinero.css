@@ -1180,6 +1180,34 @@ body.cocinero-layout.sidebar-open {
     color: #b7d3ff;
 }
 
+.cocinero-btn-detalles {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 9px 15px;
+    border: 1px solid rgba(111, 170, 255, 0.30) !important;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(111, 170, 255, 0.16), rgba(111, 170, 255, 0.07)) !important;
+    color: #cfe2ff !important;
+    box-shadow: 0 9px 22px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.cocinero-btn-detalles:hover {
+    color: #fff !important;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 13px 28px rgba(0, 0, 0, 0.22);
+    filter: brightness(1.08);
+}
+
+.cocinero-btn-detalles:active {
+    transform: translateY(1px) scale(0.97);
+}
+
 .cocinero-btn-preparar,
 .cocinero-btn-listo {
     border: 1px solid rgba(255, 200, 87, 0.18);
