@@ -112,7 +112,7 @@
                     {{ $pedidosEnCola === 1 ? 'pedido en cola' : 'pedidos en cola' }}
                 </h2>
 
-                <p class="text-muted mb-4">
+                <p class="delivery-queue-description mb-4">
                     Estos pedidos ya están listos en cocina y todavía no tienen un Delivery asignado.
                     Los detalles permanecen ocultos hasta que un pedido sea asignado a ti.
                 </p>
