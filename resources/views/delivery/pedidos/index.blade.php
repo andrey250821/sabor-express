@@ -8,7 +8,7 @@
 
 <div class="delivery-orders-page">
 
-    <div class="delivery-orders-header">
+    <div class="delivery-orders-header" data-delivery-animate>
 
         <div class="delivery-orders-heading">
 
@@ -33,9 +33,19 @@
 
         </div>
 
-        <div class="delivery-orders-counter">
+        <div class="delivery-orders-actions">
 
-            <div class="delivery-orders-counter-icon">
+            <button
+                type="button"
+                class="delivery-queue-refresh"
+                id="deliveryQueueRefresh"
+                data-delivery-interactive
+                title="Actualizar la cola ahora">
+                <i class="bi bi-arrow-clockwise"></i>
+                <span>Actualizar</span>
+            </button>
+
+            <div class="delivery-orders-counter">
                 <i class="bi bi-clock-history"></i>
             </div>
 
@@ -49,7 +59,7 @@
     </div>
 
 
-    <div class="delivery-orders-info">
+    <div class="delivery-orders-info" data-delivery-animate>
 
         <div class="delivery-orders-info-icon">
             <i class="bi bi-lightning-charge-fill"></i>
@@ -72,7 +82,7 @@
     </div>
 
 
-    <div class="delivery-orders-summary">
+    <div class="delivery-orders-summary" data-delivery-animate>
 
         <div>
             <span class="delivery-summary-label">
@@ -98,7 +108,7 @@
 
         <div class="col-12 col-lg-8">
 
-            <article class="delivery-show-card text-center p-5">
+            <article class="delivery-show-card text-center p-5 delivery-queue-card" data-delivery-animate>
 
                 <div class="delivery-show-card-icon mx-auto mb-4">
                     <i class="bi bi-box-seam"></i>
@@ -141,5 +151,29 @@
     </div>
 
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('deliveryQueueRefresh');
+
+    if (!button) {
+        return;
+    }
+
+    button.addEventListener('click', function () {
+        button.classList.add('delivery-refreshing');
+        button.disabled = true;
+
+        const icon = button.querySelector('i');
+        if (icon) {
+            icon.classList.add('delivery-refresh-spin');
+        }
+
+        window.setTimeout(() => window.location.reload(), 220);
+    });
+});
+</script>
+@endpush
 
 @endsection
