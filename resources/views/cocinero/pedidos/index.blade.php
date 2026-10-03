@@ -283,8 +283,6 @@
 
                     @endforeach
 
-                        @endforeach
-
                 </div>
 
             @else
@@ -742,6 +740,8 @@
                         </article>
 
                     @endforeach
+
+                        @endforeach
 
                 </div>
 
