@@ -570,6 +570,26 @@
 
                         </div>
 
+                        @if($cliente?->telefono)
+
+                        <div class="delivery-my-phone">
+
+                            <i class="bi bi-telephone-fill"></i>
+
+                            <div>
+
+                                <span>Teléfono de contacto</span>
+
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $cliente->telefono) }}">
+                                    {{ $cliente->telefono }}
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                        @endif
+
 
                         <div class="delivery-my-order-info">
 
@@ -655,7 +675,7 @@
                             <i class="bi bi-signpost-2-fill"></i>
 
                             <div>
-                                <strong>Referencia</strong>
+                                <strong>Referencia para la entrega</strong>
 
                                 <span>
                                     {{ $pedido->referencia_delivery }}
