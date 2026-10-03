@@ -1713,32 +1713,124 @@ body.cocinero-layout.sidebar-open {
     font-size: 19px;
 }
 
-.cocinero-observation {
+/* Observaciones del cliente — bloque prioritario para cocina. */
+.cocinero-observation-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 200, 87, 0.32);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255, 138, 61, 0.16), transparent 15rem),
+        radial-gradient(circle at 0% 100%, rgba(255, 200, 87, 0.09), transparent 18rem),
+        linear-gradient(135deg, rgba(255, 200, 87, 0.12), rgba(255, 255, 255, 0.025));
+    box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.20),
+        0 0 0 1px rgba(255, 200, 87, 0.04) inset;
+}
+
+.cocinero-observation-card::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    content: "";
+    background: linear-gradient(180deg, #ffc857, #ff8a3d);
+    box-shadow: 0 0 22px rgba(255, 200, 87, 0.24);
+}
+
+.cocinero-observation-card-top {
     display: flex;
-    gap: 12px;
-    margin: 18px 20px;
-    padding: 14px;
-    border: 1px solid rgba(255, 200, 87, 0.15);
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px 15px 22px;
+}
+
+.cocinero-observation-icon {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    display: grid;
+    place-items: center;
     border-radius: 14px;
-    background: rgba(255, 200, 87, 0.055);
+    color: #241707;
+    background: linear-gradient(135deg, #ffc857, #ff8a3d);
+    box-shadow:
+        0 10px 24px rgba(255, 138, 61, 0.20),
+        0 0 18px rgba(255, 200, 87, 0.10);
+    font-size: 20px;
 }
 
-.cocinero-observation > i {
-    flex: 0 0 auto;
-    color: var(--cocinero-yellow);
+.cocinero-observation-kicker {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    color: #ffe3a3 !important;
+    font-size: 9px !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
 }
 
-.cocinero-observation strong {
-    display: block;
-    color: #fff;
-    font-size: 11px;
-}
-
-.cocinero-observation p {
+.cocinero-observation-card-top h3 {
     margin: 3px 0 0;
-    color: var(--cocinero-muted);
-    font-size: 11px;
-    line-height: 1.5;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.cocinero-observation-card-top p {
+    margin: 4px 0 0;
+    color: #d9dde5;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.cocinero-observation-badge {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 200, 87, 0.28);
+    border-radius: 999px;
+    background: rgba(255, 200, 87, 0.10);
+    color: #ffe5a9;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.cocinero-observation-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0 20px 20px 22px;
+    padding: 17px 18px;
+    border: 1px solid rgba(255, 200, 87, 0.20);
+    border-radius: 14px;
+    background: rgba(10, 11, 15, 0.28);
+}
+
+.cocinero-observation-content > i {
+    margin-top: 2px;
+    flex: 0 0 auto;
+    color: #ffc857;
+    font-size: 17px;
+}
+
+.cocinero-observation-content strong {
+    display: block;
+    color: #fff5d6;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.cocinero-observation-content p {
+    margin: 5px 0 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.55;
 }
 
 .cocinero-detail-actions {
@@ -1815,77 +1907,6 @@ body.cocinero-layout.sidebar-open {
     color: #fff;
     transform: translateY(-2px);
     filter: brightness(1.08);
-}
-
-.cocinero-delivery-info {
-    padding: 7px 20px 14px;
-}
-
-.cocinero-info-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--cocinero-border);
-}
-
-.cocinero-info-row:last-child {
-    border-bottom: 0;
-}
-
-.cocinero-info-row-icon {
-    width: 33px;
-    height: 33px;
-    flex: 0 0 33px;
-    display: grid;
-    place-items: center;
-    border-radius: 10px;
-    background: var(--cocinero-surface-2);
-    color: var(--cocinero-pink-light);
-}
-
-.cocinero-info-row small {
-    display: block;
-    color: var(--cocinero-muted);
-    font-size: 9px;
-}
-
-.cocinero-info-row strong {
-    display: block;
-    margin-top: 2px;
-    color: #fff;
-    font-size: 11px;
-    line-height: 1.5;
-}
-
-.cocinero-coordinates {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin-top: 10px;
-    padding: 11px;
-    border-radius: 11px;
-    background: var(--cocinero-surface-2);
-}
-
-.cocinero-coordinates > i {
-    color: var(--cocinero-green);
-}
-
-.cocinero-coordinates small,
-.cocinero-coordinates span {
-    display: block;
-}
-
-.cocinero-coordinates small {
-    color: var(--cocinero-muted);
-    font-size: 8px;
-}
-
-.cocinero-coordinates span {
-    margin-top: 2px;
-    color: #fff;
-    font-size: 10px;
 }
 
 .cocinero-order-data {
@@ -2453,16 +2474,25 @@ body.cocinero-layout.sidebar-open {
         padding-right: 16px;
     }
 
-    .cocinero-delivery-info,
     .cocinero-order-data,
     .cocinero-detail-actions {
         padding-left: 16px;
         padding-right: 16px;
     }
 
-    .cocinero-observation {
-        margin-left: 16px;
-        margin-right: 16px;
+    .cocinero-observation-card-top {
+        align-items: flex-start;
+        padding-left: 20px;
+        padding-right: 18px;
+    }
+
+    .cocinero-observation-badge {
+        margin-left: auto;
+    }
+
+    .cocinero-observation-content {
+        margin-left: 20px;
+        margin-right: 18px;
     }
 }
 
