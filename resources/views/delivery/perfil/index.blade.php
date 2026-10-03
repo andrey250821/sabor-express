@@ -23,7 +23,6 @@
 
             <p>
                 Consulta y actualiza tu información personal.
-                El correo, rol y control de disponibilidad pertenecen a la cuenta administrada por el restaurante.
             </p>
 
         </div>
@@ -81,7 +80,7 @@
 
     <div class="row g-4">
 
-        <div class="col-12 col-xl-7">
+        <div class="col-12 col-xl-9 mx-auto">
 
             <section
                 class="delivery-profile-card"
@@ -259,117 +258,6 @@
         </div>
 
 
-        <div class="col-12 col-xl-5">
-
-            <aside
-                class="delivery-profile-card delivery-profile-account-card"
-                data-delivery-animate>
-
-                <div class="delivery-profile-card-header">
-
-                    <div class="delivery-profile-card-heading">
-
-                        <div class="delivery-profile-heading-icon">
-                            <i class="bi bi-person-vcard-fill"></i>
-                        </div>
-
-                        <div>
-
-                            <span>
-                                CUENTA
-                            </span>
-
-                            <h2>
-                                Información de acceso
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="delivery-account-list">
-
-                    <div class="delivery-account-item">
-
-                        <span>
-                            <i class="bi bi-envelope"></i>
-                            Correo electrónico
-                        </span>
-
-                        <strong>
-                            {{ $user->email }}
-                        </strong>
-
-                        <small>
-                            El correo no se modifica desde este apartado.
-                        </small>
-
-                    </div>
-
-
-                    <div class="delivery-account-item">
-
-                        <span>
-                            <i class="bi bi-shield-check"></i>
-                            Rol
-                        </span>
-
-                        <strong>
-                            {{ $user->role?->nombre ?? 'Delivery' }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="delivery-account-item">
-
-                        <span>
-                            <i class="bi bi-activity"></i>
-                            Disponibilidad
-                        </span>
-
-                        <strong>
-                            {{ $user->estado === 'activo'
-                                ? 'Puedes recibir nuevas asignaciones'
-                                : 'No recibirás nuevas asignaciones' }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="delivery-account-item">
-
-                        <span>
-                            <i class="bi bi-calendar3"></i>
-                            Miembro desde
-                        </span>
-
-                        <strong>
-                            {{ $user->created_at?->format('d/m/Y') ?? 'No disponible' }}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="delivery-profile-note">
-
-                    <i class="bi bi-info-circle-fill"></i>
-
-                    <span>
-                        Para activar o desactivar tu disponibilidad utiliza el control
-                        de estado ubicado en el menú lateral.
-                    </span>
-
-                </div>
-
-            </aside>
-
-        </div>
 
     </div>
 
