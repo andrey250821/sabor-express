@@ -284,6 +284,8 @@
             </div>
         </section>
 
+        </div>
+
         {{-- COLUMNA LATERAL --}}
         <div class="col-12 col-xl-4">
 
