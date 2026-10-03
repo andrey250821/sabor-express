@@ -219,6 +219,92 @@ $estadoPedido === 'en_camino'
 
 
     {{-- ============================================================
+         INFORMACIÓN PRIORITARIA PARA LA ENTREGA
+    ============================================================= --}}
+
+    <section class="delivery-priority-grid" aria-label="Información prioritaria de entrega">
+
+        <article class="delivery-priority-card delivery-priority-reference">
+
+            <div class="delivery-priority-shine" aria-hidden="true"></div>
+
+            <div class="delivery-priority-icon">
+                <i class="bi bi-signpost-2-fill"></i>
+            </div>
+
+            <div class="delivery-priority-content">
+
+                <span>
+                    REFERENCIA PARA LA ENTREGA
+                </span>
+
+                <strong>
+                    {{ $pedido->referencia_delivery ?: 'Sin referencia registrada por el cliente' }}
+                </strong>
+
+                @if($pedido->referencia_delivery)
+                    <small>
+                        Usa esta referencia como apoyo para identificar el domicilio.
+                    </small>
+                @else
+                    <small>
+                        El cliente no registró una referencia adicional.
+                    </small>
+                @endif
+
+            </div>
+
+        </article>
+
+
+        <article class="delivery-priority-card delivery-priority-phone">
+
+            <div class="delivery-priority-shine" aria-hidden="true"></div>
+
+            <div class="delivery-priority-icon">
+                <i class="bi bi-telephone-fill"></i>
+            </div>
+
+            <div class="delivery-priority-content">
+
+                <span>
+                    TELÉFONO DEL CLIENTE
+                </span>
+
+                @if($pedido->user?->telefono)
+
+                    <a
+                        href="tel:{{ preg_replace('/[^0-9+]/', '', $pedido->user->telefono) }}"
+                        class="delivery-priority-phone-link">
+
+                        {{ $pedido->user->telefono }}
+
+                    </a>
+
+                    <small>
+                        Toca el número para llamar directamente.
+                    </small>
+
+                @else
+
+                    <strong>
+                        Sin teléfono registrado
+                    </strong>
+
+                    <small>
+                        No hay un número de contacto disponible.
+                    </small>
+
+                @endif
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    {{-- ============================================================
          ESTADO DEL PEDIDO
     ============================================================= --}}
 
@@ -815,41 +901,79 @@ $estadoPedido === 'en_camino'
     </div>
 
 
-    <div class="delivery-financial-breakdown">
+    <div class="delivery-financial-breakdown" aria-label="Desglose económico de la entrega">
 
-        <div>
-            <span>
-                Costo de la ruta
-                @if($pedido->distancia_delivery_km !== null)
-                    ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
-                @endif
-            </span>
+        <div class="delivery-financial-row delivery-financial-row-route">
 
-            <strong>
-                Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
-            </strong>
+            <div class="delivery-financial-row-icon">
+                <i class="bi bi-signpost-split-fill"></i>
+            </div>
+
+            <div class="delivery-financial-row-copy">
+
+                <span>
+                    Costo de la ruta
+                    @if($pedido->distancia_delivery_km !== null)
+                        <small>
+                            {{ number_format((float) $pedido->distancia_delivery_km, 2) }} km
+                        </small>
+                    @endif
+                </span>
+
+                <strong>
+                    Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                </strong>
+
+            </div>
+
         </div>
 
-        <div>
-            <span>Mi comisión</span>
 
-            <strong class="delivery-financial-my-share">
-                Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
-                <small>
-                    ({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%)
-                </small>
-            </strong>
+        <div class="delivery-financial-row delivery-financial-row-commission">
+
+            <div class="delivery-financial-row-icon">
+                <i class="bi bi-person-badge-fill"></i>
+            </div>
+
+            <div class="delivery-financial-row-copy">
+
+                <span>
+                    Mi comisión
+                    <small>
+                        {{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%
+                    </small>
+                </span>
+
+                <strong class="delivery-financial-my-share">
+                    Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                </strong>
+
+            </div>
+
         </div>
 
-        <div>
-            <span>Parte restaurante</span>
 
-            <strong>
-                Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
-                <small>
-                    ({{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%)
-                </small>
-            </strong>
+        <div class="delivery-financial-row delivery-financial-row-restaurant">
+
+            <div class="delivery-financial-row-icon">
+                <i class="bi bi-shop-window"></i>
+            </div>
+
+            <div class="delivery-financial-row-copy">
+
+                <span>
+                    Parte restaurante
+                    <small>
+                        {{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%
+                    </small>
+                </span>
+
+                <strong>
+                    Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
+                </strong>
+
+            </div>
+
         </div>
 
     </div>
