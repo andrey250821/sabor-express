@@ -26,6 +26,7 @@ class Pedido extends Model
         'porcentaje_restaurante_delivery',
         'monto_restaurante_delivery',
         'estado',
+        'fecha_listo',
         'latitud',
         'longitud',
         'direccion_entrega',
@@ -44,6 +45,7 @@ class Pedido extends Model
             'porcentaje_restaurante_delivery' => 'decimal:2',
             'monto_restaurante_delivery' => 'decimal:2',
             'total' => 'decimal:2',
+            'fecha_listo' => 'datetime',
         ];
     }
 
