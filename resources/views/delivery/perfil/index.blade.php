@@ -202,7 +202,7 @@
 
                             </label>
 
-                            <div class="delivery-file-wrapper">
+                            <div class="delivery-file-wrapper delivery-interactive-field">
 
                                 <i class="bi bi-camera-fill"></i>
 
@@ -336,7 +336,7 @@
 
                                 <button
                                     type="button"
-                                    class="delivery-password-toggle"
+                                    class="delivery-password-toggle" data-delivery-interactive
                                     data-password-toggle="current_password"
                                     aria-label="Mostrar contraseña actual">
                                     <i class="bi bi-eye"></i>
@@ -371,7 +371,7 @@
 
                                 <button
                                     type="button"
-                                    class="delivery-password-toggle"
+                                    class="delivery-password-toggle" data-delivery-interactive
                                     data-password-toggle="password"
                                     aria-label="Mostrar nueva contraseña">
                                     <i class="bi bi-eye"></i>
@@ -409,7 +409,7 @@
 
                                 <button
                                     type="button"
-                                    class="delivery-password-toggle"
+                                    class="delivery-password-toggle" data-delivery-interactive
                                     data-password-toggle="password_confirmation"
                                     aria-label="Mostrar confirmación de contraseña">
                                     <i class="bi bi-eye"></i>
