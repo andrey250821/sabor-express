@@ -9239,29 +9239,28 @@ body.delivery-menu-open {
 }
 
 @media (max-width: 900px) {
-    .delivery-show .delivery-priority-grid {
-        grid-template-columns: 1fr;
-    }
-
     .delivery-show .delivery-financial-breakdown {
         grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 575.98px) {
-    .delivery-show .delivery-priority-card {
+    .delivery-show .delivery-reference,
+    .delivery-show .delivery-contact-phone {
         align-items: flex-start;
-        padding: 16px;
+        padding: 15px;
     }
 
-    .delivery-show .delivery-priority-icon {
+    .delivery-show .delivery-reference-icon,
+    .delivery-show .delivery-contact-phone .delivery-info-item-icon {
         width: 46px;
         height: 46px;
         min-width: 46px;
+        font-size: 19px;
     }
 
-    .delivery-show .delivery-priority-content > strong,
-    .delivery-show .delivery-priority-phone-link {
+    .delivery-show .delivery-reference > div:last-child > strong,
+    .delivery-show .delivery-contact-phone-link {
         font-size: 15px;
     }
 
@@ -9275,12 +9274,13 @@ body.delivery-menu-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .delivery-show .delivery-priority-card,
-    .delivery-show .delivery-priority-card::after {
-        animation: none;
-    }
-
+    .delivery-show .delivery-reference,
+    .delivery-show .delivery-reference::after,
+    .delivery-show .delivery-contact-phone,
+    .delivery-show .delivery-contact-phone::after,
+    .delivery-show .delivery-contact-phone-link,
     .delivery-show .delivery-financial-row {
+        animation: none;
         transition: none;
     }
 }
