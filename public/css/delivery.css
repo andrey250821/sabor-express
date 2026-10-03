@@ -9096,6 +9096,8 @@ body.delivery-menu-open {
 
 //* ==========================================================================
    DETALLE DEL PEDIDO — DESGLOSE ECONÓMICO
+   --------------------------------------------------------------------------
+   Tarjeta en modo oscuro, con filas uniformes y alto contraste.
    ========================================================================== */
 
 .delivery-show .delivery-financial-breakdown {
@@ -9106,16 +9108,11 @@ body.delivery-menu-open {
     gap: 12px;
     margin-top: 18px;
     padding: 14px;
-    border: 1px solid #2f3139;
+    border: 1px solid #2f3139 !important;
     border-radius: 18px;
-    background:
-        linear-gradient(
-            145deg,
-            #131419,
-            #1b1d24
-        );
+    background: #18181b !important;
     box-shadow:
-        0 14px 30px rgba(0, 0, 0, .16),
+        0 14px 30px rgba(0, 0, 0, .22),
         inset 0 1px 0 rgba(255, 255, 255, .025);
 }
 
@@ -9126,18 +9123,21 @@ body.delivery-menu-open {
     align-items: center;
     gap: 11px;
     padding: 14px;
+    border: 1px solid #30323b !important;
     border-radius: 15px;
-    border: 1px solid #30323b;
-    background: #1a1c22;
+    background: #1f2937 !important;
+    color: #f3f4f6 !important;
     transition:
         transform .22s ease,
         border-color .22s ease,
-        box-shadow .22s ease;
+        box-shadow .22s ease,
+        background .22s ease;
 }
 
 .delivery-show .delivery-financial-row:hover {
     transform: translateY(-2px);
-    border-color: #484b56;
+    border-color: #4b5563 !important;
+    background: #232c3a !important;
     box-shadow: 0 10px 22px rgba(0, 0, 0, .18);
 }
 
@@ -9160,82 +9160,62 @@ body.delivery-menu-open {
 }
 
 .delivery-show .delivery-financial-row-copy > span {
-    color: #8e919b;
+    color: #d1d5db !important;
     font-size: 10px;
     font-weight: 800;
     line-height: 1.35;
+    letter-spacing: .02em;
 }
 
 .delivery-show .delivery-financial-row-copy > span small {
     display: inline-flex;
     margin-left: 4px;
-    color: #b5b7be;
+    color: #9ca3af !important;
     font-size: 9px;
     font-weight: 700;
 }
 
 .delivery-show .delivery-financial-row-copy > strong {
-    color: #f3f4f6;
+    color: #f9fafb !important;
     font-size: 17px;
     font-weight: 900;
     line-height: 1.15;
 }
 
+/* Acentos sutiles: el fondo sigue siendo uniforme y oscuro. */
 .delivery-show .delivery-financial-row-route {
-    border-color: rgba(255, 193, 7, .18);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 193, 7, .07),
-            #1a1c22
-        );
+    border-color: rgba(245, 158, 11, .22) !important;
 }
 
 .delivery-show .delivery-financial-row-route .delivery-financial-row-icon {
-    color: #ffc107;
-    background: rgba(255, 193, 7, .10);
-}
-
-.delivery-show .delivery-financial-row-route .delivery-financial-row-copy > strong {
-    color: #fff2c2;
+    color: #fbbf24;
+    background: rgba(245, 158, 11, .10);
 }
 
 .delivery-show .delivery-financial-row-commission {
-    border-color: rgba(53, 208, 127, .19);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(53, 208, 127, .07),
-            #1a1c22
-        );
+    border-color: rgba(52, 211, 153, .22) !important;
 }
 
 .delivery-show .delivery-financial-row-commission .delivery-financial-row-icon {
-    color: #35d07f;
-    background: rgba(53, 208, 127, .10);
+    color: #34d399;
+    background: rgba(52, 211, 153, .10);
 }
 
 .delivery-show .delivery-financial-my-share {
-    color: #72e9a5 !important;
+    color: #86efac !important;
 }
 
 .delivery-show .delivery-financial-row-restaurant {
-    border-color: rgba(255, 77, 136, .18);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(139, 30, 69, .12),
-            #1a1c22
-        );
+    border-color: rgba(244, 114, 182, .20) !important;
 }
 
 .delivery-show .delivery-financial-row-restaurant .delivery-financial-row-icon {
-    color: #ff6a9b;
-    background: rgba(255, 47, 118, .10);
+    color: #f472b6;
+    background: rgba(244, 114, 182, .09);
 }
 
 .delivery-show .delivery-financial-row-restaurant .delivery-financial-row-copy > strong {
-    color: #ffd1df;
+    color: #fce7f3 !important;
 }
 
 @media (max-width: 900px) {
@@ -9245,25 +9225,6 @@ body.delivery-menu-open {
 }
 
 @media (max-width: 575.98px) {
-    .delivery-show .delivery-reference,
-    .delivery-show .delivery-contact-phone {
-        align-items: flex-start;
-        padding: 15px;
-    }
-
-    .delivery-show .delivery-reference-icon,
-    .delivery-show .delivery-contact-phone .delivery-info-item-icon {
-        width: 46px;
-        height: 46px;
-        min-width: 46px;
-        font-size: 19px;
-    }
-
-    .delivery-show .delivery-reference > div:last-child > strong,
-    .delivery-show .delivery-contact-phone-link {
-        font-size: 15px;
-    }
-
     .delivery-show .delivery-financial-breakdown {
         padding: 10px;
     }
@@ -9271,16 +9232,14 @@ body.delivery-menu-open {
     .delivery-show .delivery-financial-row {
         padding: 12px;
     }
+
+    .delivery-show .delivery-financial-row-copy > strong {
+        font-size: 16px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .delivery-show .delivery-reference,
-    .delivery-show .delivery-reference::after,
-    .delivery-show .delivery-contact-phone,
-    .delivery-show .delivery-contact-phone::after,
-    .delivery-show .delivery-contact-phone-link,
     .delivery-show .delivery-financial-row {
-        animation: none;
         transition: none;
     }
 }
