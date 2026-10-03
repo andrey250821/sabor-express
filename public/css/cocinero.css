@@ -3864,3 +3864,62 @@ body.cocinero-layout {
     }
 }
 
+
+
+/* ==========================================================================
+   CORRECCIÓN — LEGIBILIDAD DEL HISTORIAL
+   ========================================================================== */
+
+.cocinero-history-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.cocinero-history-filters .btn {
+    font-weight: 800;
+    color: #e7e9ee;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.cocinero-history-filters .btn-outline-secondary {
+    color: #d9dde5 !important;
+    border-color: rgba(255, 255, 255, 0.20) !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+}
+
+.cocinero-history-filters .btn-outline-secondary:hover,
+.cocinero-history-filters .btn-outline-secondary:focus {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.34) !important;
+    background: rgba(255, 255, 255, 0.085) !important;
+}
+
+.cocinero-history-filters .btn-dark {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    background: linear-gradient(135deg, #3a3d47, #252831) !important;
+}
+
+.cocinero-history-date {
+    color: #cbd1dc !important;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+
+    .cocinero-history-filters {
+        width: 100%;
+    }
+
+    .cocinero-history-filters .btn {
+        flex: 1 1 auto;
+    }
+
+    .cocinero-history-date {
+        font-size: 10px;
+    }
+}
