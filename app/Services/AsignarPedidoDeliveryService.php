@@ -189,17 +189,18 @@ class AsignarPedidoDeliveryService
                 ->values();
 
             /*
-             * 5. Mantener FIFO estricto según el orden de creación del pedido.
+             * 5. Mantener FIFO estricto según el momento en que cocina
+             * terminó cada pedido.
              *
-             * created_at ya registra el momento en que el cliente realizó
-             * el pedido, por lo que no necesitamos una segunda fecha para
-             * representar el orden de la cola.
+             * fecha_listo representa cuándo el pedido pasó a LISTO.
+             * Para registros históricos que aún no tengan esa fecha,
+             * usamos created_at como respaldo.
              */
             foreach ($candidatos as $candidato) {
                 $pedido = Pedido::query()
                     ->where('estado', 'listo')
                     ->whereDoesntHave('asignacionDelivery')
-                    ->orderBy('created_at', 'asc')
+                    ->orderByRaw('COALESCE(fecha_listo, created_at) ASC')
                     ->orderBy('id', 'asc')
                     ->lockForUpdate()
                     ->first();
