@@ -589,7 +589,7 @@
                                 <strong>{{ $etiquetaFecha }}</strong>
 
                                 @if($fechaGrupo)
-                                    <span class="text-muted">
+                                    <span class="cocinero-history-date">
                                         {{ $fechaGrupo->format('d/m/Y') }}
                                     </span>
                                 @endif
