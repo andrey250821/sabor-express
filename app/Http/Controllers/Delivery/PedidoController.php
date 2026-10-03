@@ -44,7 +44,7 @@ class PedidoController extends Controller
     /**
      * COLA DE PEDIDOS
      *
-     * El Delivery no puede elegir pedidos ni consultar sus datos.
+     * El Delivery no puede elegir manualmente pedidos ni consultar sus datos.
      * La cola solo muestra la cantidad de pedidos que esperan asignación.
      */
     public function index(
