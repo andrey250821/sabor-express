@@ -155,7 +155,7 @@ $estadoPedido === 'en_camino'
                     </h1>
 
                     <p>
-                        Revisa la información necesaria para realizar la entrega.
+                        Los detalles de la entrega están disponibles porque este pedido ya está en camino.
                     </p>
 
                 </div>
@@ -865,7 +865,7 @@ $estadoPedido === 'en_camino'
 
 
     {{-- ========================================================
-             PEDIDO DISPONIBLE
+             PEDIDO ASIGNADO
         ========================================================= --}}
 
     @if($puedeIniciar)
@@ -897,7 +897,8 @@ $estadoPedido === 'en_camino'
     <form
         method="POST"
         action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}"
-        class="delivery-action-form">
+        class="delivery-action-form"
+        data-disable-on-submit>
 
         @csrf
 
@@ -905,7 +906,8 @@ $estadoPedido === 'en_camino'
 
         <button
             type="submit"
-            class="delivery-action-button primary">
+            class="delivery-action-button primary"
+            data-delivery-interactive>
 
             <i class="bi bi-bicycle"></i>
 
@@ -949,7 +951,8 @@ $estadoPedido === 'en_camino'
     <form
         method="POST"
         action="{{ route('delivery.pedidos.entregar', $pedido->id) }}"
-        class="delivery-action-form">
+        class="delivery-action-form"
+        data-disable-on-submit>
 
         @csrf
 
@@ -957,7 +960,8 @@ $estadoPedido === 'en_camino'
 
         <button
             type="submit"
-            class="delivery-action-button success">
+            class="delivery-action-button success"
+            data-delivery-interactive>
 
             <i class="bi bi-check2-circle"></i>
 
