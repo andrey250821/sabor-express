@@ -111,19 +111,16 @@
                     autocomplete="off"
                     spellcheck="false">
 
-                @if(!empty($busquedaGmail))
-
                 <button
                     type="button"
+                    id="deliveryGmailClear"
                     class="delivery-search-clear"
-                    onclick="document.getElementById('deliveryGmailSearch').value='';document.getElementById('deliveryGmailSearch').dispatchEvent(new Event('input'));"
-                    aria-label="Limpiar búsqueda">
+                    aria-label="Limpiar búsqueda"
+                    {{ empty($busquedaGmail) ? 'hidden' : '' }}>
 
                     <i class="bi bi-x-circle-fill"></i>
 
                 </button>
-
-                @endif
 
             </div>
 
