@@ -239,42 +239,53 @@
                 </div>
             </section>
 
-            {{-- OBSERVACIONES --}}
-            @if($pedido->observacion_cliente)
+        {{-- OBSERVACIONES PRIORITARIAS --}}
+        <section class="cocinero-observation-card mb-4 cocinero-reveal">
 
-                <section class="cocinero-detail-card mb-4 cocinero-reveal">
+            <div class="cocinero-observation-card-top">
+                <div class="cocinero-observation-icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
 
-                    <div class="cocinero-detail-card-header">
+                <div>
+                    <span class="cocinero-observation-kicker">
+                        <i class="bi bi-eye-fill"></i>
+                        Prioridad de cocina
+                    </span>
 
-                        <div>
-                            <div class="cocinero-detail-card-icon warning">
-                                <i class="bi bi-chat-left-text-fill"></i>
-                            </div>
+                    <h3>
+                        Observaciones del cliente
+                    </h3>
 
-                            <div>
-                                <h3>Observación del cliente</h3>
-                                <span>Indicaciones especiales para la preparación</span>
-                            </div>
-                        </div>
-                    </div>
+                    <p>
+                        Revisa estas indicaciones antes de preparar el pedido.
+                    </p>
+                </div>
 
-                    <div class="cocinero-observation">
+                <div class="cocinero-observation-badge">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    Revisar
+                </div>
+            </div>
 
-                        <i class="bi bi-exclamation-circle-fill"></i>
+            <div class="cocinero-observation-content">
+                <i class="bi bi-chat-left-quote-fill"></i>
 
-                        <div>
-                            <strong>Indicaciones</strong>
+                <div>
+                    <strong>
+                        {{ $pedido->observacion_cliente ? 'Indicaciones especiales' : 'Sin indicaciones especiales' }}
+                    </strong>
 
-                            <p>
-                                {{ $pedido->observacion_cliente }}
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                    <p>
+                        {{ $pedido->observacion_cliente ?: 'El cliente no registró observaciones para la preparación.' }}
+                    </p>
+                </div>
+            </div>
+        </section>
 
-            @endif
+        <div class="row g-4">
 
-        </div>
+        {{-- COLUMNA PRINCIPAL --}}
 
         {{-- COLUMNA LATERAL --}}
         <div class="col-12 col-xl-4">
@@ -395,77 +406,6 @@
                                 <span>
                                     Este pedido ya está en una etapa posterior
                                     o pertenece a otro cocinero.
-                                </span>
-                            </div>
-                        </div>
-
-                    @endif
-
-                </div>
-            </section>
-
-            {{-- ENTREGA --}}
-            <section class="cocinero-detail-card mb-4 cocinero-reveal">
-
-                <div class="cocinero-detail-card-header">
-
-                    <div>
-                        <div class="cocinero-detail-card-icon">
-                            <i class="bi bi-geo-alt-fill"></i>
-                        </div>
-
-                        <div>
-                            <h3>Entrega</h3>
-                            <span>Información registrada para Delivery</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cocinero-delivery-info">
-
-                    @if($pedido->direccion_entrega)
-
-                        <div class="cocinero-info-row">
-
-                            <div class="cocinero-info-row-icon">
-                                <i class="bi bi-geo-alt-fill"></i>
-                            </div>
-
-                            <div>
-                                <small>Dirección</small>
-                                <strong>{{ $pedido->direccion_entrega }}</strong>
-                            </div>
-                        </div>
-
-                    @endif
-
-                    @if($pedido->referencia_delivery)
-
-                        <div class="cocinero-info-row">
-
-                            <div class="cocinero-info-row-icon">
-                                <i class="bi bi-signpost-2-fill"></i>
-                            </div>
-
-                            <div>
-                                <small>Referencia</small>
-                                <strong>{{ $pedido->referencia_delivery }}</strong>
-                            </div>
-                        </div>
-
-                    @endif
-
-                    @if($pedido->latitud !== null && $pedido->longitud !== null)
-
-                        <div class="cocinero-coordinates">
-
-                            <i class="bi bi-pin-map-fill"></i>
-
-                            <div>
-                                <small>Ubicación registrada</small>
-                                <span>
-                                    {{ $pedido->latitud }},
-                                    {{ $pedido->longitud }}
                                 </span>
                             </div>
                         </div>
