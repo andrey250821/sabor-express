@@ -126,7 +126,7 @@ $estadoPedido === 'en_camino'
 
             <a
                 href="{{ route('delivery.pedidos.index') }}"
-                class="delivery-show-back">
+                class="delivery-show-back" data-delivery-interactive>
 
                 <i class="bi bi-arrow-left"></i>
 
@@ -165,7 +165,7 @@ $estadoPedido === 'en_camino'
         </div>
 
 
-        <div class="delivery-show-header-date">
+        <div class="delivery-show-header-date" data-delivery-animate>
 
             <i class="bi bi-calendar3"></i>
 
@@ -439,7 +439,7 @@ $estadoPedido === 'en_camino'
 
                     <a
                         href="tel:{{ preg_replace('/[^0-9+]/', '', $pedido->user->telefono) }}"
-                        class="delivery-contact-phone-link">
+                        class="delivery-contact-phone-link" data-delivery-interactive>
 
                         {{ $pedido->user->telefono }}
 
@@ -625,7 +625,7 @@ $estadoPedido === 'en_camino'
             href="https://www.google.com/maps?q={{ $latitud }},{{ $longitud }}"
             target="_blank"
             rel="noopener noreferrer"
-            class="delivery-map-external">
+            class="delivery-map-external" data-delivery-interactive>
 
             <i class="bi bi-box-arrow-up-right"></i>
 
@@ -907,7 +907,7 @@ $estadoPedido === 'en_camino'
          ACCIONES
     ============================================================= --}}
 
-<div class="delivery-action-card">
+<div class="delivery-action-card" data-delivery-animate>
 
 
     {{-- ========================================================
