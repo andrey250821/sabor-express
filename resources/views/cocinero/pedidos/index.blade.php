@@ -14,206 +14,131 @@
     $cantidadPendientes = $pendientes->count();
     $cantidadPreparando = $preparando->count();
     $cantidadListos = $listos->count();
-    $totalActivos = $cantidadPendientes + $cantidadPreparando + $cantidadListos;
 @endphp
 
 <div class="container-fluid px-0 cocinero-pedidos">
 
     {{-- CABECERA --}}
-    <div class="row align-items-center g-3 mb-4 cocinero-reveal">
+    <section class="cocinero-page-intro cocinero-reveal mb-4">
 
-        <div class="col-12 col-lg">
+        <div class="cocinero-page-intro-icon">
+            <i class="bi bi-bag-check-fill"></i>
+        </div>
 
-            <div class="d-flex align-items-start gap-3">
+        <div class="cocinero-page-intro-content">
 
-                <div class="cocinero-detail-card-icon flex-shrink-0">
-                    <i class="bi bi-bag-check-fill"></i>
-                </div>
+            <span class="cocinero-kicker">
+                <i class="bi bi-fire"></i>
+                Gestión de cocina
+            </span>
 
-                <div>
-                    <span class="cocinero-kicker">
-                        <i class="bi bi-fire"></i>
-                        Gestión de cocina
-                    </span>
+            <h2>
+                Pedidos
+            </h2>
 
-                    <h2 class="h3 fw-bold text-white mb-2 mt-1">
-                        Pedidos
-                    </h2>
+            <p>
+                Atiende los pedidos pagados respetando el orden de llegada.
+                Una vez que comienzas una preparación, el pedido queda asociado a tu cuenta.
+            </p>
+        </div>
 
-                    <p class="text-secondary mb-0 small">
-                        Atiende los pedidos pagados respetando el orden de llegada.
-                        Una vez que comienzas una preparación, el pedido queda asociado a tu cuenta.
-                    </p>
-                </div>
+        <a
+            href="{{ route('cocinero.dashboard') }}"
+            class="cocinero-btn-secondary js-ripple cocinero-page-intro-button">
+
+            <i class="bi bi-grid-1x2-fill"></i>
+            Dashboard
+        </a>
+    </section>
+
+
+    {{-- SELECTOR VERTICAL DE ESTADOS --}}
+    <section class="cocinero-state-panel cocinero-reveal mb-4">
+
+        <div class="cocinero-state-panel-heading">
+
+            <div>
+                <span class="cocinero-panel-kicker">
+                    FLUJO DE COCINA
+                </span>
+
+                <h2>
+                    ¿Qué quieres revisar?
+                </h2>
+
+                <p>
+                    Selecciona una sección. Los pedidos aparecerán debajo.
+                </p>
             </div>
         </div>
 
-        <div class="col-12 col-lg-auto">
-
-            <a
-                href="{{ route('cocinero.dashboard') }}"
-                class="btn cocinero-btn-secondary js-ripple d-inline-flex align-items-center">
-
-                <i class="bi bi-grid-1x2-fill me-1"></i>
-                Dashboard
-            </a>
-        </div>
-    </div>
-
-    {{-- RESUMEN --}}
-    <div class="row g-3 mb-4">
-
-        <div class="col-12 col-sm-6 col-xl-3 cocinero-reveal">
+        <div class="cocinero-state-navigation">
 
             <a
                 href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
-                class="cocinero-stat-link">
+                class="cocinero-state-link {{ $seccion === 'pendientes' ? 'active pendiente' : '' }}">
 
-                <div class="pedido-stat-card pendiente clickable">
+                <span class="cocinero-state-link-icon">
+                    <i class="bi bi-hourglass-split"></i>
+                </span>
 
-                    <div class="d-flex align-items-center justify-content-between gap-3">
+                <span class="cocinero-state-link-content">
+                    <strong>Cola</strong>
+                    <small>Pedidos pagados esperando preparación</small>
+                </span>
 
-                        <div class="pedido-stat-content">
-                            <span>Cola de cocina</span>
-                            <strong>{{ $cantidadPendientes }}</strong>
-                            <small>Pedidos pagados esperando preparación</small>
-                        </div>
+                <span class="cocinero-state-link-count">
+                    {{ $cantidadPendientes }}
+                </span>
 
-                        <div class="pedido-stat-icon">
-                            <i class="bi bi-hourglass-split"></i>
-                        </div>
-                    </div>
-
-                </div>
+                <i class="bi bi-chevron-right cocinero-state-link-arrow"></i>
             </a>
-        </div>
 
-        <div class="col-12 col-sm-6 col-xl-3 cocinero-reveal">
 
             <a
                 href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
-                class="cocinero-stat-link">
+                class="cocinero-state-link {{ $seccion === 'preparando' ? 'active preparando' : '' }}">
 
-                <div class="pedido-stat-card preparando clickable">
+                <span class="cocinero-state-link-icon">
+                    <i class="bi bi-fire"></i>
+                </span>
 
-                    <div class="d-flex align-items-center justify-content-between gap-3">
+                <span class="cocinero-state-link-content">
+                    <strong>En preparación</strong>
+                    <small>Pedidos que actualmente estás preparando</small>
+                </span>
 
-                        <div class="pedido-stat-content">
-                            <span>Preparando</span>
-                            <strong>{{ $cantidadPreparando }}</strong>
-                            <small>Pedidos que estás preparando</small>
-                        </div>
+                <span class="cocinero-state-link-count">
+                    {{ $cantidadPreparando }}
+                </span>
 
-                        <div class="pedido-stat-icon">
-                            <i class="bi bi-fire"></i>
-                        </div>
-                    </div>
-
-                </div>
+                <i class="bi bi-chevron-right cocinero-state-link-arrow"></i>
             </a>
-        </div>
 
-        <div class="col-12 col-sm-6 col-xl-3 cocinero-reveal">
 
             <a
                 href="{{ route('cocinero.pedidos.index', ['seccion' => 'listos']) }}"
-                class="cocinero-stat-link">
+                class="cocinero-state-link {{ $seccion === 'listos' ? 'active listos' : '' }}">
 
-                <div class="pedido-stat-card listo clickable">
+                <span class="cocinero-state-link-icon">
+                    <i class="bi bi-check-circle-fill"></i>
+                </span>
 
-                    <div class="d-flex align-items-center justify-content-between gap-3">
+                <span class="cocinero-state-link-content">
+                    <strong>Seguimiento</strong>
+                    <small>Pedidos terminados por cocina e historial</small>
+                </span>
 
-                        <div class="pedido-stat-content">
-                            <span>Listos</span>
-                            <strong>{{ $cantidadListos }}</strong>
-                            <small>Pedidos terminados por cocina</small>
-                        </div>
+                <span class="cocinero-state-link-count">
+                    {{ $cantidadListos }}
+                </span>
 
-                        <div class="pedido-stat-icon">
-                            <i class="bi bi-check-circle-fill"></i>
-                        </div>
-                    </div>
-
-                </div>
+                <i class="bi bi-chevron-right cocinero-state-link-arrow"></i>
             </a>
+
         </div>
+    </section>
 
-        <div class="col-12 col-sm-6 col-xl-3 cocinero-reveal">
-
-            <div class="pedido-stat-card total">
-
-                <div class="d-flex align-items-center justify-content-between gap-3">
-
-                    <div class="pedido-stat-content">
-                        <span>Activos</span>
-                        <strong>{{ $totalActivos }}</strong>
-                        <small>Resumen del flujo actual</small>
-                    </div>
-
-                    <div class="pedido-stat-icon">
-                        <i class="bi bi-collection-fill"></i>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    {{-- NAVEGACIÓN DE ESTADOS --}}
-    <div class="cocinero-panel mb-4 cocinero-reveal">
-
-        <div class="p-3">
-
-            <div
-                class="nav nav-pills nav-fill gap-2"
-                aria-label="Secciones de pedidos">
-
-                <a
-                    href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
-                    class="nav-link {{ $seccion === 'pendientes' ? 'active' : '' }} rounded-3 text-start px-3 py-3">
-
-                    <div class="fw-bold small">
-                        <i class="bi bi-hourglass-split me-1"></i>
-                        Cola
-                    </div>
-
-                    <small class="opacity-75">
-                        {{ $cantidadPendientes }} pendientes
-                    </small>
-                </a>
-
-                <a
-                    href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
-                    class="nav-link {{ $seccion === 'preparando' ? 'active' : '' }} rounded-3 text-start px-3 py-3">
-
-                    <div class="fw-bold small">
-                        <i class="bi bi-fire me-1"></i>
-                        Preparando
-                    </div>
-
-                    <small class="opacity-75">
-                        {{ $cantidadPreparando }} en cocina
-                    </small>
-                </a>
-
-                <a
-                    href="{{ route('cocinero.pedidos.index', ['seccion' => 'listos']) }}"
-                    class="nav-link {{ $seccion === 'listos' ? 'active' : '' }} rounded-3 text-start px-3 py-3">
-
-                    <div class="fw-bold small">
-                        <i class="bi bi-clock-history me-1"></i>
-                        Seguimiento
-                    </div>
-
-                    <small class="opacity-75">
-                        {{ $cantidadListos }} registrados
-                    </small>
-                </a>
-
-            </div>
-        </div>
-    </div>
 
     {{-- COLA --}}
     @if($seccion === 'pendientes')
@@ -222,9 +147,14 @@
 
             <div class="cocinero-orders-header">
 
-                <div>
+                <div class="cocinero-orders-header-main">
+
+                    <span class="cocinero-section-eyebrow">
+                        COLA ACTUAL
+                    </span>
+
                     <h3>
-                        <i class="bi bi-hourglass-split me-2"></i>
+                        <i class="bi bi-hourglass-split"></i>
                         Cola de preparación
                     </h3>
 
@@ -239,6 +169,7 @@
                 </span>
             </div>
 
+
             @if($cantidadPendientes > 0)
 
                 <div class="cocinero-orders-list">
@@ -251,83 +182,94 @@
                             tabindex="0"
                             role="link">
 
-                            <div class="cocinero-order-number">
-                                <span>#</span>
-                                <strong>{{ $pedido->id }}</strong>
-                            </div>
+                            <div class="cocinero-order-topline">
 
-                            <div class="cocinero-order-info">
+                                <div class="cocinero-order-number">
+                                    <span>#</span>
+                                    <strong>{{ $pedido->id }}</strong>
+                                </div>
 
                                 <div class="cocinero-order-title">
 
-                                    <h4>
-                                        Pedido #{{ $pedido->id }}
-                                    </h4>
+                                    <div class="cocinero-order-title-main">
+                                        <h4>
+                                            Pedido #{{ $pedido->id }}
+                                        </h4>
 
-                                    <span class="pedido-status pendiente">
-                                        <i class="bi bi-clock-fill"></i>
-                                        En cola
-                                    </span>
+                                        <span class="pedido-status pendiente">
+                                            <i class="bi bi-clock-fill"></i>
+                                            En cola
+                                        </span>
+                                    </div>
+
+                                    <div class="cocinero-order-meta">
+
+                                        <span>
+                                            <i class="bi bi-person-fill"></i>
+                                            {{ $pedido->user->name ?? 'Cliente' }}
+                                        </span>
+
+                                        @if($pedido->user?->email)
+                                            <span>
+                                                <i class="bi bi-envelope"></i>
+                                                {{ $pedido->user->email }}
+                                            </span>
+                                        @endif
+
+                                        @if($pedido->created_at)
+                                            <span>
+                                                <i class="bi bi-clock"></i>
+                                                {{ $pedido->created_at->format('d/m/Y H:i') }}
+                                            </span>
+                                        @endif
+
+                                        <span>
+                                            <i class="bi bi-basket-fill"></i>
+                                            {{ $pedido->detallePedidos->count() }}
+                                            {{ $pedido->detallePedidos->count() === 1 ? 'producto' : 'productos' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="cocinero-order-footer">
+
+                                <div class="cocinero-order-total">
+                                    <span>Total</span>
+                                    <strong>
+                                        Bs {{ number_format($pedido->total ?? 0, 2) }}
+                                    </strong>
                                 </div>
 
-                                <div class="cocinero-order-meta">
+                                <div class="cocinero-order-actions">
 
-                                    <span>
-                                        <i class="bi bi-person-fill"></i>
-                                        {{ $pedido->user->name ?? 'Cliente' }}
-                                    </span>
+                                    <form
+                                        method="POST"
+                                        action="{{ route('cocinero.pedidos.preparar', $pedido->id) }}"
+                                        data-confirm="¿Comenzar a preparar el pedido #{{ $pedido->id }}? Esta acción lo asignará a tu cocina."
+                                        data-loading-text="Preparando...">
 
-                                    @if($pedido->user?->email)
-                                        <span>
-                                            <i class="bi bi-envelope"></i>
-                                            {{ $pedido->user->email }}
-                                        </span>
-                                    @endif
+                                        @csrf
+                                        @method('PUT')
 
-                                    @if($pedido->created_at)
-                                        <span>
-                                            <i class="bi bi-clock"></i>
-                                            {{ $pedido->created_at->format('d/m/Y H:i') }}
-                                        </span>
-                                    @endif
+                                        <button
+                                            type="submit"
+                                            class="btn cocinero-btn-preparar js-ripple">
 
-                                    <span>
-                                        <i class="bi bi-basket-fill"></i>
-                                        {{ $pedido->detallePedidos->count() }}
-                                        {{ $pedido->detallePedidos->count() === 1 ? 'producto' : 'productos' }}
-                                    </span>
+                                            <i class="bi bi-fire"></i>
+                                            <span>Preparar pedido</span>
+                                        </button>
+                                    </form>
                                 </div>
+
+                                <i class="bi bi-arrow-right cocinero-order-arrow"></i>
                             </div>
 
-                            <div class="cocinero-order-total">
-                                <span>Total</span>
-                                <strong>
-                                    Bs {{ number_format($pedido->total ?? 0, 2) }}
-                                </strong>
-                            </div>
-
-                            <div class="cocinero-order-actions">
-
-                                <form
-                                    method="POST"
-                                    action="{{ route('cocinero.pedidos.preparar', $pedido->id) }}"
-                                    data-confirm="¿Comenzar a preparar el pedido #{{ $pedido->id }}? Esta acción lo asignará a tu cocina."
-                                    data-loading-text="Preparando...">
-
-                                    @csrf
-                                    @method('PUT')
-
-                                    <button
-                                        type="submit"
-                                        class="btn cocinero-btn-preparar js-ripple">
-
-                                        <i class="bi bi-fire"></i>
-                                        <span>Preparar</span>
-                                    </button>
-                                </form>
-                            </div>
                         </article>
+
                     @endforeach
+
                 </div>
 
             @else
@@ -346,7 +288,9 @@
                 </div>
 
             @endif
+
         </section>
+
 
     {{-- PREPARANDO --}}
     @elseif($seccion === 'preparando')
@@ -355,22 +299,30 @@
 
             <div class="cocinero-orders-header">
 
-                <div>
+                <div class="cocinero-orders-header-main">
+
+                    <span class="cocinero-section-eyebrow">
+                        TRABAJO ACTUAL
+                    </span>
+
                     <h3>
-                        <i class="bi bi-fire me-2"></i>
-                        Mis preparaciones
+                        <i class="bi bi-fire"></i>
+                        En preparación
                     </h3>
 
                     <span>
                         Aquí aparecen únicamente los pedidos que comenzaste a preparar.
                     </span>
+
                 </div>
 
                 <span class="cocinero-orders-count">
                     {{ $cantidadPreparando }}
                     {{ $cantidadPreparando === 1 ? 'pedido' : 'pedidos' }}
                 </span>
+
             </div>
+
 
             @if($cantidadPreparando > 0)
 
@@ -384,82 +336,99 @@
                             tabindex="0"
                             role="link">
 
-                            <div class="cocinero-order-number">
-                                <span>#</span>
-                                <strong>{{ $pedido->id }}</strong>
-                            </div>
+                            <div class="cocinero-order-topline">
 
-                            <div class="cocinero-order-info">
+                                <div class="cocinero-order-number">
+                                    <span>#</span>
+                                    <strong>{{ $pedido->id }}</strong>
+                                </div>
 
                                 <div class="cocinero-order-title">
 
-                                    <h4>
-                                        Pedido #{{ $pedido->id }}
-                                    </h4>
+                                    <div class="cocinero-order-title-main">
 
-                                    <span class="pedido-status preparando">
-                                        <i class="bi bi-fire"></i>
-                                        Preparando
-                                    </span>
+                                        <h4>
+                                            Pedido #{{ $pedido->id }}
+                                        </h4>
+
+                                        <span class="pedido-status preparando">
+                                            <i class="bi bi-fire"></i>
+                                            Preparando
+                                        </span>
+
+                                    </div>
+
+                                    <div class="cocinero-order-meta">
+
+                                        <span>
+                                            <i class="bi bi-person-fill"></i>
+                                            {{ $pedido->user->name ?? 'Cliente' }}
+                                        </span>
+
+                                        @if($pedido->user?->email)
+                                            <span>
+                                                <i class="bi bi-envelope"></i>
+                                                {{ $pedido->user->email }}
+                                            </span>
+                                        @endif
+
+                                        @if($pedido->created_at)
+                                            <span>
+                                                <i class="bi bi-clock"></i>
+                                                {{ $pedido->created_at->format('d/m/Y H:i') }}
+                                            </span>
+                                        @endif
+
+                                        <span>
+                                            <i class="bi bi-person-check-fill"></i>
+                                            Asignado a ti
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="cocinero-order-footer">
+
+                                <div class="cocinero-order-total">
+                                    <span>Total</span>
+                                    <strong>
+                                        Bs {{ number_format($pedido->total ?? 0, 2) }}
+                                    </strong>
                                 </div>
 
-                                <div class="cocinero-order-meta">
+                                <div class="cocinero-order-actions">
 
-                                    <span>
-                                        <i class="bi bi-person-fill"></i>
-                                        {{ $pedido->user->name ?? 'Cliente' }}
-                                    </span>
+                                    <form
+                                        method="POST"
+                                        action="{{ route('cocinero.pedidos.listo', $pedido->id) }}"
+                                        data-confirm="¿Marcar el pedido #{{ $pedido->id }} como listo?"
+                                        data-loading-text="Finalizando...">
 
-                                    @if($pedido->user?->email)
-                                        <span>
-                                            <i class="bi bi-envelope"></i>
-                                            {{ $pedido->user->email }}
-                                        </span>
-                                    @endif
+                                        @csrf
+                                        @method('PUT')
 
-                                    @if($pedido->created_at)
-                                        <span>
-                                            <i class="bi bi-clock"></i>
-                                            {{ $pedido->created_at->format('d/m/Y H:i') }}
-                                        </span>
-                                    @endif
+                                        <button
+                                            type="submit"
+                                            class="btn cocinero-btn-listo js-ripple">
 
-                                    <span>
-                                        <i class="bi bi-person-check-fill"></i>
-                                        Asignado a ti
-                                    </span>
+                                            <i class="bi bi-check-lg"></i>
+                                            <span>Marcar como listo</span>
+                                        </button>
+
+                                    </form>
+
                                 </div>
+
+                                <i class="bi bi-arrow-right cocinero-order-arrow"></i>
+
                             </div>
 
-                            <div class="cocinero-order-total">
-                                <span>Total</span>
-                                <strong>
-                                    Bs {{ number_format($pedido->total ?? 0, 2) }}
-                                </strong>
-                            </div>
-
-                            <div class="cocinero-order-actions">
-
-                                <form
-                                    method="POST"
-                                    action="{{ route('cocinero.pedidos.listo', $pedido->id) }}"
-                                    data-confirm="¿Marcar el pedido #{{ $pedido->id }} como listo?"
-                                    data-loading-text="Finalizando...">
-
-                                    @csrf
-                                    @method('PUT')
-
-                                    <button
-                                        type="submit"
-                                        class="btn cocinero-btn-listo js-ripple">
-
-                                        <i class="bi bi-check-lg"></i>
-                                        <span>Marcar listo</span>
-                                    </button>
-                                </form>
-                            </div>
                         </article>
+
                     @endforeach
+
                 </div>
 
             @else
@@ -475,86 +444,106 @@
                     <p>
                         Cuando tomes un pedido de la cola, aparecerá aquí.
                     </p>
+
                 </div>
 
             @endif
+
         </section>
 
-    {{-- LISTOS --}}
+
+    {{-- SEGUIMIENTO --}}
     @elseif($seccion === 'listos')
 
         <section class="cocinero-orders-card cocinero-reveal">
 
             <div class="cocinero-orders-header">
 
-                <div>
+                <div class="cocinero-orders-header-main">
+
+                    <span class="cocinero-section-eyebrow">
+                        SEGUIMIENTO
+                    </span>
+
                     <h3>
-                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <i class="bi bi-check-circle-fill"></i>
                         Pedidos terminados
                     </h3>
 
                     <span>
-                        Consulta los pedidos que finalizaste y su estado posterior.
+                        Consulta los pedidos que finalizaste y revisa en qué etapa se encuentran.
                     </span>
+
                 </div>
 
-                <span class="cocinero-orders-count">
-                    {{ $cantidadListos }}
-                    {{ $cantidadListos === 1 ? 'pedido' : 'pedidos' }}
-                </span>
-            </div>
+                <div class="cocinero-orders-header-actions">
 
-            <div class="cocinero-history-filter">
+                    <span class="cocinero-orders-count">
+                        {{ $cantidadListos }}
+                        {{ $cantidadListos === 1 ? 'pedido' : 'pedidos' }}
+                    </span>
 
-                <form
-                    method="GET"
-                    action="{{ route('cocinero.pedidos.index') }}"
-                    class="row g-2 align-items-center">
+                    <details class="cocinero-history-details">
 
-                    <input
-                        type="hidden"
-                        name="seccion"
-                        value="listos">
-
-                    <div class="col-12 col-md-auto">
-
-                        <label
-                            for="periodo_listos"
-                            class="form-label text-secondary small fw-semibold mb-0">
-
-                            <i class="bi bi-calendar3 me-1"></i>
+                        <summary class="cocinero-history-button js-ripple">
+                            <i class="bi bi-clock-history"></i>
                             Historial
-                        </label>
-                    </div>
+                            <i class="bi bi-chevron-down cocinero-history-chevron"></i>
+                        </summary>
 
-                    <div class="col-12 col-md-auto">
+                        <div class="cocinero-history-popover">
 
-                        <select
-                            id="periodo_listos"
-                            name="periodo_listos"
-                            class="form-select form-select-sm cocinero-select"
-                            data-submit-form>
+                            <form
+                                method="GET"
+                                action="{{ route('cocinero.pedidos.index') }}">
 
-                            <option value="hoy" {{ $periodoListos === 'hoy' ? 'selected' : '' }}>
-                                Hoy
-                            </option>
+                                <input
+                                    type="hidden"
+                                    name="seccion"
+                                    value="listos">
 
-                            <option value="ayer" {{ $periodoListos === 'ayer' ? 'selected' : '' }}>
-                                Ayer
-                            </option>
+                                <label
+                                    for="periodo_listos"
+                                    class="cocinero-history-label">
 
-                            <option value="anteayer" {{ $periodoListos === 'anteayer' ? 'selected' : '' }}>
-                                Anteayer
-                            </option>
+                                    <i class="bi bi-calendar3"></i>
+                                    Mostrar periodo
+                                </label>
 
-                            <option value="semana" {{ $periodoListos === 'semana' ? 'selected' : '' }}>
-                                Última semana
-                            </option>
-                        </select>
-                    </div>
-                </form>
+                                <select
+                                    id="periodo_listos"
+                                    name="periodo_listos"
+                                    class="form-select cocinero-select"
+                                    data-submit-form>
+
+                                    <option value="hoy" {{ $periodoListos === 'hoy' ? 'selected' : '' }}>
+                                        Hoy
+                                    </option>
+
+                                    <option value="ayer" {{ $periodoListos === 'ayer' ? 'selected' : '' }}>
+                                        Ayer
+                                    </option>
+
+                                    <option value="anteayer" {{ $periodoListos === 'anteayer' ? 'selected' : '' }}>
+                                        Anteayer
+                                    </option>
+
+                                    <option value="semana" {{ $periodoListos === 'semana' ? 'selected' : '' }}>
+                                        Última semana
+                                    </option>
+
+                                </select>
+                            </form>
+
+                        </div>
+
+                    </details>
+
+                </div>
             </div>
 
+
+            {{-- PEDIDOS DE SEGUIMIENTO DEBAJO DEL ENCABEZADO --}}
             @if($cantidadListos > 0)
 
                 <div class="cocinero-orders-list">
@@ -567,109 +556,132 @@
                             tabindex="0"
                             role="link">
 
-                            <div class="cocinero-order-number">
-                                <span>#</span>
-                                <strong>{{ $pedido->id }}</strong>
-                            </div>
+                            <div class="cocinero-order-topline">
 
-                            <div class="cocinero-order-info">
+                                <div class="cocinero-order-number">
+                                    <span>#</span>
+                                    <strong>{{ $pedido->id }}</strong>
+                                </div>
 
                                 <div class="cocinero-order-title">
 
-                                    <h4>
-                                        Pedido #{{ $pedido->id }}
-                                    </h4>
+                                    <div class="cocinero-order-title-main">
 
-                                    @switch($pedido->estado)
+                                        <h4>
+                                            Pedido #{{ $pedido->id }}
+                                        </h4>
 
-                                        @case('asignado')
-                                            <span class="pedido-status listo">
-                                                <i class="bi bi-bicycle"></i>
-                                                Asignado a Delivery
+                                        @switch($pedido->estado)
+
+                                            @case('asignado')
+                                                <span class="pedido-status listo">
+                                                    <i class="bi bi-bicycle"></i>
+                                                    Asignado a Delivery
+                                                </span>
+                                                @break
+
+                                            @case('en_camino')
+                                                <span class="pedido-status preparando">
+                                                    <i class="bi bi-truck"></i>
+                                                    En camino
+                                                </span>
+                                                @break
+
+                                            @case('entregado')
+                                                <span class="pedido-status listo">
+                                                    <i class="bi bi-check2-all"></i>
+                                                    Entregado
+                                                </span>
+                                                @break
+
+                                            @case('cancelado')
+                                                <span class="pedido-status pendiente">
+                                                    <i class="bi bi-x-circle-fill"></i>
+                                                    Cancelado
+                                                </span>
+                                                @break
+
+                                            @default
+                                                <span class="pedido-status listo">
+                                                    <i class="bi bi-check-circle-fill"></i>
+                                                    Listo
+                                                </span>
+
+                                        @endswitch
+
+                                    </div>
+
+                                    <div class="cocinero-order-meta">
+
+                                        <span>
+                                            <i class="bi bi-person-fill"></i>
+                                            {{ $pedido->user->name ?? 'Cliente' }}
+                                        </span>
+
+                                        @if($pedido->user?->email)
+                                            <span>
+                                                <i class="bi bi-envelope"></i>
+                                                {{ $pedido->user->email }}
                                             </span>
-                                            @break
+                                        @endif
 
-                                        @case('en_camino')
-                                            <span class="pedido-status preparando">
-                                                <i class="bi bi-truck"></i>
-                                                En camino
+                                        @if($pedido->created_at)
+                                            <span>
+                                                <i class="bi bi-clock"></i>
+                                                {{ $pedido->created_at->format('d/m/Y H:i') }}
                                             </span>
-                                            @break
+                                        @endif
 
-                                        @case('entregado')
-                                            <span class="pedido-status listo">
-                                                <i class="bi bi-check2-all"></i>
-                                                Entregado
-                                            </span>
-                                            @break
+                                        <span>
+                                            <i class="bi bi-basket-fill"></i>
+                                            {{ $pedido->detallePedidos->count() }}
+                                            {{ $pedido->detallePedidos->count() === 1 ? 'producto' : 'productos' }}
+                                        </span>
 
-                                        @case('cancelado')
-                                            <span class="pedido-status pendiente">
-                                                <i class="bi bi-x-circle-fill"></i>
-                                                Cancelado
-                                            </span>
-                                            @break
+                                    </div>
+                                </div>
+                            </div>
 
-                                        @default
-                                            <span class="pedido-status listo">
-                                                <i class="bi bi-check-circle-fill"></i>
-                                                Listo
-                                            </span>
 
-                                    @endswitch
+                            <div class="cocinero-order-footer">
+
+                                <div class="cocinero-order-total">
+                                    <span>Total</span>
+                                    <strong>
+                                        Bs {{ number_format($pedido->total ?? 0, 2) }}
+                                    </strong>
                                 </div>
 
-                                <div class="cocinero-order-meta">
+                                <div class="cocinero-order-actions">
 
-                                    <span>
-                                        <i class="bi bi-person-fill"></i>
-                                        {{ $pedido->user->name ?? 'Cliente' }}
-                                    </span>
+                                    @if(in_array($pedido->estado, ['listo', 'asignado'], true))
 
-                                    @if($pedido->created_at)
-                                        <span>
-                                            <i class="bi bi-clock"></i>
-                                            {{ $pedido->created_at->format('d/m/Y H:i') }}
+                                        <span class="cocinero-ready-label">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            {{ $pedido->estado === 'asignado'
+                                                ? 'Asignado a Delivery'
+                                                : 'Esperando siguiente paso' }}
                                         </span>
+
+                                    @else
+
+                                        <span class="cocinero-tracking-label">
+                                            <i class="bi bi-clock-history"></i>
+                                            Seguimiento
+                                        </span>
+
                                     @endif
 
-                                    <span>
-                                        <i class="bi bi-basket-fill"></i>
-                                        {{ $pedido->detallePedidos->count() }}
-                                        {{ $pedido->detallePedidos->count() === 1 ? 'producto' : 'productos' }}
-                                    </span>
                                 </div>
+
+                                <i class="bi bi-arrow-right cocinero-order-arrow"></i>
+
                             </div>
 
-                            <div class="cocinero-order-total">
-                                <span>Total</span>
-                                <strong>
-                                    Bs {{ number_format($pedido->total ?? 0, 2) }}
-                                </strong>
-                            </div>
-
-                            <div class="cocinero-order-actions">
-
-                                @if(in_array($pedido->estado, ['listo', 'asignado'], true))
-
-                                    <span class="cocinero-ready-label">
-                                        <i class="bi bi-check-circle-fill"></i>
-                                        {{ $pedido->estado === 'asignado'
-                                            ? 'Asignado a Delivery'
-                                            : 'Esperando siguiente paso' }}
-                                    </span>
-
-                                @else
-
-                                    <span class="text-secondary small">
-                                        <i class="bi bi-clock-history me-1"></i>
-                                        Seguimiento
-                                    </span>
-
-                                @endif
-                            </div>
                         </article>
+
                     @endforeach
+
                 </div>
 
             @else
@@ -683,11 +695,13 @@
                     <h3>No hay pedidos en este periodo</h3>
 
                     <p>
-                        Los pedidos que finalices aparecerán aquí para seguimiento.
+                        Cuando termines pedidos, aparecerán aquí para seguimiento e historial.
                     </p>
+
                 </div>
 
             @endif
+
         </section>
 
     @endif
