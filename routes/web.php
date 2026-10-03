@@ -406,6 +406,7 @@ Route::middleware(['auth', 'role:Delivery'])
         // para que un Delivery inactivo pueda volver a activarse.
         Route::get('/perfil', [DeliveryPerfilController::class, 'edit'])->name('delivery.perfil.edit');
         Route::patch('/perfil', [DeliveryPerfilController::class, 'update'])->name('delivery.perfil.update');
+        Route::patch('/perfil/password', [DeliveryPerfilController::class, 'updatePassword'])->name('delivery.perfil.password');
         Route::patch('/estado', [DeliveryPerfilController::class, 'alternarEstado'])->name('delivery.estado.alternar');
 
         // Solo Deliverys activos pueden acceder al trabajo operativo.
