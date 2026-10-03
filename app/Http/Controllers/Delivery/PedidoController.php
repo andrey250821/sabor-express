@@ -149,8 +149,6 @@ class PedidoController extends Controller
             $fechaSeleccionada
         );
 
-        $busquedaGmail = trim((string) $request->input('buscar', ''));
-
         $asignaciones = AsignacionDelivery::query()
             ->with([
                 'pedido.user',
@@ -172,11 +170,6 @@ class PedidoController extends Controller
                     ->whereBetween('created_at', [$inicioUtc, $finUtc])
                     ->orWhereBetween('updated_at', [$inicioUtc, $finUtc]);
             })
-            ->when($busquedaGmail !== '', function ($query) use ($busquedaGmail) {
-                $query->whereHas('pedido.user', function ($userQuery) use ($busquedaGmail) {
-                    $userQuery->where('email', 'like', '%' . $busquedaGmail . '%');
-                });
-            })
             ->orderByDesc('updated_at')
             ->get();
 
@@ -184,8 +177,7 @@ class PedidoController extends Controller
             'delivery.pedidos.mis',
             compact(
                 'asignaciones',
-                'fechaSeleccionada',
-                'busquedaGmail'
+                'fechaSeleccionada'
             )
         );
     }
