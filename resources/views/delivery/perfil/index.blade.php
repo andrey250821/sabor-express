@@ -255,6 +255,195 @@
 
             </section>
 
+            <div class="delivery-password-divider" aria-hidden="true"></div>
+
+            {{-- CAMBIO DE CONTRASEÑA --}}
+            <section class="delivery-password-card" data-delivery-animate>
+
+                <div class="delivery-password-header">
+
+                    <div class="delivery-password-icon">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+
+                    <div>
+                        <span>SEGURIDAD DE LA CUENTA</span>
+                        <h2>Cambiar contraseña</h2>
+                        <p>
+                            Usa tu contraseña actual para establecer una nueva contraseña de acceso.
+                        </p>
+                    </div>
+
+                </div>
+
+                @if(session('password_status'))
+
+                <div class="delivery-password-alert success">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>{{ session('password_status') }}</span>
+                </div>
+
+                @endif
+
+                @if($errors->passwordUpdate->any())
+
+                <div class="delivery-password-alert error">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                    <div>
+                        <strong>No se pudo actualizar la contraseña.</strong>
+                        <ul>
+                            @foreach($errors->passwordUpdate->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                </div>
+
+                @endif
+
+                <form
+                    action="{{ route('delivery.perfil.password') }}"
+                    method="POST"
+                    class="delivery-password-form">
+
+                    @csrf
+                    @method('PATCH')
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-lg-4">
+
+                            <label for="current_password" class="delivery-form-label">
+                                Contraseña actual
+                            </label>
+
+                            <div class="delivery-password-input">
+
+                                <i class="bi bi-lock"></i>
+
+                                <input
+                                    id="current_password"
+                                    name="current_password"
+                                    type="password"
+                                    class="@error('current_password', 'passwordUpdate') is-invalid @enderror"
+                                    autocomplete="current-password"
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="delivery-password-toggle"
+                                    data-password-toggle="current_password"
+                                    aria-label="Mostrar contraseña actual">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+
+                            </div>
+
+                            @error('current_password', 'passwordUpdate')
+                                <small class="delivery-field-error">{{ $message }}</small>
+                            @enderror
+
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+
+                            <label for="password" class="delivery-form-label">
+                                Nueva contraseña
+                            </label>
+
+                            <div class="delivery-password-input">
+
+                                <i class="bi bi-key-fill"></i>
+
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    class="@error('password', 'passwordUpdate') is-invalid @enderror"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="delivery-password-toggle"
+                                    data-password-toggle="password"
+                                    aria-label="Mostrar nueva contraseña">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+
+                            </div>
+
+                            @error('password', 'passwordUpdate')
+                                <small class="delivery-field-error">{{ $message }}</small>
+                            @enderror
+
+                            <small class="delivery-form-help">
+                                Mínimo 8 caracteres.
+                            </small>
+
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+
+                            <label for="password_confirmation" class="delivery-form-label">
+                                Confirmar nueva contraseña
+                            </label>
+
+                            <div class="delivery-password-input">
+
+                                <i class="bi bi-check2-circle"></i>
+
+                                <input
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="delivery-password-toggle"
+                                    data-password-toggle="password_confirmation"
+                                    aria-label="Mostrar confirmación de contraseña">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="delivery-password-footer">
+
+                        <div class="delivery-password-tip">
+                            <i class="bi bi-info-circle-fill"></i>
+                            <span>
+                                No compartas tu contraseña y evita utilizar datos fáciles de adivinar.
+                            </span>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="delivery-password-save"
+                            data-delivery-interactive>
+
+                            <i class="bi bi-key-fill"></i>
+                            Actualizar contraseña
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
         </div>
 
 
@@ -263,4 +452,37 @@
 
 </div>
 
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const input = document.getElementById(
+                button.getAttribute('data-password-toggle')
+            );
+
+            if (!input) {
+                return;
+            }
+
+            const icon = button.querySelector('i');
+            const showing = input.type === 'text';
+
+            input.type = showing ? 'password' : 'text';
+
+            if (icon) {
+                icon.classList.toggle('bi-eye', showing);
+                icon.classList.toggle('bi-eye-slash', !showing);
+            }
+
+            button.setAttribute(
+                'aria-label',
+                showing ? 'Mostrar contraseña' : 'Ocultar contraseña'
+            );
+        });
+    });
+});
+</script>
+@endpush
 @endsection
