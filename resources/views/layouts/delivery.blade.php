@@ -178,7 +178,7 @@
                 </a>
 
 
-                {{-- PEDIDOS DISPONIBLES --}}
+                {{-- COLA DE PEDIDOS --}}
 
                 <a
                     href="{{ route('delivery.pedidos.index') }}"
