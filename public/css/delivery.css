@@ -3740,57 +3740,6 @@ a {
     }
 
 
-    .delivery-dashboard-panel {
-
-        padding: 16px;
-    }
-
-
-    .delivery-panel-header {
-
-        align-items: center;
-    }
-
-
-    .delivery-flow-step {
-
-        gap: 8px;
-    }
-
-
-    .delivery-flow-number {
-
-        display: none;
-    }
-
-
-    .delivery-flow-content strong {
-
-        font-size: .8rem;
-    }
-
-
-    .delivery-flow-content span {
-
-        font-size: .68rem;
-    }
-
-
-    .delivery-profile-card {
-
-        flex-wrap: wrap;
-    }
-
-
-    .delivery-profile-status {
-
-        width: 100%;
-
-        padding-top: 8px;
-
-        border-top: 1px solid var(--delivery-border);
-    }
-
 }
 
 
@@ -4317,19 +4266,7 @@ a {
    REDUCIR ANIMACIONES
    ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
 
-    .delivery-order-card,
-    .delivery-order-detail-btn,
-    .delivery-take-btn {
-        transition: none;
-    }
-
-    .delivery-live-dot {
-        animation: none;
-    }
-
-}
 /* =========================================================
    DELIVERY - MIS PEDIDOS
    ========================================================= */
@@ -4506,11 +4443,6 @@ a {
 .delivery-my-stat-success .delivery-my-stat-icon {
     color: #35d07f;
     background: rgba(25, 135, 84, 0.13);
-}
-
-.delivery-my-stat-total .delivery-my-stat-icon {
-    color: #5b9dff;
-    background: rgba(13, 110, 253, 0.12);
 }
 
 .delivery-my-stat-icon i {
@@ -6811,10 +6743,6 @@ a {
     }
 
     .delivery-map .leaflet-container {
-        min-height: 380px;
-    }
-
-    .delivery-map-error {
         min-height: 380px;
     }
 
