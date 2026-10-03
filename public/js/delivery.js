@@ -109,6 +109,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* =========================================================
+       RIPPLE / RETROALIMENTACIÓN VISUAL AL TOCAR
+       ========================================================= */
+
+    document.querySelectorAll('[data-delivery-interactive]').forEach((element) => {
+        element.addEventListener('pointerdown', (event) => {
+            if (element.disabled) {
+                return;
+            }
+
+            const rect = element.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            const size = Math.max(rect.width, rect.height);
+
+            ripple.className = 'delivery-ripple';
+            ripple.style.width = size + 'px';
+            ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left) + 'px';
+            ripple.style.top = (event.clientY - rect.top) + 'px';
+
+            element.querySelectorAll('.delivery-ripple').forEach((item) => item.remove());
+            element.appendChild(ripple);
+
+            window.setTimeout(() => {
+                ripple.remove();
+            }, 550);
+        });
+    });
+
+    /* =========================================================
        REVELADO DE ELEMENTOS AL ENTRAR EN PANTALLA
        ========================================================= */
 
