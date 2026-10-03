@@ -9800,3 +9800,319 @@ body.delivery-menu-open {
         margin-top: 1.25rem;
     }
 }
+
+
+/* =========================================================
+   DELIVERY UX POLISH — MICROINTERACCIONES
+   ========================================================= */
+
+[data-delivery-interactive] {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition:
+        transform .18s ease,
+        box-shadow .22s ease,
+        border-color .22s ease,
+        background-color .22s ease,
+        color .22s ease,
+        filter .22s ease;
+}
+
+[data-delivery-interactive]:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+[data-delivery-interactive]:active,
+[data-delivery-interactive].delivery-is-pressed {
+    transform: translateY(1px) scale(.975);
+    filter: brightness(.96);
+    transition-duration: .08s;
+}
+
+[data-delivery-interactive]:focus-visible {
+    outline: 2px solid rgba(255, 77, 136, .95);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px rgba(139, 30, 69, .18);
+}
+
+.delivery-ripple {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .24);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: deliveryRipple .5s ease-out forwards;
+    z-index: 10;
+}
+
+@keyframes deliveryRipple {
+    to {
+        transform: translate(-50%, -50%) scale(18);
+        opacity: 0;
+    }
+}
+
+/* Navegación */
+.delivery-nav-link {
+    border: 1px solid transparent;
+}
+
+.delivery-nav-link:hover {
+    border-color: rgba(255, 77, 136, .18);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .18);
+}
+
+.delivery-nav-link.active {
+    box-shadow:
+        inset 3px 0 0 var(--delivery-pink),
+        0 8px 20px rgba(139, 30, 69, .16);
+}
+
+.delivery-brand-link:hover .delivery-brand-text strong {
+    letter-spacing: .2px;
+}
+
+.delivery-sidebar-close:hover,
+.delivery-menu-toggle:hover {
+    box-shadow: 0 8px 20px rgba(255, 47, 118, .18);
+}
+
+.delivery-control-button {
+    min-height: 42px;
+    font-weight: 700;
+}
+
+/* Botones del dashboard */
+.delivery-dashboard-btn-primary,
+.delivery-dashboard-btn-secondary,
+.delivery-stat-link {
+    will-change: transform;
+}
+
+.delivery-dashboard-btn-primary:hover,
+.delivery-dashboard-btn-secondary:hover {
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .24);
+}
+
+.delivery-stat-link {
+    display: block;
+}
+
+.delivery-stat-link .delivery-stat-card {
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+.delivery-stat-link:hover .delivery-stat-card {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, .28);
+}
+
+/* Cola */
+.delivery-orders-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.delivery-queue-refresh {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border: 1px solid rgba(255, 77, 136, .26);
+    border-radius: 12px;
+    background: linear-gradient(135deg, #24101a, #351022);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
+}
+
+.delivery-queue-refresh i {
+    font-size: 17px;
+}
+
+.delivery-queue-refresh:hover {
+    border-color: rgba(255, 77, 136, .6);
+    box-shadow: 0 12px 26px rgba(139, 30, 69, .28);
+}
+
+.delivery-queue-refresh.refreshing,
+.delivery-queue-refresh.delivery-refreshing {
+    cursor: wait;
+    opacity: .82;
+}
+
+.delivery-refresh-spin {
+    animation: deliveryRefreshSpin .55s linear infinite;
+}
+
+@keyframes deliveryRefreshSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.delivery-queue-card {
+    position: relative;
+}
+
+.delivery-queue-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+        linear-gradient(115deg, transparent 20%, rgba(255,255,255,.045) 45%, transparent 70%);
+    transform: translateX(-110%);
+    transition: transform .8s ease;
+}
+
+.delivery-queue-card:hover::before {
+    transform: translateX(110%);
+}
+
+/* Detalle */
+.delivery-show-back,
+.delivery-map-external,
+.delivery-contact-phone-link,
+.delivery-delivered-view-link,
+.delivery-my-phone a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.delivery-show-card {
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+.delivery-show-card:hover {
+    border-color: rgba(255, 77, 136, .16);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .24);
+}
+
+.delivery-show-back:hover,
+.delivery-map-external:hover,
+.delivery-contact-phone-link:hover,
+.delivery-delivered-view-link:hover,
+.delivery-my-phone a:hover {
+    color: #fff;
+}
+
+/* Tarjetas de pedidos */
+.delivery-my-order-card,
+.delivery-delivered-card,
+.delivery-history-item,
+.delivery-financial-card,
+.delivery-dashboard-status {
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+.delivery-my-order-card:hover,
+.delivery-delivered-card:hover,
+.delivery-financial-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, .22);
+}
+
+.delivery-history-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(255, 77, 136, .2);
+}
+
+/* Tabs */
+.delivery-my-tab {
+    transition:
+        transform .16s ease,
+        background-color .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.delivery-my-tab:hover {
+    transform: translateY(-1px);
+}
+
+.delivery-my-tab:active {
+    transform: scale(.97);
+}
+
+/* Formularios del perfil */
+.delivery-interactive-field:hover,
+.delivery-file-wrapper:hover {
+    border-color: rgba(255, 77, 136, .45);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .16);
+}
+
+.delivery-password-toggle {
+    transition:
+        transform .15s ease,
+        background-color .2s ease,
+        color .2s ease;
+}
+
+.delivery-password-toggle:hover {
+    transform: scale(1.08);
+    color: #fff;
+}
+
+.delivery-password-toggle:active {
+    transform: scale(.94);
+}
+
+/* Estado visual de carga */
+.delivery-button-loading {
+    pointer-events: none;
+    transform: scale(.98);
+    opacity: .82;
+}
+
+/* Mejora para pantallas táctiles */
+@media (hover: none) {
+    [data-delivery-interactive]:hover {
+        transform: none;
+        filter: none;
+    }
+
+    [data-delivery-interactive]:active,
+    [data-delivery-interactive].delivery-is-pressed {
+        transform: scale(.975);
+        filter: brightness(.96);
+    }
+
+    .delivery-stat-link:active .delivery-stat-card,
+    .delivery-my-order-card:active,
+    .delivery-delivered-card:active {
+        transform: scale(.985);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .delivery-orders-actions {
+        width: 100%;
+    }
+
+    .delivery-queue-refresh {
+        width: 100%;
+    }
+}
