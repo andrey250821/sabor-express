@@ -57,8 +57,8 @@ class AsignarPedidoDeliveryService
                 /*
                  * Se obtiene la cola estrictamente por fecha de creación.
                  *
-                 * No utilizamos fecha_listo ni dependemos de una nueva columna.
-                 * created_at es la referencia disponible para mantener el orden.
+                 * created_at es la única referencia utilizada para mantener
+                 * el orden FIFO de la cola.
                  */
                 $pedidosEnCola = Pedido::query()
                     ->where('estado', 'listo')
