@@ -141,6 +141,50 @@
                 </div>
             </section>
 
+        {{-- OBSERVACIONES PRIORITARIAS --}}
+        <section class="cocinero-observation-card mb-4 cocinero-reveal">
+
+            <div class="cocinero-observation-card-top">
+                <div class="cocinero-observation-icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+
+                <div>
+                    <span class="cocinero-observation-kicker">
+                        <i class="bi bi-eye-fill"></i>
+                        Prioridad de cocina
+                    </span>
+
+                    <h3>
+                        Observaciones del cliente
+                    </h3>
+
+                    <p>
+                        Revisa estas indicaciones antes de preparar el pedido.
+                    </p>
+                </div>
+
+                <div class="cocinero-observation-badge">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    Revisar
+                </div>
+            </div>
+
+            <div class="cocinero-observation-content">
+                <i class="bi bi-chat-left-quote-fill"></i>
+
+                <div>
+                    <strong>
+                        {{ $pedido->observacion_cliente ? 'Indicaciones especiales' : 'Sin indicaciones especiales' }}
+                    </strong>
+
+                    <p>
+                        {{ $pedido->observacion_cliente ?: 'El cliente no registró observaciones para la preparación.' }}
+                    </p>
+                </div>
+            </div>
+        </section>
+
             {{-- PRODUCTOS --}}
             <section class="cocinero-detail-card mb-4 cocinero-reveal">
 
@@ -238,54 +282,6 @@
                     </strong>
                 </div>
             </section>
-
-        {{-- OBSERVACIONES PRIORITARIAS --}}
-        <section class="cocinero-observation-card mb-4 cocinero-reveal">
-
-            <div class="cocinero-observation-card-top">
-                <div class="cocinero-observation-icon">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                </div>
-
-                <div>
-                    <span class="cocinero-observation-kicker">
-                        <i class="bi bi-eye-fill"></i>
-                        Prioridad de cocina
-                    </span>
-
-                    <h3>
-                        Observaciones del cliente
-                    </h3>
-
-                    <p>
-                        Revisa estas indicaciones antes de preparar el pedido.
-                    </p>
-                </div>
-
-                <div class="cocinero-observation-badge">
-                    <i class="bi bi-lightning-charge-fill"></i>
-                    Revisar
-                </div>
-            </div>
-
-            <div class="cocinero-observation-content">
-                <i class="bi bi-chat-left-quote-fill"></i>
-
-                <div>
-                    <strong>
-                        {{ $pedido->observacion_cliente ? 'Indicaciones especiales' : 'Sin indicaciones especiales' }}
-                    </strong>
-
-                    <p>
-                        {{ $pedido->observacion_cliente ?: 'El cliente no registró observaciones para la preparación.' }}
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <div class="row g-4">
-
-        {{-- COLUMNA PRINCIPAL --}}
 
         {{-- COLUMNA LATERAL --}}
         <div class="col-12 col-xl-4">
