@@ -83,8 +83,8 @@
                 </span>
 
                 <span class="cocinero-state-link-content">
-                    <strong>Cola</strong>
-                    <small>Pedidos pagados esperando preparación</small>
+                    <strong>Cola de preparación</strong>
+                    <small>Pedidos pagados que esperan entrar a cocina</small>
                 </span>
 
                 <span class="cocinero-state-link-count">
@@ -104,8 +104,8 @@
                 </span>
 
                 <span class="cocinero-state-link-content">
-                    <strong>En preparación</strong>
-                    <small>Pedidos que actualmente estás preparando</small>
+                    <strong>Pedidos en preparación</strong>
+                    <small>Pedidos que estás preparando en este momento</small>
                 </span>
 
                 <span class="cocinero-state-link-count">
@@ -125,8 +125,8 @@
                 </span>
 
                 <span class="cocinero-state-link-content">
-                    <strong>Seguimiento</strong>
-                    <small>Pedidos terminados por cocina e historial</small>
+                    <strong>Listos e historial</strong>
+                    <small>Pedidos terminados y seguimiento del siguiente paso</small>
                 </span>
 
                 <span class="cocinero-state-link-count">
