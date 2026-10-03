@@ -2460,6 +2460,748 @@ body.cocinero-layout.sidebar-open {
     }
 }
 
+
+/* ==========================================================================
+   PEDIDOS · ESTRUCTURA VERTICAL + INTERACCIONES
+   ========================================================================== */
+
+.cocinero-page-intro {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: var(--cocinero-radius);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.018));
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+}
+
+.cocinero-page-intro-icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(214, 51, 132, 0.22), rgba(255, 138, 61, 0.16));
+    color: var(--cocinero-pink-light);
+    font-size: 22px;
+}
+
+.cocinero-page-intro-content {
+    min-width: 0;
+}
+
+.cocinero-page-intro-content h2 {
+    margin: 4px 0 5px;
+    color: #fff;
+    font-size: clamp(1.55rem, 3vw, 2rem);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+}
+
+.cocinero-page-intro-content p {
+    max-width: 820px;
+    margin: 0;
+    color: var(--cocinero-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.cocinero-page-intro-button {
+    min-width: 130px;
+}
+
+.cocinero-state-panel {
+    overflow: visible;
+    border: 1px solid var(--cocinero-border);
+    border-radius: var(--cocinero-radius);
+    background: var(--cocinero-surface);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+}
+
+.cocinero-state-panel-heading {
+    padding: 20px 21px 14px;
+    border-bottom: 1px solid var(--cocinero-border);
+}
+
+.cocinero-state-panel-heading h2 {
+    margin: 4px 0 4px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.cocinero-state-panel-heading p {
+    margin: 0;
+    color: var(--cocinero-muted);
+    font-size: 10px;
+}
+
+.cocinero-state-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+}
+
+.cocinero-state-link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    min-height: 66px;
+    padding: 10px 13px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.018);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cocinero-state-link:hover {
+    color: inherit;
+    border-color: rgba(214, 51, 132, 0.30);
+    background: rgba(214, 51, 132, 0.055);
+    transform: translateX(3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+}
+
+.cocinero-state-link:active {
+    transform: scale(0.992);
+}
+
+.cocinero-state-link.active {
+    border-color: rgba(214, 51, 132, 0.42);
+    background: linear-gradient(90deg, rgba(214, 51, 132, 0.15), rgba(255, 138, 61, 0.055));
+    box-shadow: inset 3px 0 0 var(--cocinero-pink), 0 12px 26px rgba(0, 0, 0, 0.12);
+}
+
+.cocinero-state-link.active.preparando {
+    border-color: rgba(214, 51, 132, 0.38);
+}
+
+.cocinero-state-link.active.listos {
+    border-color: rgba(53, 208, 127, 0.30);
+    background: linear-gradient(90deg, rgba(53, 208, 127, 0.12), rgba(255, 255, 255, 0.018));
+    box-shadow: inset 3px 0 0 var(--cocinero-green), 0 12px 26px rgba(0, 0, 0, 0.12);
+}
+
+.cocinero-state-link-icon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd0d9;
+    font-size: 19px;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.cocinero-state-link:hover .cocinero-state-link-icon,
+.cocinero-state-link.active .cocinero-state-link-icon {
+    background: rgba(214, 51, 132, 0.16);
+    color: var(--cocinero-pink-light);
+    transform: scale(1.05);
+}
+
+.cocinero-state-link.active.listos .cocinero-state-link-icon {
+    background: rgba(53, 208, 127, 0.13);
+    color: var(--cocinero-green);
+}
+
+.cocinero-state-link-content {
+    min-width: 0;
+}
+
+.cocinero-state-link-content strong,
+.cocinero-state-link-content small {
+    display: block;
+}
+
+.cocinero-state-link-content strong {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.cocinero-state-link-content small {
+    margin-top: 3px;
+    overflow: hidden;
+    color: var(--cocinero-muted);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cocinero-state-link-count {
+    min-width: 34px;
+    padding: 7px 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    text-align: center;
+}
+
+.cocinero-state-link.active .cocinero-state-link-count {
+    background: rgba(214, 51, 132, 0.18);
+    color: #ffd0e4;
+}
+
+.cocinero-state-link.active.listos .cocinero-state-link-count {
+    background: rgba(53, 208, 127, 0.14);
+    color: #b5ffd7;
+}
+
+.cocinero-state-link-arrow {
+    color: #707784;
+    font-size: 12px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.cocinero-state-link:hover .cocinero-state-link-arrow,
+.cocinero-state-link.active .cocinero-state-link-arrow {
+    color: #fff;
+    transform: translateX(2px);
+}
+
+/* Contenedor del bloque: nunca debe comportarse como una fila horizontal. */
+.cocinero-orders-card {
+    display: block !important;
+    overflow: hidden;
+    padding: 0 !important;
+    border: 1px solid var(--cocinero-border);
+    border-radius: var(--cocinero-radius);
+    background: var(--cocinero-surface);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
+}
+
+.cocinero-orders-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 20px 21px;
+    border-bottom: 1px solid var(--cocinero-border);
+}
+
+.cocinero-orders-header-main {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.cocinero-section-eyebrow {
+    display: block;
+    color: #777f8d;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.17em;
+}
+
+.cocinero-orders-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0 4px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.cocinero-orders-header h3 i {
+    color: var(--cocinero-pink-light);
+}
+
+.cocinero-orders-header > .cocinero-orders-count {
+    margin-left: auto;
+}
+
+.cocinero-orders-header-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.cocinero-history-details {
+    position: relative;
+}
+
+.cocinero-history-details > summary {
+    list-style: none;
+}
+
+.cocinero-history-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.cocinero-history-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid rgba(214, 51, 132, 0.28);
+    border-radius: 11px;
+    background: rgba(214, 51, 132, 0.08);
+    color: #ffb3cf;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 900;
+    user-select: none;
+    transition: var(--cocinero-transition);
+}
+
+.cocinero-history-button:hover,
+.cocinero-history-details[open] .cocinero-history-button {
+    color: #fff;
+    border-color: rgba(214, 51, 132, 0.46);
+    background: rgba(214, 51, 132, 0.16);
+    transform: translateY(-1px);
+}
+
+.cocinero-history-chevron {
+    transition: transform 0.2s ease;
+}
+
+.cocinero-history-details[open] .cocinero-history-chevron {
+    transform: rotate(180deg);
+}
+
+.cocinero-history-popover {
+    position: absolute;
+    top: calc(100% + 9px);
+    right: 0;
+    z-index: 20;
+    width: 245px;
+    padding: 14px;
+    border: 1px solid var(--cocinero-border);
+    border-radius: 14px;
+    background: #1b1e27;
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.32);
+}
+
+.cocinero-history-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 7px;
+    color: #d6dae2;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.cocinero-select {
+    min-height: 39px;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+    background-color: #16181f !important;
+    color: #fff !important;
+    font-size: 10px;
+}
+
+.cocinero-select:focus {
+    border-color: rgba(214, 51, 132, 0.42) !important;
+    box-shadow: 0 0 0 0.18rem rgba(214, 51, 132, 0.10) !important;
+}
+
+/* Cada pedido queda abajo del anterior y no comparte columnas laterales. */
+.cocinero-order-item {
+    display: block !important;
+    width: 100%;
+    padding: 20px 21px !important;
+    border-bottom: 1px solid var(--cocinero-border);
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cocinero-order-item:last-child {
+    border-bottom: 0;
+}
+
+.cocinero-order-item:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(214, 51, 132, 0.025));
+    transform: none !important;
+}
+
+.cocinero-order-item:active {
+    background: rgba(214, 51, 132, 0.045);
+}
+
+.cocinero-order-topline {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    min-width: 0;
+}
+
+.cocinero-order-title {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.cocinero-order-title-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.cocinero-order-title-main h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.cocinero-order-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 14px;
+    margin-top: 11px;
+}
+
+.cocinero-order-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--cocinero-muted);
+    font-size: 10px;
+}
+
+.cocinero-order-meta span i {
+    color: #858c99;
+}
+
+.cocinero-order-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--cocinero-border);
+}
+
+.cocinero-order-total {
+    min-width: 110px;
+    text-align: left;
+}
+
+.cocinero-order-total span {
+    display: block;
+    color: #858c99;
+    font-size: 9px;
+}
+
+.cocinero-order-total strong {
+    display: block;
+    margin-top: 3px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.cocinero-order-actions {
+    min-width: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.cocinero-order-actions form {
+    margin: 0;
+}
+
+.cocinero-order-actions .btn {
+    min-height: 45px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.cocinero-btn-preparar,
+.cocinero-btn-listo {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 9px 15px;
+    border-radius: 12px;
+    box-shadow: 0 9px 22px rgba(0, 0, 0, 0.15);
+}
+
+.cocinero-btn-preparar {
+    border-color: rgba(255, 200, 87, 0.30) !important;
+    background: linear-gradient(135deg, rgba(255, 200, 87, 0.17), rgba(255, 138, 61, 0.11)) !important;
+    color: #ffe59e !important;
+}
+
+.cocinero-btn-listo {
+    border-color: rgba(53, 208, 127, 0.30) !important;
+    background: linear-gradient(135deg, rgba(53, 208, 127, 0.18), rgba(53, 208, 127, 0.08)) !important;
+    color: #baffd8 !important;
+}
+
+.cocinero-btn-preparar:hover,
+.cocinero-btn-listo:hover {
+    color: #fff !important;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 13px 28px rgba(0, 0, 0, 0.22);
+    filter: brightness(1.08);
+}
+
+.cocinero-btn-preparar:active,
+.cocinero-btn-listo:active {
+    transform: translateY(1px) scale(0.97);
+}
+
+.cocinero-ready-label,
+.cocinero-tracking-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 8px 11px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.cocinero-ready-label {
+    background: rgba(53, 208, 127, 0.07);
+    color: #a8ffd0;
+}
+
+.cocinero-tracking-label {
+    background: rgba(110, 168, 254, 0.07);
+    color: #b7d3ff;
+}
+
+.cocinero-empty-state {
+    padding: 52px 24px;
+    text-align: center;
+}
+
+.cocinero-empty-state h3 {
+    margin: 13px 0 5px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.cocinero-empty-state p {
+    max-width: 420px;
+    margin: 0 auto;
+    color: var(--cocinero-muted);
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.cocinero-empty-icon {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto;
+    border-radius: 17px;
+    background: rgba(255, 255, 255, 0.045);
+    color: var(--cocinero-green);
+    font-size: 24px;
+}
+
+/* Botones generales del layout: hover + click + foco táctil/teclado. */
+.cocinero-btn-primary,
+.cocinero-btn-secondary,
+.cocinero-status-toggle,
+.cocinero-logout,
+.cocinero-action-btn,
+.cocinero-menu-button {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.cocinero-btn-primary::before,
+.cocinero-btn-secondary::before,
+.cocinero-status-toggle::before,
+.cocinero-logout::before,
+.cocinero-action-btn::before,
+.cocinero-menu-button::before {
+    position: absolute;
+    top: 0;
+    left: -125%;
+    width: 58%;
+    height: 100%;
+    content: "";
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.20), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    transition: left 0.45s ease;
+}
+
+.cocinero-btn-primary:hover::before,
+.cocinero-btn-secondary:hover::before,
+.cocinero-status-toggle:hover::before,
+.cocinero-logout:hover::before,
+.cocinero-action-btn:hover::before,
+.cocinero-menu-button:hover::before {
+    left: 135%;
+}
+
+.cocinero-btn-primary:active,
+.cocinero-btn-secondary:active,
+.cocinero-status-toggle:active,
+.cocinero-logout:active,
+.cocinero-action-btn:active,
+.cocinero-menu-button:active {
+    transform: translateY(1px) scale(0.97);
+}
+
+.cocinero-btn-primary:focus-visible,
+.cocinero-btn-secondary:focus-visible,
+.cocinero-status-toggle:focus-visible,
+.cocinero-logout:focus-visible,
+.cocinero-action-btn:focus-visible,
+.cocinero-menu-button:focus-visible,
+.cocinero-history-button:focus-visible {
+    outline: 2px solid rgba(255, 159, 199, 0.75);
+    outline-offset: 2px;
+}
+
+.cocinero-action-btn {
+    min-height: 46px;
+    border-radius: 12px;
+}
+
+@media (max-width: 767.98px) {
+    .cocinero-page-intro {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .cocinero-page-intro-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .cocinero-page-intro-content h2 {
+        font-size: 1.45rem;
+    }
+
+    .cocinero-page-intro-content p {
+        font-size: 10px;
+    }
+
+    .cocinero-page-intro-button {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .cocinero-state-panel-heading {
+        padding: 17px 16px 12px;
+    }
+
+    .cocinero-state-navigation {
+        padding: 10px;
+    }
+
+    .cocinero-state-link {
+        grid-template-columns: 43px minmax(0, 1fr) auto auto;
+        min-height: 60px;
+        gap: 10px;
+        padding: 9px 10px;
+    }
+
+    .cocinero-state-link-icon {
+        width: 43px;
+        height: 43px;
+    }
+
+    .cocinero-state-link-content strong {
+        font-size: 11px;
+    }
+
+    .cocinero-state-link-content small {
+        font-size: 9px;
+    }
+
+    .cocinero-orders-header {
+        align-items: flex-start !important;
+        flex-direction: column;
+        padding: 17px 16px;
+    }
+
+    .cocinero-orders-header > .cocinero-orders-count {
+        margin-left: 0;
+    }
+
+    .cocinero-orders-header-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .cocinero-history-popover {
+        position: static;
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .cocinero-order-item {
+        padding: 17px 16px !important;
+    }
+
+    .cocinero-order-topline {
+        gap: 11px;
+    }
+
+    .cocinero-order-title-main {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cocinero-order-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .cocinero-order-footer {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .cocinero-order-total,
+    .cocinero-order-actions {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .cocinero-order-actions,
+    .cocinero-order-actions form,
+    .cocinero-order-actions .btn {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .cocinero-order-actions .btn {
+        min-height: 48px;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
