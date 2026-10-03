@@ -278,11 +278,11 @@
 
                     @endforeach
 
+                    @endforeach
+
                 </div>
 
-            @else
-
-                <div class="cocinero-empty-state">
+            @elseinero-empty-state">
 
                     <div class="cocinero-empty-icon">
                         <i class="bi bi-check2-circle"></i>
@@ -499,61 +499,40 @@
                         {{ $cantidadListos === 1 ? 'pedido' : 'pedidos' }}
                     </span>
 
-                    <details class="cocinero-history-details">
+                    <div class="cocinero-history-filters">
 
-                        <summary class="cocinero-history-button js-ripple">
+                        <span class="cocinero-history-label">
                             <i class="bi bi-clock-history"></i>
-                            Historial
-                            <i class="bi bi-chevron-down cocinero-history-chevron"></i>
-                        </summary>
+                            Historial:
+                        </span>
 
-                        <div class="cocinero-history-popover">
+                        @php
+                            $filtrosHistorial = [
+                                'hoy' => 'Hoy',
+                                'ayer' => 'Ayer',
+                                'anteayer' => 'Anteayer',
+                                'semana' => 'Últimos 7 días',
+                            ];
+                        @endphp
 
-                            <form
-                                method="GET"
-                                action="{{ route('cocinero.pedidos.index') }}">
+                        @foreach($filtrosHistorial as $valor => $texto)
 
-                                <input
-                                    type="hidden"
-                                    name="seccion"
-                                    value="listos">
+                            <a
+                                href="{{ route('cocinero.pedidos.index', [
+                                    'seccion' => 'listos',
+                                    'periodo_listos' => $valor,
+                                ]) }}"
+                                class="btn btn-sm js-ripple {{ $periodoListos === $valor
+                                    ? 'btn-dark'
+                                    : 'btn-outline-secondary' }}">
 
-                                <label
-                                    for="periodo_listos"
-                                    class="cocinero-history-label">
+                                {{ $texto }}
 
-                                    <i class="bi bi-calendar3"></i>
-                                    Mostrar periodo
-                                </label>
+                            </a>
 
-                                <select
-                                    id="periodo_listos"
-                                    name="periodo_listos"
-                                    class="form-select cocinero-select"
-                                    data-submit-form>
+                        @endforeach
 
-                                    <option value="hoy" {{ $periodoListos === 'hoy' ? 'selected' : '' }}>
-                                        Hoy
-                                    </option>
-
-                                    <option value="ayer" {{ $periodoListos === 'ayer' ? 'selected' : '' }}>
-                                        Ayer
-                                    </option>
-
-                                    <option value="anteayer" {{ $periodoListos === 'anteayer' ? 'selected' : '' }}>
-                                        Anteayer
-                                    </option>
-
-                                    <option value="semana" {{ $periodoListos === 'semana' ? 'selected' : '' }}>
-                                        Última semana
-                                    </option>
-
-                                </select>
-                            </form>
-
-                        </div>
-
-                    </details>
+                    </div>
 
                 </div>
             </div>
@@ -562,9 +541,62 @@
             {{-- PEDIDOS DE SEGUIMIENTO DEBAJO DEL ENCABEZADO --}}
             @if($cantidadListos > 0)
 
+                @php
+                    $listosAgrupados = $listosAgrupados ?? $listos->groupBy(function ($pedido) {
+                        $fecha = $pedido->fecha_listo ?? $pedido->created_at;
+
+                        return $fecha
+                            ? $fecha->copy()->timezone('America/La_Paz')->format('Y-m-d')
+                            : 'sin-fecha';
+                    });
+                @endphp
+
                 <div class="cocinero-orders-list">
 
-                    @foreach($listos as $pedido)
+                    @foreach($listosAgrupados as $fechaClave => $pedidosDelDia)
+
+                        @php
+                            $fechaGrupo = $fechaClave !== 'sin-fecha'
+                                ? \Carbon\Carbon::createFromFormat(
+                                    'Y-m-d',
+                                    $fechaClave,
+                                    'America/La_Paz'
+                                )
+                                : null;
+
+                            $hoyLocal = \Carbon\Carbon::now('America/La_Paz')->startOfDay();
+
+                            $etiquetaFecha = match (true) {
+                                $fechaGrupo?->isSameDay($hoyLocal) => 'Hoy',
+                                $fechaGrupo?->isSameDay($hoyLocal->copy()->subDay()) => 'Ayer',
+                                $fechaGrupo?->isSameDay($hoyLocal->copy()->subDays(2)) => 'Anteayer',
+                                default => $fechaGrupo
+                                    ? $fechaGrupo->format('d/m/Y')
+                                    : 'Fecha no disponible',
+                            };
+                        @endphp
+
+                        <div class="w-100 mb-3">
+
+                            <div class="d-flex align-items-center gap-2 px-2 py-2 border-bottom mb-2">
+                                <i class="bi bi-calendar3"></i>
+                                <strong>{{ $etiquetaFecha }}</strong>
+
+                                @if($fechaGrupo)
+                                    <span class="text-muted">
+                                        {{ $fechaGrupo->format('d/m/Y') }}
+                                    </span>
+                                @endif
+
+                                <span class="badge bg-secondary ms-auto">
+                                    {{ $pedidosDelDia->count() }}
+                                    {{ $pedidosDelDia->count() === 1 ? 'pedido' : 'pedidos' }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        @foreach($pedidosDelDia as $pedido)
 
                         <article
                             class="cocinero-order-item is-clickable"
