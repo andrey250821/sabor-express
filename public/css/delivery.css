@@ -10116,3 +10116,201 @@ body.delivery-menu-open {
         width: 100%;
     }
 }
+
+
+/* =========================================================
+   DELIVERY UX — BOTÓN DE CERRAR SESIÓN
+   ---------------------------------------------------------
+   Este bloque final corrige la regla anterior de 34px x 34px
+   y convierte el cierre de sesión en un control visible,
+   cómodo y coherente con el resto del sidebar.
+   ========================================================= */
+
+.delivery-sidebar .delivery-logout-form {
+    margin: 12px 15px 18px;
+}
+
+.delivery-sidebar .delivery-logout {
+    width: 100%;
+    min-height: 50px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 11px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 77, 136, .16);
+    border-radius: 14px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139, 30, 69, .16),
+            rgba(255, 47, 118, .05)
+        );
+    color: #f0dbe3;
+    font-size: .82rem;
+    font-weight: 700;
+    text-align: left;
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .035);
+}
+
+.delivery-sidebar .delivery-logout-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(255, 47, 118, .12);
+    color: #ff6b9b;
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        color .2s ease;
+}
+
+.delivery-sidebar .delivery-logout-icon i {
+    font-size: 17px;
+}
+
+.delivery-sidebar .delivery-logout-copy {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.delivery-sidebar .delivery-logout-copy strong {
+    display: block;
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.delivery-sidebar .delivery-logout-copy small {
+    display: block;
+    color: #8f919a;
+    font-size: .66rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.delivery-sidebar .delivery-logout-arrow {
+    flex: 0 0 auto;
+    color: #777b85;
+    font-size: .72rem;
+    transition:
+        transform .2s ease,
+        color .2s ease;
+}
+
+.delivery-sidebar .delivery-logout:hover {
+    border-color: rgba(255, 77, 136, .38);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139, 30, 69, .30),
+            rgba(255, 47, 118, .10)
+        );
+    color: #fff;
+    box-shadow:
+        0 14px 28px rgba(0, 0, 0, .24),
+        0 0 0 1px rgba(255, 77, 136, .04) inset;
+    transform: translateY(-2px);
+}
+
+.delivery-sidebar .delivery-logout:hover .delivery-logout-icon {
+    transform: scale(1.06);
+    background: rgba(255, 47, 118, .20);
+    color: #fff;
+}
+
+.delivery-sidebar .delivery-logout:hover .delivery-logout-arrow {
+    transform: translateX(3px);
+    color: #ff6b9b;
+}
+
+.delivery-sidebar .delivery-logout:active {
+    transform: translateY(1px) scale(.985);
+}
+
+.delivery-sidebar .delivery-logout:focus-visible {
+    outline: 2px solid rgba(255, 77, 136, .9);
+    outline-offset: 3px;
+    box-shadow:
+        0 0 0 5px rgba(139, 30, 69, .18),
+        0 10px 22px rgba(0, 0, 0, .2);
+}
+
+.delivery-sidebar .delivery-logout:disabled {
+    cursor: wait;
+    opacity: .72;
+}
+
+/* =========================================================
+   DELIVERY UX — BOTÓN DE DISPONIBILIDAD
+   ========================================================= */
+
+.delivery-sidebar .delivery-status-box {
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.delivery-sidebar .delivery-status-box:hover {
+    transform: translateY(-1px);
+    border-color: rgba(53, 208, 127, .24);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+}
+
+.delivery-sidebar .delivery-status-toggle {
+    width: 100%;
+    min-height: 42px;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 11px;
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.delivery-sidebar .delivery-status-toggle i {
+    font-size: .95rem;
+}
+
+@media (max-width: 575.98px) {
+    .delivery-sidebar .delivery-logout-form {
+        margin: 12px 14px 16px;
+    }
+
+    .delivery-sidebar .delivery-logout {
+        min-height: 52px;
+        border-radius: 15px;
+    }
+
+    .delivery-sidebar .delivery-logout-copy strong {
+        font-size: .84rem;
+    }
+
+    .delivery-sidebar .delivery-logout-copy small {
+        font-size: .68rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-sidebar .delivery-logout,
+    .delivery-sidebar .delivery-logout-icon,
+    .delivery-sidebar .delivery-logout-arrow,
+    .delivery-sidebar .delivery-status-box {
+        transition: none;
+    }
+}
