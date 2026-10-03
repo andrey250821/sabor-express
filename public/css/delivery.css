@@ -7586,151 +7586,6 @@ a {
 
 
 /* =========================================================
-   BUSCADOR GMAIL
-   ========================================================= */
-
-.delivery-search-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 22px;
-    padding: 18px;
-    border: 1px solid rgba(255, 47, 118, .22);
-    border-radius: 18px;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(139, 30, 69, .16),
-            rgba(23, 24, 29, .92)
-        );
-    box-shadow:
-        0 16px 34px rgba(0, 0, 0, .18),
-        inset 0 1px 0 rgba(255, 255, 255, .02);
-    transition:
-        transform .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
-}
-
-.delivery-search-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 47, 118, .38);
-    box-shadow:
-        0 22px 42px rgba(0, 0, 0, .23),
-        0 0 0 1px rgba(255, 47, 118, .05);
-}
-
-.delivery-search-icon {
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 14px;
-    color: #fff;
-    background:
-        linear-gradient(
-            135deg,
-            var(--delivery-guindo),
-            var(--delivery-pink)
-        );
-    box-shadow:
-        0 10px 24px rgba(179, 35, 90, .28);
-    font-size: 20px;
-}
-
-.delivery-search-body {
-    width: 100%;
-    min-width: 0;
-}
-
-.delivery-search-label {
-    display: block;
-    margin-bottom: 7px;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: .02em;
-}
-
-.delivery-search-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.delivery-search-input-wrapper > i {
-    position: absolute;
-    left: 14px;
-    z-index: 2;
-    color: #ff5a91;
-    pointer-events: none;
-}
-
-.delivery-search-input {
-    width: 100%;
-    min-height: 46px;
-    padding: 11px 45px 11px 42px;
-    border: 1px solid #363944;
-    border-radius: 13px;
-    outline: none;
-    color: #fff;
-    background: #111218;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.015);
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
-}
-
-.delivery-search-input::placeholder {
-    color: #6f727c;
-}
-
-.delivery-search-input:focus {
-    border-color: rgba(255, 47, 118, .65);
-    background: #0f1015;
-    box-shadow:
-        0 0 0 4px rgba(255, 47, 118, .09),
-        0 10px 24px rgba(0, 0, 0, .16);
-}
-
-.delivery-search-clear {
-    position: absolute;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    border-radius: 9px;
-    color: #858893;
-    background: transparent;
-    transition:
-        color .2s ease,
-        background .2s ease,
-        transform .2s ease;
-}
-
-.delivery-search-clear:hover {
-    color: #fff;
-    background: rgba(255, 47, 118, .12);
-    transform: scale(1.05);
-}
-
-.delivery-search-result {
-    display: block;
-    margin-top: 8px;
-    color: #858893;
-    font-size: 11px;
-    transition: color .2s ease;
-}
-
-
-/* =========================================================
    PEDIDO ASIGNADO — PRIVACIDAD
    ========================================================= */
 
@@ -8407,19 +8262,6 @@ a {
 }
 
 @media (max-width: 767.98px) {
-    .delivery-search-card {
-        gap: 12px;
-        padding: 14px;
-    }
-
-    .delivery-search-icon {
-        width: 42px;
-        height: 42px;
-        min-width: 42px;
-        border-radius: 12px;
-        font-size: 17px;
-    }
-
     .delivery-assigned-meta {
         grid-template-columns: 1fr;
     }
@@ -8452,15 +8294,6 @@ a {
 }
 
 @media (max-width: 575.98px) {
-    .delivery-search-card {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .delivery-search-input {
-        font-size: 12px;
-    }
-
     .delivery-profile-header h1 {
         font-size: 1.55rem;
     }
@@ -9045,4 +8878,409 @@ body.delivery-menu-open {
 
 .delivery-history-header span {
     color: #e5e7eb !important;
+}
+
+
+/* ==========================================================================
+   DETALLE DEL PEDIDO — INFORMACIÓN PRIORITARIA
+   ========================================================================== */
+
+.delivery-show .delivery-priority-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(280px, .85fr);
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.delivery-show .delivery-priority-card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 19px 20px;
+    border-radius: 18px;
+    isolation: isolate;
+}
+
+.delivery-show .delivery-priority-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, .045),
+        rgba(255, 255, 255, 0)
+    );
+}
+
+.delivery-show .delivery-priority-card::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -55%;
+    z-index: -1;
+    width: 42%;
+    height: 160%;
+    transform: rotate(18deg);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, .24),
+        transparent
+    );
+    filter: blur(2px);
+    pointer-events: none;
+    animation: delivery-priority-shine 2.8s linear infinite;
+}
+
+.delivery-show .delivery-priority-reference {
+    border: 1px solid rgba(255, 193, 7, .48);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 193, 7, .17),
+            rgba(74, 54, 10, .22) 58%,
+            rgba(23, 24, 29, .98)
+        );
+    box-shadow:
+        0 14px 34px rgba(255, 193, 7, .08),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+    animation: delivery-priority-reference-glow 2.4s ease-in-out infinite;
+}
+
+.delivery-show .delivery-priority-phone {
+    border: 1px solid rgba(53, 208, 127, .42);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(53, 208, 127, .14),
+            rgba(25, 135, 84, .09) 58%,
+            rgba(23, 24, 29, .98)
+        );
+    box-shadow:
+        0 14px 34px rgba(53, 208, 127, .07),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+    animation: delivery-priority-phone-glow 2.4s ease-in-out infinite;
+}
+
+.delivery-show .delivery-priority-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    font-size: 21px;
+}
+
+.delivery-show .delivery-priority-reference .delivery-priority-icon {
+    color: #ffc107;
+    background: rgba(255, 193, 7, .13);
+    border: 1px solid rgba(255, 193, 7, .18);
+    box-shadow: 0 0 22px rgba(255, 193, 7, .12);
+}
+
+.delivery-show .delivery-priority-phone .delivery-priority-icon {
+    color: #35d07f;
+    background: rgba(53, 208, 127, .11);
+    border: 1px solid rgba(53, 208, 127, .16);
+    box-shadow: 0 0 22px rgba(53, 208, 127, .10);
+}
+
+.delivery-show .delivery-priority-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delivery-show .delivery-priority-content > span {
+    color: #c6c8ce;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .08em;
+}
+
+.delivery-show .delivery-priority-reference .delivery-priority-content > span {
+    color: #f2cd68;
+}
+
+.delivery-show .delivery-priority-phone .delivery-priority-content > span {
+    color: #8ed5aa;
+}
+
+.delivery-show .delivery-priority-content > strong,
+.delivery-show .delivery-priority-phone-link {
+    margin: 0;
+    color: #fff;
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+}
+
+.delivery-show .delivery-priority-phone-link {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    color: #dcffe9;
+    text-shadow: 0 0 18px rgba(53, 208, 127, .24);
+}
+
+.delivery-show .delivery-priority-phone-link:hover {
+    color: #fff;
+}
+
+.delivery-show .delivery-priority-content > small {
+    color: #9598a1;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.delivery-show .delivery-priority-reference .delivery-priority-content > strong {
+    color: #fff7db;
+}
+
+.delivery-show .delivery-priority-phone .delivery-priority-content > strong {
+    color: #ecfff4;
+}
+
+@keyframes delivery-priority-shine {
+    0% {
+        left: -55%;
+    }
+
+    55%,
+    100% {
+        left: 125%;
+    }
+}
+
+@keyframes delivery-priority-reference-glow {
+    0%,
+    100% {
+        box-shadow:
+            0 14px 34px rgba(255, 193, 7, .08),
+            inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    50% {
+        box-shadow:
+            0 16px 38px rgba(255, 193, 7, .17),
+            0 0 24px rgba(255, 193, 7, .08),
+            inset 0 1px 0 rgba(255, 255, 255, .07);
+    }
+}
+
+@keyframes delivery-priority-phone-glow {
+    0%,
+    100% {
+        box-shadow:
+            0 14px 34px rgba(53, 208, 127, .07),
+            inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    50% {
+        box-shadow:
+            0 16px 38px rgba(53, 208, 127, .15),
+            0 0 24px rgba(53, 208, 127, .07),
+            inset 0 1px 0 rgba(255, 255, 255, .07);
+    }
+}
+
+
+/* ==========================================================================
+   DETALLE DEL PEDIDO — DESGLOSE ECONÓMICO
+   ========================================================================== */
+
+.delivery-show .delivery-financial-breakdown {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+    padding: 14px;
+    border: 1px solid #2f3139;
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            145deg,
+            #131419,
+            #1b1d24
+        );
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, .16),
+        inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.delivery-show .delivery-financial-row {
+    position: relative;
+    min-width: 0;
+    display: flex !important;
+    align-items: center;
+    gap: 11px;
+    padding: 14px;
+    border-radius: 15px;
+    border: 1px solid #30323b;
+    background: #1a1c22;
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+.delivery-show .delivery-financial-row:hover {
+    transform: translateY(-2px);
+    border-color: #484b56;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .18);
+}
+
+.delivery-show .delivery-financial-row-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 17px;
+}
+
+.delivery-show .delivery-financial-row-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delivery-show .delivery-financial-row-copy > span {
+    color: #8e919b;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+.delivery-show .delivery-financial-row-copy > span small {
+    display: inline-flex;
+    margin-left: 4px;
+    color: #b5b7be;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.delivery-show .delivery-financial-row-copy > strong {
+    color: #f3f4f6;
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.delivery-show .delivery-financial-row-route {
+    border-color: rgba(255, 193, 7, .18);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 193, 7, .07),
+            #1a1c22
+        );
+}
+
+.delivery-show .delivery-financial-row-route .delivery-financial-row-icon {
+    color: #ffc107;
+    background: rgba(255, 193, 7, .10);
+}
+
+.delivery-show .delivery-financial-row-route .delivery-financial-row-copy > strong {
+    color: #fff2c2;
+}
+
+.delivery-show .delivery-financial-row-commission {
+    border-color: rgba(53, 208, 127, .19);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(53, 208, 127, .07),
+            #1a1c22
+        );
+}
+
+.delivery-show .delivery-financial-row-commission .delivery-financial-row-icon {
+    color: #35d07f;
+    background: rgba(53, 208, 127, .10);
+}
+
+.delivery-show .delivery-financial-my-share {
+    color: #72e9a5 !important;
+}
+
+.delivery-show .delivery-financial-row-restaurant {
+    border-color: rgba(255, 77, 136, .18);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139, 30, 69, .12),
+            #1a1c22
+        );
+}
+
+.delivery-show .delivery-financial-row-restaurant .delivery-financial-row-icon {
+    color: #ff6a9b;
+    background: rgba(255, 47, 118, .10);
+}
+
+.delivery-show .delivery-financial-row-restaurant .delivery-financial-row-copy > strong {
+    color: #ffd1df;
+}
+
+@media (max-width: 900px) {
+    .delivery-show .delivery-priority-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .delivery-show .delivery-financial-breakdown {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .delivery-show .delivery-priority-card {
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .delivery-show .delivery-priority-icon {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+    }
+
+    .delivery-show .delivery-priority-content > strong,
+    .delivery-show .delivery-priority-phone-link {
+        font-size: 15px;
+    }
+
+    .delivery-show .delivery-financial-breakdown {
+        padding: 10px;
+    }
+
+    .delivery-show .delivery-financial-row {
+        padding: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-show .delivery-priority-card,
+    .delivery-show .delivery-priority-card::after {
+        animation: none;
+    }
+
+    .delivery-show .delivery-financial-row {
+        transition: none;
+    }
 }
