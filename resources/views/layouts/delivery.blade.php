@@ -142,7 +142,9 @@
                         class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }} delivery-control-button" data-delivery-interactive
                         title="{{ Auth::user()->estado === 'activo' ? 'Ponerte inactivo' : 'Ponerte activo' }}">
                         <i class="bi {{ Auth::user()->estado === 'activo' ? 'bi-pause-circle-fill' : 'bi-play-circle-fill' }}"></i>
-                        {{ Auth::user()->estado === 'activo' ? 'Inactivo' : 'Activo' }}
+                        <span>
+                            {{ Auth::user()->estado === 'activo' ? 'Pausar disponibilidad' : 'Activar disponibilidad' }}
+                        </span>
                     </button>
                 </form>
 
@@ -297,13 +299,21 @@
 
                 <button
                     type="submit"
-                    class="delivery-logout" data-delivery-interactive>
+                    class="delivery-logout"
+                    data-delivery-interactive
+                    aria-label="Cerrar sesión"
+                    title="Cerrar sesión">
 
-                    <i class="bi bi-box-arrow-left"></i>
-
-                    <span>
-                        Cerrar sesión
+                    <span class="delivery-logout-icon" aria-hidden="true">
+                        <i class="bi bi-box-arrow-left"></i>
                     </span>
+
+                    <span class="delivery-logout-copy">
+                        <strong>Cerrar sesión</strong>
+                        <small>Salir de tu cuenta</small>
+                    </span>
+
+                    <i class="bi bi-chevron-right delivery-logout-arrow" aria-hidden="true"></i>
 
                 </button>
 
