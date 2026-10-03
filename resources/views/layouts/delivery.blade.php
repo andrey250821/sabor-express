@@ -494,96 +494,14 @@
 
 
     {{-- =====================================================
-        MENÚ RESPONSIVE
+        JAVASCRIPT DEL PANEL DELIVERY
     ====================================================== --}}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const sidebar =
-                document.getElementById('deliverySidebar');
-
-            const overlay =
-                document.getElementById('deliveryOverlay');
-
-            const menuToggle =
-                document.getElementById('deliveryMenuToggle');
-
-            const closeButton =
-                document.getElementById('deliverySidebarClose');
-
-
-            function openSidebar() {
-
-                sidebar?.classList.add('show');
-
-                overlay?.classList.add('show');
-
-                document.body.classList.add('delivery-menu-open');
-
-            }
-
-
-            function closeSidebar() {
-
-                sidebar?.classList.remove('show');
-
-                overlay?.classList.remove('show');
-
-                document.body.classList.remove('delivery-menu-open');
-
-            }
-
-
-            menuToggle?.addEventListener(
-                'click',
-                openSidebar
-            );
-
-
-            closeButton?.addEventListener(
-                'click',
-                closeSidebar
-            );
-
-
-            overlay?.addEventListener(
-                'click',
-                closeSidebar
-            );
-
-
-            document
-                .querySelectorAll('.delivery-nav-link')
-                .forEach(function(link) {
-
-                    link.addEventListener(
-                        'click',
-                        function() {
-
-                            if (window.innerWidth < 992) {
-                                closeSidebar();
-                            }
-
-                        }
-                    );
-
-                });
-
-
-            window.addEventListener(
-                'resize',
-                function() {
-
-                    if (window.innerWidth >= 992) {
-                        closeSidebar();
-                    }
-
-                }
-            );
-
-        });
+    <script
+        src="{{ asset('js/delivery.js') }}"
+        defer>
     </script>
+
     @vite('resources/js/app.js')
 
     @stack('scripts')
