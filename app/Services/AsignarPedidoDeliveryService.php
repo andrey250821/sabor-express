@@ -76,19 +76,26 @@ class AsignarPedidoDeliveryService
                     ->get();
 
                 /*
-                 * Cuando un Delivery cancela un pedido, guardamos en cache
-                 * un bloqueo temporal para evitar que ese mismo pedido vuelva
-                 * a asignarse inmediatamente al mismo Delivery.
+                 * FIFO estricto:
+                 * el candidato siempre intenta recibir el pedido más antiguo.
+                 *
+                 * Si ese pedido fue cancelado recientemente por este mismo
+                 * Delivery, no se le asigna un pedido posterior. El pedido
+                 * cancelado debe esperar hasta que otro Delivery pueda tomarlo.
                  *
                  * Esto no modifica la base de datos.
                  */
-                $pedido = $pedidosEnCola->first(function (Pedido $pedido) use ($delivery) {
-                    return !Cache::has(
-                        'delivery_cancelled:' . $delivery->id . ':' . $pedido->id
-                    );
-                });
+                $pedido = $pedidosEnCola->first();
 
                 if (!$pedido) {
+                    continue;
+                }
+
+                $bloqueadoPorCancelacion = Cache::has(
+                    'delivery_cancelled:' . $delivery->id . ':' . $pedido->id
+                );
+
+                if ($bloqueadoPorCancelacion) {
                     continue;
                 }
 
