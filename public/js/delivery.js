@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ========================================================= */
 
     const searchInput = document.getElementById('deliveryGmailSearch');
+    const searchClear = document.getElementById('deliveryGmailClear');
     const searchCards = [...document.querySelectorAll('[data-delivery-search-card]')];
     const searchResult = document.getElementById('deliverySearchResult');
 
@@ -81,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const termino = searchInput.value.trim().toLowerCase();
+
+        if (searchClear) {
+            searchClear.hidden = termino === '';
+        }
 
         let visibles = 0;
 
@@ -122,6 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     searchInput?.addEventListener('input', actualizarBusqueda);
+
+    searchClear?.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        actualizarBusqueda();
+    });
+
     actualizarBusqueda();
 
     /* =========================================================
