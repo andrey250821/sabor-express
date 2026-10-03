@@ -8669,7 +8669,7 @@ body.delivery-menu-open {
 .delivery-financial-card span {
     position: relative;
     z-index: 1;
-    color: #716770;
+    color: #374151;
     font-size: .76rem;
     font-weight: 800;
     letter-spacing: .04em;
@@ -8690,7 +8690,7 @@ body.delivery-menu-open {
     position: relative;
     z-index: 1;
     margin-top: .4rem;
-    color: #8a8087;
+    color: #374151;
     font-size: .73rem;
     font-weight: 600;
 }
@@ -8756,7 +8756,7 @@ body.delivery-menu-open {
 
 .delivery-history-header span {
     padding-left: 2.15rem;
-    color: #7e737b;
+    color: #374151;
     font-size: .78rem;
 }
 
@@ -8794,7 +8794,7 @@ body.delivery-menu-open {
 }
 
 .delivery-history-selected-header span {
-    color: #81767d;
+    color: #374151;
     font-size: .69rem;
     font-weight: 800;
     letter-spacing: .08em;
@@ -8828,7 +8828,7 @@ body.delivery-menu-open {
 }
 
 .delivery-history-selected-totals small {
-    color: #80757c;
+    color: #374151;
     font-size: .67rem;
     font-weight: 800;
     letter-spacing: .04em;
@@ -8901,7 +8901,7 @@ body.delivery-menu-open {
 }
 
 .delivery-history-item > div:first-child small {
-    color: #887d84;
+    color: #374151;
     font-size: .74rem;
     font-weight: 700;
 }
@@ -8915,7 +8915,7 @@ body.delivery-menu-open {
     border: 1px solid rgba(0, 0, 0, .05);
     border-radius: 11px;
     background: #ffffff;
-    color: #756a72;
+    color: #374151;
     font-size: .72rem;
     font-weight: 700;
     transition: transform .18s ease, border-color .18s ease;
@@ -8958,7 +8958,7 @@ body.delivery-menu-open {
     border: 1px dashed rgba(139, 30, 69, .17);
     border-radius: 17px;
     background: #fcfafb;
-    color: #867b82;
+    color: #374151;
     font-size: .83rem;
     text-align: center;
 }
@@ -9016,4 +9016,22 @@ body.delivery-menu-open {
     .delivery-history-item-values span {
         transition: none;
     }
+}
+
+
+/* ==========================================================================
+   CONTRASTE — TEXTOS SECUNDARIOS EN CONTENEDORES BLANCOS
+   --------------------------------------------------------------------------
+   Mantiene la jerarquía visual, pero mejora la legibilidad sobre fondos claros.
+   ========================================================================== */
+
+.delivery-financial-card span,
+.delivery-financial-card small,
+.delivery-history-header span,
+.delivery-history-selected-header span,
+.delivery-history-selected-totals small,
+.delivery-history-item > div:first-child small,
+.delivery-history-item-values span,
+.delivery-history-empty {
+    color: #374151 !important;
 }
