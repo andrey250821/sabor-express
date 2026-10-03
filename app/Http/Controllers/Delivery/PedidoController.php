@@ -7,13 +7,13 @@ use App\Models\AsignacionDelivery;
 use App\Models\Notificacion;
 use App\Models\Pedido;
 use App\Services\AsignarPedidoDeliveryService;
+use App\Services\FechaFiltroService;
 use App\Services\FirebaseDeliveryLocationService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use App\Services\FechaFiltroService;
-use Illuminate\Http\Request;
 
 class PedidoController extends Controller
 {
@@ -41,14 +41,9 @@ class PedidoController extends Controller
     }
 
     /**
-     * COLA DE PEDIDOS
+     * Mostrar únicamente la cantidad de pedidos que permanecen en cola.
      *
-     * El Delivery puede consultar únicamente cuántos pedidos están
-     * esperando asignación. No se muestran clientes, productos,
-     * direcciones, montos ni ningún otro detalle.
-     *
-     * La selección del pedido no la realiza el Delivery:
-     * el sistema asigna automáticamente el siguiente pedido de la cola.
+     * Los datos del pedido no se exponen mientras no exista una asignación.
      */
     public function index(): View|RedirectResponse
     {
@@ -70,11 +65,12 @@ class PedidoController extends Controller
     }
 
     /**
-     * DETALLE DE UN PEDIDO
+     * Mostrar un pedido asignado.
      *
-     * Solo puede abrirse un pedido que haya sido asignado al
-     * Delivery autenticado. Esto evita que pueda consultar
-     * manualmente un pedido ajeno escribiendo su ID en la URL.
+     * Seguridad de flujo:
+     * - ASIGNADO: no se muestran detalles del cliente, dirección,
+     *   productos, distancia ni importes.
+     * - EN_CAMINO / ENTREGADO: recién aquí se cargan los detalles completos.
      */
     public function show(int $id): View|RedirectResponse
     {
@@ -84,15 +80,31 @@ class PedidoController extends Controller
             return $delivery;
         }
 
-        $pedido = Pedido::query()
-            ->whereHas('asignacionDelivery', function ($query) use ($delivery) {
-                $query->where('delivery_id', $delivery->id);
-            })
+        $asignacion = AsignacionDelivery::query()
+            ->where('pedido_id', $id)
+            ->where('delivery_id', $delivery->id)
             ->with([
-                'user',
-                'detallePedidos.producto',
+                'pedido:id,user_id,total,estado,fecha_listo',
             ])
-            ->findOrFail($id);
+            ->firstOrFail();
+
+        $pedido = $asignacion->pedido;
+
+        if (!$pedido) {
+            abort(404, 'El pedido ya no existe.');
+        }
+
+        if ($pedido->estado === 'asignado') {
+            return view(
+                'delivery.pedidos.asignado',
+                compact('pedido', 'asignacion')
+            );
+        }
+
+        $pedido->load([
+            'user',
+            'detallePedidos.producto',
+        ]);
 
         return view(
             'delivery.pedidos.show',
@@ -103,8 +115,8 @@ class PedidoController extends Controller
     /**
      * MIS PEDIDOS
      *
-     * Muestra únicamente asignaciones pertenecientes al Delivery
-     * autenticado. Los pedidos históricos también pueden consultarse.
+     * El filtro superior de fecha es la única referencia temporal de esta vista.
+     * No se vuelve a agrupar ni filtrar manualmente por fechas dentro de la vista.
      */
     public function misPedidos(
         Request $request,
@@ -118,20 +130,11 @@ class PedidoController extends Controller
 
         $fechaSeleccionada = $fechas->resolver($request);
 
-        [$inicioUtc, $finUtc] = $fechas->rangoUtc(
-            $fechaSeleccionada
-        );
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc($fechaSeleccionada);
 
-        /*
-         * Actividad de pedidos:
-         * - asignado/en_camino: se considera la fecha de asignación
-         *   o de su última actualización.
-         * - entregado: updated_at corresponde al momento de finalización.
-         */
         $asignaciones = AsignacionDelivery::query()
             ->with([
-                'pedido.user',
-                'pedido.detallePedidos.producto',
+                'pedido:id,user_id,total,estado,fecha_listo,direccion_entrega,referencia_delivery,observacion_cliente,tarifa_delivery,distancia_delivery_km,porcentaje_delivery,monto_delivery,porcentaje_restaurante_delivery,monto_restaurante_delivery,created_at',
             ])
             ->where('delivery_id', $delivery->id)
             ->where(function ($query) use ($inicioUtc, $finUtc) {
@@ -141,6 +144,22 @@ class PedidoController extends Controller
             })
             ->orderByDesc('updated_at')
             ->get();
+
+        // Cargar información sensible solo cuando ya puede consultarse.
+        $asignaciones->each(function (AsignacionDelivery $asignacion): void {
+            if (
+                $asignacion->pedido &&
+                in_array($asignacion->pedido->estado, [
+                    'en_camino',
+                    'entregado',
+                ], true)
+            ) {
+                $asignacion->pedido->load([
+                    'user',
+                    'detallePedidos.producto',
+                ]);
+            }
+        });
 
         return view(
             'delivery.pedidos.mis',
@@ -154,8 +173,10 @@ class PedidoController extends Controller
     /**
      * INICIAR ENTREGA
      *
-     * La asignación ya fue aceptada automáticamente por el sistema.
-     * El Delivery solamente indica cuándo comienza el recorrido.
+     * ASIGNADO -> EN_CAMINO
+     *
+     * Desde este momento el Delivery puede consultar los detalles
+     * completos del pedido y se activa el GPS del seguimiento.
      */
     public function iniciar(int $id): RedirectResponse
     {
@@ -165,54 +186,125 @@ class PedidoController extends Controller
             return $delivery;
         }
 
-        DB::transaction(function () use ($id, $delivery): void {
-            $asignacion = AsignacionDelivery::query()
-                ->where('pedido_id', $id)
-                ->where('delivery_id', $delivery->id)
-                ->lockForUpdate()
-                ->firstOrFail();
+        try {
+            DB::transaction(function () use ($id, $delivery): void {
+                $asignacion = AsignacionDelivery::query()
+                    ->where('pedido_id', $id)
+                    ->where('delivery_id', $delivery->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-            $pedido = Pedido::query()
-                ->where('id', $id)
-                ->lockForUpdate()
-                ->firstOrFail();
+                $pedido = Pedido::query()
+                    ->where('id', $id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-            if ($pedido->estado !== 'asignado') {
-                throw new \RuntimeException(
-                    'El pedido ya no se encuentra disponible para iniciar la entrega.'
+                if ($pedido->estado !== 'asignado') {
+                    throw new \RuntimeException(
+                        'El pedido ya no se encuentra asignado y no puede iniciarse.'
+                    );
+                }
+
+                $pedido->update([
+                    'estado' => 'en_camino',
+                ]);
+
+                $asignacion->touch();
+
+                Notificacion::create([
+                    'user_id' => $pedido->user_id,
+                    'pedido_id' => $pedido->id,
+                    'mensaje' => 'Tu pedido #' . $pedido->id . ' ya está en camino con nuestro Delivery.',
+                    'tipo' => 'cliente',
+                    'evento' => 'pedido_en_camino',
+                    'leido' => false,
+                ]);
+            });
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()
+            ->route('delivery.pedidos.show', $id)
+            ->with(
+                'success',
+                'Entrega iniciada. Ahora puedes consultar los detalles del pedido y realizar el recorrido.'
+            );
+    }
+
+    /**
+     * CANCELAR ASIGNACIÓN
+     *
+     * Solo está permitido mientras el pedido permanezca ASIGNADO.
+     *
+     * Al cancelar:
+     * - se elimina la asignación actual;
+     * - el pedido vuelve a LISTO;
+     * - conserva su fecha_listo para mantener su posición FIFO;
+     * - el sistema intenta asignarlo automáticamente a otro Delivery libre;
+     * - el Delivery que canceló queda excluido de esa ejecución para
+     *   evitar que reciba inmediatamente el mismo pedido.
+     */
+    public function cancelar(
+        int $id,
+        AsignarPedidoDeliveryService $asignador,
+        FirebaseDeliveryLocationService $firebaseLocation
+    ): RedirectResponse {
+        $delivery = $this->verificarDelivery();
+
+        if ($delivery instanceof RedirectResponse) {
+            return $delivery;
+        }
+
+        try {
+            DB::transaction(function () use ($id, $delivery): void {
+                $asignacion = AsignacionDelivery::query()
+                    ->where('pedido_id', $id)
+                    ->where('delivery_id', $delivery->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $pedido = Pedido::query()
+                    ->where('id', $id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                if ($pedido->estado !== 'asignado') {
+                    throw new \RuntimeException(
+                        'Solo puedes cancelar un pedido mientras está asignado. Una entrega iniciada ya no puede cancelarse.'
+                    );
+                }
+
+                $pedido->update([
+                    'estado' => 'listo',
+                ]);
+
+                $asignacion->delete();
+            });
+
+            // Limpieza preventiva por si existiera una ubicación anterior.
+            $firebaseLocation->eliminarPorPedido($id);
+
+            $asignador->procesarCola($delivery->id);
+
+            return redirect()
+                ->route('delivery.pedidos.mis')
+                ->with(
+                    'success',
+                    'Pedido #' . $id . ' cancelado. Volvió a la cola y se buscará automáticamente otro Delivery disponible.'
                 );
-            }
-
-            $pedido->update([
-                'estado' => 'en_camino',
-            ]);
-
-            $asignacion->touch();
-
-            Notificacion::create([
-                'user_id' => $pedido->user_id,
-                'pedido_id' => $pedido->id,
-                'mensaje' => 'Tu pedido #' . $pedido->id . ' ya está en camino con nuestro Delivery.',
-                'tipo' => 'cliente',
-                'evento' => 'pedido_en_camino',
-                'leido' => false,
-            ]);
-        });
-
-        return back()->with(
-            'success',
-            'Entrega iniciada correctamente.'
-        );
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
      * MARCAR COMO ENTREGADO
      *
-     * en_camino -> entregado
+     * EN_CAMINO -> ENTREGADO
      *
-     * Después de completar la entrega, el mismo Delivery queda libre
-     * y el sistema procesa inmediatamente la cola para asignarle
-     * el siguiente pedido, sin permitir que salte pedidos.
+     * Después de la entrega, el Delivery queda libre y el sistema
+     * procesa automáticamente el siguiente pedido de la cola.
      */
     public function entregar(
         int $id,
@@ -225,63 +317,62 @@ class PedidoController extends Controller
             return $delivery;
         }
 
-        DB::transaction(function () use ($id, $delivery): void {
-            $asignacion = AsignacionDelivery::query()
-                ->where('pedido_id', $id)
-                ->where('delivery_id', $delivery->id)
-                ->lockForUpdate()
-                ->firstOrFail();
+        try {
+            DB::transaction(function () use ($id, $delivery): void {
+                $asignacion = AsignacionDelivery::query()
+                    ->where('pedido_id', $id)
+                    ->where('delivery_id', $delivery->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-            $pedido = Pedido::query()
-                ->where('id', $id)
-                ->lockForUpdate()
-                ->firstOrFail();
+                $pedido = Pedido::query()
+                    ->where('id', $id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-            if ($pedido->estado !== 'en_camino') {
-                throw new \RuntimeException(
-                    'El pedido ya no se encuentra en camino.'
-                );
-            }
+                if ($pedido->estado !== 'en_camino') {
+                    throw new \RuntimeException(
+                        'El pedido ya no se encuentra en camino.'
+                    );
+                }
 
-            $pedido->update([
-                'estado' => 'entregado',
-            ]);
+                $pedido->update([
+                    'estado' => 'entregado',
+                ]);
 
-            // updated_at representa la última actualización de la asignación.
-            // Al completar la entrega queda como referencia para el historial.
-            $asignacion->touch();
+                $asignacion->touch();
 
-            Notificacion::create([
-                'user_id' => $pedido->user_id,
-                'pedido_id' => $pedido->id,
-                'mensaje' => 'Tu pedido #' . $pedido->id . ' fue entregado correctamente.',
-                'tipo' => 'cliente',
-                'evento' => 'pedido_entregado',
-                'leido' => false,
-            ]);
-        });
+                Notificacion::create([
+                    'user_id' => $pedido->user_id,
+                    'pedido_id' => $pedido->id,
+                    'mensaje' => 'Tu pedido #' . $pedido->id . ' fue entregado correctamente.',
+                    'tipo' => 'cliente',
+                    'evento' => 'pedido_entregado',
+                    'leido' => false,
+                ]);
+            });
+        } catch (\RuntimeException $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
-        /*
-         * Firebase es independiente de MySQL. La ubicación del pedido
-         * se elimina explícitamente al finalizar la entrega.
-         * No dependemos de que el navegador vuelva a cargar la página.
-         */
         $firebaseLocation->eliminarPorPedido($id);
 
-        // Al liberar este Delivery, se entrega automáticamente
-        // el siguiente pedido más antiguo que esté esperando.
         $asignados = $asignador->procesarCola();
 
         if ($asignados > 0) {
-            return back()->with(
-                'success',
-                'Pedido marcado como entregado. Se te asignó automáticamente el siguiente pedido de la cola.'
-            );
+            return redirect()
+                ->route('delivery.pedidos.mis')
+                ->with(
+                    'success',
+                    'Pedido #' . $id . ' marcado como entregado. Se procesó automáticamente la siguiente entrega de la cola.'
+                );
         }
 
-        return back()->with(
-            'success',
-            'Pedido marcado como entregado correctamente. No hay más pedidos esperando en la cola.'
-        );
+        return redirect()
+            ->route('delivery.pedidos.mis')
+            ->with(
+                'success',
+                'Pedido #' . $id . ' marcado como entregado correctamente. No hay más pedidos esperando en la cola.'
+            );
     }
 }
