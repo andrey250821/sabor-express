@@ -79,127 +79,6 @@
 
 
     {{-- =====================================================
-        BUSCADOR GMAIL
-    ====================================================== --}}
-
-    <section class="delivery-search-card" data-delivery-animate>
-
-        <div class="delivery-search-icon">
-            <i class="bi bi-google"></i>
-        </div>
-
-        <div class="delivery-search-body">
-
-            <label
-                for="deliveryGmailSearch"
-                class="delivery-search-label">
-
-                Buscar por Gmail del cliente
-
-            </label>
-
-            <div class="delivery-search-input-wrapper">
-
-                <i class="bi bi-search"></i>
-
-                <input
-                    id="deliveryGmailSearch"
-                    type="search"
-                    class="delivery-search-input"
-                    value="{{ $busquedaGmail ?? '' }}"
-                    placeholder="Ej. cliente@gmail.com"
-                    autocomplete="off"
-                    spellcheck="false">
-
-                <button
-                    type="button"
-                    id="deliveryGmailClear"
-                    class="delivery-search-clear"
-                    aria-label="Limpiar búsqueda"
-                    {{ empty($busquedaGmail) ? 'hidden' : '' }}>
-
-                    <i class="bi bi-x-circle-fill"></i>
-
-                </button>
-
-            </div>
-
-            <small
-                id="deliverySearchResult"
-                class="delivery-search-result">
-
-                Escribe el Gmail del cliente para filtrar al instante.
-
-            </small>
-
-        </div>
-
-    </section>
-
-
-    {{-- =====================================================
-        RESUMEN
-    ====================================================== --}}
-
-    <div class="row g-3 mb-4">
-
-        <div class="col-12 col-md-6" data-delivery-animate>
-
-            <div class="delivery-my-stat delivery-my-stat-active">
-
-                <div class="delivery-my-stat-icon">
-                    <i class="bi bi-bicycle"></i>
-                </div>
-
-                <div>
-                    <span>
-                        En proceso
-                    </span>
-
-                    <strong>
-                        {{ $cantidadAsignados }}
-                    </strong>
-
-                    <small>
-                        Asignados o en camino
-                    </small>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="col-12 col-md-6" data-delivery-animate>
-
-            <div class="delivery-my-stat delivery-my-stat-success">
-
-                <div class="delivery-my-stat-icon">
-                    <i class="bi bi-check2-circle"></i>
-                </div>
-
-                <div>
-                    <span>
-                        Entregados
-                    </span>
-
-                    <strong>
-                        {{ $cantidadEntregados }}
-                    </strong>
-
-                    <small>
-                        Finalizados en la fecha seleccionada
-                    </small>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    {{-- =====================================================
         MENSAJES
     ====================================================== --}}
 
@@ -314,8 +193,7 @@
 
     <section
         id="panel-asignados"
-        class="delivery-my-tab-panel active"
-        data-delivery-search-panel>
+        class="delivery-my-tab-panel active">
 
         <div class="delivery-my-section">
 
@@ -346,8 +224,7 @@
             @if($pedidosAsignados->isEmpty())
 
             <div
-                class="delivery-my-empty delivery-my-empty-active"
-                data-delivery-search-empty>
+                class="delivery-my-empty delivery-my-empty-active">
 
                 <div class="delivery-my-empty-icon">
                     <i class="bi bi-bicycle"></i>
@@ -374,13 +251,10 @@
                     $pedido = $asignacion->pedido;
                     $cliente = $pedido?->user;
                     $estado = $pedido?->estado;
-                    $gmail = $cliente?->email ?? '';
                 @endphp
 
                 <div
                     class="col-12 col-lg-6"
-                    data-delivery-search-card
-                    data-gmail="{{ $gmail }}">
 
                     <article
                         class="delivery-my-order-card {{ $estado === 'asignado' ? 'delivery-assigned-locked' : 'delivery-in-route-card' }}"
@@ -767,8 +641,7 @@
 
     <section
         id="panel-entregados"
-        class="delivery-my-tab-panel"
-        data-delivery-search-panel>
+        class="delivery-my-tab-panel">
 
         <div class="delivery-my-section delivery-my-section-delivered">
 
@@ -799,8 +672,7 @@
             @if($pedidosEntregados->isEmpty())
 
             <div
-                class="delivery-my-empty delivery-my-empty-delivered"
-                data-delivery-search-empty>
+                class="delivery-my-empty delivery-my-empty-delivered">
 
                 <div class="delivery-my-empty-icon">
                     <i class="bi bi-calendar-check"></i>
@@ -826,13 +698,10 @@
                 @php
                     $pedido = $asignacion->pedido;
                     $cliente = $pedido?->user;
-                    $gmail = $cliente?->email ?? '';
                 @endphp
 
                 <div
                     class="col-12 col-md-6 col-xl-4"
-                    data-delivery-search-card
-                    data-gmail="{{ $gmail }}">
 
                     <article
                         class="delivery-delivered-card delivery-delivered-card-static"
