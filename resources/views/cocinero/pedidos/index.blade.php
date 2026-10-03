@@ -217,7 +217,7 @@
                                         @endif
 
                                         @php
-                                            $fechaFinalizacion = $pedido->fecha_listo ?? $pedido->created_at;
+                                            $fechaFinalizacion = $pedido->created_at;
                                         @endphp
 
                                         @if($fechaFinalizacion)
@@ -549,7 +549,7 @@
 
                 @php
                     $listosAgrupados = $listosAgrupados ?? $listos->groupBy(function ($pedido) {
-                        $fecha = $pedido->fecha_listo ?? $pedido->created_at;
+                        $fecha = $pedido->created_at;
 
                         return $fecha
                             ? $fecha->copy()->timezone('America/La_Paz')->format('Y-m-d')
