@@ -1181,9 +1181,7 @@ body.cocinero-layout.sidebar-open {
 }
 
 .cocinero-btn-preparar,
-.cocinero-btn-listo,
-
-.cocinero-btn-preparar {
+.cocinero-btn-listo {
     border: 1px solid rgba(255, 200, 87, 0.18);
     background: rgba(255, 200, 87, 0.11);
     color: #ffdf94;
@@ -2188,39 +2186,6 @@ body.cocinero-layout.sidebar-open {
         flex-direction: column;
     }
 
-    .cocinero-order,
-    .cocinero-order-item {
-        align-items: flex-start;
-        flex-wrap: wrap;
-        padding: 15px;
-    }
-
-    .cocinero-order-info {
-        width: calc(100% - 70px);
-    }
-
-    .cocinero-order-total {
-        width: calc(100% - 70px);
-        margin-left: 70px;
-        padding-top: 10px;
-        text-align: left;
-        border-top: 1px solid var(--cocinero-border);
-    }
-
-    .cocinero-order-actions {
-        width: calc(100% - 70px);
-        margin-left: 70px;
-        justify-content: flex-start;
-    }
-
-    .cocinero-order-actions form,
-    .cocinero-order-actions .btn {
-        width: 100%;
-    }
-
-    .cocinero-order-arrow {
-        display: none;
-    }
 
     .cocinero-hero-visual {
         min-height: 270px;
