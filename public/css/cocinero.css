@@ -948,8 +948,21 @@ body.cocinero-layout.sidebar-open {
     color: #fff;
 }
 
-.cocinero-panel,
-.cocinero-orders-card,
+.cocinero-panel {
+    overflow: hidden;
+    border: 1px solid var(--cocinero-border);
+    border-radius: var(--cocinero-radius);
+    background: var(--cocinero-surface);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.13);
+}
+
+.cocinero-orders-card {
+    overflow: hidden;
+    border: 1px solid var(--cocinero-border);
+    border-radius: var(--cocinero-radius);
+    background: var(--cocinero-surface);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.13);
+}
 
 .cocinero-panel-header,
 .cocinero-orders-header {
