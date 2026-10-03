@@ -219,92 +219,6 @@ $estadoPedido === 'en_camino'
 
 
     {{-- ============================================================
-         INFORMACIÓN PRIORITARIA PARA LA ENTREGA
-    ============================================================= --}}
-
-    <section class="delivery-priority-grid" aria-label="Información prioritaria de entrega">
-
-        <article class="delivery-priority-card delivery-priority-reference">
-
-            <div class="delivery-priority-shine" aria-hidden="true"></div>
-
-            <div class="delivery-priority-icon">
-                <i class="bi bi-signpost-2-fill"></i>
-            </div>
-
-            <div class="delivery-priority-content">
-
-                <span>
-                    REFERENCIA PARA LA ENTREGA
-                </span>
-
-                <strong>
-                    {{ $pedido->referencia_delivery ?: 'Sin referencia registrada por el cliente' }}
-                </strong>
-
-                @if($pedido->referencia_delivery)
-                    <small>
-                        Usa esta referencia como apoyo para identificar el domicilio.
-                    </small>
-                @else
-                    <small>
-                        El cliente no registró una referencia adicional.
-                    </small>
-                @endif
-
-            </div>
-
-        </article>
-
-
-        <article class="delivery-priority-card delivery-priority-phone">
-
-            <div class="delivery-priority-shine" aria-hidden="true"></div>
-
-            <div class="delivery-priority-icon">
-                <i class="bi bi-telephone-fill"></i>
-            </div>
-
-            <div class="delivery-priority-content">
-
-                <span>
-                    TELÉFONO DEL CLIENTE
-                </span>
-
-                @if($pedido->user?->telefono)
-
-                    <a
-                        href="tel:{{ preg_replace('/[^0-9+]/', '', $pedido->user->telefono) }}"
-                        class="delivery-priority-phone-link">
-
-                        {{ $pedido->user->telefono }}
-
-                    </a>
-
-                    <small>
-                        Toca el número para llamar directamente.
-                    </small>
-
-                @else
-
-                    <strong>
-                        Sin teléfono registrado
-                    </strong>
-
-                    <small>
-                        No hay un número de contacto disponible.
-                    </small>
-
-                @endif
-
-            </div>
-
-        </article>
-
-    </section>
-
-
-    {{-- ============================================================
          ESTADO DEL PEDIDO
     ============================================================= --}}
 
@@ -514,18 +428,26 @@ $estadoPedido === 'en_camino'
 
                 <div class="delivery-info-item-icon">
 
-                    <i class="bi bi-telephone"></i>
+                    <i class="bi bi-telephone-fill"></i>
 
                 </div>
 
 
                 <div>
 
-                    <span>Teléfono de contacto</span>
+                    <span>Teléfono del cliente</span>
 
-                    <strong>
+                    <a
+                        href="tel:{{ preg_replace('/[^0-9+]/', '', $pedido->user->telefono) }}"
+                        class="delivery-contact-phone-link">
+
                         {{ $pedido->user->telefono }}
-                    </strong>
+
+                    </a>
+
+                    <small class="delivery-contact-phone-hint">
+                        Toca el número para llamar directamente.
+                    </small>
 
                 </div>
 
@@ -613,7 +535,7 @@ $estadoPedido === 'en_camino'
 
             <div class="delivery-reference-icon">
 
-                <i class="bi bi-signpost-2"></i>
+                <i class="bi bi-signpost-2-fill"></i>
 
             </div>
 
@@ -622,9 +544,9 @@ $estadoPedido === 'en_camino'
 
                 <span>Referencia para la entrega</span>
 
-                <p>
+                <strong>
                     {{ $pedido->referencia_delivery }}
-                </p>
+                </strong>
 
             </div>
 
