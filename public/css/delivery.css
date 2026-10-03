@@ -8528,11 +8528,13 @@ body.delivery-menu-open {
     border: 1px solid rgba(139, 30, 69, .12);
     border-radius: 24px;
     background:
-        radial-gradient(circle at 100% 0%, rgba(139, 30, 69, .10), transparent 28%),
-        linear-gradient(145deg, #ffffff 0%, #fffafb 52%, #f8f7f9 100%);
+        radial-gradient(circle at 100% 0%, rgba(255, 47, 118, .22), transparent 30%),
+        radial-gradient(circle at 0% 100%, rgba(53, 208, 127, .10), transparent 28%),
+        linear-gradient(145deg, #2a101b 0%, #1c1720 52%, #13151b 100%);
+    border-color: rgba(255, 77, 136, .18);
     box-shadow:
-        0 18px 45px rgba(32, 18, 27, .08),
-        0 4px 14px rgba(32, 18, 27, .05);
+        0 20px 48px rgba(0, 0, 0, .28),
+        0 6px 18px rgba(139, 30, 69, .14);
 }
 
 .delivery-dashboard-financial::before {
@@ -8555,10 +8557,10 @@ body.delivery-menu-open {
     align-items: center;
     gap: .5rem;
     padding: .38rem .7rem;
-    border: 1px solid rgba(139, 30, 69, .12);
+    border: 1px solid rgba(255, 77, 136, .22);
     border-radius: 999px;
-    background: rgba(139, 30, 69, .06);
-    color: #8b1e45;
+    background: rgba(139, 30, 69, .16);
+    color: #ff6b9c;
     font-size: .72rem;
     font-weight: 900;
     letter-spacing: .11em;
@@ -8575,7 +8577,7 @@ body.delivery-menu-open {
 
 .delivery-financial-header h2 {
     margin-top: .65rem;
-    color: #1f1a20;
+    color: #ffffff;
     font-size: clamp(1.3rem, 2vw, 1.65rem);
     font-weight: 900;
     letter-spacing: -.02em;
@@ -8583,7 +8585,7 @@ body.delivery-menu-open {
 
 .delivery-financial-header p {
     max-width: 760px;
-    color: #6f666d;
+    color: #c8bec5;
     font-size: .88rem;
 }
 
