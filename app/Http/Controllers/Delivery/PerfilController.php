@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
 use App\Models\AsignacionDelivery;
 
 class PerfilController extends Controller
@@ -21,6 +22,35 @@ class PerfilController extends Controller
         return view('delivery.perfil.index', [
             'user' => $request->user(),
         ]);
+    }
+
+
+    /**
+     * Actualizar la contraseña del Delivery.
+     */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('passwordUpdate', [
+            'current_password' => [
+                'required',
+                'current_password',
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+            ],
+        ]);
+
+        $user = $request->user();
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return Redirect::route('delivery.perfil.edit')
+            ->with('password_status', 'Contraseña actualizada correctamente.');
     }
 
     /**
