@@ -283,6 +283,8 @@
 
                     @endforeach
 
+                        @endforeach
+
                 </div>
 
             @else
