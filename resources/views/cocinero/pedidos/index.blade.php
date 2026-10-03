@@ -283,11 +283,9 @@
 
                     @endforeach
 
-                    @endforeach
-
                 </div>
 
-            @elseinero-empty-state">
+            @else
 
                     <div class="cocinero-empty-icon">
                         <i class="bi bi-check2-circle"></i>
