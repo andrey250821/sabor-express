@@ -53,7 +53,7 @@
             {{-- BOTÓN CERRAR EN MÓVIL --}}
             <button
                 type="button"
-                class="delivery-sidebar-close d-lg-none"
+                class="delivery-sidebar-close d-lg-none" data-delivery-interactive
                 id="deliverySidebarClose"
                 aria-label="Cerrar menú">
 
@@ -70,7 +70,7 @@
 
                 <a
                     href="{{ route('delivery.dashboard') }}"
-                    class="delivery-brand-link">
+                    class="delivery-brand-link" data-delivery-interactive aria-label="Ir al panel de Delivery">
 
                     <div class="delivery-brand-logo">
 
@@ -139,7 +139,7 @@
 
                     <button
                         type="submit"
-                        class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }}"
+                        class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }} delivery-control-button" data-delivery-interactive
                         title="{{ Auth::user()->estado === 'activo' ? 'Ponerte inactivo' : 'Ponerte activo' }}">
                         <i class="bi {{ Auth::user()->estado === 'activo' ? 'bi-pause-circle-fill' : 'bi-play-circle-fill' }}"></i>
                         {{ Auth::user()->estado === 'activo' ? 'Inactivo' : 'Activo' }}
@@ -165,7 +165,8 @@
                 <a
                     href="{{ route('delivery.dashboard') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.dashboard') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.dashboard') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.dashboard') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-grid-1x2-fill"></i>
@@ -183,7 +184,8 @@
                 <a
                     href="{{ route('delivery.pedidos.index') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-box-seam-fill"></i>
@@ -205,7 +207,8 @@
                 <a
                     href="{{ route('delivery.pedidos.mis') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.pedidos.mis') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-bicycle"></i>
@@ -224,7 +227,8 @@
                 <a
                     href="{{ route('delivery.perfil.edit') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.perfil.*') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.perfil.*') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.perfil.*') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-person-circle"></i>
@@ -293,7 +297,7 @@
 
                 <button
                     type="submit"
-                    class="delivery-logout">
+                    class="delivery-logout" data-delivery-interactive>
 
                     <i class="bi bi-box-arrow-left"></i>
 
@@ -335,7 +339,7 @@
 
                     <button
                         type="button"
-                        class="delivery-menu-toggle d-lg-none"
+                        class="delivery-menu-toggle d-lg-none" data-delivery-interactive
                         id="deliveryMenuToggle"
                         aria-label="Abrir menú">
 
@@ -420,7 +424,7 @@
 
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close" data-delivery-interactive
                         data-bs-dismiss="alert">
                     </button>
 
@@ -443,7 +447,7 @@
 
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close" data-delivery-interactive
                         data-bs-dismiss="alert">
                     </button>
 
