@@ -557,15 +557,6 @@
 
                                 @endif
 
-                                @if($cliente?->telefono)
-
-                                <small>
-                                    <i class="bi bi-telephone"></i>
-                                    {{ $cliente->telefono }}
-                                </small>
-
-                                @endif
-
                             </div>
 
                         </div>
