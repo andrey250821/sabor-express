@@ -8881,41 +8881,39 @@ body.delivery-menu-open {
 
 
 /* ==========================================================================
-   DETALLE DEL PEDIDO — INFORMACIÓN PRIORITARIA
+   DETALLE DEL PEDIDO — REFERENCIA Y TELÉFONO DESTACADOS
+   Los datos permanecen en sus ubicaciones originales.
    ========================================================================== */
 
-.delivery-show .delivery-priority-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(280px, .85fr);
-    gap: 16px;
-    margin-bottom: 22px;
-}
-
-.delivery-show .delivery-priority-card {
+/* REFERENCIA PARA LA ENTREGA */
+.delivery-show .delivery-reference {
     position: relative;
-    min-width: 0;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 19px 20px;
-    border-radius: 18px;
     isolation: isolate;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-top: 14px;
+    padding: 18px;
+    border: 1px solid rgba(255, 193, 7, .48);
+    border-radius: 17px;
+    background: linear-gradient(135deg, rgba(255, 193, 7, .17), rgba(74, 54, 10, .22) 58%, rgba(23, 24, 29, .98));
+    box-shadow: 0 14px 34px rgba(255, 193, 7, .08), inset 0 1px 0 rgba(255, 255, 255, .05);
+    animation: delivery-reference-glow 2.4s ease-in-out infinite;
 }
 
-.delivery-show .delivery-priority-card::before {
+.delivery-show .delivery-reference::before,
+.delivery-show .delivery-contact-phone::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -2;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, .045),
-        rgba(255, 255, 255, 0)
-    );
+    background: linear-gradient(135deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, 0));
+    pointer-events: none;
 }
 
-.delivery-show .delivery-priority-card::after {
+.delivery-show .delivery-reference::after,
+.delivery-show .delivery-contact-phone::after {
     content: "";
     position: absolute;
     top: -30%;
@@ -8924,176 +8922,179 @@ body.delivery-menu-open {
     width: 42%;
     height: 160%;
     transform: rotate(18deg);
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, .24),
-        transparent
-    );
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .24), transparent);
     filter: blur(2px);
     pointer-events: none;
-    animation: delivery-priority-shine 2.8s linear infinite;
+    animation: delivery-reference-shine 2.8s linear infinite;
 }
 
-.delivery-show .delivery-priority-reference {
-    border: 1px solid rgba(255, 193, 7, .48);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 193, 7, .17),
-            rgba(74, 54, 10, .22) 58%,
-            rgba(23, 24, 29, .98)
-        );
-    box-shadow:
-        0 14px 34px rgba(255, 193, 7, .08),
-        inset 0 1px 0 rgba(255, 255, 255, .05);
-    animation: delivery-priority-reference-glow 2.4s ease-in-out infinite;
-}
-
-.delivery-show .delivery-priority-phone {
-    border: 1px solid rgba(53, 208, 127, .42);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(53, 208, 127, .14),
-            rgba(25, 135, 84, .09) 58%,
-            rgba(23, 24, 29, .98)
-        );
-    box-shadow:
-        0 14px 34px rgba(53, 208, 127, .07),
-        inset 0 1px 0 rgba(255, 255, 255, .05);
-    animation: delivery-priority-phone-glow 2.4s ease-in-out infinite;
-}
-
-.delivery-show .delivery-priority-icon {
+.delivery-show .delivery-reference-icon {
     width: 52px;
     height: 52px;
     min-width: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 1px;
     border-radius: 15px;
-    font-size: 21px;
-}
-
-.delivery-show .delivery-priority-reference .delivery-priority-icon {
     color: #ffc107;
     background: rgba(255, 193, 7, .13);
     border: 1px solid rgba(255, 193, 7, .18);
     box-shadow: 0 0 22px rgba(255, 193, 7, .12);
+    font-size: 21px;
 }
 
-.delivery-show .delivery-priority-phone .delivery-priority-icon {
-    color: #35d07f;
-    background: rgba(53, 208, 127, .11);
-    border: 1px solid rgba(53, 208, 127, .16);
-    box-shadow: 0 0 22px rgba(53, 208, 127, .10);
-}
-
-.delivery-show .delivery-priority-content {
+.delivery-show .delivery-reference > div:last-child {
     min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.delivery-show .delivery-priority-content > span {
-    color: #c6c8ce;
+.delivery-show .delivery-reference > div:last-child > span {
+    color: #f2cd68;
     font-size: 10px;
     font-weight: 900;
     letter-spacing: .08em;
+    text-transform: uppercase;
 }
 
-.delivery-show .delivery-priority-reference .delivery-priority-content > span {
-    color: #f2cd68;
-}
-
-.delivery-show .delivery-priority-phone .delivery-priority-content > span {
-    color: #8ed5aa;
-}
-
-.delivery-show .delivery-priority-content > strong,
-.delivery-show .delivery-priority-phone-link {
+.delivery-show .delivery-reference > div:last-child > strong {
     margin: 0;
-    color: #fff;
+    color: #fff7db;
     font-size: 17px;
-    line-height: 1.4;
+    line-height: 1.45;
     font-weight: 900;
     overflow-wrap: anywhere;
-    text-decoration: none;
 }
 
-.delivery-show .delivery-priority-phone-link {
+/* TELÉFONO DEL CLIENTE */
+.delivery-show .delivery-contact-phone {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    align-items: center;
+    margin-top: 8px;
+    padding: 16px 15px;
+    border: 1px solid rgba(53, 208, 127, .42) !important;
+    border-top: 1px solid rgba(53, 208, 127, .42) !important;
+    border-radius: 17px;
+    background: linear-gradient(135deg, rgba(53, 208, 127, .14), rgba(25, 135, 84, .09) 58%, rgba(23, 24, 29, .98));
+    box-shadow: 0 14px 34px rgba(53, 208, 127, .07), inset 0 1px 0 rgba(255, 255, 255, .05);
+    animation: delivery-phone-glow 2.4s ease-in-out infinite;
+}
+
+.delivery-show .delivery-contact-phone .delivery-info-item-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 15px;
+    color: #35d07f;
+    background: rgba(53, 208, 127, .11);
+    border: 1px solid rgba(53, 208, 127, .16);
+    box-shadow: 0 0 22px rgba(53, 208, 127, .10);
+    font-size: 21px;
+}
+
+.delivery-show .delivery-contact-phone > div:last-child {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delivery-show .delivery-contact-phone > div:last-child > span {
+    color: #8ed5aa;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.delivery-show .delivery-contact-phone-link {
     display: inline-flex;
     align-items: center;
     width: fit-content;
-    color: #dcffe9;
+    max-width: 100%;
+    color: #dcffe9 !important;
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 900;
+    text-decoration: none;
+    overflow-wrap: anywhere;
     text-shadow: 0 0 18px rgba(53, 208, 127, .24);
+    transition: color .2s ease, transform .2s ease, text-shadow .2s ease;
 }
 
-.delivery-show .delivery-priority-phone-link:hover {
-    color: #fff;
+.delivery-show .delivery-contact-phone-link:hover {
+    color: #fff !important;
+    transform: translateX(2px);
+    text-shadow: 0 0 22px rgba(53, 208, 127, .38);
 }
 
-.delivery-show .delivery-priority-content > small {
+.delivery-show .delivery-contact-phone-hint {
     color: #9598a1;
     font-size: 10px;
     line-height: 1.45;
 }
 
-.delivery-show .delivery-priority-reference .delivery-priority-content > strong {
-    color: #fff7db;
+@keyframes delivery-reference-shine {
+    0% { left: -55%; }
+    55%, 100% { left: 125%; }
 }
 
-.delivery-show .delivery-priority-phone .delivery-priority-content > strong {
-    color: #ecfff4;
-}
-
-@keyframes delivery-priority-shine {
-    0% {
-        left: -55%;
+@keyframes delivery-reference-glow {
+    0%, 100% {
+        box-shadow: 0 14px 34px rgba(255, 193, 7, .08), inset 0 1px 0 rgba(255, 255, 255, .05);
     }
-
-    55%,
-    100% {
-        left: 125%;
-    }
-}
-
-@keyframes delivery-priority-reference-glow {
-    0%,
-    100% {
-        box-shadow:
-            0 14px 34px rgba(255, 193, 7, .08),
-            inset 0 1px 0 rgba(255, 255, 255, .05);
-    }
-
     50% {
-        box-shadow:
-            0 16px 38px rgba(255, 193, 7, .17),
-            0 0 24px rgba(255, 193, 7, .08),
-            inset 0 1px 0 rgba(255, 255, 255, .07);
+        box-shadow: 0 16px 38px rgba(255, 193, 7, .17), 0 0 24px rgba(255, 193, 7, .08), inset 0 1px 0 rgba(255, 255, 255, .07);
     }
 }
 
-@keyframes delivery-priority-phone-glow {
-    0%,
-    100% {
-        box-shadow:
-            0 14px 34px rgba(53, 208, 127, .07),
-            inset 0 1px 0 rgba(255, 255, 255, .05);
+@keyframes delivery-phone-glow {
+    0%, 100% {
+        box-shadow: 0 14px 34px rgba(53, 208, 127, .07), inset 0 1px 0 rgba(255, 255, 255, .05);
     }
-
     50% {
-        box-shadow:
-            0 16px 38px rgba(53, 208, 127, .15),
-            0 0 24px rgba(53, 208, 127, .07),
-            inset 0 1px 0 rgba(255, 255, 255, .07);
+        box-shadow: 0 16px 38px rgba(53, 208, 127, .15), 0 0 24px rgba(53, 208, 127, .07), inset 0 1px 0 rgba(255, 255, 255, .07);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .delivery-show .delivery-reference,
+    .delivery-show .delivery-contact-phone {
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .delivery-show .delivery-reference-icon,
+    .delivery-show .delivery-contact-phone .delivery-info-item-icon {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        font-size: 19px;
+    }
+
+    .delivery-show .delivery-reference > div:last-child > strong,
+    .delivery-show .delivery-contact-phone-link {
+        font-size: 15px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-show .delivery-reference,
+    .delivery-show .delivery-reference::after,
+    .delivery-show .delivery-contact-phone,
+    .delivery-show .delivery-contact-phone::after,
+    .delivery-show .delivery-contact-phone-link {
+        animation: none;
+        transition: none;
     }
 }
 
 
-/* ==========================================================================
+//* ==========================================================================
    DETALLE DEL PEDIDO — DESGLOSE ECONÓMICO
    ========================================================================== */
 
