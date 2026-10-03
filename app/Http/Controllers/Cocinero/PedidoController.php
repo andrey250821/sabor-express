@@ -11,6 +11,7 @@ use App\Services\AsignarPedidoDeliveryService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Carbon\Carbon;
+use App\Services\FechaFiltroService;
 
 class PedidoController extends Controller
 {
@@ -55,12 +56,16 @@ class PedidoController extends Controller
         /*
          * LISTOS / HISTORIAL
          *
-         * Se muestran los pedidos que este cocinero llevó hasta LISTO
-         * o que posteriormente avanzaron en el flujo (asignado, en camino,
-         * entregado o cancelado).
+         * Aquí aparecen TODOS los pedidos que este cocinero terminó de preparar.
+         * El pedido permanece en este historial aunque después:
+         * - se asigne a Delivery;
+         * - esté en camino;
+         * - haya sido entregado;
+         * - o termine cancelado.
          *
-         * El filtro de fecha usa created_at y no agrega columnas nuevas
-         * ni modifica la estructura existente de pedidos.
+         * La fecha del historial corresponde al momento en que cocina lo marcó
+         * como LISTO. Para pedidos históricos creados antes de existir fecha_listo,
+         * usamos created_at como respaldo.
          */
         $periodosListosValidos = [
             'hoy',
@@ -75,7 +80,8 @@ class PedidoController extends Controller
             $periodoListos = 'hoy';
         }
 
-        $hoy = Carbon::today();
+        $fechaFiltro = app(FechaFiltroService::class);
+        $hoy = $fechaFiltro->hoy();
 
         [$inicioListos, $finListos] = match ($periodoListos) {
             'ayer' => [
@@ -99,6 +105,7 @@ class PedidoController extends Controller
         $listos = Pedido::with([
             'user',
             'detallePedidos.producto',
+            'asignacionDelivery.delivery',
         ])
             ->whereIn('estado', [
                 'listo',
@@ -108,10 +115,22 @@ class PedidoController extends Controller
                 'cancelado',
             ])
             ->where('cocinero_id', Auth::id())
-            ->whereBetween('created_at', [$inicioListos, $finListos])
-            ->orderBy('created_at', 'asc')
+            ->whereBetween(
+                DB::raw('COALESCE(fecha_listo, created_at)'),
+                [$inicioListos->utc(), $finListos->utc()]
+            )
+            ->orderByRaw('COALESCE(fecha_listo, created_at) ASC')
             ->orderBy('id', 'asc')
             ->get();
+
+        $listosAgrupados = $listos->groupBy(function (Pedido $pedido): string {
+            $fecha = $pedido->fecha_listo ?? $pedido->created_at;
+
+            return $fecha
+                ->copy()
+                ->timezone(FechaFiltroService::TIMEZONE)
+                ->format('Y-m-d');
+        });
 
         $seccionesValidas = ['pendientes', 'preparando', 'listos'];
 
@@ -125,6 +144,7 @@ class PedidoController extends Controller
             'pendientes',
             'preparando',
             'listos',
+            'listosAgrupados',
             'seccion',
             'periodoListos'
         ));
@@ -248,6 +268,7 @@ class PedidoController extends Controller
 
                 $pedido->update([
                     'estado' => 'listo',
+                    'fecha_listo' => now(),
                 ]);
             });
 
