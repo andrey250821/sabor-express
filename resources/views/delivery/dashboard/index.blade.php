@@ -11,7 +11,7 @@
     {{-- =========================================================
          HERO
     ========================================================== --}}
-    <section class="delivery-dashboard-hero mb-4">
+    <section class="delivery-dashboard-hero mb-4" data-delivery-animate>
 
         <div class="delivery-dashboard-hero-glow"></div>
 
@@ -48,7 +48,7 @@
                 <div class="delivery-dashboard-actions">
 
                     <a href="{{ route('delivery.pedidos.index') }}"
-                        class="delivery-dashboard-btn-primary">
+                        class="delivery-dashboard-btn-primary" data-delivery-interactive>
 
                         <i class="bi bi-box-seam"></i>
 
@@ -57,7 +57,7 @@
                     </a>
 
                     <a href="{{ route('delivery.pedidos.mis') }}"
-                        class="delivery-dashboard-btn-secondary">
+                        class="delivery-dashboard-btn-secondary" data-delivery-interactive>
 
                         <i class="bi bi-bicycle"></i>
 
@@ -163,7 +163,7 @@
     {{-- =========================================================
          ESTADO DEL DELIVERY
     ========================================================== --}}
-    <section class="delivery-dashboard-status mb-4">
+    <section class="delivery-dashboard-status mb-4" data-delivery-animate>
 
         <div class="delivery-dashboard-status-left">
 
@@ -238,7 +238,7 @@
         <div class="col-12 col-sm-6 col-xl-4">
 
             <a href="{{ route('delivery.pedidos.index') }}"
-                class="delivery-stat-link">
+                class="delivery-stat-link" data-delivery-interactive>
 
                 <div class="delivery-stat-card warning">
 
@@ -285,7 +285,7 @@
         <div class="col-12 col-sm-6 col-xl-4">
 
             <a href="{{ route('delivery.pedidos.mis') }}"
-                class="delivery-stat-link">
+                class="delivery-stat-link" data-delivery-interactive>
 
                 <div class="delivery-stat-card primary">
 
@@ -375,7 +375,7 @@
     {{-- =========================================================
          RESUMEN ECONÓMICO DEL DÍA
     ========================================================== --}}
-    <section class="delivery-dashboard-financial mb-4">
+    <section class="delivery-dashboard-financial mb-4" data-delivery-animate>
 
         <div class="delivery-financial-header">
 
@@ -564,7 +564,7 @@
     {{-- =========================================================
          INFORMACIÓN FINAL
     ========================================================== --}}
-    <section class="delivery-dashboard-footer-card">
+    <section class="delivery-dashboard-footer-card" data-delivery-animate>
 
         <div class="delivery-footer-card-icon">
 
