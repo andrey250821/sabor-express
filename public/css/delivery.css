@@ -9575,3 +9575,228 @@ body.delivery-menu-open {
         transition: none;
     }
 }
+
+
+/* ==========================================================================
+   PERFIL DELIVERY — DISTRIBUCIÓN EN DOS COLUMNAS Y SEGURIDAD DESTACADA
+   --------------------------------------------------------------------------
+   En pantallas grandes, Datos personales y Seguridad se muestran lado a lado.
+   En tablet/móvil se apilan para conservar la lectura y el espacio.
+   ========================================================================== */
+
+.delivery-profile-page > .row {
+    align-items: stretch;
+}
+
+.delivery-profile-page > .row > .col-12.col-xl-6 {
+    display: flex;
+}
+
+.delivery-profile-page .delivery-profile-card,
+.delivery-profile-page .delivery-password-card {
+    width: 100%;
+    height: 100%;
+}
+
+.delivery-profile-page .delivery-profile-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.delivery-profile-page .delivery-profile-form {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.delivery-profile-page .delivery-profile-form > .row {
+    flex: 1;
+    align-content: flex-start;
+}
+
+.delivery-profile-page .delivery-profile-form-footer {
+    margin-top: auto;
+}
+
+/* Seguridad: bloque visualmente distinto y claramente asociado a protección. */
+.delivery-profile-page .delivery-password-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.35rem;
+    border: 1px solid rgba(255, 77, 136, .38);
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255, 47, 118, .24), transparent 32%),
+        radial-gradient(circle at 0% 100%, rgba(53, 208, 127, .11), transparent 30%),
+        linear-gradient(145deg, #24101a 0%, #17181d 52%, #111217 100%);
+    box-shadow:
+        0 22px 45px rgba(0, 0, 0, .24),
+        0 0 0 1px rgba(255, 255, 255, .02) inset;
+}
+
+.delivery-profile-page .delivery-password-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 5px;
+    background: linear-gradient(90deg, #8b1e45 0%, #ff2f76 52%, #35d07f 100%);
+}
+
+.delivery-profile-page .delivery-password-card::after {
+    content: "";
+    position: absolute;
+    width: 210px;
+    height: 210px;
+    right: -90px;
+    bottom: -105px;
+    border-radius: 50%;
+    background: rgba(255, 47, 118, .08);
+    filter: blur(2px);
+    pointer-events: none;
+}
+
+.delivery-profile-page .delivery-password-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+}
+
+.delivery-profile-page .delivery-password-icon {
+    flex: 0 0 auto;
+    border-color: rgba(255, 77, 136, .30);
+    background:
+        linear-gradient(145deg, rgba(255, 47, 118, .24), rgba(139, 30, 69, .26));
+    color: #ff6b9b;
+    box-shadow:
+        0 10px 24px rgba(255, 47, 118, .12),
+        0 0 26px rgba(255, 47, 118, .08);
+}
+
+.delivery-profile-page .delivery-password-header span {
+    color: #ff6b9b;
+}
+
+.delivery-profile-page .delivery-password-header h2 {
+    color: #ffffff;
+}
+
+.delivery-profile-page .delivery-password-header p {
+    color: #c6c7cd;
+}
+
+.delivery-profile-page .delivery-password-form {
+    position: relative;
+    z-index: 1;
+}
+
+.delivery-profile-page .delivery-password-form .delivery-form-label {
+    color: #f2f2f4;
+    font-weight: 800;
+}
+
+.delivery-profile-page .delivery-password-input input {
+    min-height: 46px;
+    border: 1px solid #3b3037;
+    background: rgba(9, 10, 13, .72);
+    color: #ffffff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.delivery-profile-page .delivery-password-input input::placeholder {
+    color: #70737c;
+}
+
+.delivery-profile-page .delivery-password-input input:focus {
+    border-color: rgba(255, 77, 136, .68);
+    background: rgba(13, 14, 18, .92);
+    color: #ffffff;
+    box-shadow:
+        0 0 0 4px rgba(255, 47, 118, .12),
+        0 12px 24px rgba(0, 0, 0, .16);
+}
+
+.delivery-profile-page .delivery-password-input > i:first-child {
+    color: #ff4d88;
+}
+
+.delivery-profile-page .delivery-password-toggle {
+    color: #b5a9b0;
+}
+
+.delivery-profile-page .delivery-password-toggle:hover {
+    background: rgba(255, 47, 118, .12);
+    color: #ffffff;
+}
+
+.delivery-profile-page .delivery-password-footer {
+    border-top-color: rgba(255, 255, 255, .10);
+}
+
+.delivery-profile-page .delivery-password-tip {
+    color: #c1c3ca;
+}
+
+.delivery-profile-page .delivery-password-tip i {
+    color: #35d07f;
+}
+
+.delivery-profile-page .delivery-password-save {
+    border-color: rgba(255, 77, 136, .28);
+    background: linear-gradient(135deg, #8b1e45 0%, #ff2f76 100%);
+    box-shadow:
+        0 13px 24px rgba(139, 30, 69, .28),
+        0 0 24px rgba(255, 47, 118, .08),
+        inset 0 1px 0 rgba(255, 255, 255, .15);
+}
+
+.delivery-profile-page .delivery-password-save:hover {
+    box-shadow:
+        0 17px 30px rgba(139, 30, 69, .34),
+        0 0 28px rgba(255, 47, 118, .12),
+        inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+/* Alertas del bloque de seguridad sobre fondo oscuro. */
+.delivery-profile-page .delivery-password-alert.success {
+    border-color: rgba(53, 208, 127, .28);
+    background: rgba(53, 208, 127, .10);
+    color: #b7f6ce;
+}
+
+.delivery-profile-page .delivery-password-alert.error {
+    border-color: rgba(255, 107, 122, .30);
+    background: rgba(220, 53, 69, .10);
+    color: #ffc0c8;
+}
+
+/* Evita que la distribución lateral se sienta comprimida. */
+@media (min-width: 1200px) {
+    .delivery-profile-page > .row {
+        align-items: stretch;
+    }
+
+    .delivery-profile-page .delivery-password-card,
+    .delivery-profile-page .delivery-profile-card {
+        min-height: 100%;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .delivery-profile-page > .row > .col-12.col-xl-6 {
+        display: block;
+    }
+
+    .delivery-profile-page .delivery-profile-card,
+    .delivery-profile-page .delivery-password-card {
+        height: auto;
+    }
+
+    .delivery-profile-page .delivery-profile-form {
+        display: block;
+    }
+
+    .delivery-profile-page .delivery-profile-form-footer {
+        margin-top: 1.25rem;
+    }
+}
