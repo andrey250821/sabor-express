@@ -3772,7 +3772,7 @@ a {
 
 }
 /* =========================================================
-   DELIVERY - PEDIDOS DISPONIBLES
+   DELIVERY - COLA DE PEDIDOS
    ========================================================= */
 
 .delivery-orders-page {
@@ -6340,11 +6340,6 @@ a {
     align-items: center;
     justify-content: center;
     font-size: 24px;
-}
-
-.delivery-action-icon.take {
-    background: rgba(255, 193, 7, .12);
-    color: #ffc107;
 }
 
 .delivery-action-icon.start {
