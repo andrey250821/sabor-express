@@ -424,7 +424,7 @@ $estadoPedido === 'en_camino'
 
             @if(!empty($pedido->user->telefono))
 
-            <div class="delivery-info-item">
+            <div class="delivery-info-item delivery-contact-phone">
 
                 <div class="delivery-info-item-icon">
 
@@ -435,7 +435,7 @@ $estadoPedido === 'en_camino'
 
                 <div>
 
-                    <span>Teléfono</span>
+                    <span>Teléfono de contacto</span>
 
                     <strong>
                         {{ $pedido->user->telefono }}
@@ -534,7 +534,7 @@ $estadoPedido === 'en_camino'
 
             <div>
 
-                <span>Referencia</span>
+                <span>Referencia para la entrega</span>
 
                 <p>
                     {{ $pedido->referencia_delivery }}
