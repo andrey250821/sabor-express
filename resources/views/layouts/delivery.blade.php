@@ -113,21 +113,11 @@
             <div class="delivery-status-box {{ Auth::user()->estado === 'activo' ? 'activo' : 'inactivo' }}">
 
                 <div class="delivery-status-info">
+                    <span class="delivery-status-indicator" aria-hidden="true"></span>
 
-                    <span class="delivery-status-indicator"></span>
-
-                    <div>
-                        <strong>
-                            {{ Auth::user()->estado === 'activo' ? 'Activo' : 'Inactivo' }}
-                        </strong>
-
-                        <small>
-                            {{ Auth::user()->estado === 'activo'
-                                ? 'Puedes recibir y realizar entregas'
-                                : 'No puedes recibir ni gestionar pedidos' }}
-                        </small>
-                    </div>
-
+                    <strong>
+                        {{ Auth::user()->estado === 'activo' ? 'Activo' : 'Inactivo' }}
+                    </strong>
                 </div>
 
                 <form
@@ -139,11 +129,13 @@
 
                     <button
                         type="submit"
-                        class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }} delivery-control-button" data-delivery-interactive
-                        title="{{ Auth::user()->estado === 'activo' ? 'Ponerte inactivo' : 'Ponerte activo' }}">
-                        <i class="bi {{ Auth::user()->estado === 'activo' ? 'bi-pause-circle-fill' : 'bi-play-circle-fill' }}"></i>
+                        class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }} delivery-control-button"
+                        data-delivery-interactive
+                        title="{{ Auth::user()->estado === 'activo' ? 'Pausar disponibilidad' : 'Activar disponibilidad' }}"
+                        aria-label="{{ Auth::user()->estado === 'activo' ? 'Pausar disponibilidad' : 'Activar disponibilidad' }}">
+                        <i class="bi {{ Auth::user()->estado === 'activo' ? 'bi-pause-circle-fill' : 'bi-play-circle-fill' }}" aria-hidden="true"></i>
                         <span>
-                            {{ Auth::user()->estado === 'activo' ? 'Pausar disponibilidad' : 'Activar disponibilidad' }}
+                            {{ Auth::user()->estado === 'activo' ? 'Pausar' : 'Activar' }}
                         </span>
                     </button>
                 </form>
