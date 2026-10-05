@@ -10314,3 +10314,550 @@ body.delivery-menu-open {
         transition: none;
     }
 }
+
+
+/* =========================================================
+   AJUSTE FINAL — DELIVERY RESPONSIVE Y COMPACTO
+   ========================================================= */
+
+/* Evitar desbordamientos horizontales en cualquier pantalla. */
+.delivery-wrapper,
+.delivery-main,
+.delivery-content,
+.delivery-content > * {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Estado de disponibilidad compacto en el sidebar. */
+.delivery-status-box {
+    margin: 10px 14px 14px;
+    padding: 9px 10px;
+    min-height: 42px;
+    gap: 7px;
+    border-radius: 11px;
+}
+
+.delivery-status-info {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 7px;
+}
+
+.delivery-status-info > div {
+    min-width: 0;
+}
+
+.delivery-status-info strong {
+    margin: 0;
+    color: #ffffff;
+    font-size: 10px;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+.delivery-status-box small {
+    display: none !important;
+}
+
+.delivery-status-form {
+    flex: 0 0 auto;
+}
+
+.delivery-status-toggle {
+    min-width: 0;
+    min-height: 30px;
+    padding: 6px 9px;
+    gap: 5px;
+    border-radius: 8px;
+    font-size: 9px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.delivery-status-toggle i {
+    font-size: 12px;
+}
+
+/* El JavaScript del panel usa .show; lo dejamos explícito también en el responsive final. */
+@media (max-width: 991.98px) {
+    .delivery-sidebar.show {
+        transform: translateX(0);
+        box-shadow: 20px 0 50px rgba(0,0,0,.35);
+    }
+
+    .delivery-main {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .delivery-content {
+        width: 100%;
+    }
+
+    .delivery-sidebar {
+        max-width: calc(100vw - 24px);
+    }
+}
+
+/* Tablet / móvil: reducir espacios sin perder jerarquía. */
+@media (max-width: 767.98px) {
+    .delivery-content {
+        padding: 16px 12px;
+    }
+
+    .delivery-topbar {
+        min-height: 64px;
+        padding: 0 12px;
+    }
+
+    .delivery-page-heading {
+        min-width: 0;
+    }
+
+    .delivery-page-heading h1 {
+        max-width: 58vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 18px;
+    }
+
+    .delivery-page-heading span {
+        max-width: 58vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .delivery-dashboard {
+        width: 100%;
+    }
+
+    .delivery-dashboard-hero {
+        padding: 20px 16px;
+        border-radius: 17px;
+    }
+
+    .delivery-dashboard-title {
+        font-size: 1.65rem;
+        line-height: 1.15;
+    }
+
+    .delivery-dashboard-text {
+        font-size: .85rem;
+        line-height: 1.45;
+    }
+
+    .delivery-dashboard-hero-visual {
+        min-height: 205px;
+        margin-top: 4px;
+    }
+
+    .delivery-bike-icon {
+        width: 92px;
+        height: 92px;
+        font-size: 2.7rem;
+    }
+
+    .delivery-hero-circle.circle-one {
+        width: 190px;
+        height: 190px;
+    }
+
+    .delivery-hero-circle.circle-two {
+        width: 145px;
+        height: 145px;
+    }
+
+    .delivery-hero-circle.circle-three {
+        width: 105px;
+        height: 105px;
+    }
+
+    .delivery-floating-card {
+        min-width: 118px;
+        padding: 9px;
+        gap: 7px;
+        border-radius: 11px;
+    }
+
+    .delivery-floating-card strong {
+        font-size: 1rem;
+    }
+
+    .delivery-floating-card span {
+        font-size: .7rem;
+    }
+
+    .delivery-floating-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+    }
+
+    .delivery-orders-header,
+    .delivery-my-orders-header,
+    .delivery-show-header {
+        gap: 14px;
+    }
+
+    .delivery-orders-heading,
+    .delivery-my-orders-title {
+        gap: 11px;
+    }
+
+    .delivery-orders-icon,
+    .delivery-my-orders-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    .delivery-orders-heading h1,
+    .delivery-my-orders-title h1 {
+        font-size: 22px;
+        line-height: 1.15;
+    }
+
+    .delivery-orders-heading p,
+    .delivery-my-orders-title p {
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .delivery-orders-info {
+        margin-bottom: 18px;
+        padding: 12px;
+        border-radius: 13px;
+    }
+
+    .delivery-my-order-card,
+    .delivery-show-card,
+    .delivery-action-card {
+        border-radius: 15px;
+    }
+
+    .delivery-my-order-card {
+        width: 100%;
+    }
+
+    .delivery-my-actions {
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .delivery-action-card {
+        align-items: flex-start;
+        padding: 14px;
+        gap: 11px;
+    }
+
+    .delivery-action-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        border-radius: 13px;
+        font-size: 19px;
+    }
+
+    .delivery-action-content {
+        width: auto;
+    }
+
+    .delivery-action-content h2 {
+        font-size: 17px;
+    }
+
+    .delivery-action-content p {
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .delivery-action-form,
+    .delivery-action-button {
+        width: 100%;
+    }
+
+    .delivery-show-header-date {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .delivery-show-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px;
+    }
+
+    .delivery-financial-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+
+    .delivery-footer {
+        padding: 14px 12px;
+        gap: 6px;
+    }
+}
+
+/* Teléfonos pequeños: prioridad absoluta a legibilidad y ajuste. */
+@media (max-width: 575.98px) {
+    .delivery-sidebar {
+        width: 272px;
+        padding: 14px 12px;
+    }
+
+    .delivery-brand {
+        margin-bottom: 2px;
+    }
+
+    .delivery-brand-text strong {
+        font-size: 12px;
+    }
+
+    .delivery-brand-text span {
+        font-size: 9px;
+    }
+
+    .delivery-status-box {
+        margin: 8px 0 11px;
+        padding: 8px;
+    }
+
+    .delivery-status-toggle {
+        width: 30px;
+        height: 30px;
+        min-height: 30px;
+        padding: 0;
+        border-radius: 8px;
+    }
+
+    .delivery-status-toggle span {
+        display: none;
+    }
+
+    .delivery-nav {
+        padding: 5px 4px;
+    }
+
+    .delivery-nav-link {
+        min-height: 42px;
+        padding: 9px 10px;
+    }
+
+    .delivery-nav-title {
+        margin: 10px 6px 6px;
+        font-size: .58rem;
+    }
+
+    .delivery-user-card {
+        padding: 9px;
+        gap: 8px;
+    }
+
+    .delivery-user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .delivery-user-info strong {
+        max-width: 150px;
+        font-size: 10px;
+    }
+
+    .delivery-user-info span {
+        font-size: 8px;
+    }
+
+    .delivery-content {
+        padding: 13px 10px;
+    }
+
+    .delivery-topbar {
+        min-height: 60px;
+        padding: 0 10px;
+    }
+
+    .delivery-menu-toggle {
+        width: 38px;
+        height: 38px;
+    }
+
+    .delivery-page-heading h1 {
+        max-width: 55vw;
+        font-size: 16px;
+    }
+
+    .delivery-page-heading span {
+        max-width: 55vw;
+        font-size: 9px;
+    }
+
+    .delivery-topbar-user-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .delivery-dashboard-hero {
+        padding: 16px 13px;
+        border-radius: 15px;
+    }
+
+    .delivery-dashboard-title {
+        font-size: 1.45rem;
+    }
+
+    .delivery-dashboard-text {
+        font-size: .8rem;
+    }
+
+    .delivery-dashboard-hero-visual {
+        min-height: 175px;
+    }
+
+    .delivery-bike-icon {
+        width: 78px;
+        height: 78px;
+        font-size: 2.2rem;
+    }
+
+    .delivery-floating-card {
+        min-width: 102px;
+        padding: 7px;
+        gap: 6px;
+        border-radius: 9px;
+    }
+
+    .delivery-floating-card strong {
+        font-size: .9rem;
+    }
+
+    .delivery-floating-card span {
+        font-size: .62rem;
+    }
+
+    .delivery-floating-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+    }
+
+    .delivery-orders-counter {
+        width: 100%;
+        min-width: 0 !important;
+    }
+
+    .delivery-orders-info-status {
+        margin-left: 0 !important;
+    }
+
+    .delivery-orders-summary {
+        gap: 7px;
+        margin-bottom: 12px;
+    }
+
+    .delivery-orders-summary h2 {
+        font-size: 18px;
+    }
+
+    .delivery-my-section {
+        margin-top: 22px;
+    }
+
+    .delivery-my-section-header {
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .delivery-my-section-header h2 {
+        font-size: 18px;
+    }
+
+    .delivery-my-actions {
+        padding: 10px;
+    }
+
+    .delivery-my-detail-btn,
+    .delivery-my-start-btn,
+    .delivery-my-deliver-btn,
+    .delivery-my-cancel-btn {
+        min-height: 42px;
+        font-size: 10px;
+    }
+
+    .delivery-show-header h1 {
+        font-size: 19px;
+    }
+
+    .delivery-show-header p {
+        font-size: 11px;
+    }
+
+    .delivery-show-card-header {
+        padding: 14px;
+    }
+
+    .delivery-progress {
+        padding: 4px 10px 12px;
+    }
+
+    .delivery-map {
+        height: 300px !important;
+        min-height: 300px !important;
+    }
+
+    .delivery-action-card {
+        padding: 12px;
+    }
+
+    .delivery-action-content h2 {
+        font-size: 16px;
+    }
+
+    .delivery-action-content p {
+        font-size: 10px;
+    }
+
+    .delivery-financial-card {
+        padding: 12px;
+    }
+
+    .delivery-profile-card {
+        padding: 12px;
+    }
+}
+
+/* Nunca permitir que formularios o tarjetas creen scroll horizontal. */
+.delivery-content form,
+.delivery-content .row,
+.delivery-content .card,
+.delivery-content table {
+    max-width: 100%;
+}
+
+.delivery-content .table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 575.98px) {
+    .delivery-content .row {
+        --bs-gutter-x: .75rem;
+        --bs-gutter-y: .75rem;
+    }
+
+    .sabor-date-filter {
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .sabor-date-filter-header {
+        margin-bottom: 9px;
+    }
+
+    .sabor-date-filter-help {
+        font-size: .68rem;
+        line-height: 1.35;
+    }
+}
