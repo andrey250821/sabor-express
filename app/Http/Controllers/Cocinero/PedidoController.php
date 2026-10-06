@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use App\Services\AsignarPedidoDeliveryService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Carbon\Carbon;
 use App\Services\FechaFiltroService;
 
 class PedidoController extends Controller
@@ -63,9 +62,8 @@ class PedidoController extends Controller
          * - haya sido entregado;
          * - o termine cancelado.
          *
-         * La fecha del historial corresponde al momento en que cocina lo marcó
-         * como LISTO. Para pedidos históricos creados antes de existir fecha_listo,
-         * usamos created_at como respaldo.
+         * El orden y filtrado temporal utilizan created_at,
+         * que es la fecha de creación del pedido y la referencia única del sistema.
          */
         $periodosListosValidos = [
             'hoy',
@@ -116,15 +114,15 @@ class PedidoController extends Controller
             ])
             ->where('cocinero_id', Auth::id())
             ->whereBetween(
-                DB::raw('COALESCE(fecha_listo, created_at)'),
+                'created_at',
                 [$inicioListos->utc(), $finListos->utc()]
             )
-            ->orderByRaw('COALESCE(fecha_listo, created_at) ASC')
+            ->orderBy('created_at', 'asc')
             ->orderBy('id', 'asc')
             ->get();
 
         $listosAgrupados = $listos->groupBy(function (Pedido $pedido): string {
-            $fecha = $pedido->fecha_listo ?? $pedido->created_at;
+            $fecha = $pedido->created_at;
 
             return $fecha
                 ->copy()
@@ -268,7 +266,6 @@ class PedidoController extends Controller
 
                 $pedido->update([
                     'estado' => 'listo',
-                    'fecha_listo' => now(),
                 ]);
             });
 

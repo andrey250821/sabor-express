@@ -53,7 +53,7 @@
             {{-- BOTÓN CERRAR EN MÓVIL --}}
             <button
                 type="button"
-                class="delivery-sidebar-close d-lg-none"
+                class="delivery-sidebar-close d-lg-none" data-delivery-interactive
                 id="deliverySidebarClose"
                 aria-label="Cerrar menú">
 
@@ -70,7 +70,7 @@
 
                 <a
                     href="{{ route('delivery.dashboard') }}"
-                    class="delivery-brand-link">
+                    class="delivery-brand-link" data-delivery-interactive aria-label="Ir al panel de Delivery">
 
                     <div class="delivery-brand-logo">
 
@@ -113,21 +113,11 @@
             <div class="delivery-status-box {{ Auth::user()->estado === 'activo' ? 'activo' : 'inactivo' }}">
 
                 <div class="delivery-status-info">
+                    <span class="delivery-status-indicator" aria-hidden="true"></span>
 
-                    <span class="delivery-status-indicator"></span>
-
-                    <div>
-                        <strong>
-                            {{ Auth::user()->estado === 'activo' ? 'Activo' : 'Inactivo' }}
-                        </strong>
-
-                        <small>
-                            {{ Auth::user()->estado === 'activo'
-                                ? 'Puedes recibir y realizar entregas'
-                                : 'No puedes recibir ni gestionar pedidos' }}
-                        </small>
-                    </div>
-
+                    <strong>
+                        {{ Auth::user()->estado === 'activo' ? 'Activo' : 'Inactivo' }}
+                    </strong>
                 </div>
 
                 <form
@@ -139,10 +129,14 @@
 
                     <button
                         type="submit"
-                        class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }}"
-                        title="{{ Auth::user()->estado === 'activo' ? 'Ponerte inactivo' : 'Ponerte activo' }}">
-                        <i class="bi {{ Auth::user()->estado === 'activo' ? 'bi-pause-circle-fill' : 'bi-play-circle-fill' }}"></i>
-                        {{ Auth::user()->estado === 'activo' ? 'Inactivo' : 'Activo' }}
+                        class="delivery-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }} delivery-control-button"
+                        data-delivery-interactive
+                        title="{{ Auth::user()->estado === 'activo' ? 'Pausar disponibilidad' : 'Activar disponibilidad' }}"
+                        aria-label="{{ Auth::user()->estado === 'activo' ? 'Pausar disponibilidad' : 'Activar disponibilidad' }}">
+                        <i class="bi {{ Auth::user()->estado === 'activo' ? 'bi-pause-circle-fill' : 'bi-play-circle-fill' }}" aria-hidden="true"></i>
+                        <span>
+                            {{ Auth::user()->estado === 'activo' ? 'Pausar' : 'Activar' }}
+                        </span>
                     </button>
                 </form>
 
@@ -165,7 +159,8 @@
                 <a
                     href="{{ route('delivery.dashboard') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.dashboard') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.dashboard') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.dashboard') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-grid-1x2-fill"></i>
@@ -178,12 +173,13 @@
                 </a>
 
 
-                {{-- PEDIDOS DISPONIBLES --}}
+                {{-- COLA DE PEDIDOS --}}
 
                 <a
                     href="{{ route('delivery.pedidos.index') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-box-seam-fill"></i>
@@ -205,7 +201,8 @@
                 <a
                     href="{{ route('delivery.pedidos.mis') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.pedidos.mis') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-bicycle"></i>
@@ -224,7 +221,8 @@
                 <a
                     href="{{ route('delivery.perfil.edit') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.perfil.*') ? 'active' : '' }}">
+                    {{ request()->routeIs('delivery.perfil.*') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.perfil.*') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-person-circle"></i>
@@ -293,13 +291,21 @@
 
                 <button
                     type="submit"
-                    class="delivery-logout">
+                    class="delivery-logout"
+                    data-delivery-interactive
+                    aria-label="Cerrar sesión"
+                    title="Cerrar sesión">
 
-                    <i class="bi bi-box-arrow-left"></i>
-
-                    <span>
-                        Cerrar sesión
+                    <span class="delivery-logout-icon" aria-hidden="true">
+                        <i class="bi bi-box-arrow-left"></i>
                     </span>
+
+                    <span class="delivery-logout-copy">
+                        <strong>Cerrar sesión</strong>
+                        <small>Salir de tu cuenta</small>
+                    </span>
+
+                    <i class="bi bi-chevron-right delivery-logout-arrow" aria-hidden="true"></i>
 
                 </button>
 
@@ -335,7 +341,7 @@
 
                     <button
                         type="button"
-                        class="delivery-menu-toggle d-lg-none"
+                        class="delivery-menu-toggle d-lg-none" data-delivery-interactive
                         id="deliveryMenuToggle"
                         aria-label="Abrir menú">
 
@@ -420,7 +426,7 @@
 
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close" data-delivery-interactive
                         data-bs-dismiss="alert">
                     </button>
 
@@ -443,7 +449,7 @@
 
                     <button
                         type="button"
-                        class="btn-close"
+                        class="btn-close" data-delivery-interactive
                         data-bs-dismiss="alert">
                     </button>
 
@@ -494,96 +500,14 @@
 
 
     {{-- =====================================================
-        MENÚ RESPONSIVE
+        JAVASCRIPT DEL PANEL DELIVERY
     ====================================================== --}}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const sidebar =
-                document.getElementById('deliverySidebar');
-
-            const overlay =
-                document.getElementById('deliveryOverlay');
-
-            const menuToggle =
-                document.getElementById('deliveryMenuToggle');
-
-            const closeButton =
-                document.getElementById('deliverySidebarClose');
-
-
-            function openSidebar() {
-
-                sidebar?.classList.add('show');
-
-                overlay?.classList.add('show');
-
-                document.body.classList.add('delivery-menu-open');
-
-            }
-
-
-            function closeSidebar() {
-
-                sidebar?.classList.remove('show');
-
-                overlay?.classList.remove('show');
-
-                document.body.classList.remove('delivery-menu-open');
-
-            }
-
-
-            menuToggle?.addEventListener(
-                'click',
-                openSidebar
-            );
-
-
-            closeButton?.addEventListener(
-                'click',
-                closeSidebar
-            );
-
-
-            overlay?.addEventListener(
-                'click',
-                closeSidebar
-            );
-
-
-            document
-                .querySelectorAll('.delivery-nav-link')
-                .forEach(function(link) {
-
-                    link.addEventListener(
-                        'click',
-                        function() {
-
-                            if (window.innerWidth < 992) {
-                                closeSidebar();
-                            }
-
-                        }
-                    );
-
-                });
-
-
-            window.addEventListener(
-                'resize',
-                function() {
-
-                    if (window.innerWidth >= 992) {
-                        closeSidebar();
-                    }
-
-                }
-            );
-
-        });
+    <script
+        src="{{ asset('js/delivery.js') }}"
+        defer>
     </script>
+
     @vite('resources/js/app.js')
 
     @stack('scripts')

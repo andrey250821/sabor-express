@@ -289,11 +289,16 @@ class PedidoTest extends TestCase
                     'total' => 60,
                     'distancia_delivery_km' => $datos[0],
                     'estado' => 'listo',
-                    'fecha_listo' => Carbon::createFromFormat(
+                    'created_at' => Carbon::createFromFormat(
                         'Y-m-d H:i',
                         $datos[1],
                         'America/La_Paz'
-                    ),
+                    )->utc(),
+                    'updated_at' => Carbon::createFromFormat(
+                        'Y-m-d H:i',
+                        $datos[1],
+                        'America/La_Paz'
+                    )->utc(),
                     'direccion_entrega' => 'Cola ' . $datos[1],
                 ]);
             });

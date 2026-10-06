@@ -126,7 +126,7 @@ $estadoPedido === 'en_camino'
 
             <a
                 href="{{ route('delivery.pedidos.index') }}"
-                class="delivery-show-back">
+                class="delivery-show-back" data-delivery-interactive>
 
                 <i class="bi bi-arrow-left"></i>
 
@@ -155,7 +155,7 @@ $estadoPedido === 'en_camino'
                     </h1>
 
                     <p>
-                        Revisa la información necesaria para realizar la entrega.
+                        Los detalles de la entrega están disponibles porque este pedido ya está en camino.
                     </p>
 
                 </div>
@@ -165,7 +165,7 @@ $estadoPedido === 'en_camino'
         </div>
 
 
-        <div class="delivery-show-header-date">
+        <div class="delivery-show-header-date" data-delivery-animate>
 
             <i class="bi bi-calendar3"></i>
 
@@ -424,22 +424,30 @@ $estadoPedido === 'en_camino'
 
             @if(!empty($pedido->user->telefono))
 
-            <div class="delivery-info-item">
+            <div class="delivery-info-item delivery-contact-phone">
 
                 <div class="delivery-info-item-icon">
 
-                    <i class="bi bi-telephone"></i>
+                    <i class="bi bi-telephone-fill"></i>
 
                 </div>
 
 
                 <div>
 
-                    <span>Teléfono</span>
+                    <span>Teléfono del cliente</span>
 
-                    <strong>
+                    <a
+                        href="tel:{{ preg_replace('/[^0-9+]/', '', $pedido->user->telefono) }}"
+                        class="delivery-contact-phone-link" data-delivery-interactive>
+
                         {{ $pedido->user->telefono }}
-                    </strong>
+
+                    </a>
+
+                    <small class="delivery-contact-phone-hint">
+                        Toca el número para llamar directamente.
+                    </small>
 
                 </div>
 
@@ -527,18 +535,18 @@ $estadoPedido === 'en_camino'
 
             <div class="delivery-reference-icon">
 
-                <i class="bi bi-signpost-2"></i>
+                <i class="bi bi-signpost-2-fill"></i>
 
             </div>
 
 
             <div>
 
-                <span>Referencia</span>
+                <span>Referencia para la entrega</span>
 
-                <p>
+                <strong>
                     {{ $pedido->referencia_delivery }}
-                </p>
+                </strong>
 
             </div>
 
@@ -617,7 +625,7 @@ $estadoPedido === 'en_camino'
             href="https://www.google.com/maps?q={{ $latitud }},{{ $longitud }}"
             target="_blank"
             rel="noopener noreferrer"
-            class="delivery-map-external">
+            class="delivery-map-external" data-delivery-interactive>
 
             <i class="bi bi-box-arrow-up-right"></i>
 
@@ -815,41 +823,79 @@ $estadoPedido === 'en_camino'
     </div>
 
 
-    <div class="delivery-financial-breakdown">
+    <div class="delivery-financial-breakdown" aria-label="Desglose económico de la entrega">
 
-        <div>
-            <span>
-                Costo de la ruta
-                @if($pedido->distancia_delivery_km !== null)
-                    ({{ number_format((float) $pedido->distancia_delivery_km, 2) }} km)
-                @endif
-            </span>
+        <div class="delivery-financial-row delivery-financial-row-route">
 
-            <strong>
-                Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
-            </strong>
+            <div class="delivery-financial-row-icon">
+                <i class="bi bi-signpost-split-fill"></i>
+            </div>
+
+            <div class="delivery-financial-row-copy">
+
+                <span>
+                    Costo de la ruta
+                    @if($pedido->distancia_delivery_km !== null)
+                        <small>
+                            {{ number_format((float) $pedido->distancia_delivery_km, 2) }} km
+                        </small>
+                    @endif
+                </span>
+
+                <strong>
+                    Bs {{ number_format((float) ($pedido->tarifa_delivery ?? 0), 2) }}
+                </strong>
+
+            </div>
+
         </div>
 
-        <div>
-            <span>Mi comisión</span>
 
-            <strong class="delivery-financial-my-share">
-                Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
-                <small>
-                    ({{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%)
-                </small>
-            </strong>
+        <div class="delivery-financial-row delivery-financial-row-commission">
+
+            <div class="delivery-financial-row-icon">
+                <i class="bi bi-person-badge-fill"></i>
+            </div>
+
+            <div class="delivery-financial-row-copy">
+
+                <span>
+                    Mi comisión
+                    <small>
+                        {{ number_format((float) ($pedido->porcentaje_delivery ?? 0), 0) }}%
+                    </small>
+                </span>
+
+                <strong class="delivery-financial-my-share">
+                    Bs {{ number_format((float) ($pedido->monto_delivery ?? 0), 2) }}
+                </strong>
+
+            </div>
+
         </div>
 
-        <div>
-            <span>Parte restaurante</span>
 
-            <strong>
-                Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
-                <small>
-                    ({{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%)
-                </small>
-            </strong>
+        <div class="delivery-financial-row delivery-financial-row-restaurant">
+
+            <div class="delivery-financial-row-icon">
+                <i class="bi bi-shop-window"></i>
+            </div>
+
+            <div class="delivery-financial-row-copy">
+
+                <span>
+                    Parte restaurante
+                    <small>
+                        {{ number_format((float) ($pedido->porcentaje_restaurante_delivery ?? 0), 0) }}%
+                    </small>
+                </span>
+
+                <strong>
+                    Bs {{ number_format((float) ($pedido->monto_restaurante_delivery ?? 0), 2) }}
+                </strong>
+
+            </div>
+
         </div>
 
     </div>
@@ -861,11 +907,11 @@ $estadoPedido === 'en_camino'
          ACCIONES
     ============================================================= --}}
 
-<div class="delivery-action-card">
+<div class="delivery-action-card" data-delivery-animate>
 
 
     {{-- ========================================================
-             PEDIDO DISPONIBLE
+             PEDIDO ASIGNADO
         ========================================================= --}}
 
     @if($puedeIniciar)
@@ -897,7 +943,8 @@ $estadoPedido === 'en_camino'
     <form
         method="POST"
         action="{{ route('delivery.pedidos.iniciar', $pedido->id) }}"
-        class="delivery-action-form">
+        class="delivery-action-form"
+        data-disable-on-submit>
 
         @csrf
 
@@ -905,7 +952,8 @@ $estadoPedido === 'en_camino'
 
         <button
             type="submit"
-            class="delivery-action-button primary">
+            class="delivery-action-button primary"
+            data-delivery-interactive>
 
             <i class="bi bi-bicycle"></i>
 
@@ -949,7 +997,8 @@ $estadoPedido === 'en_camino'
     <form
         method="POST"
         action="{{ route('delivery.pedidos.entregar', $pedido->id) }}"
-        class="delivery-action-form">
+        class="delivery-action-form"
+        data-disable-on-submit>
 
         @csrf
 
@@ -957,7 +1006,8 @@ $estadoPedido === 'en_camino'
 
         <button
             type="submit"
-            class="delivery-action-button success">
+            class="delivery-action-button success"
+            data-delivery-interactive>
 
             <i class="bi bi-check2-circle"></i>
 

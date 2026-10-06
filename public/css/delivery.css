@@ -2646,7 +2646,7 @@ a {
 
     margin: 20px 0;
 
-    color: var(--delivery-muted-light);
+    color: #b8bbc3;
 
     font-size: 1rem;
 
@@ -2740,7 +2740,7 @@ a {
 
     margin-top: 20px;
 
-    color: #888;
+    color: #a4a7b0;
 
     font-size: .85rem;
 }
@@ -2873,9 +2873,10 @@ a {
 
     display: block;
 
-    color: #999;
+    color: #b2b5bd;
 
     font-size: .72rem;
+    font-weight: 600;
 }
 
 
@@ -2969,7 +2970,8 @@ a {
 
     margin-top: 3px;
 
-    color: #888;
+    color: #a2a5ae;
+    line-height: 1.45;
 }
 
 
@@ -3103,9 +3105,10 @@ a {
 
     margin-bottom: 5px;
 
-    color: #8d8d8d;
+    color: #b0b3bb;
 
     font-size: .82rem;
+    font-weight: 700;
 }
 
 
@@ -3179,246 +3182,16 @@ a {
 
     border-top: 1px solid var(--delivery-border);
 
-    color: #777;
+    color: #9ea1aa;
 
     font-size: .78rem;
+    font-weight: 600;
 }
 
 
 .delivery-stat-bottom i {
 
     font-size: 1rem;
-}
-
-
-/* =========================================================
-   PANELS
-========================================================= */
-
-.delivery-dashboard-panel {
-
-    padding: 22px;
-
-    border: 1px solid var(--delivery-border);
-
-    border-radius: 18px;
-
-    background: var(--delivery-surface);
-}
-
-
-.delivery-panel-header {
-
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 15px;
-
-    margin-bottom: 22px;
-}
-
-
-.delivery-panel-kicker {
-
-    display: block;
-
-    margin-bottom: 5px;
-
-    color: var(--delivery-pink-light);
-
-    font-size: .7rem;
-
-    font-weight: 800;
-
-    letter-spacing: .1em;
-}
-
-
-.delivery-panel-header h2 {
-
-    display: flex;
-    align-items: center;
-
-    gap: 9px;
-
-    margin: 0;
-
-    color: #fff;
-
-    font-size: 1.2rem;
-
-    font-weight: 800;
-}
-
-
-.delivery-panel-header h2 i {
-
-    color: var(--delivery-pink);
-}
-
-
-.delivery-panel-tag {
-
-    padding: 6px 9px;
-
-    border: 1px solid var(--delivery-border);
-
-    border-radius: 8px;
-
-    color: #888;
-
-    background: var(--delivery-surface-3);
-
-    font-size: .65rem;
-
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   FLOW
-========================================================= */
-
-.delivery-flow {
-
-    display: flex;
-
-    flex-direction: column;
-}
-
-
-.delivery-flow-step {
-
-    display: flex;
-    align-items: center;
-
-    gap: 13px;
-
-    padding: 12px;
-
-    border: 1px solid var(--delivery-border);
-
-    border-radius: 13px;
-
-    background: var(--delivery-surface-2);
-}
-
-
-.delivery-flow-number {
-
-    width: 30px;
-
-    color: #777;
-
-    font-size: .68rem;
-
-    font-weight: 800;
-}
-
-
-.delivery-flow-icon {
-
-    width: 42px;
-    height: 42px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 11px;
-
-    font-size: 1.1rem;
-}
-
-
-.delivery-flow-step.warning .delivery-flow-icon {
-
-    color: var(--delivery-yellow);
-
-    background:
-        rgba(255,193,7,.1);
-}
-
-
-.delivery-flow-step.primary .delivery-flow-icon {
-
-    color: var(--delivery-pink-light);
-
-    background:
-        rgba(255,47,118,.1);
-}
-
-
-.delivery-flow-step.blue .delivery-flow-icon {
-
-    color: var(--delivery-blue);
-
-    background:
-        rgba(13,110,253,.1);
-}
-
-
-.delivery-flow-step.success .delivery-flow-icon {
-
-    color: var(--delivery-green-light);
-
-    background:
-        rgba(53,208,127,.1);
-}
-
-
-.delivery-flow-content {
-
-    flex: 1;
-}
-
-
-.delivery-flow-content strong {
-
-    display: block;
-
-    color: #fff;
-
-    font-size: .9rem;
-}
-
-
-.delivery-flow-content span {
-
-    display: block;
-
-    margin-top: 2px;
-
-    color: #777;
-
-    font-size: .75rem;
-}
-
-
-.delivery-flow-count {
-
-    min-width: 35px;
-
-    text-align: center;
-
-    color: #fff;
-
-    font-weight: 800;
-}
-
-
-.delivery-flow-line {
-
-    width: 2px;
-
-    height: 18px;
-
-    margin-left: 28px;
-
-    background: var(--delivery-border);
 }
 
 
@@ -3472,251 +3245,6 @@ a {
     display: block;
     object-fit: cover;
     border-radius: inherit;
-}
-
-
-.delivery-profile-info {
-
-    flex: 1;
-
-    min-width: 0;
-}
-
-
-.delivery-profile-info strong {
-
-    display: block;
-
-    overflow: hidden;
-
-    color: #fff;
-
-    font-size: .9rem;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-.delivery-profile-info span {
-
-    display: block;
-
-    margin-top: 3px;
-
-    color: #777;
-
-    font-size: .72rem;
-}
-
-
-.delivery-profile-status {
-
-    display: flex;
-    align-items: center;
-
-    gap: 6px;
-
-    color: var(--delivery-green-light);
-
-    font-size: .7rem;
-
-    font-weight: 700;
-}
-
-
-.delivery-profile-status span {
-
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: var(--delivery-green-light);
-
-    box-shadow:
-        0 0 9px rgba(53,208,127,.8);
-}
-
-
-/* =========================================================
-   MINI STATS
-========================================================= */
-
-.delivery-mini-stats {
-
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 8px;
-
-    margin-top: 12px;
-}
-
-
-.delivery-mini-stat {
-
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-
-    padding: 10px;
-
-    border-radius: 11px;
-
-    background: var(--delivery-surface-3);
-}
-
-
-.delivery-mini-stat-icon {
-
-    width: 30px;
-    height: 30px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 8px;
-
-    font-size: .8rem;
-}
-
-
-.delivery-mini-stat-icon.available {
-
-    color: var(--delivery-yellow);
-
-    background:
-        rgba(255,193,7,.1);
-}
-
-
-.delivery-mini-stat-icon.active {
-
-    color: var(--delivery-pink-light);
-
-    background:
-        rgba(255,47,118,.1);
-}
-
-
-.delivery-mini-stat-icon.completed {
-
-    color: var(--delivery-green-light);
-
-    background:
-        rgba(53,208,127,.1);
-}
-
-
-.delivery-mini-stat strong {
-
-    display: block;
-
-    color: #fff;
-
-    font-size: .95rem;
-}
-
-
-.delivery-mini-stat span {
-
-    display: block;
-
-    color: #777;
-
-    font-size: .63rem;
-}
-
-
-/* =========================================================
-   PROFILE MESSAGE
-========================================================= */
-
-.delivery-profile-message {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 13px;
-
-    padding: 12px;
-
-    border-radius: 12px;
-
-    background:
-        rgba(139,30,69,.08);
-
-    border: 1px solid rgba(179,35,90,.12);
-}
-
-
-.delivery-profile-message-icon {
-
-    color: var(--delivery-pink-light);
-}
-
-
-.delivery-profile-message strong {
-
-    display: block;
-
-    color: #ddd;
-
-    font-size: .78rem;
-}
-
-
-.delivery-profile-message span {
-
-    display: block;
-
-    margin-top: 2px;
-
-    color: #777;
-
-    font-size: .7rem;
-
-    line-height: 1.5;
-}
-
-
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
-
-.delivery-action {
-
-    display: flex;
-    align-items: center;
-
-    gap: 13px;
-
-    min-height: 82px;
-
-    padding: 14px;
-
-    border: 1px solid var(--delivery-border);
-
-    border-radius: 13px;
-
-    background: var(--delivery-surface-2);
-
-    transition: .25s ease;
-}
-
-
-.delivery-action:hover {
-
-    transform: translateY(-3px);
-
-    border-color: var(--delivery-border-light);
-
-    background: var(--delivery-surface-3);
 }
 
 
@@ -3794,22 +3322,6 @@ a {
 }
 
 
-.delivery-action > i {
-
-    color: #777;
-
-    transition: .2s ease;
-}
-
-
-.delivery-action:hover > i {
-
-    color: var(--delivery-pink-light);
-
-    transform: translateX(3px);
-}
-
-
 /* =========================================================
    DASHBOARD FOOTER CARD
 ========================================================= */
@@ -3882,7 +3394,7 @@ a {
 
     margin-top: 3px;
 
-    color: #777;
+    color: #9ea1aa;
 
     font-size: .72rem;
 }
@@ -4108,13 +3620,6 @@ a {
         justify-content: center;
     }
 
-
-    .delivery-mini-stats {
-
-        grid-template-columns: 1fr;
-    }
-
-
     .delivery-dashboard-footer-card {
 
         align-items: flex-start;
@@ -4232,57 +3737,6 @@ a {
     }
 
 
-    .delivery-dashboard-panel {
-
-        padding: 16px;
-    }
-
-
-    .delivery-panel-header {
-
-        align-items: center;
-    }
-
-
-    .delivery-flow-step {
-
-        gap: 8px;
-    }
-
-
-    .delivery-flow-number {
-
-        display: none;
-    }
-
-
-    .delivery-flow-content strong {
-
-        font-size: .8rem;
-    }
-
-
-    .delivery-flow-content span {
-
-        font-size: .68rem;
-    }
-
-
-    .delivery-profile-card {
-
-        flex-wrap: wrap;
-    }
-
-
-    .delivery-profile-status {
-
-        width: 100%;
-
-        padding-top: 8px;
-
-        border-top: 1px solid var(--delivery-border);
-    }
-
 }
 
 
@@ -4322,7 +3776,7 @@ a {
 
 }
 /* =========================================================
-   DELIVERY - PEDIDOS DISPONIBLES
+   DELIVERY - COLA DE PEDIDOS
    ========================================================= */
 
 .delivery-orders-page {
@@ -4588,6 +4042,17 @@ a {
 
 
 /* =========================================================
+   TEXTO EXPLICATIVO DE LA COLA
+   ========================================================= */
+
+.delivery-queue-description {
+    color: #b7bac3 !important;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
    RESUMEN
    ========================================================= */
 
@@ -4638,179 +4103,6 @@ a {
     font-size: 15px;
 }
 
-
-/* =========================================================
-   TARJETA DE PEDIDO
-   ========================================================= */
-
-.delivery-order-card {
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-
-    overflow: hidden;
-
-    border: 1px solid #292b33;
-    border-radius: 21px;
-
-    background: #17181d;
-
-    box-shadow:
-        0 14px 35px rgba(0, 0, 0, 0.18);
-
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.delivery-order-card:hover {
-    transform: translateY(-5px);
-
-    border-color: rgba(179, 35, 90, 0.65);
-
-    box-shadow:
-        0 20px 45px rgba(0, 0, 0, 0.27),
-        0 0 0 1px rgba(179, 35, 90, 0.10);
-}
-
-
-/* =========================================================
-   CABECERA DE TARJETA
-   ========================================================= */
-
-.delivery-order-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 17px 18px 13px;
-
-    border-bottom: 1px solid #292b33;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(139, 30, 69, 0.09),
-            transparent
-        );
-}
-
-.delivery-order-number {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-}
-
-.delivery-order-number-icon {
-    width: 39px;
-    height: 39px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 11px;
-
-    color: #ff4d88;
-
-    background: rgba(139, 30, 69, 0.18);
-}
-
-.delivery-order-number-icon i {
-    font-size: 18px;
-}
-
-.delivery-order-number span {
-    display: block;
-
-    color: #777a85;
-
-    font-size: 10px;
-    font-weight: 600;
-
-    text-transform: uppercase;
-}
-
-.delivery-order-number strong {
-    display: block;
-
-    color: #ffffff;
-
-    font-size: 17px;
-    font-weight: 800;
-}
-
-.delivery-ready-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 6px 9px;
-
-    border: 1px solid rgba(53, 208, 127, 0.20);
-    border-radius: 999px;
-
-    color: #35d07f;
-
-    background: rgba(25, 135, 84, 0.10);
-
-    font-size: 10px;
-    font-weight: 800;
-
-    text-transform: uppercase;
-}
-
-.delivery-ready-badge span {
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: #35d07f;
-}
-
-
-/* =========================================================
-   TIEMPO
-   ========================================================= */
-
-.delivery-order-time {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 11px 18px 0;
-
-    color: #858893;
-
-    font-size: 11px;
-}
-
-.delivery-order-time i {
-    color: #b3235a;
-}
-
-
-/* =========================================================
-   CLIENTE
-   ========================================================= */
-
-.delivery-order-client {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-
-    margin: 14px 18px 0;
-    padding: 12px;
-
-    border: 1px solid #292b33;
-    border-radius: 13px;
-
-    background: #1d1f26;
-}
-
 .delivery-client-avatar img,
 .delivery-my-avatar img,
 .delivery-delivered-avatar img {
@@ -4845,180 +4137,11 @@ a {
     font-weight: 800;
 }
 
-.delivery-client-data span {
-    display: block;
-
-    color: #777a85;
-
-    font-size: 10px;
-}
-
-.delivery-client-data strong {
-    display: block;
-
-    margin-top: 2px;
-
-    color: #ffffff;
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   PRODUCTOS
-   ========================================================= */
-
-.delivery-order-products {
-    margin-top: 16px;
-    padding: 0 18px;
-}
-
-.delivery-card-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 9px;
-}
-
-.delivery-card-title span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    color: #d9dae0;
-
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.delivery-card-title span i {
-    color: #ff4d88;
-}
-
-.delivery-card-title small {
-    color: #70737e;
-
-    font-size: 10px;
-}
-
 .delivery-products-list {
     overflow: hidden;
 
     border: 1px solid #292b33;
     border-radius: 12px;
-}
-
-.delivery-product-row {
-    display: grid;
-
-    grid-template-columns: 35px 1fr auto;
-
-    align-items: center;
-
-    gap: 6px;
-
-    padding: 9px 10px;
-
-    border-bottom: 1px solid #292b33;
-}
-
-.delivery-product-row:last-child {
-    border-bottom: none;
-}
-
-.delivery-product-quantity {
-    color: #ff4d88;
-
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.delivery-product-name {
-    min-width: 0;
-
-    overflow: hidden;
-
-    color: #c8c9cf;
-
-    font-size: 11px;
-    font-weight: 600;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.delivery-product-price {
-    color: #ffffff;
-
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.delivery-more-products {
-    padding: 8px 10px;
-
-    color: #858893;
-
-    background: rgba(255, 255, 255, 0.015);
-
-    font-size: 10px;
-    text-align: center;
-}
-
-.delivery-more-products i {
-    margin-right: 4px;
-
-    color: #b3235a;
-}
-
-
-/* =========================================================
-   TOTAL
-   ========================================================= */
-
-.delivery-order-total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin: 15px 18px 0;
-    padding: 13px 0;
-
-    border-top: 1px solid #292b33;
-}
-
-.delivery-order-total span {
-    color: #858893;
-
-    font-size: 11px;
-}
-
-.delivery-order-total strong {
-    color: #ffffff;
-
-    font-size: 20px;
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   UBICACIÓN
-   ========================================================= */
-
-.delivery-order-location {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-
-    margin: 0 18px;
-
-    padding: 12px;
-
-    border: 1px solid rgba(13, 110, 253, 0.18);
-    border-radius: 13px;
-
-    background: rgba(13, 110, 253, 0.05);
 }
 
 .delivery-location-icon {
@@ -5041,414 +4164,6 @@ a {
     color: #5b9dff;
 
     font-size: 14px;
-}
-
-.delivery-location-content {
-    min-width: 0;
-}
-
-.delivery-location-content span {
-    display: block;
-
-    margin-bottom: 3px;
-
-    color: #777a85;
-
-    font-size: 9px;
-    font-weight: 700;
-
-    text-transform: uppercase;
-}
-
-.delivery-location-content strong {
-    display: block;
-
-    color: #c6c8ce;
-
-    font-size: 11px;
-    font-weight: 600;
-    line-height: 1.45;
-}
-
-
-/* =========================================================
-   REFERENCIA
-   ========================================================= */
-
-.delivery-order-reference {
-    display: flex;
-    align-items: flex-start;
-    gap: 9px;
-
-    margin: 10px 18px 0;
-    padding: 10px 11px;
-
-    border-radius: 11px;
-
-    background: rgba(255, 193, 7, 0.06);
-}
-
-.delivery-order-reference > div {
-    color: #ffc107;
-
-    font-size: 13px;
-}
-
-.delivery-order-reference span {
-    color: #9d9fa7;
-
-    font-size: 10px;
-    line-height: 1.5;
-}
-
-.delivery-order-reference strong {
-    color: #d4d5d9;
-}
-
-
-/* =========================================================
-   OBSERVACIÓN
-   ========================================================= */
-
-.delivery-order-observation {
-    display: flex;
-    align-items: flex-start;
-    gap: 9px;
-
-    margin: 10px 18px 0;
-    padding: 10px 11px;
-
-    border-left: 3px solid #b3235a;
-    border-radius: 0 10px 10px 0;
-
-    background: rgba(179, 35, 90, 0.08);
-}
-
-.delivery-order-observation > i {
-    margin-top: 2px;
-
-    color: #ff4d88;
-
-    font-size: 13px;
-}
-
-.delivery-order-observation strong {
-    display: block;
-
-    margin-bottom: 2px;
-
-    color: #cfd0d5;
-
-    font-size: 10px;
-}
-
-.delivery-order-observation span {
-    display: block;
-
-    color: #989aa3;
-
-    font-size: 10px;
-    line-height: 1.45;
-}
-
-
-/* =========================================================
-   ACCIONES
-   ========================================================= */
-
-.delivery-order-actions {
-    display: grid;
-
-    grid-template-columns: 1fr 1.25fr;
-
-    gap: 8px;
-
-    margin-top: auto;
-    padding: 17px 18px 18px;
-}
-
-.delivery-order-detail-btn,
-.delivery-take-btn {
-    min-height: 43px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-
-    border-radius: 11px;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    text-decoration: none;
-
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.delivery-order-detail-btn {
-    border: 1px solid #34363f;
-
-    color: #c4c5cb;
-
-    background: #1d1f26;
-}
-
-.delivery-order-detail-btn:hover {
-    border-color: #8b1e45;
-
-    color: #ffffff;
-
-    background: #252731;
-
-    transform: translateY(-1px);
-}
-
-.delivery-take-form {
-    margin: 0;
-}
-
-.delivery-take-btn {
-    width: 100%;
-
-    border: 1px solid #8b1e45;
-
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #8b1e45,
-            #b3235a
-        );
-
-    cursor: pointer;
-
-    box-shadow:
-        0 8px 18px rgba(139, 30, 69, 0.20);
-}
-
-.delivery-take-btn:hover {
-    border-color: #ff2f76;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52250,
-            #d42b6a
-        );
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 10px 22px rgba(179, 35, 90, 0.28);
-}
-
-.delivery-order-detail-btn:focus-visible,
-.delivery-take-btn:focus-visible {
-    outline: 3px solid rgba(255, 47, 118, 0.20);
-    outline-offset: 2px;
-}
-
-
-/* =========================================================
-   SIN PEDIDOS
-   ========================================================= */
-
-.delivery-empty-orders {
-    position: relative;
-
-    overflow: hidden;
-
-    padding: 65px 25px;
-
-    border: 1px solid #292b33;
-    border-radius: 23px;
-
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(139, 30, 69, 0.14),
-            transparent 45%
-        ),
-        #17181d;
-
-    text-align: center;
-
-    box-shadow:
-        0 16px 40px rgba(0, 0, 0, 0.16);
-}
-
-.delivery-empty-orders-animation {
-    margin-bottom: 20px;
-}
-
-.delivery-empty-circle {
-    width: 90px;
-    height: 90px;
-
-    margin: auto;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid rgba(179, 35, 90, 0.35);
-    border-radius: 50%;
-
-    color: #ff4d88;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(179, 35, 90, 0.18),
-            rgba(139, 30, 69, 0.06)
-        );
-
-    box-shadow:
-        0 0 0 12px rgba(139, 30, 69, 0.04),
-        0 0 0 25px rgba(139, 30, 69, 0.02);
-}
-
-.delivery-empty-circle i {
-    font-size: 37px;
-}
-
-.delivery-empty-orders h2 {
-    margin: 0 0 8px;
-
-    color: #ffffff;
-
-    font-size: 23px;
-    font-weight: 800;
-}
-
-.delivery-empty-orders p {
-    max-width: 560px;
-
-    margin: 0 auto 23px;
-
-    color: #898c96;
-
-    font-size: 13px;
-    line-height: 1.65;
-}
-
-.delivery-empty-btn {
-    min-height: 42px;
-
-    padding: 10px 17px;
-
-    border: 1px solid #8b1e45;
-    border-radius: 11px;
-
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #8b1e45,
-            #b3235a
-        );
-
-    font-size: 12px;
-    font-weight: 700;
-
-    box-shadow:
-        0 8px 20px rgba(139, 30, 69, 0.20);
-}
-
-.delivery-empty-btn:hover {
-    border-color: #ff2f76;
-
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52250,
-            #d42b6a
-        );
-}
-
-
-/* =========================================================
-   HISTORIAL DE ENTREGAS POR FECHA
-   ========================================================= */
-
-.delivery-delivered-date-section {
-    margin-bottom: 24px;
-}
-
-.delivery-delivered-date-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 14px;
-    padding: 18px 20px;
-    border: 1px solid #292b33;
-    border-radius: 16px;
-    background: #17181d;
-}
-
-.delivery-delivered-date-title {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin: 4px 0 3px;
-    color: #f0f1f3;
-    font-size: 18px;
-    font-weight: 800;
-}
-
-.delivery-delivered-date-title i {
-    color: #35d07f;
-}
-
-.delivery-delivered-date-subtitle {
-    margin: 0;
-    color: #777b85;
-    font-size: 11px;
-}
-
-.delivery-delivered-date-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.delivery-delivered-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 12px;
-    border: 1px solid rgba(53, 208, 127, .22);
-    border-radius: 10px;
-    background: rgba(25, 135, 84, .08);
-    color: #35d07f;
-    font-size: 10px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all .2s ease;
-}
-
-.delivery-delivered-toggle:hover {
-    border-color: rgba(53, 208, 127, .4);
-    background: rgba(25, 135, 84, .14);
-}
-
-.delivery-delivered-toggle i {
-    transition: transform .2s ease;
-}
-
-.delivery-delivered-toggle:not(.collapsed) i {
-    transform: rotate(180deg);
 }
 
 
@@ -5552,26 +4267,6 @@ a {
         margin-left: 0;
     }
 
-    .delivery-order-card {
-        border-radius: 18px;
-    }
-
-    .delivery-order-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .delivery-empty-orders {
-        padding: 50px 18px;
-    }
-
-    .delivery-empty-orders h2 {
-        font-size: 20px;
-    }
-
-    .delivery-empty-orders p {
-        font-size: 12px;
-    }
-
 }
 
 
@@ -5579,19 +4274,7 @@ a {
    REDUCIR ANIMACIONES
    ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
 
-    .delivery-order-card,
-    .delivery-order-detail-btn,
-    .delivery-take-btn {
-        transition: none;
-    }
-
-    .delivery-live-dot {
-        animation: none;
-    }
-
-}
 /* =========================================================
    DELIVERY - MIS PEDIDOS
    ========================================================= */
@@ -5748,10 +4431,6 @@ a {
     border-color: rgba(53, 208, 127, 0.40);
 }
 
-.delivery-my-stat-total:hover {
-    border-color: rgba(13, 110, 253, 0.40);
-}
-
 .delivery-my-stat-icon {
     width: 48px;
     height: 48px;
@@ -5772,11 +4451,6 @@ a {
 .delivery-my-stat-success .delivery-my-stat-icon {
     color: #35d07f;
     background: rgba(25, 135, 84, 0.13);
-}
-
-.delivery-my-stat-total .delivery-my-stat-icon {
-    color: #5b9dff;
-    background: rgba(13, 110, 253, 0.12);
 }
 
 .delivery-my-stat-icon i {
@@ -6195,6 +4869,56 @@ a {
 
 
 /* =========================================================
+   TELÉFONO DE CONTACTO
+   ========================================================= */
+
+.delivery-my-phone {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin: 10px 17px 0;
+    padding: 11px 12px;
+    border: 1px solid rgba(53, 208, 127, .20);
+    border-radius: 12px;
+    background: rgba(53, 208, 127, .055);
+}
+
+.delivery-my-phone > i {
+    width: 33px;
+    height: 33px;
+    flex: 0 0 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    color: #35d07f;
+    background: rgba(53, 208, 127, .11);
+}
+
+.delivery-my-phone span {
+    display: block;
+    margin-bottom: 2px;
+    color: #8fc9a7;
+    font-size: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.delivery-my-phone a {
+    display: inline-block;
+    color: #effff6 !important;
+    font-size: 13px;
+    font-weight: 850;
+    text-decoration: none;
+}
+
+.delivery-my-phone a:hover {
+    color: #78ebb0 !important;
+    text-decoration: underline;
+}
+
+
+/* =========================================================
    INFORMACIÓN
    ========================================================= */
 
@@ -6325,32 +5049,47 @@ a {
 }
 
 .delivery-my-reference {
-    background: rgba(255, 193, 7, 0.05);
+    margin-top: 11px;
+    padding: 13px 12px;
+    border: 1px solid rgba(255, 193, 7, .34);
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 193, 7, .13),
+            rgba(255, 193, 7, .045)
+        );
+    box-shadow: 0 8px 20px rgba(255, 193, 7, .05);
 }
 
 .delivery-my-reference > i {
+    margin-top: 1px;
     color: #ffc107;
+    font-size: 16px;
 }
 
 .delivery-my-reference strong,
 .delivery-my-observation strong {
     display: block;
 
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 
-    color: #cfd0d5;
+    color: #e4c56a;
 
     font-size: 9px;
+    font-weight: 850;
+    text-transform: uppercase;
 }
 
 .delivery-my-reference span,
 .delivery-my-observation span {
     display: block;
 
-    color: #9699a2;
+    color: #fff4cf;
 
-    font-size: 9px;
-    line-height: 1.45;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.55;
 }
 
 .delivery-my-observation {
@@ -6592,44 +5331,6 @@ a {
     line-height: 1.6;
 }
 
-.delivery-my-empty-btn {
-    min-height: 40px;
-
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 9px 15px;
-
-    border: 1px solid #8b1e45;
-    border-radius: 10px;
-
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #8b1e45,
-            #b3235a
-        );
-
-    font-size: 10px;
-    font-weight: 700;
-
-    text-decoration: none;
-}
-
-.delivery-my-empty-btn:hover {
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a52250,
-            #d42b6a
-        );
-}
-
 
 /* =========================================================
    TARJETAS ENTREGADOS
@@ -6818,99 +5519,6 @@ a {
 
     font-size: 15px;
     font-weight: 800;
-}
-
-.delivery-delivered-detail {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-
-    color: #35d07f;
-
-    font-size: 9px;
-    font-weight: 700;
-
-    text-decoration: none;
-}
-
-.delivery-delivered-detail:hover {
-    color: #63e49b;
-}
-
-
-/* =========================================================
-   HISTORIAL DE ENTREGAS POR FECHA
-   ========================================================= */
-
-.delivery-delivered-date-section {
-    margin-bottom: 24px;
-}
-
-.delivery-delivered-date-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 14px;
-    padding: 18px 20px;
-    border: 1px solid #292b33;
-    border-radius: 16px;
-    background: #17181d;
-}
-
-.delivery-delivered-date-title {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin: 4px 0 3px;
-    color: #f0f1f3;
-    font-size: 18px;
-    font-weight: 800;
-}
-
-.delivery-delivered-date-title i {
-    color: #35d07f;
-}
-
-.delivery-delivered-date-subtitle {
-    margin: 0;
-    color: #777b85;
-    font-size: 11px;
-}
-
-.delivery-delivered-date-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.delivery-delivered-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 12px;
-    border: 1px solid rgba(53, 208, 127, .22);
-    border-radius: 10px;
-    background: rgba(25, 135, 84, .08);
-    color: #35d07f;
-    font-size: 10px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all .2s ease;
-}
-
-.delivery-delivered-toggle:hover {
-    border-color: rgba(53, 208, 127, .4);
-    background: rgba(25, 135, 84, .14);
-}
-
-.delivery-delivered-toggle i {
-    transition: transform .2s ease;
-}
-
-.delivery-delivered-toggle:not(.collapsed) i {
-    transform: rotate(180deg);
 }
 
 
@@ -7541,6 +6149,40 @@ a {
     word-break: break-word;
 }
 
+.delivery-contact-phone {
+    margin-top: 2px;
+    padding: 14px;
+    border: 1px solid rgba(53, 208, 127, .22);
+    border-radius: 13px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(53, 208, 127, .08),
+            rgba(25, 135, 84, .03)
+        );
+}
+
+.delivery-contact-phone {
+    border-top: 1px solid rgba(53, 208, 127, .22);
+}
+
+.delivery-contact-phone .delivery-info-item-icon {
+    color: #35d07f;
+    background: rgba(53, 208, 127, .10);
+}
+
+.delivery-contact-phone span {
+    color: #8fc9a7;
+    font-weight: 700;
+}
+
+.delivery-contact-phone strong {
+    color: #f3fff7;
+    font-size: 15px;
+    font-weight: 850;
+}
+
+
 .delivery-empty-info {
     display: flex;
     align-items: center;
@@ -7585,6 +6227,10 @@ a {
     font-weight: 700;
 }
 
+.delivery-reference span {
+    color: #e4c56a;
+}
+
 .delivery-location-main strong {
     color: #e9e9ec;
     font-size: 13px;
@@ -7592,16 +6238,32 @@ a {
 }
 
 .delivery-reference {
-    margin: 0 23px;
-    padding: 13px;
-    border-radius: 12px;
-    background: #1d1f26;
+    position: relative;
+    margin: 14px 23px 0;
+    padding: 15px;
+    border: 1px solid rgba(255, 193, 7, .34);
+    border-radius: 14px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 193, 7, .13),
+            rgba(255, 193, 7, .045)
+        );
     display: flex;
-    gap: 11px;
+    gap: 12px;
+    box-shadow: 0 10px 24px rgba(255, 193, 7, .06);
 }
 
 .delivery-reference-icon {
-    color: #ff4d88;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: #ffc107;
+    background: rgba(255, 193, 7, .12);
     font-size: 17px;
 }
 
@@ -7613,9 +6275,10 @@ a {
 
 .delivery-reference p {
     margin: 0;
-    color: #d6d7da;
-    font-size: 12px;
-    line-height: 1.5;
+    color: #fff4cf;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.55;
 }
 
 .delivery-coordinates {
@@ -7787,50 +6450,6 @@ a {
     font-size: 12px;
 }
 
-.delivery-product-subtotal {
-    color: #f0f1f3;
-    font-size: 14px;
-    font-weight: 800;
-    white-space: nowrap;
-}
-
-.delivery-total {
-    margin: 8px 23px 23px;
-    padding: 18px 20px;
-    border-radius: 15px;
-    background: linear-gradient(
-        135deg,
-        rgba(139, 30, 69, .18),
-        rgba(179, 35, 90, .08)
-    );
-    border: 1px solid rgba(179, 35, 90, .25);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.delivery-total div {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.delivery-total span {
-    color: #e3e4e7;
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.delivery-total small {
-    color: #777b85;
-    font-size: 10px;
-}
-
-.delivery-total strong {
-    color: #ff4d88;
-    font-size: 22px;
-}
-
 
 /* ============================================================
    ACCIONES
@@ -7856,11 +6475,6 @@ a {
     align-items: center;
     justify-content: center;
     font-size: 24px;
-}
-
-.delivery-action-icon.take {
-    background: rgba(255, 193, 7, .12);
-    color: #ffc107;
 }
 
 .delivery-action-icon.start {
@@ -8098,19 +6712,6 @@ a {
         height: 52px;
     }
 
-    .delivery-product-subtotal {
-        font-size: 12px;
-    }
-
-    .delivery-total {
-        margin-left: 15px;
-        margin-right: 15px;
-    }
-
-    .delivery-total strong {
-        font-size: 18px;
-    }
-
     .delivery-location-main,
     .delivery-client {
         padding-left: 17px;
@@ -8251,53 +6852,6 @@ a {
 }
 
 
-/* ---------------------------------------------------------------
-   ERROR DEL MAPA
----------------------------------------------------------------- */
-
-.delivery-map-error {
-    width: 100%;
-    height: 100%;
-    min-height: 450px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    padding: 25px;
-
-    text-align: center;
-
-    background: #f3f4f6;
-
-    color: #555;
-}
-
-.delivery-map-error i {
-    font-size: 42px;
-
-    color: #dc3545;
-}
-
-.delivery-map-error strong {
-    font-size: 17px;
-
-    font-weight: 700;
-}
-
-.delivery-map-error span {
-    font-size: 14px;
-
-    color: #777;
-}
-
-
 /* ================================================================
    RESPONSIVE
 ================================================================ */
@@ -8312,10 +6866,6 @@ a {
     }
 
     .delivery-map .leaflet-container {
-        min-height: 380px;
-    }
-
-    .delivery-map-error {
         min-height: 380px;
     }
 
@@ -8342,10 +6892,6 @@ a {
     }
 
     .delivery-map .leaflet-container {
-        min-height: 320px;
-    }
-
-    .delivery-map-error {
         min-height: 320px;
     }
 
@@ -8734,79 +7280,6 @@ a {
     font-size: 0.82rem;
 }
 
-.delivery-history-toggle {
-    border: 1px solid rgba(139, 30, 69, 0.18);
-    background: #fff;
-    color: #8b1e45;
-    border-radius: 10px;
-    padding: 0.55rem 0.85rem;
-    font-weight: 700;
-    font-size: 0.82rem;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.delivery-history-toggle:hover {
-    background: #f8eef2;
-}
-
-.delivery-history-content[hidden] {
-    display: none !important;
-}
-
-.delivery-history-days {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 0.55rem;
-    margin-top: 1rem;
-}
-
-.delivery-history-day {
-    display: block;
-    text-decoration: none;
-    padding: 0.75rem 0.65rem;
-    border: 1px solid rgba(0, 0, 0, 0.07);
-    border-radius: 12px;
-    background: #fafafa;
-    color: #242028;
-    transition: 0.2s ease;
-}
-
-.delivery-history-day:hover {
-    transform: translateY(-1px);
-    border-color: rgba(139, 30, 69, 0.22);
-    background: #fff;
-}
-
-.delivery-history-day.active {
-    border-color: rgba(139, 30, 69, 0.35);
-    background: #f8eef2;
-}
-
-.delivery-history-day-label,
-.delivery-history-day strong,
-.delivery-history-day small {
-    display: block;
-}
-
-.delivery-history-day-label {
-    color: #716770;
-    font-size: 0.75rem;
-    font-weight: 700;
-}
-
-.delivery-history-day strong {
-    margin-top: 0.3rem;
-    color: #22723c;
-    font-size: 0.98rem;
-}
-
-.delivery-history-day small {
-    margin-top: 0.15rem;
-    color: #8a8087;
-    font-size: 0.72rem;
-}
-
 .delivery-history-selected {
     padding: 1rem;
     border-radius: 14px;
@@ -8932,22 +7405,12 @@ a {
     font-size: 0.72rem;
 }
 
-@media (max-width: 1100px) {
-    .delivery-history-days {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-}
-
 @media (max-width: 768px) {
     .delivery-history-header,
     .delivery-history-selected-header,
     .delivery-history-item {
         align-items: flex-start;
         flex-direction: column;
-    }
-
-    .delivery-history-days {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .delivery-history-selected-totals {
@@ -8963,7 +7426,6 @@ a {
         justify-content: flex-start;
     }
 }
-
 
 
 /* =========================================================
@@ -9076,5 +7538,3326 @@ a {
 
     .delivery-status-toggle {
         padding-inline: 8px;
+    }
+}
+
+
+/* =========================================================
+   DELIVERY UI — INTERACCIÓN Y MEJORAS VISUALES
+   ========================================================= */
+
+.delivery-profile-page,
+.delivery-my-orders,
+.delivery-orders-page,
+.delivery-show {
+    width: 100%;
+}
+
+
+/* =========================================================
+   REVELADO
+   ========================================================= */
+
+.delivery-reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+        opacity .45s ease,
+        transform .45s ease;
+}
+
+.delivery-reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   ELEMENTOS INTERACTIVOS
+   ========================================================= */
+
+[data-delivery-interactive] {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.delivery-is-pressed {
+    transform: scale(.97) !important;
+}
+
+
+/* =========================================================
+   PEDIDO ASIGNADO — PRIVACIDAD
+   ========================================================= */
+
+.delivery-assigned-locked {
+    border-color: rgba(255, 193, 7, .20);
+    background:
+        linear-gradient(
+            160deg,
+            rgba(255, 193, 7, .045),
+            #17181d 42%
+        );
+}
+
+.delivery-assigned-privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 18px;
+    padding: 15px;
+    border: 1px solid rgba(255, 193, 7, .18);
+    border-radius: 15px;
+    background: rgba(255, 193, 7, .05);
+}
+
+.delivery-assigned-privacy-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #ffc107;
+    background: rgba(255, 193, 7, .12);
+    box-shadow: 0 8px 18px rgba(255, 193, 7, .08);
+}
+
+.delivery-assigned-privacy strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #f8f8f8;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.delivery-assigned-privacy span {
+    display: block;
+    color: #9d9fa7;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.delivery-assigned-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 18px 18px;
+}
+
+.delivery-assigned-meta > div {
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid #292b33;
+    border-radius: 12px;
+    background: rgba(255,255,255,.018);
+}
+
+.delivery-assigned-meta span {
+    display: block;
+    margin-bottom: 3px;
+    color: #747781;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.delivery-assigned-meta strong {
+    display: block;
+    overflow: hidden;
+    color: #e8e9ec;
+    font-size: 11px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.delivery-assigned-actions {
+    grid-template-columns: minmax(0, 1fr) minmax(0, .8fr) !important;
+}
+
+.delivery-my-cancel-btn {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid rgba(220, 53, 69, .42);
+    border-radius: 12px;
+    color: #fff;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(220, 53, 69, .15),
+            rgba(125, 22, 38, .28)
+        );
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, .15);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.delivery-my-cancel-btn:hover {
+    border-color: #ff6070;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(220, 53, 69, .24),
+            rgba(125, 22, 38, .36)
+        );
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 26px rgba(0, 0, 0, .24);
+}
+
+.delivery-my-cancel-btn:focus-visible {
+    outline: 3px solid rgba(220, 53, 69, .16);
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   PEDIDO EN CAMINO
+   ========================================================= */
+
+.delivery-in-route-card {
+    border-color: rgba(13, 110, 253, .24);
+    background:
+        linear-gradient(
+            155deg,
+            rgba(13, 110, 253, .055),
+            #17181d 38%
+        );
+}
+
+.delivery-in-route-card:hover {
+    border-color: rgba(91, 157, 255, .48);
+    box-shadow:
+        0 20px 44px rgba(0, 0, 0, .25),
+        0 0 0 1px rgba(91, 157, 255, .06);
+}
+
+.delivery-in-route-card .delivery-my-status.route {
+    box-shadow:
+        0 0 0 4px rgba(13, 110, 253, .08),
+        0 0 18px rgba(13, 110, 253, .18);
+}
+
+
+/* =========================================================
+   ENTREGADOS
+   ========================================================= */
+
+.delivery-delivered-card-static {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(53, 208, 127, .15);
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 135, 84, .065),
+            #17181d 42%
+        );
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.14);
+    overflow: hidden;
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.delivery-delivered-card-static:hover {
+    transform: translateY(-4px);
+    border-color: rgba(53, 208, 127, .35);
+    box-shadow:
+        0 18px 38px rgba(0,0,0,.22),
+        0 0 0 1px rgba(53,208,127,.05);
+}
+
+.delivery-delivered-card-static .delivery-delivered-bottom {
+    margin-top: auto;
+}
+
+
+/* =========================================================
+   PERFIL
+   ========================================================= */
+
+.delivery-profile-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.delivery-profile-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 7px;
+    color: #fff;
+    font-size: clamp(1.6rem, 2.4vw, 2.15rem);
+    font-weight: 850;
+}
+
+.delivery-profile-header h1 i {
+    color: #ff4d88;
+}
+
+.delivery-profile-header p {
+    max-width: 800px;
+    margin: 0;
+    color: #858893;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.delivery-profile-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    padding: 9px 13px;
+    border: 1px solid;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.delivery-profile-status-chip > span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.delivery-profile-status-chip.active {
+    border-color: rgba(53, 208, 127, .24);
+    color: #7ce7a8;
+    background: rgba(53,208,127,.07);
+}
+
+.delivery-profile-status-chip.active > span {
+    background: #35d07f;
+    box-shadow: 0 0 12px rgba(53,208,127,.7);
+}
+
+.delivery-profile-status-chip.inactive {
+    border-color: rgba(108,117,125,.28);
+    color: #aeb1b8;
+    background: rgba(108,117,125,.06);
+}
+
+.delivery-profile-status-chip.inactive > span {
+    background: #8b8f98;
+}
+
+.delivery-profile-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border: 1px solid;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+.delivery-profile-alert.success {
+    border-color: rgba(53, 208, 127, .22);
+    color: #b8f2cf;
+    background: rgba(53,208,127,.07);
+}
+
+.delivery-profile-alert.success > i {
+    color: #35d07f;
+}
+
+.delivery-profile-alert.error {
+    border-color: rgba(220,53,69,.24);
+    color: #ffc0c5;
+    background: rgba(220,53,69,.07);
+}
+
+.delivery-profile-alert.error > i {
+    color: #ff6371;
+}
+
+.delivery-profile-alert ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    color: #a7abb4;
+}
+
+.delivery-profile-card {
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid #292b33;
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139, 30, 69, .07),
+            #17181d 34%
+        );
+    box-shadow:
+        0 16px 34px rgba(0,0,0,.18);
+}
+
+.delivery-profile-card-header {
+    padding: 22px;
+    border-bottom: 1px solid #292b33;
+}
+
+.delivery-profile-identity,
+.delivery-profile-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.delivery-profile-avatar {
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid rgba(255,77,136,.28);
+    border-radius: 50%;
+    color: #fff;
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e45,
+            #b3235a
+        );
+    box-shadow:
+        0 12px 26px rgba(139,30,69,.24);
+    font-size: 27px;
+    font-weight: 850;
+}
+
+.delivery-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.delivery-profile-identity > div:last-child span,
+.delivery-profile-card-heading > div:last-child span {
+    display: block;
+    margin-bottom: 4px;
+    color: #ff5a91;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .12em;
+}
+
+.delivery-profile-identity h2,
+.delivery-profile-card-heading h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 820;
+}
+
+.delivery-profile-identity p {
+    margin: 4px 0 0;
+    color: #777b85;
+    font-size: 11px;
+}
+
+.delivery-profile-heading-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    color: #ffc107;
+    background: rgba(255,193,7,.08);
+    box-shadow: 0 8px 18px rgba(255,193,7,.06);
+}
+
+.delivery-profile-form {
+    padding: 22px;
+}
+
+.delivery-form-label {
+    display: block;
+    margin-bottom: 7px;
+    color: #dadce1;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.delivery-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.delivery-input-group > i {
+    position: absolute;
+    left: 13px;
+    color: #ff5a91;
+    pointer-events: none;
+}
+
+.delivery-input-group input {
+    width: 100%;
+    min-height: 45px;
+    padding: 10px 13px 10px 39px;
+    border: 1px solid #343640;
+    border-radius: 12px;
+    outline: none;
+    color: #fff;
+    background: #111218;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.delivery-input-group input::placeholder {
+    color: #676a73;
+}
+
+.delivery-input-group input:focus {
+    border-color: rgba(255,47,118,.58);
+    box-shadow: 0 0 0 4px rgba(255,47,118,.08);
+}
+
+.delivery-file-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px dashed #454752;
+    border-radius: 12px;
+    background: rgba(255,255,255,.018);
+    transition:
+        border-color .2s ease,
+        background .2s ease;
+}
+
+.delivery-file-wrapper:hover {
+    border-color: rgba(255,47,118,.42);
+    background: rgba(255,47,118,.03);
+}
+
+.delivery-file-wrapper > i {
+    color: #ff5a91;
+}
+
+.delivery-file-wrapper input {
+    width: 100%;
+    min-width: 0;
+    color: #b4b7bf;
+    font-size: 11px;
+}
+
+.delivery-form-help {
+    display: block;
+    margin-top: 6px;
+    color: #73767f;
+    font-size: 10px;
+}
+
+.delivery-field-error {
+    margin-top: 6px;
+    color: #ff7580;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.delivery-profile-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #292b33;
+}
+
+.delivery-profile-form-footer > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #777b85;
+    font-size: 10px;
+}
+
+.delivery-profile-form-footer > span i {
+    color: #35d07f;
+}
+
+.delivery-profile-save {
+    min-height: 43px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 14px;
+    border: 1px solid #a52456;
+    border-radius: 11px;
+    color: #fff;
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e45,
+            #c52c63
+        );
+    box-shadow:
+        0 10px 22px rgba(139,30,69,.22);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+.delivery-profile-save:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 28px rgba(139,30,69,.30);
+}
+
+/* =========================================================
+   COLA — MICROINTERACCIONES
+   ========================================================= */
+
+.delivery-show-card {
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.delivery-show-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 18px 38px rgba(0,0,0,.20);
+}
+
+.delivery-orders-counter,
+.delivery-orders-info,
+.delivery-orders-summary {
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.delivery-orders-counter:hover,
+.delivery-orders-info:hover,
+.delivery-orders-summary:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   BOTONES OPERATIVOS
+   ========================================================= */
+
+.delivery-my-start-btn,
+.delivery-my-deliver-btn,
+.delivery-my-detail-btn,
+.delivery-dashboard-btn-primary,
+.delivery-dashboard-btn-secondary,
+.delivery-my-orders-new,
+.delivery-delivered-view-link,
+.delivery-status-toggle {
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease,
+        background .2s ease,
+        filter .2s ease;
+}
+
+.delivery-my-start-btn:hover,
+.delivery-my-deliver-btn:hover,
+.delivery-my-detail-btn:hover,
+.delivery-dashboard-btn-primary:hover,
+.delivery-dashboard-btn-secondary:hover,
+.delivery-my-orders-new:hover,
+.delivery-delivered-view-link:hover,
+.delivery-status-toggle:hover {
+    transform: translateY(-2px);
+}
+
+.delivery-my-start-btn:active,
+.delivery-my-deliver-btn:active,
+.delivery-my-detail-btn:active,
+.delivery-dashboard-btn-primary:active,
+.delivery-dashboard-btn-secondary:active,
+.delivery-my-orders-new:active,
+.delivery-delivered-view-link:active,
+.delivery-status-toggle:active {
+    transform: translateY(0) scale(.98);
+}
+
+.delivery-button-loading {
+    pointer-events: none;
+    opacity: .78;
+}
+
+.delivery-spinner {
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+    border: 2px solid rgba(255,255,255,.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: delivery-spin .7s linear infinite;
+}
+
+@keyframes delivery-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+    .delivery-profile-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .delivery-profile-status-chip {
+        align-self: flex-start;
+    }
+
+    .delivery-assigned-actions {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .delivery-assigned-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .delivery-profile-card-header,
+    .delivery-profile-form {
+        padding: 17px;
+    }
+
+    .delivery-profile-avatar {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        font-size: 23px;
+    }
+
+    .delivery-profile-identity h2,
+    .delivery-profile-card-heading h2 {
+        font-size: 16px;
+    }
+
+    .delivery-profile-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .delivery-profile-save {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .delivery-profile-header h1 {
+        font-size: 1.55rem;
+    }
+
+    .delivery-assigned-privacy {
+        margin: 14px;
+    }
+
+    .delivery-assigned-meta {
+        margin: 0 14px 14px;
+    }
+
+    .delivery-my-actions {
+        gap: 8px;
+    }
+
+    .delivery-my-order-card {
+        border-radius: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-reveal,
+    .delivery-show-card,
+    .delivery-orders-counter,
+    .delivery-orders-info,
+    .delivery-orders-summary,
+    .delivery-my-start-btn,
+    .delivery-my-deliver-btn,
+    .delivery-my-detail-btn,
+    .delivery-dashboard-btn-primary,
+    .delivery-dashboard-btn-secondary,
+    .delivery-my-orders-new,
+    .delivery-delivered-view-link,
+    .delivery-status-toggle,
+    .delivery-delivered-card-static,
+    .delivery-my-cancel-btn,
+    .delivery-profile-save {
+        transition: none;
+    }
+
+    .delivery-spinner {
+        animation: none;
+    }
+}
+
+/* Evitar desplazamiento del fondo cuando el menú móvil está abierto. */
+body.delivery-menu-open {
+    overflow: hidden;
+}
+
+
+
+/* ==========================================================================
+   INGRESOS DEL DÍA — PRESENTACIÓN DESTACADA
+   --------------------------------------------------------------------------
+   Este bloque es únicamente visual. No modifica cálculos ni datos.
+   ========================================================================== */
+
+.delivery-dashboard-financial {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    border: 1px solid rgba(139, 30, 69, .12);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255, 47, 118, .22), transparent 30%),
+        radial-gradient(circle at 0% 100%, rgba(53, 208, 127, .10), transparent 28%),
+        linear-gradient(145deg, #2a101b 0%, #1c1720 52%, #13151b 100%);
+    border-color: rgba(255, 77, 136, .18);
+    box-shadow:
+        0 20px 48px rgba(0, 0, 0, .28),
+        0 6px 18px rgba(139, 30, 69, .14);
+}
+
+.delivery-dashboard-financial::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b1e45 0%, #ff2f76 52%, #22723c 100%);
+}
+
+.delivery-financial-header {
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    margin-bottom: 1.35rem;
+}
+
+.delivery-financial-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .38rem .7rem;
+    border: 1px solid rgba(255, 77, 136, .22);
+    border-radius: 999px;
+    background: rgba(139, 30, 69, .16);
+    color: #ff6b9c;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .11em;
+}
+
+.delivery-financial-kicker::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff2f76;
+    box-shadow: 0 0 0 5px rgba(255, 47, 118, .10);
+}
+
+.delivery-financial-header h2 {
+    margin-top: .65rem;
+    color: #ffffff;
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    font-weight: 900;
+    letter-spacing: -.02em;
+}
+
+.delivery-financial-header p {
+    max-width: 760px;
+    color: #c8bec5;
+    font-size: .88rem;
+}
+
+.delivery-financial-icon {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    flex-basis: 58px;
+    border: 1px solid rgba(139, 30, 69, .10);
+    border-radius: 18px;
+    background:
+        linear-gradient(145deg, rgba(139, 30, 69, .12), rgba(255, 47, 118, .10));
+    color: #8b1e45;
+    font-size: 1.35rem;
+    box-shadow: 0 10px 22px rgba(139, 30, 69, .10);
+}
+
+.delivery-financial-icon::after {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 1px solid rgba(139, 30, 69, .08);
+    border-radius: 14px;
+    pointer-events: none;
+}
+
+.delivery-financial-grid {
+    position: relative;
+    z-index: 1;
+    gap: 1.15rem;
+}
+
+.delivery-financial-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 132px;
+    padding: 1.15rem 1.2rem;
+    border: 1px solid rgba(0, 0, 0, .06);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 8px 20px rgba(24, 18, 22, .04);
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.delivery-financial-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: #8b1e45;
+    opacity: .85;
+}
+
+.delivery-financial-card::after {
+    content: "";
+    position: absolute;
+    width: 95px;
+    height: 95px;
+    top: -48px;
+    right: -42px;
+    border-radius: 50%;
+    background: rgba(139, 30, 69, .05);
+    transition: transform .25s ease;
+}
+
+.delivery-financial-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139, 30, 69, .16);
+    box-shadow:
+        0 16px 28px rgba(24, 18, 22, .08),
+        0 4px 10px rgba(24, 18, 22, .04);
+}
+
+.delivery-financial-card:hover::after {
+    transform: scale(1.18);
+}
+
+.delivery-financial-card span {
+    position: relative;
+    z-index: 1;
+    color: #374151;
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.delivery-financial-card strong {
+    position: relative;
+    z-index: 1;
+    margin-top: .55rem;
+    color: #1f1a20;
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-weight: 900;
+    letter-spacing: -.035em;
+}
+
+.delivery-financial-card small {
+    position: relative;
+    z-index: 1;
+    margin-top: .4rem;
+    color: #374151;
+    font-size: .73rem;
+    font-weight: 600;
+}
+
+.delivery-financial-card.commission::before {
+    background: linear-gradient(180deg, #35d07f, #198754);
+}
+
+.delivery-financial-card.commission strong {
+    color: #198754;
+}
+
+.delivery-financial-card.restaurant::before {
+    background: linear-gradient(180deg, #ff2f76, #8b1e45);
+}
+
+.delivery-financial-card.restaurant strong {
+    color: #8b1e45;
+}
+
+.delivery-financial-card:not(.commission):not(.restaurant)::before {
+    background: linear-gradient(180deg, #0d6efd, #5b9cff);
+}
+
+.delivery-financial-card:not(.commission):not(.restaurant) strong {
+    color: #24344f;
+}
+
+.delivery-history-wrapper {
+    position: relative;
+    z-index: 1;
+    margin-top: 1.35rem !important;
+    padding-top: 1.3rem;
+    border-top: 1px solid rgba(139, 30, 69, .10);
+}
+
+.delivery-history-header {
+    padding: .15rem .1rem;
+}
+
+.delivery-history-header strong {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    color: #211c22;
+    font-size: 1rem;
+    font-weight: 900;
+}
+
+.delivery-history-header strong::before {
+    content: "✓";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 27px;
+    height: 27px;
+    border-radius: 9px;
+    background: rgba(34, 114, 60, .10);
+    color: #198754;
+    font-size: .78rem;
+    font-weight: 900;
+}
+
+.delivery-history-header span {
+    padding-left: 2.15rem;
+    color: #374151;
+    font-size: .78rem;
+}
+
+.delivery-history-selected {
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, .065);
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(24, 18, 22, .035);
+}
+
+.delivery-history-selected-header {
+    position: relative;
+    padding: 1rem 1.15rem;
+    border-bottom: 1px solid rgba(0, 0, 0, .055);
+    background:
+        linear-gradient(90deg, #fbf7f9 0%, #ffffff 48%, #f8faf8 100%);
+}
+
+.delivery-history-selected-header > div:first-child {
+    position: relative;
+    padding-left: .72rem;
+}
+
+.delivery-history-selected-header > div:first-child::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .12rem;
+    bottom: .12rem;
+    width: 3px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #8b1e45, #ff2f76);
+}
+
+.delivery-history-selected-header span {
+    color: #374151;
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.delivery-history-selected-header strong {
+    margin-top: .2rem;
+    color: #211c22;
+    font-size: .98rem;
+    font-weight: 900;
+}
+
+.delivery-history-selected-totals {
+    gap: .6rem;
+}
+
+.delivery-history-selected-totals > div {
+    min-width: 115px;
+    padding: .65rem .8rem;
+    border: 1px solid rgba(0, 0, 0, .055);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, .85);
+    text-align: right;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.delivery-history-selected-totals > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(24, 18, 22, .06);
+}
+
+.delivery-history-selected-totals small {
+    color: #374151;
+    font-size: .67rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.delivery-history-selected-totals strong {
+    margin-top: .18rem;
+    color: #198754;
+    font-size: .93rem;
+    font-weight: 900;
+}
+
+.delivery-history-selected-totals > div:last-child {
+    border-color: rgba(139, 30, 69, .09);
+    background: rgba(139, 30, 69, .035);
+}
+
+.delivery-history-selected-totals > div:last-child strong {
+    color: #8b1e45;
+}
+
+.delivery-history-list {
+    gap: .8rem;
+    padding: 1rem 1.15rem 1.15rem;
+}
+
+.delivery-history-item {
+    position: relative;
+    margin: 0;
+    padding: 1rem 1rem 1rem 1.05rem;
+    border: 1px solid rgba(0, 0, 0, .06);
+    border-radius: 17px;
+    background:
+        linear-gradient(135deg, #ffffff 0%, #fbfafb 100%);
+    box-shadow: 0 7px 16px rgba(24, 18, 22, .035);
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+.delivery-history-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 13px;
+    bottom: 13px;
+    width: 4px;
+    border-radius: 0 8px 8px 0;
+    background: linear-gradient(180deg, #8b1e45, #ff2f76);
+}
+
+.delivery-history-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(139, 30, 69, .13);
+    box-shadow:
+        0 12px 22px rgba(24, 18, 22, .07),
+        0 3px 8px rgba(24, 18, 22, .03);
+}
+
+.delivery-history-item > div:first-child {
+    min-width: 175px;
+}
+
+.delivery-history-item > div:first-child strong {
+    color: #201b21;
+    font-size: .93rem;
+    font-weight: 900;
+}
+
+.delivery-history-item > div:first-child small {
+    color: #374151;
+    font-size: .74rem;
+    font-weight: 700;
+}
+
+.delivery-history-item-values {
+    gap: .5rem;
+}
+
+.delivery-history-item-values span {
+    padding: .48rem .65rem;
+    border: 1px solid rgba(0, 0, 0, .05);
+    border-radius: 11px;
+    background: #ffffff;
+    color: #374151;
+    font-size: .72rem;
+    font-weight: 700;
+    transition: transform .18s ease, border-color .18s ease;
+}
+
+.delivery-history-item-values span:hover {
+    transform: translateY(-2px);
+    border-color: rgba(139, 30, 69, .12);
+}
+
+.delivery-history-item-values span strong {
+    margin-left: .16rem;
+    color: #211c22;
+    font-weight: 900;
+}
+
+.delivery-history-item-values span:nth-child(2) {
+    border-color: rgba(34, 114, 60, .10);
+    background: rgba(34, 114, 60, .035);
+}
+
+.delivery-history-item-values span:nth-child(2) strong {
+    color: #198754;
+}
+
+.delivery-history-item-values span:nth-child(3) {
+    border-color: rgba(139, 30, 69, .10);
+    background: rgba(139, 30, 69, .035);
+}
+
+.delivery-history-item-values span:nth-child(3) strong {
+    color: #8b1e45;
+}
+
+.delivery-history-empty {
+    justify-content: center;
+    min-height: 150px;
+    margin: .5rem 1.15rem 1.15rem;
+    padding: 1rem;
+    border: 1px dashed rgba(139, 30, 69, .17);
+    border-radius: 17px;
+    background: #fcfafb;
+    color: #374151;
+    font-size: .83rem;
+    text-align: center;
+}
+
+.delivery-history-empty i {
+    color: #8b1e45;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .delivery-dashboard-financial {
+        padding: 1.15rem;
+        border-radius: 20px;
+    }
+
+    .delivery-financial-header {
+        align-items: flex-start;
+    }
+
+    .delivery-financial-icon {
+        width: 50px;
+        height: 50px;
+        flex-basis: 50px;
+        border-radius: 15px;
+    }
+
+    .delivery-history-list {
+        padding: .8rem;
+    }
+
+    .delivery-history-item {
+        gap: .8rem;
+        padding: .95rem .9rem;
+    }
+
+    .delivery-history-item > div:first-child {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .delivery-history-item-values {
+        width: 100%;
+    }
+
+    .delivery-history-item-values span {
+        flex: 1 1 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-financial-card,
+    .delivery-financial-card::after,
+    .delivery-history-selected-totals > div,
+    .delivery-history-item,
+    .delivery-history-item-values span {
+        transition: none;
+    }
+}
+
+
+/* ==========================================================================
+   CONTRASTE — TEXTOS SECUNDARIOS EN CONTENEDORES BLANCOS
+   --------------------------------------------------------------------------
+   Mantiene la jerarquía visual, pero mejora la legibilidad sobre fondos claros.
+   ========================================================================== */
+
+.delivery-financial-card span,
+.delivery-financial-card small,
+.delivery-history-header span,
+.delivery-history-selected-header span,
+.delivery-history-selected-totals small,
+.delivery-history-item > div:first-child small,
+.delivery-history-item-values span,
+.delivery-history-empty {
+    color: #374151 !important;
+}
+/* ==========================================================================
+   CONTRASTE DEL ENCABEZADO DEL HISTORIAL DIARIO
+   ========================================================================== */
+
+.delivery-history-header strong {
+    color: #ffffff !important;
+}
+
+.delivery-history-header span {
+    color: #e5e7eb !important;
+}
+
+
+/* ==========================================================================
+   DETALLE DEL PEDIDO — REFERENCIA Y TELÉFONO DESTACADOS
+   Los datos permanecen en sus ubicaciones originales.
+   ========================================================================== */
+
+/* REFERENCIA PARA LA ENTREGA */
+.delivery-show .delivery-reference {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-top: 14px;
+    padding: 18px;
+    border: 1px solid rgba(255, 193, 7, .48);
+    border-radius: 17px;
+    background: linear-gradient(135deg, rgba(255, 193, 7, .17), rgba(74, 54, 10, .22) 58%, rgba(23, 24, 29, .98));
+    box-shadow: 0 14px 34px rgba(255, 193, 7, .08), inset 0 1px 0 rgba(255, 255, 255, .05);
+    animation: delivery-reference-glow 2.4s ease-in-out infinite;
+}
+
+.delivery-show .delivery-reference::before,
+.delivery-show .delivery-contact-phone::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: linear-gradient(135deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, 0));
+    pointer-events: none;
+}
+
+.delivery-show .delivery-reference::after,
+.delivery-show .delivery-contact-phone::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -55%;
+    z-index: -1;
+    width: 42%;
+    height: 160%;
+    transform: rotate(18deg);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .24), transparent);
+    filter: blur(2px);
+    pointer-events: none;
+    animation: delivery-reference-shine 2.8s linear infinite;
+}
+
+.delivery-show .delivery-reference-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    border-radius: 15px;
+    color: #ffc107;
+    background: rgba(255, 193, 7, .13);
+    border: 1px solid rgba(255, 193, 7, .18);
+    box-shadow: 0 0 22px rgba(255, 193, 7, .12);
+    font-size: 21px;
+}
+
+.delivery-show .delivery-reference > div:last-child {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delivery-show .delivery-reference > div:last-child > span {
+    color: #f2cd68;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.delivery-show .delivery-reference > div:last-child > strong {
+    margin: 0;
+    color: #fff7db;
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+}
+
+/* TELÉFONO DEL CLIENTE */
+.delivery-show .delivery-contact-phone {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    align-items: center;
+    margin-top: 8px;
+    padding: 16px 15px;
+    border: 1px solid rgba(53, 208, 127, .42) !important;
+    border-top: 1px solid rgba(53, 208, 127, .42) !important;
+    border-radius: 17px;
+    background: linear-gradient(135deg, rgba(53, 208, 127, .14), rgba(25, 135, 84, .09) 58%, rgba(23, 24, 29, .98));
+    box-shadow: 0 14px 34px rgba(53, 208, 127, .07), inset 0 1px 0 rgba(255, 255, 255, .05);
+    animation: delivery-phone-glow 2.4s ease-in-out infinite;
+}
+
+.delivery-show .delivery-contact-phone .delivery-info-item-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 15px;
+    color: #35d07f;
+    background: rgba(53, 208, 127, .11);
+    border: 1px solid rgba(53, 208, 127, .16);
+    box-shadow: 0 0 22px rgba(53, 208, 127, .10);
+    font-size: 21px;
+}
+
+.delivery-show .delivery-contact-phone > div:last-child {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delivery-show .delivery-contact-phone > div:last-child > span {
+    color: #8ed5aa;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.delivery-show .delivery-contact-phone-link {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    color: #dcffe9 !important;
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 900;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 18px rgba(53, 208, 127, .24);
+    transition: color .2s ease, transform .2s ease, text-shadow .2s ease;
+}
+
+.delivery-show .delivery-contact-phone-link:hover {
+    color: #fff !important;
+    transform: translateX(2px);
+    text-shadow: 0 0 22px rgba(53, 208, 127, .38);
+}
+
+.delivery-show .delivery-contact-phone-hint {
+    color: #9598a1;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+@keyframes delivery-reference-shine {
+    0% { left: -55%; }
+    55%, 100% { left: 125%; }
+}
+
+@keyframes delivery-reference-glow {
+    0%, 100% {
+        box-shadow: 0 14px 34px rgba(255, 193, 7, .08), inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+    50% {
+        box-shadow: 0 16px 38px rgba(255, 193, 7, .17), 0 0 24px rgba(255, 193, 7, .08), inset 0 1px 0 rgba(255, 255, 255, .07);
+    }
+}
+
+@keyframes delivery-phone-glow {
+    0%, 100% {
+        box-shadow: 0 14px 34px rgba(53, 208, 127, .07), inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+    50% {
+        box-shadow: 0 16px 38px rgba(53, 208, 127, .15), 0 0 24px rgba(53, 208, 127, .07), inset 0 1px 0 rgba(255, 255, 255, .07);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .delivery-show .delivery-reference,
+    .delivery-show .delivery-contact-phone {
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .delivery-show .delivery-reference-icon,
+    .delivery-show .delivery-contact-phone .delivery-info-item-icon {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        font-size: 19px;
+    }
+
+    .delivery-show .delivery-reference > div:last-child > strong,
+    .delivery-show .delivery-contact-phone-link {
+        font-size: 15px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-show .delivery-reference,
+    .delivery-show .delivery-reference::after,
+    .delivery-show .delivery-contact-phone,
+    .delivery-show .delivery-contact-phone::after,
+    .delivery-show .delivery-contact-phone-link {
+        animation: none;
+        transition: none;
+    }
+}
+
+
+/* ==========================================================================
+   DETALLE DEL PEDIDO — DESGLOSE ECONÓMICO
+   --------------------------------------------------------------------------
+   Tarjeta en modo oscuro, con filas uniformes y alto contraste.
+   ========================================================================== */
+
+.delivery-show .delivery-financial-breakdown {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+    padding: 14px;
+    border: 1px solid #2f3139 !important;
+    border-radius: 18px;
+    background: #18181b !important;
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, .22),
+        inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.delivery-show .delivery-financial-row {
+    position: relative;
+    min-width: 0;
+    display: flex !important;
+    align-items: center;
+    gap: 11px;
+    padding: 14px;
+    border: 1px solid #30323b !important;
+    border-radius: 15px;
+    background: #1f2937 !important;
+    color: #f3f4f6 !important;
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        background .22s ease;
+}
+
+.delivery-show .delivery-financial-row:hover {
+    transform: translateY(-2px);
+    border-color: #4b5563 !important;
+    background: #232c3a !important;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .18);
+}
+
+.delivery-show .delivery-financial-row-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 17px;
+}
+
+.delivery-show .delivery-financial-row-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delivery-show .delivery-financial-row-copy > span {
+    color: #d1d5db !important;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: .02em;
+}
+
+.delivery-show .delivery-financial-row-copy > span small {
+    display: inline-flex;
+    margin-left: 4px;
+    color: #9ca3af !important;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.delivery-show .delivery-financial-row-copy > strong {
+    color: #f9fafb !important;
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+/* Acentos sutiles: el fondo sigue siendo uniforme y oscuro. */
+.delivery-show .delivery-financial-row-route {
+    border-color: rgba(245, 158, 11, .22) !important;
+}
+
+.delivery-show .delivery-financial-row-route .delivery-financial-row-icon {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, .10);
+}
+
+.delivery-show .delivery-financial-row-commission {
+    border-color: rgba(52, 211, 153, .22) !important;
+}
+
+.delivery-show .delivery-financial-row-commission .delivery-financial-row-icon {
+    color: #34d399;
+    background: rgba(52, 211, 153, .10);
+}
+
+.delivery-show .delivery-financial-my-share {
+    color: #86efac !important;
+}
+
+.delivery-show .delivery-financial-row-restaurant {
+    border-color: rgba(244, 114, 182, .20) !important;
+}
+
+.delivery-show .delivery-financial-row-restaurant .delivery-financial-row-icon {
+    color: #f472b6;
+    background: rgba(244, 114, 182, .09);
+}
+
+.delivery-show .delivery-financial-row-restaurant .delivery-financial-row-copy > strong {
+    color: #fce7f3 !important;
+}
+
+@media (max-width: 900px) {
+    .delivery-show .delivery-financial-breakdown {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .delivery-show .delivery-financial-breakdown {
+        padding: 10px;
+    }
+
+    .delivery-show .delivery-financial-row {
+        padding: 12px;
+    }
+
+    .delivery-show .delivery-financial-row-copy > strong {
+        font-size: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-show .delivery-financial-row {
+        transition: none;
+    }
+}
+
+
+/* ==========================================================================
+   PERFIL DELIVERY — CAMBIO DE CONTRASEÑA
+   ========================================================================== */
+
+.delivery-password-divider {
+    height: 1px;
+    margin: 1.35rem 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(139, 30, 69, .16),
+        rgba(255, 47, 118, .10),
+        transparent
+    );
+}
+
+.delivery-password-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.45rem;
+    border: 1px solid rgba(139, 30, 69, .13);
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 90% 0%, rgba(255, 47, 118, .08), transparent 31%),
+        radial-gradient(circle at 0% 100%, rgba(139, 30, 69, .07), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #fbf8fa 100%);
+    box-shadow:
+        0 18px 36px rgba(24, 18, 22, .07),
+        0 4px 12px rgba(24, 18, 22, .035);
+}
+
+.delivery-password-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #8b1e45, #ff2f76, #35d07f);
+}
+
+.delivery-password-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.delivery-password-icon {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(139, 30, 69, .13);
+    border-radius: 17px;
+    background: linear-gradient(
+        145deg,
+        rgba(139, 30, 69, .12),
+        rgba(255, 47, 118, .08)
+    );
+    color: #8b1e45;
+    font-size: 1.3rem;
+    box-shadow: 0 10px 24px rgba(139, 30, 69, .08);
+}
+
+.delivery-password-header span {
+    display: inline-block;
+    color: #8b1e45;
+    font-size: .69rem;
+    font-weight: 900;
+    letter-spacing: .10em;
+}
+
+.delivery-password-header h2 {
+    margin: .15rem 0 .2rem;
+    color: #201b21;
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.delivery-password-header p {
+    margin: 0;
+    color: #4b5563;
+    font-size: .8rem;
+    line-height: 1.5;
+}
+
+.delivery-password-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+    margin-bottom: 1rem;
+    padding: .85rem 1rem;
+    border-radius: 14px;
+    font-size: .8rem;
+    line-height: 1.45;
+}
+
+.delivery-password-alert.success {
+    border: 1px solid rgba(25, 135, 84, .16);
+    background: rgba(25, 135, 84, .07);
+    color: #166534;
+}
+
+.delivery-password-alert.success > i {
+    color: #198754;
+    margin-top: .05rem;
+}
+
+.delivery-password-alert.error {
+    border: 1px solid rgba(220, 53, 69, .16);
+    background: rgba(220, 53, 69, .06);
+    color: #7f1d1d;
+}
+
+.delivery-password-alert.error > i {
+    color: #dc3545;
+    margin-top: .05rem;
+}
+
+.delivery-password-alert ul {
+    margin: .35rem 0 0;
+    padding-left: 1rem;
+}
+
+.delivery-password-form {
+    position: relative;
+    z-index: 1;
+}
+
+.delivery-password-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.delivery-password-input > i:first-child {
+    position: absolute;
+    left: .9rem;
+    z-index: 2;
+    color: #8b1e45;
+    font-size: .95rem;
+    pointer-events: none;
+}
+
+.delivery-password-input input {
+    width: 100%;
+    min-height: 48px;
+    padding: .72rem 2.9rem .72rem 2.65rem;
+    border: 1px solid #dfe3e8;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #201b21;
+    font-size: .88rem;
+    font-weight: 650;
+    outline: none;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.delivery-password-input input:focus {
+    border-color: rgba(139, 30, 69, .48);
+    box-shadow:
+        0 0 0 4px rgba(139, 30, 69, .09),
+        0 8px 20px rgba(24, 18, 22, .05);
+}
+
+.delivery-password-input input.is-invalid {
+    border-color: rgba(220, 53, 69, .60);
+    box-shadow: 0 0 0 4px rgba(220, 53, 69, .08);
+}
+
+.delivery-password-toggle {
+    position: absolute;
+    right: .55rem;
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 11px;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.delivery-password-toggle:hover {
+    background: rgba(139, 30, 69, .07);
+    color: #8b1e45;
+    transform: translateY(-1px);
+}
+
+.delivery-password-form .delivery-form-label {
+    display: block;
+    margin-bottom: .45rem;
+}
+
+.delivery-password-form .delivery-field-error {
+    display: block;
+    margin-top: .4rem;
+    color: #b42318;
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.delivery-password-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, .06);
+}
+
+.delivery-password-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: .55rem;
+    max-width: 560px;
+    color: #4b5563;
+    font-size: .74rem;
+    line-height: 1.45;
+}
+
+.delivery-password-tip i {
+    flex: 0 0 auto;
+    color: #8b1e45;
+    margin-top: .03rem;
+}
+
+.delivery-password-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    min-height: 46px;
+    padding: .7rem 1rem;
+    border: 1px solid rgba(139, 30, 69, .15);
+    border-radius: 13px;
+    background: linear-gradient(135deg, #8b1e45, #ff2f76);
+    color: #ffffff;
+    font-size: .8rem;
+    font-weight: 900;
+    box-shadow:
+        0 12px 22px rgba(139, 30, 69, .16),
+        inset 0 1px 0 rgba(255, 255, 255, .15);
+    cursor: pointer;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+.delivery-password-save:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.04);
+    box-shadow:
+        0 15px 28px rgba(139, 30, 69, .21),
+        inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+.delivery-password-save:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 991.98px) {
+    .delivery-password-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .delivery-password-tip {
+        max-width: none;
+    }
+
+    .delivery-password-save {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .delivery-password-card {
+        padding: 1.1rem;
+        border-radius: 18px;
+    }
+
+    .delivery-password-header {
+        align-items: flex-start;
+    }
+
+    .delivery-password-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 14px;
+        font-size: 1.1rem;
+    }
+
+    .delivery-password-header h2 {
+        font-size: 1.05rem;
+    }
+
+    .delivery-password-header p {
+        font-size: .76rem;
+    }
+
+    .delivery-password-input input {
+        min-height: 46px;
+        padding-left: 2.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-password-input input,
+    .delivery-password-toggle,
+    .delivery-password-save {
+        transition: none;
+    }
+}
+
+
+/* ==========================================================================
+   PERFIL DELIVERY — DISTRIBUCIÓN EN DOS COLUMNAS Y SEGURIDAD DESTACADA
+   --------------------------------------------------------------------------
+   En pantallas grandes, Datos personales y Seguridad se muestran lado a lado.
+   En tablet/móvil se apilan para conservar la lectura y el espacio.
+   ========================================================================== */
+
+.delivery-profile-page > .row {
+    align-items: stretch;
+}
+
+.delivery-profile-page > .row > .col-12.col-xl-6 {
+    display: flex;
+}
+
+.delivery-profile-page .delivery-profile-card,
+.delivery-profile-page .delivery-password-card {
+    width: 100%;
+    height: 100%;
+}
+
+.delivery-profile-page .delivery-profile-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.delivery-profile-page .delivery-profile-form {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.delivery-profile-page .delivery-profile-form > .row {
+    flex: 1;
+    align-content: flex-start;
+}
+
+.delivery-profile-page .delivery-profile-form-footer {
+    margin-top: auto;
+}
+
+/* Seguridad: bloque visualmente distinto y claramente asociado a protección. */
+.delivery-profile-page .delivery-password-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.35rem;
+    border: 1px solid rgba(255, 77, 136, .38);
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255, 47, 118, .24), transparent 32%),
+        radial-gradient(circle at 0% 100%, rgba(53, 208, 127, .11), transparent 30%),
+        linear-gradient(145deg, #24101a 0%, #17181d 52%, #111217 100%);
+    box-shadow:
+        0 22px 45px rgba(0, 0, 0, .24),
+        0 0 0 1px rgba(255, 255, 255, .02) inset;
+}
+
+.delivery-profile-page .delivery-password-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 5px;
+    background: linear-gradient(90deg, #8b1e45 0%, #ff2f76 52%, #35d07f 100%);
+}
+
+.delivery-profile-page .delivery-password-card::after {
+    content: "";
+    position: absolute;
+    width: 210px;
+    height: 210px;
+    right: -90px;
+    bottom: -105px;
+    border-radius: 50%;
+    background: rgba(255, 47, 118, .08);
+    filter: blur(2px);
+    pointer-events: none;
+}
+
+.delivery-profile-page .delivery-password-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+}
+
+.delivery-profile-page .delivery-password-icon {
+    flex: 0 0 auto;
+    border-color: rgba(255, 77, 136, .30);
+    background:
+        linear-gradient(145deg, rgba(255, 47, 118, .24), rgba(139, 30, 69, .26));
+    color: #ff6b9b;
+    box-shadow:
+        0 10px 24px rgba(255, 47, 118, .12),
+        0 0 26px rgba(255, 47, 118, .08);
+}
+
+.delivery-profile-page .delivery-password-header span {
+    color: #ff6b9b;
+}
+
+.delivery-profile-page .delivery-password-header h2 {
+    color: #ffffff;
+}
+
+.delivery-profile-page .delivery-password-header p {
+    color: #c6c7cd;
+}
+
+.delivery-profile-page .delivery-password-form {
+    position: relative;
+    z-index: 1;
+}
+
+.delivery-profile-page .delivery-password-form .delivery-form-label {
+    color: #f2f2f4;
+    font-weight: 800;
+}
+
+.delivery-profile-page .delivery-password-input input {
+    min-height: 46px;
+    border: 1px solid #3b3037;
+    background: rgba(9, 10, 13, .72);
+    color: #ffffff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.delivery-profile-page .delivery-password-input input::placeholder {
+    color: #70737c;
+}
+
+.delivery-profile-page .delivery-password-input input:focus {
+    border-color: rgba(255, 77, 136, .68);
+    background: rgba(13, 14, 18, .92);
+    color: #ffffff;
+    box-shadow:
+        0 0 0 4px rgba(255, 47, 118, .12),
+        0 12px 24px rgba(0, 0, 0, .16);
+}
+
+.delivery-profile-page .delivery-password-input > i:first-child {
+    color: #ff4d88;
+}
+
+.delivery-profile-page .delivery-password-toggle {
+    color: #b5a9b0;
+}
+
+.delivery-profile-page .delivery-password-toggle:hover {
+    background: rgba(255, 47, 118, .12);
+    color: #ffffff;
+}
+
+.delivery-profile-page .delivery-password-footer {
+    border-top-color: rgba(255, 255, 255, .10);
+}
+
+.delivery-profile-page .delivery-password-tip {
+    color: #c1c3ca;
+}
+
+.delivery-profile-page .delivery-password-tip i {
+    color: #35d07f;
+}
+
+.delivery-profile-page .delivery-password-save {
+    border-color: rgba(255, 77, 136, .28);
+    background: linear-gradient(135deg, #8b1e45 0%, #ff2f76 100%);
+    box-shadow:
+        0 13px 24px rgba(139, 30, 69, .28),
+        0 0 24px rgba(255, 47, 118, .08),
+        inset 0 1px 0 rgba(255, 255, 255, .15);
+}
+
+.delivery-profile-page .delivery-password-save:hover {
+    box-shadow:
+        0 17px 30px rgba(139, 30, 69, .34),
+        0 0 28px rgba(255, 47, 118, .12),
+        inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+/* Alertas del bloque de seguridad sobre fondo oscuro. */
+.delivery-profile-page .delivery-password-alert.success {
+    border-color: rgba(53, 208, 127, .28);
+    background: rgba(53, 208, 127, .10);
+    color: #b7f6ce;
+}
+
+.delivery-profile-page .delivery-password-alert.error {
+    border-color: rgba(255, 107, 122, .30);
+    background: rgba(220, 53, 69, .10);
+    color: #ffc0c8;
+}
+
+/* Evita que la distribución lateral se sienta comprimida. */
+@media (min-width: 1200px) {
+    .delivery-profile-page > .row {
+        align-items: stretch;
+    }
+
+    .delivery-profile-page .delivery-password-card,
+    .delivery-profile-page .delivery-profile-card {
+        min-height: 100%;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .delivery-profile-page > .row > .col-12.col-xl-6 {
+        display: block;
+    }
+
+    .delivery-profile-page .delivery-profile-card,
+    .delivery-profile-page .delivery-password-card {
+        height: auto;
+    }
+
+    .delivery-profile-page .delivery-profile-form {
+        display: block;
+    }
+
+    .delivery-profile-page .delivery-profile-form-footer {
+        margin-top: 1.25rem;
+    }
+}
+
+
+/* =========================================================
+   DELIVERY UX POLISH — MICROINTERACCIONES
+   ========================================================= */
+
+[data-delivery-interactive] {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition:
+        transform .18s ease,
+        box-shadow .22s ease,
+        border-color .22s ease,
+        background-color .22s ease,
+        color .22s ease,
+        filter .22s ease;
+}
+
+[data-delivery-interactive]:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+[data-delivery-interactive]:active,
+[data-delivery-interactive].delivery-is-pressed {
+    transform: translateY(1px) scale(.975);
+    filter: brightness(.96);
+    transition-duration: .08s;
+}
+
+[data-delivery-interactive]:focus-visible {
+    outline: 2px solid rgba(255, 77, 136, .95);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px rgba(139, 30, 69, .18);
+}
+
+.delivery-ripple {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .24);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: deliveryRipple .5s ease-out forwards;
+    z-index: 10;
+}
+
+@keyframes deliveryRipple {
+    to {
+        transform: translate(-50%, -50%) scale(18);
+        opacity: 0;
+    }
+}
+
+/* Navegación */
+.delivery-nav-link {
+    border: 1px solid transparent;
+}
+
+.delivery-nav-link:hover {
+    border-color: rgba(255, 77, 136, .18);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .18);
+}
+
+.delivery-nav-link.active {
+    box-shadow:
+        inset 3px 0 0 var(--delivery-pink),
+        0 8px 20px rgba(139, 30, 69, .16);
+}
+
+.delivery-brand-link:hover .delivery-brand-text strong {
+    letter-spacing: .2px;
+}
+
+.delivery-sidebar-close:hover,
+.delivery-menu-toggle:hover {
+    box-shadow: 0 8px 20px rgba(255, 47, 118, .18);
+}
+
+.delivery-control-button {
+    min-height: 42px;
+    font-weight: 700;
+}
+
+/* Botones del dashboard */
+.delivery-dashboard-btn-primary,
+.delivery-dashboard-btn-secondary,
+.delivery-stat-link {
+    will-change: transform;
+}
+
+.delivery-dashboard-btn-primary:hover,
+.delivery-dashboard-btn-secondary:hover {
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .24);
+}
+
+.delivery-stat-link {
+    display: block;
+}
+
+.delivery-stat-link .delivery-stat-card {
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+.delivery-stat-link:hover .delivery-stat-card {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, .28);
+}
+
+/* Cola */
+.delivery-orders-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.delivery-queue-refresh {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border: 1px solid rgba(255, 77, 136, .26);
+    border-radius: 12px;
+    background: linear-gradient(135deg, #24101a, #351022);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
+}
+
+.delivery-queue-refresh i {
+    font-size: 17px;
+}
+
+.delivery-queue-refresh:hover {
+    border-color: rgba(255, 77, 136, .6);
+    box-shadow: 0 12px 26px rgba(139, 30, 69, .28);
+}
+
+.delivery-queue-refresh.refreshing,
+.delivery-queue-refresh.delivery-refreshing {
+    cursor: wait;
+    opacity: .82;
+}
+
+.delivery-refresh-spin {
+    animation: deliveryRefreshSpin .55s linear infinite;
+}
+
+@keyframes deliveryRefreshSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.delivery-queue-card {
+    position: relative;
+}
+
+.delivery-queue-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+        linear-gradient(115deg, transparent 20%, rgba(255,255,255,.045) 45%, transparent 70%);
+    transform: translateX(-110%);
+    transition: transform .8s ease;
+}
+
+.delivery-queue-card:hover::before {
+    transform: translateX(110%);
+}
+
+/* Detalle */
+.delivery-show-back,
+.delivery-map-external,
+.delivery-contact-phone-link,
+.delivery-delivered-view-link,
+.delivery-my-phone a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.delivery-show-card {
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+.delivery-show-card:hover {
+    border-color: rgba(255, 77, 136, .16);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .24);
+}
+
+.delivery-show-back:hover,
+.delivery-map-external:hover,
+.delivery-contact-phone-link:hover,
+.delivery-delivered-view-link:hover,
+.delivery-my-phone a:hover {
+    color: #fff;
+}
+
+/* Tarjetas de pedidos */
+.delivery-my-order-card,
+.delivery-delivered-card,
+.delivery-history-item,
+.delivery-financial-card,
+.delivery-dashboard-status {
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+.delivery-my-order-card:hover,
+.delivery-delivered-card:hover,
+.delivery-financial-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, .22);
+}
+
+.delivery-history-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(255, 77, 136, .2);
+}
+
+/* Tabs */
+.delivery-my-tab {
+    transition:
+        transform .16s ease,
+        background-color .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.delivery-my-tab:hover {
+    transform: translateY(-1px);
+}
+
+.delivery-my-tab:active {
+    transform: scale(.97);
+}
+
+/* Formularios del perfil */
+.delivery-interactive-field:hover,
+.delivery-file-wrapper:hover {
+    border-color: rgba(255, 77, 136, .45);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .16);
+}
+
+.delivery-password-toggle {
+    transition:
+        transform .15s ease,
+        background-color .2s ease,
+        color .2s ease;
+}
+
+.delivery-password-toggle:hover {
+    transform: scale(1.08);
+    color: #fff;
+}
+
+.delivery-password-toggle:active {
+    transform: scale(.94);
+}
+
+/* Estado visual de carga */
+.delivery-button-loading {
+    pointer-events: none;
+    transform: scale(.98);
+    opacity: .82;
+}
+
+/* Mejora para pantallas táctiles */
+@media (hover: none) {
+    [data-delivery-interactive]:hover {
+        transform: none;
+        filter: none;
+    }
+
+    [data-delivery-interactive]:active,
+    [data-delivery-interactive].delivery-is-pressed {
+        transform: scale(.975);
+        filter: brightness(.96);
+    }
+
+    .delivery-stat-link:active .delivery-stat-card,
+    .delivery-my-order-card:active,
+    .delivery-delivered-card:active {
+        transform: scale(.985);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .delivery-orders-actions {
+        width: 100%;
+    }
+
+    .delivery-queue-refresh {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   DELIVERY UX — BOTÓN DE CERRAR SESIÓN
+   ---------------------------------------------------------
+   Este bloque final corrige la regla anterior de 34px x 34px
+   y convierte el cierre de sesión en un control visible,
+   cómodo y coherente con el resto del sidebar.
+   ========================================================= */
+
+.delivery-sidebar .delivery-logout-form {
+    margin: 12px 15px 18px;
+}
+
+.delivery-sidebar .delivery-logout {
+    width: 100%;
+    min-height: 50px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 11px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 77, 136, .16);
+    border-radius: 14px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139, 30, 69, .16),
+            rgba(255, 47, 118, .05)
+        );
+    color: #f0dbe3;
+    font-size: .82rem;
+    font-weight: 700;
+    text-align: left;
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .035);
+}
+
+.delivery-sidebar .delivery-logout-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(255, 47, 118, .12);
+    color: #ff6b9b;
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        color .2s ease;
+}
+
+.delivery-sidebar .delivery-logout-icon i {
+    font-size: 17px;
+}
+
+.delivery-sidebar .delivery-logout-copy {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.delivery-sidebar .delivery-logout-copy strong {
+    display: block;
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.delivery-sidebar .delivery-logout-copy small {
+    display: block;
+    color: #8f919a;
+    font-size: .66rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.delivery-sidebar .delivery-logout-arrow {
+    flex: 0 0 auto;
+    color: #777b85;
+    font-size: .72rem;
+    transition:
+        transform .2s ease,
+        color .2s ease;
+}
+
+.delivery-sidebar .delivery-logout:hover {
+    border-color: rgba(255, 77, 136, .38);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139, 30, 69, .30),
+            rgba(255, 47, 118, .10)
+        );
+    color: #fff;
+    box-shadow:
+        0 14px 28px rgba(0, 0, 0, .24),
+        0 0 0 1px rgba(255, 77, 136, .04) inset;
+    transform: translateY(-2px);
+}
+
+.delivery-sidebar .delivery-logout:hover .delivery-logout-icon {
+    transform: scale(1.06);
+    background: rgba(255, 47, 118, .20);
+    color: #fff;
+}
+
+.delivery-sidebar .delivery-logout:hover .delivery-logout-arrow {
+    transform: translateX(3px);
+    color: #ff6b9b;
+}
+
+.delivery-sidebar .delivery-logout:active {
+    transform: translateY(1px) scale(.985);
+}
+
+.delivery-sidebar .delivery-logout:focus-visible {
+    outline: 2px solid rgba(255, 77, 136, .9);
+    outline-offset: 3px;
+    box-shadow:
+        0 0 0 5px rgba(139, 30, 69, .18),
+        0 10px 22px rgba(0, 0, 0, .2);
+}
+
+.delivery-sidebar .delivery-logout:disabled {
+    cursor: wait;
+    opacity: .72;
+}
+
+/* =========================================================
+   DELIVERY UX — BOTÓN DE DISPONIBILIDAD
+   ========================================================= */
+
+.delivery-sidebar .delivery-status-box {
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.delivery-sidebar .delivery-status-box:hover {
+    transform: translateY(-1px);
+    border-color: rgba(53, 208, 127, .24);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+}
+
+.delivery-sidebar .delivery-status-toggle {
+    width: 100%;
+    min-height: 42px;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 11px;
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.delivery-sidebar .delivery-status-toggle i {
+    font-size: .95rem;
+}
+
+@media (max-width: 575.98px) {
+    .delivery-sidebar .delivery-logout-form {
+        margin: 12px 14px 16px;
+    }
+
+    .delivery-sidebar .delivery-logout {
+        min-height: 52px;
+        border-radius: 15px;
+    }
+
+    .delivery-sidebar .delivery-logout-copy strong {
+        font-size: .84rem;
+    }
+
+    .delivery-sidebar .delivery-logout-copy small {
+        font-size: .68rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-sidebar .delivery-logout,
+    .delivery-sidebar .delivery-logout-icon,
+    .delivery-sidebar .delivery-logout-arrow,
+    .delivery-sidebar .delivery-status-box {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
+   AJUSTE FINAL — DELIVERY RESPONSIVE Y COMPACTO
+   ========================================================= */
+
+/* Evitar desbordamientos horizontales en cualquier pantalla. */
+.delivery-wrapper,
+.delivery-main,
+.delivery-content,
+.delivery-content > * {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Estado de disponibilidad compacto en el sidebar. */
+.delivery-status-box {
+    margin: 10px 14px 14px;
+    padding: 9px 10px;
+    min-height: 42px;
+    gap: 7px;
+    border-radius: 11px;
+}
+
+.delivery-status-info {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 7px;
+}
+
+.delivery-status-info > div {
+    min-width: 0;
+}
+
+.delivery-status-info strong {
+    margin: 0;
+    color: #ffffff;
+    font-size: 10px;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+.delivery-status-box small {
+    display: none !important;
+}
+
+.delivery-status-form {
+    flex: 0 0 auto;
+}
+
+.delivery-status-toggle {
+    min-width: 0;
+    min-height: 30px;
+    padding: 6px 9px;
+    gap: 5px;
+    border-radius: 8px;
+    font-size: 9px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.delivery-status-toggle i {
+    font-size: 12px;
+}
+
+/* El JavaScript del panel usa .show; lo dejamos explícito también en el responsive final. */
+@media (max-width: 991.98px) {
+    .delivery-sidebar.show {
+        transform: translateX(0);
+        box-shadow: 20px 0 50px rgba(0,0,0,.35);
+    }
+
+    .delivery-main {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .delivery-content {
+        width: 100%;
+    }
+
+    .delivery-sidebar {
+        max-width: calc(100vw - 24px);
+    }
+}
+
+/* Tablet / móvil: reducir espacios sin perder jerarquía. */
+@media (max-width: 767.98px) {
+    .delivery-content {
+        padding: 16px 12px;
+    }
+
+    .delivery-topbar {
+        min-height: 64px;
+        padding: 0 12px;
+    }
+
+    .delivery-page-heading {
+        min-width: 0;
+    }
+
+    .delivery-page-heading h1 {
+        max-width: 58vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 18px;
+    }
+
+    .delivery-page-heading span {
+        max-width: 58vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .delivery-dashboard {
+        width: 100%;
+    }
+
+    .delivery-dashboard-hero {
+        padding: 20px 16px;
+        border-radius: 17px;
+    }
+
+    .delivery-dashboard-title {
+        font-size: 1.65rem;
+        line-height: 1.15;
+    }
+
+    .delivery-dashboard-text {
+        font-size: .85rem;
+        line-height: 1.45;
+    }
+
+    .delivery-dashboard-hero-visual {
+        min-height: 205px;
+        margin-top: 4px;
+    }
+
+    .delivery-bike-icon {
+        width: 92px;
+        height: 92px;
+        font-size: 2.7rem;
+    }
+
+    .delivery-hero-circle.circle-one {
+        width: 190px;
+        height: 190px;
+    }
+
+    .delivery-hero-circle.circle-two {
+        width: 145px;
+        height: 145px;
+    }
+
+    .delivery-hero-circle.circle-three {
+        width: 105px;
+        height: 105px;
+    }
+
+    .delivery-floating-card {
+        min-width: 118px;
+        padding: 9px;
+        gap: 7px;
+        border-radius: 11px;
+    }
+
+    .delivery-floating-card strong {
+        font-size: 1rem;
+    }
+
+    .delivery-floating-card span {
+        font-size: .7rem;
+    }
+
+    .delivery-floating-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+    }
+
+    .delivery-orders-header,
+    .delivery-my-orders-header,
+    .delivery-show-header {
+        gap: 14px;
+    }
+
+    .delivery-orders-heading,
+    .delivery-my-orders-title {
+        gap: 11px;
+    }
+
+    .delivery-orders-icon,
+    .delivery-my-orders-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    .delivery-orders-heading h1,
+    .delivery-my-orders-title h1 {
+        font-size: 22px;
+        line-height: 1.15;
+    }
+
+    .delivery-orders-heading p,
+    .delivery-my-orders-title p {
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .delivery-orders-info {
+        margin-bottom: 18px;
+        padding: 12px;
+        border-radius: 13px;
+    }
+
+    .delivery-my-order-card,
+    .delivery-show-card,
+    .delivery-action-card {
+        border-radius: 15px;
+    }
+
+    .delivery-my-order-card {
+        width: 100%;
+    }
+
+    .delivery-my-actions {
+        grid-template-columns: 1fr !important;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .delivery-action-card {
+        align-items: flex-start;
+        padding: 14px;
+        gap: 11px;
+    }
+
+    .delivery-action-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        border-radius: 13px;
+        font-size: 19px;
+    }
+
+    .delivery-action-content {
+        width: auto;
+    }
+
+    .delivery-action-content h2 {
+        font-size: 17px;
+    }
+
+    .delivery-action-content p {
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .delivery-action-form,
+    .delivery-action-button {
+        width: 100%;
+    }
+
+    .delivery-show-header-date {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .delivery-show-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px;
+    }
+
+    .delivery-financial-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+
+    .delivery-footer {
+        padding: 14px 12px;
+        gap: 6px;
+    }
+}
+
+/* Teléfonos pequeños: prioridad absoluta a legibilidad y ajuste. */
+@media (max-width: 575.98px) {
+    .delivery-sidebar {
+        width: 272px;
+        padding: 14px 12px;
+    }
+
+    .delivery-brand {
+        margin-bottom: 2px;
+    }
+
+    .delivery-brand-text strong {
+        font-size: 12px;
+    }
+
+    .delivery-brand-text span {
+        font-size: 9px;
+    }
+
+    .delivery-status-box {
+        margin: 8px 0 11px;
+        padding: 8px;
+    }
+
+    .delivery-status-toggle {
+        width: 30px;
+        height: 30px;
+        min-height: 30px;
+        padding: 0;
+        border-radius: 8px;
+    }
+
+    .delivery-status-toggle span {
+        display: none;
+    }
+
+    .delivery-nav {
+        padding: 5px 4px;
+    }
+
+    .delivery-nav-link {
+        min-height: 42px;
+        padding: 9px 10px;
+    }
+
+    .delivery-nav-title {
+        margin: 10px 6px 6px;
+        font-size: .58rem;
+    }
+
+    .delivery-user-card {
+        padding: 9px;
+        gap: 8px;
+    }
+
+    .delivery-user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .delivery-user-info strong {
+        max-width: 150px;
+        font-size: 10px;
+    }
+
+    .delivery-user-info span {
+        font-size: 8px;
+    }
+
+    .delivery-content {
+        padding: 13px 10px;
+    }
+
+    .delivery-topbar {
+        min-height: 60px;
+        padding: 0 10px;
+    }
+
+    .delivery-menu-toggle {
+        width: 38px;
+        height: 38px;
+    }
+
+    .delivery-page-heading h1 {
+        max-width: 55vw;
+        font-size: 16px;
+    }
+
+    .delivery-page-heading span {
+        max-width: 55vw;
+        font-size: 9px;
+    }
+
+    .delivery-topbar-user-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .delivery-dashboard-hero {
+        padding: 16px 13px;
+        border-radius: 15px;
+    }
+
+    .delivery-dashboard-title {
+        font-size: 1.45rem;
+    }
+
+    .delivery-dashboard-text {
+        font-size: .8rem;
+    }
+
+    .delivery-dashboard-hero-visual {
+        min-height: 175px;
+    }
+
+    .delivery-bike-icon {
+        width: 78px;
+        height: 78px;
+        font-size: 2.2rem;
+    }
+
+    .delivery-floating-card {
+        min-width: 102px;
+        padding: 7px;
+        gap: 6px;
+        border-radius: 9px;
+    }
+
+    .delivery-floating-card strong {
+        font-size: .9rem;
+    }
+
+    .delivery-floating-card span {
+        font-size: .62rem;
+    }
+
+    .delivery-floating-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+    }
+
+    .delivery-orders-counter {
+        width: 100%;
+        min-width: 0 !important;
+    }
+
+    .delivery-orders-info-status {
+        margin-left: 0 !important;
+    }
+
+    .delivery-orders-summary {
+        gap: 7px;
+        margin-bottom: 12px;
+    }
+
+    .delivery-orders-summary h2 {
+        font-size: 18px;
+    }
+
+    .delivery-my-section {
+        margin-top: 22px;
+    }
+
+    .delivery-my-section-header {
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .delivery-my-section-header h2 {
+        font-size: 18px;
+    }
+
+    .delivery-my-actions {
+        padding: 10px;
+    }
+
+    .delivery-my-detail-btn,
+    .delivery-my-start-btn,
+    .delivery-my-deliver-btn,
+    .delivery-my-cancel-btn {
+        min-height: 42px;
+        font-size: 10px;
+    }
+
+    .delivery-show-header h1 {
+        font-size: 19px;
+    }
+
+    .delivery-show-header p {
+        font-size: 11px;
+    }
+
+    .delivery-show-card-header {
+        padding: 14px;
+    }
+
+    .delivery-progress {
+        padding: 4px 10px 12px;
+    }
+
+    .delivery-map {
+        height: 300px !important;
+        min-height: 300px !important;
+    }
+
+    .delivery-action-card {
+        padding: 12px;
+    }
+
+    .delivery-action-content h2 {
+        font-size: 16px;
+    }
+
+    .delivery-action-content p {
+        font-size: 10px;
+    }
+
+    .delivery-financial-card {
+        padding: 12px;
+    }
+
+    .delivery-profile-card {
+        padding: 12px;
+    }
+}
+
+/* Nunca permitir que formularios o tarjetas creen scroll horizontal. */
+.delivery-content form,
+.delivery-content .row,
+.delivery-content .card,
+.delivery-content table {
+    max-width: 100%;
+}
+
+.delivery-content .table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 575.98px) {
+    .delivery-content .row {
+        --bs-gutter-x: .75rem;
+        --bs-gutter-y: .75rem;
+    }
+
+    .sabor-date-filter {
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .sabor-date-filter-header {
+        margin-bottom: 9px;
+    }
+
+    .sabor-date-filter-help {
+        font-size: .68rem;
+        line-height: 1.35;
     }
 }
