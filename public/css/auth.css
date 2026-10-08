@@ -812,6 +812,35 @@ a {
     to { transform: rotate(360deg); }
 }
 
+.sx-auth-ripple {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .38);
+    pointer-events: none;
+    transform: scale(1);
+    opacity: .85;
+    animation: sxAuthRipple .62s ease-out forwards;
+}
+
+@keyframes sxAuthRipple {
+    from {
+        transform: scale(1);
+        opacity: .45;
+    }
+    to {
+        transform: scale(32);
+        opacity: 0;
+    }
+}
+
+/* Realce sutil del campo activo */
+.sx-auth-field.is-focused .sx-auth-input {
+    border-color: rgba(196, 44, 99, .78);
+}
+
 /* ==========================================================================
    DIVISOR + GOOGLE
    ========================================================================== */
