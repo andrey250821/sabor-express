@@ -1,3 +1,9 @@
+@php
+    $configuracion = $configuracion ?? \App\Models\Configuracion::first();
+    $nombreRestaurante = $configuracion?->nombre_restaurante ?: 'Sabor Express';
+    $esRegistro = request()->routeIs('register') || request()->is('register');
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -8,7 +14,7 @@
 
     <title>
         {{ $configuracion->nombre_restaurante ?? config('app.name', 'Sabor Express') }}
-        · {{ request()->routeIs('register') ? 'Registro' : 'Iniciar sesión' }}
+        · {{ $esRegistro ? 'Registro' : 'Iniciar sesión' }}
     </title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -30,8 +36,6 @@
 <body class="sx-auth-page">
 
     @php
-        $configuracion = $configuracion ?? \App\Models\Configuracion::first();
-        $nombreRestaurante = $configuracion?->nombre_restaurante ?: 'Sabor Express';
         $logoRestaurante = $configuracion?->logo
             ? asset('storage/' . ltrim($configuracion->logo, '/'))
             : null;
@@ -72,17 +76,17 @@
 
                 <div class="sx-auth-welcome">
                     <span class="sx-auth-eyebrow">
-                        {{ request()->routeIs('register') ? 'NUEVO CLIENTE' : 'BIENVENIDO DE NUEVO' }}
+                        {{ $esRegistro ? 'NUEVO CLIENTE' : 'BIENVENIDO DE NUEVO' }}
                     </span>
 
                     <h1>
-                        {{ request()->routeIs('register')
+                        {{ $esRegistro
                             ? 'Regístrate en ' . $nombreRestaurante
                             : 'Inicia sesión en ' . $nombreRestaurante }}
                     </h1>
 
                     <p>
-                        {{ request()->routeIs('register')
+                        {{ $esRegistro
                             ? 'Crea tu cuenta para pedir en línea, guardar tus datos y seguir tus entregas.'
                             : 'Accede a tu cuenta para continuar con tus pedidos y consultar tus entregas.' }}
                     </p>
