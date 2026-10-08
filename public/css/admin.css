@@ -2447,12 +2447,6 @@ img {
     color: #222;
 }
 
-.admin-delivery-map .leaflet-marker-icon.admin-mapa-icono-cliente,
-.admin-delivery-map .leaflet-marker-icon.admin-mapa-icono-delivery {
-    background: transparent !important;
-    border: none !important;
-}
-
 .admin-mapa-icono-cliente {
     display: flex !important;
     align-items: center;
