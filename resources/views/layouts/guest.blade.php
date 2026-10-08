@@ -296,6 +296,68 @@
         const password = document.getElementById('password');
         const strength = document.getElementById('sx-password-strength');
 
+
+        /*
+         * Interacciones visuales de Sabor Express:
+         * - efecto ripple en botones;
+         * - estado de carga al enviar login/registro;
+         * - pequeña animación en campos cuando reciben atención.
+         */
+        document.querySelectorAll('.sx-auth-submit, .sx-auth-google').forEach(function (button) {
+
+            button.addEventListener('pointerdown', function (event) {
+
+                const rect = button.getBoundingClientRect();
+                const ripple = document.createElement('span');
+
+                ripple.className = 'sx-auth-ripple';
+
+                ripple.style.left = (event.clientX - rect.left) + 'px';
+                ripple.style.top = (event.clientY - rect.top) + 'px';
+
+                button.appendChild(ripple);
+
+                window.setTimeout(function () {
+                    ripple.remove();
+                }, 650);
+
+            });
+
+        });
+
+        document.querySelectorAll('.sx-auth-form').forEach(function (form) {
+
+            form.addEventListener('submit', function () {
+
+                const submit = form.querySelector('.sx-auth-submit');
+
+                if (!submit) {
+                    return;
+                }
+
+                submit.classList.add('is-loading');
+                submit.setAttribute('aria-disabled', 'true');
+
+                submit.innerHTML =
+                    '<i class="bi bi-arrow-repeat"></i>' +
+                    '<span>Procesando...</span>';
+
+            });
+
+        });
+
+        document.querySelectorAll('.sx-auth-input').forEach(function (input) {
+
+            input.addEventListener('focus', function () {
+                input.closest('.sx-auth-field')?.classList.add('is-focused');
+            });
+
+            input.addEventListener('blur', function () {
+                input.closest('.sx-auth-field')?.classList.remove('is-focused');
+            });
+
+        });
+
         if (password && strength) {
 
             password.addEventListener('input', function () {
