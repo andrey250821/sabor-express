@@ -603,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                 actualizarEstado(
-                    '📡 Esperando la ubicación del repartidor...'
+                    '📡 Esperando la ubicación del Delivery...'
                 );
 
                 return;
