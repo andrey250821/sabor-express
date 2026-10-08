@@ -124,9 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
             longitudCliente
         ],
         {
-            icon: iconoCliente
+            icon: iconoCliente,
+            zIndexOffset: 1000,
+            riseOnHover: true
         }
     ).addTo(mapa);
+
+    marcadorCliente.bindTooltip('Cliente', {
+        permanent: true,
+        direction: 'right',
+        offset: [12, -12],
+        className: 'admin-mapa-etiqueta admin-mapa-etiqueta-cliente',
+        opacity: 1
+    });
 
 
     marcadorCliente.bindPopup(`
@@ -640,8 +650,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             deliveryLongitud
                         ],
                         {
-                            icon:
-                                iconoDelivery
+                            icon: iconoDelivery,
+                            zIndexOffset: 1100,
+                            riseOnHover: true
                         }
                     ).addTo(mapa);
 
@@ -659,6 +670,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     </div>
                 `);
+
+                marcadorDelivery.bindTooltip('Delivery', {
+                    permanent: true,
+                    direction: 'right',
+                    offset: [14, 0],
+                    className: 'admin-mapa-etiqueta admin-mapa-etiqueta-delivery',
+                    opacity: 1
+                });
 
             } else {
 
