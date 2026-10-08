@@ -20,9 +20,7 @@
 
     <link
         rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIINfQ3tN+0W7zjJ0LzO5S2M1Jc5t6l1S0="
-        crossorigin="">
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -199,11 +197,7 @@
 
     </main>
 
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin="">
-    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
