@@ -332,6 +332,13 @@ Route::middleware(['auth', 'role:Cliente'])
             [ClientePerfilController::class, 'updatePassword']
         )->name('cliente.configuracion.password');
 
+        Route::patch(
+            '/configuracion/password/google',
+            [ClientePerfilController::class, 'setGooglePassword']
+        )->name('cliente.configuracion.password.google');
+
+
+
 
         /*
         |--------------------------------------------------------------------------
