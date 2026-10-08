@@ -138,61 +138,115 @@
                             <i class="bi bi-shield-lock-fill"></i>
                         </div>
                         <div>
-                            <h2 class="h4 mb-1">Cambiar contraseña</h2>
-                            <p class="text-muted mb-0">Usa tu contraseña actual para definir una nueva.</p>
+                            @if($user->google_id)
+                                <h2 class="h4 mb-1">Crear contraseña de Sabor Express</h2>
+                                <p class="text-muted mb-0">
+                                    Tu cuenta está vinculada con Google. Define una contraseña propia para poder ingresar también con tu Gmail.
+                                </p>
+                            @else
+                                <h2 class="h4 mb-1">Cambiar contraseña</h2>
+                                <p class="text-muted mb-0">Usa tu contraseña actual para definir una nueva.</p>
+                            @endif
                         </div>
                     </div>
 
-                    <form action="{{ route('cliente.configuracion.password') }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-
-                        <div class="mb-3">
-                            <label for="current_password" class="form-label fw-semibold">Contraseña actual</label>
-                            <input
-                                id="current_password"
-                                name="current_password"
-                                type="password"
-                                class="form-control @error('current_password', 'passwordUpdate') is-invalid @enderror"
-                                autocomplete="current-password"
-                                required>
-                            @error('current_password', 'passwordUpdate')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                    @if($user->google_id)
+                        <div class="alert alert-info small">
+                            <i class="bi bi-google me-1"></i>
+                            La contraseña de Google no se comparte con Sabor Express. La contraseña que establezcas aquí será solo para iniciar sesión en este sistema.
                         </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label fw-semibold">Nueva contraseña</label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                class="form-control @error('password', 'passwordUpdate') is-invalid @enderror"
-                                autocomplete="new-password"
-                                minlength="8"
-                                required>
-                            @error('password', 'passwordUpdate')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        <form action="{{ route('cliente.configuracion.password.google') }}" method="POST">
+                            @csrf
+                            @method('PATCH')
 
-                        <div class="mb-4">
-                            <label for="password_confirmation" class="form-label fw-semibold">Confirmar nueva contraseña</label>
-                            <input
-                                id="password_confirmation"
-                                name="password_confirmation"
-                                type="password"
-                                class="form-control"
-                                autocomplete="new-password"
-                                minlength="8"
-                                required>
-                        </div>
+                            <div class="mb-3">
+                                <label for="google_password" class="form-label fw-semibold">Nueva contraseña</label>
+                                <input
+                                    id="google_password"
+                                    name="password"
+                                    type="password"
+                                    class="form-control @error('password', 'googlePassword') is-invalid @enderror"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required>
+                                @error('password', 'googlePassword')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <button type="submit" class="btn btn-warning">
-                            <i class="bi bi-key-fill me-1"></i>
-                            Actualizar contraseña
-                        </button>
-                    </form>
+                            <div class="mb-4">
+                                <label for="google_password_confirmation" class="form-label fw-semibold">Confirmar contraseña</label>
+                                <input
+                                    id="google_password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    class="form-control @error('password_confirmation', 'googlePassword') is-invalid @enderror"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required>
+                                @error('password_confirmation', 'googlePassword')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-key-fill me-1"></i>
+                                Guardar contraseña para correo
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('cliente.configuracion.password') }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+
+                            <div class="mb-3">
+                                <label for="current_password" class="form-label fw-semibold">Contraseña actual</label>
+                                <input
+                                    id="current_password"
+                                    name="current_password"
+                                    type="password"
+                                    class="form-control @error('current_password', 'passwordUpdate') is-invalid @enderror"
+                                    autocomplete="current-password"
+                                    required>
+                                @error('current_password', 'passwordUpdate')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-semibold">Nueva contraseña</label>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    class="form-control @error('password', 'passwordUpdate') is-invalid @enderror"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required>
+                                @error('password', 'passwordUpdate')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="password_confirmation" class="form-label fw-semibold">Confirmar nueva contraseña</label>
+                                <input
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    class="form-control"
+                                    autocomplete="new-password"
+                                    minlength="8"
+                                    required>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-key-fill me-1"></i>
+                                Actualizar contraseña
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
