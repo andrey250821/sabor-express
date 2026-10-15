@@ -35,5 +35,8 @@
     "passwords.reset": "Tu contraseña se restableció correctamente.",
     "passwords.throttled": "Espera un momento antes de volver a intentarlo.",
     "passwords.token": "El código para restablecer la contraseña no es válido o ha caducado.",
-    "passwords.user": "No encontramos una cuenta con ese correo electrónico."
+    "passwords.user": "No encontramos una cuenta con ese correo electrónico.",
+    "Dashboard": "Panel principal",
+    "Profile": "Perfil",
+    "You're logged in!": "Has iniciado sesión correctamente."
 }
