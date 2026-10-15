@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Configuracion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,15 +13,17 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Mostrar la pantalla de inicio de sesión.
      */
     public function create(): View
     {
-        return view('auth.login');
+        $configuracion = Configuracion::first();
+
+        return view('auth.login', compact('configuracion'));
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Procesar las credenciales de acceso.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -30,52 +33,55 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        // ADMINISTRADOR
+        /*
+         * Una cuenta inactiva no puede iniciar sesión.
+         * Esto mantiene coherente el estado administrado desde el panel.
+         */
+        if ($user->estado !== 'activo') {
+            Auth::logout();
+
+            return redirect('/login')
+                ->withErrors([
+                    'email' => 'Tu cuenta está inactiva. Contacta con el administrador.',
+                ]);
+        }
+
+        $user->loadMissing('role');
+
         if ($user->role && $user->role->nombre === 'Administrador') {
-
-            return redirect()
-                ->route('admin.dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
-        // CLIENTE
         if ($user->role && $user->role->nombre === 'Cliente') {
-
-            return redirect()
-                ->intended(route('cliente.dashboard.index'));
+            return redirect()->intended(
+                route('cliente.dashboard.index')
+            );
         }
 
-        // DELIVERY
         if ($user->role && $user->role->nombre === 'Delivery') {
-
-            return redirect()
-                ->route('delivery.dashboard');
+            return redirect()->route('delivery.dashboard');
         }
 
-        // COCINERO
         if ($user->role && $user->role->nombre === 'Cocinero') {
-
-            return redirect()
-                ->route('cocinero.dashboard');
+            return redirect()->route('cocinero.dashboard');
         }
 
-        // Si el usuario no tiene un rol válido
         Auth::logout();
 
         return redirect('/login')
             ->withErrors([
-                'email' => 'El usuario no tiene un rol válido.'
+                'email' => 'El usuario no tiene un rol válido.',
             ]);
     }
 
     /**
-     * Destroy an authenticated session.
+     * Cerrar la sesión autenticada.
      */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/login');

@@ -147,8 +147,7 @@ class GoogleController extends Controller
         } catch (\Exception $e) {
 
             return redirect('/login')->withErrors([
-                'email' => 'No fue posible iniciar sesión con Google: '
-                    . $e->getMessage(),
+                'email' => 'No fue posible iniciar sesión con Google. Intenta de nuevo.',
             ]);
         }
     }

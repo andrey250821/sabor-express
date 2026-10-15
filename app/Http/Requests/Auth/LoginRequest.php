@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -45,8 +46,14 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
+            $user = User::where('email', $this->string('email'))->first();
+
+            $mensaje = $user?->google_id
+                ? 'Esta cuenta fue registrada con Google. Inicia sesión con Google y establece una contraseña de Sabor Express en Configuración de perfil para poder acceder también con tu Gmail.'
+                : trans('auth.failed');
+
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => $mensaje,
             ]);
         }
 

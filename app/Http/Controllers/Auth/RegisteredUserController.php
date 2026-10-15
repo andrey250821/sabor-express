@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Configuracion;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -16,22 +17,25 @@ use Illuminate\View\View;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Mostrar la pantalla de registro.
      */
     public function create(): View
     {
-        return view('auth.register');
+        $configuracion = Configuracion::first();
+
+        return view('auth.register', compact('configuracion'));
     }
 
     /**
-     * Handle an incoming registration request.
+     * Procesar el registro de un nuevo cliente.
      *
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $datos = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'telefono' => ['required', 'string', 'max:50'],
             'email' => [
                 'required',
                 'string',
@@ -47,12 +51,16 @@ class RegisteredUserController extends Controller
             ],
         ]);
 
-        // Todo registro normal se crea como Cliente.
+        /*
+         * Los registros realizados mediante este formulario
+         * siempre corresponden al rol Cliente (ID 2).
+         */
         $user = User::create([
             'role_id' => 2,
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $datos['name'],
+            'email' => $datos['email'],
+            'telefono' => $datos['telefono'],
+            'password' => Hash::make($datos['password']),
             'estado' => 'activo',
         ]);
 
@@ -60,30 +68,26 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        /*
-         * Redirigir según el rol del usuario.
-         */
+        $user->loadMissing('role');
+
+        if ($user->role && $user->role->nombre === 'Cliente') {
+            return redirect()->intended(
+                route('cliente.dashboard.index')
+            );
+        }
+
         if ($user->role && $user->role->nombre === 'Administrador') {
-            return redirect()
-                ->route('admin.dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         if ($user->role && $user->role->nombre === 'Delivery') {
-            return redirect()
-                ->route('delivery.dashboard');
+            return redirect()->route('delivery.dashboard');
         }
 
         if ($user->role && $user->role->nombre === 'Cocinero') {
-            return redirect()
-                ->route('cocinero.dashboard');
+            return redirect()->route('cocinero.dashboard');
         }
 
-        if ($user->role && $user->role->nombre === 'Cliente') {
-            return redirect()
-                ->route('cliente.productos');
-        }
-
-        // Si por alguna razón no tiene un rol válido.
         Auth::logout();
 
         return redirect('/login')->withErrors([

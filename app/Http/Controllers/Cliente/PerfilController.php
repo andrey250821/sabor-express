@@ -87,6 +87,38 @@ class PerfilController extends Controller
     }
 
     /**
+     * Establecer una contraseña propia de Sabor Express para
+     * una cuenta que fue autenticada con Google.
+     *
+     * Google no entrega la contraseña del usuario a la aplicación.
+     * Por eso la contraseña del sistema debe ser definida aquí.
+     */
+    public function setGooglePassword(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if (!$user->google_id) {
+            return redirect()->route('cliente.configuracion.edit');
+        }
+
+        $datos = $request->validateWithBag('googlePassword', [
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+            ],
+        ]);
+
+        $user->update([
+            'password' => Hash::make($datos['password']),
+        ]);
+
+        return Redirect::route('cliente.configuracion.edit')
+            ->with('password_status', 'Contraseña de Sabor Express establecida correctamente. Ahora puedes iniciar sesión con tu Gmail y esta contraseña.');
+    }
+
+    /**
      * Actualizar contraseña del cliente.
      */
     public function updatePassword(Request $request): RedirectResponse
