@@ -305,9 +305,11 @@ class PedidoController extends Controller
                 'imagenes' => $imagenes,
             ]);
         } catch (\Throwable $e) {
+            report($e);
+
             return response()->json([
                 'ok' => false,
-                'message' => $e->getMessage(),
+                'message' => 'No se pudieron generar las imágenes de prueba del comprobante. Inténtalo nuevamente o revisa la configuración del OCR.',
             ], 422);
         }
     }
@@ -422,9 +424,11 @@ class PedidoController extends Controller
                 ),
             ]);
         } catch (\Throwable $e) {
+            report($e);
+
             return response()->json([
                 'ok' => false,
-                'message' => $e->getMessage(),
+                'message' => 'No se pudo calcular la tarifa de entrega. Verifica la ubicación seleccionada e inténtalo nuevamente.',
             ], 422);
         }
     }
@@ -458,9 +462,11 @@ class PedidoController extends Controller
                 (float) $request->longitud
             );
         } catch (\Throwable $e) {
+            report($e);
+
             return back()
                 ->withInput()
-                ->with('error', $e->getMessage());
+                ->with('error', 'No se pudo calcular la tarifa de entrega. Verifica la ubicación seleccionada e inténtalo nuevamente.');
         }
 
         DB::beginTransaction();
@@ -642,10 +648,11 @@ class PedidoController extends Controller
                 );
         } catch (\Throwable $e) {
             DB::rollBack();
+            report($e);
 
             return back()
                 ->withInput()
-                ->with('error', 'Error al procesar pedido: ' . $e->getMessage());
+                ->with('error', 'No se pudo procesar el pedido. Inténtalo nuevamente. Si el problema continúa, contacta con el administrador.');
         }
     }
 
