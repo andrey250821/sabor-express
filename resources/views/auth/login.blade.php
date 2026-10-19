@@ -87,13 +87,6 @@
                 <span>Recordarme</span>
             </label>
 
-            @if (Route::has('password.request'))
-                <a
-                    class="sx-auth-link"
-                    href="{{ route('password.request') }}">
-                    ¿Olvidaste tu contraseña?
-                </a>
-            @endif
 
         </div>
 
