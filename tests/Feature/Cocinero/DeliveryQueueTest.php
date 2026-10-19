@@ -15,15 +15,15 @@ class DeliveryQueueTest extends TestCase
 
     public function test_marcar_pedido_listo_procesa_la_cola_fifo_usando_created_at(): void
     {
-        $cocineroRole = Role::create([
+        $cocineroRole = Role::firstOrCreate([
             'nombre' => 'Cocinero',
         ]);
 
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -120,15 +120,15 @@ class DeliveryQueueTest extends TestCase
 
     public function test_pedido_marcado_listo_y_asignado_sigue_apareciendo_en_listos_de_cocina(): void
     {
-        $cocineroRole = Role::create([
+        $cocineroRole = Role::firstOrCreate([
             'nombre' => 'Cocinero',
         ]);
 
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 

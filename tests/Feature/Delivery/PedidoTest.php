@@ -17,11 +17,11 @@ class PedidoTest extends TestCase
 
     public function test_asigna_la_cola_fifo_a_los_deliverys_libres(): void
     {
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -94,11 +94,11 @@ class PedidoTest extends TestCase
 
     public function test_delivery_recibe_obligatoriamente_el_siguiente_pedido_al_entregar(): void
     {
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -185,11 +185,11 @@ class PedidoTest extends TestCase
         ));
 
         try {
-            $deliveryRole = Role::create([
+            $deliveryRole = Role::firstOrCreate([
                 'nombre' => 'Delivery',
             ]);
 
-            $clienteRole = Role::create([
+            $clienteRole = Role::firstOrCreate([
                 'nombre' => 'Cliente',
             ]);
 
@@ -353,11 +353,11 @@ class PedidoTest extends TestCase
 
     public function test_delivery_ocupado_no_recibe_otro_pedido_activo(): void
     {
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -407,11 +407,11 @@ class PedidoTest extends TestCase
 
     public function test_cola_solo_muestra_la_cantidad_y_no_los_detalles(): void
     {
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -451,11 +451,11 @@ class PedidoTest extends TestCase
 
     public function test_delivery_no_puede_ver_detalles_de_un_pedido_ajeno(): void
     {
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 

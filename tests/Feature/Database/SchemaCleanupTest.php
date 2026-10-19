@@ -30,7 +30,7 @@ class SchemaCleanupTest extends TestCase
 
     public function test_notificaciones_vigentes_solo_consideran_los_ultimos_tres_dias(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -49,9 +49,13 @@ class SchemaCleanupTest extends TestCase
             'tipo' => 'cliente',
             'evento' => 'prueba',
             'leido' => false,
-            'created_at' => Carbon::now()->subDays(4),
-            'updated_at' => Carbon::now()->subDays(4),
         ]);
+
+        $fechaVieja = Carbon::now()->subDays(4);
+        $vieja->forceFill([
+            'created_at' => $fechaVieja,
+            'updated_at' => $fechaVieja,
+        ])->save();
 
         $reciente = Notificacion::create([
             'user_id' => $user->id,
@@ -60,9 +64,13 @@ class SchemaCleanupTest extends TestCase
             'tipo' => 'cliente',
             'evento' => 'prueba',
             'leido' => false,
-            'created_at' => Carbon::now()->subDay(),
-            'updated_at' => Carbon::now()->subDay(),
         ]);
+
+        $fechaReciente = Carbon::now()->subDay();
+        $reciente->forceFill([
+            'created_at' => $fechaReciente,
+            'updated_at' => $fechaReciente,
+        ])->save();
 
         $ids = Notificacion::vigentes()
             ->pluck('id')
@@ -74,7 +82,7 @@ class SchemaCleanupTest extends TestCase
 
     public function test_comando_elimina_notificaciones_con_mas_de_tres_dias(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -89,9 +97,13 @@ class SchemaCleanupTest extends TestCase
             'tipo' => 'cliente',
             'evento' => 'prueba',
             'leido' => false,
-            'created_at' => Carbon::now()->subDays(4),
-            'updated_at' => Carbon::now()->subDays(4),
         ]);
+
+        $fechaVieja = Carbon::now()->subDays(4);
+        $vieja->forceFill([
+            'created_at' => $fechaVieja,
+            'updated_at' => $fechaVieja,
+        ])->save();
 
         $reciente = Notificacion::create([
             'user_id' => $user->id,
@@ -100,9 +112,13 @@ class SchemaCleanupTest extends TestCase
             'tipo' => 'cliente',
             'evento' => 'prueba',
             'leido' => false,
-            'created_at' => Carbon::now()->subDay(),
-            'updated_at' => Carbon::now()->subDay(),
         ]);
+
+        $fechaReciente = Carbon::now()->subDay();
+        $reciente->forceFill([
+            'created_at' => $fechaReciente,
+            'updated_at' => $fechaReciente,
+        ])->save();
 
         $this->artisan('notificaciones:limpiar')
             ->assertExitCode(0);

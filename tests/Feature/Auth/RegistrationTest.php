@@ -21,10 +21,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register_as_cliente(): void
     {
-        Role::create([
-            'id' => 2,
-            'nombre' => 'Cliente',
-        ]);
+        Role::firstOrCreate(['nombre' => 'Cliente']);
 
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -34,11 +31,11 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $this->assertAuthenticated();
-
         $response->assertRedirect(
             route('cliente.dashboard.index', absolute: false)
         );
+
+        $this->assertAuthenticated();
 
         $this->assertDatabaseHas('users', [
             'name' => 'Test User',
@@ -51,10 +48,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_user_must_provide_phone(): void
     {
-        Role::create([
-            'id' => 2,
-            'nombre' => 'Cliente',
-        ]);
+        Role::firstOrCreate(['nombre' => 'Cliente']);
 
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -70,10 +64,7 @@ class RegistrationTest extends TestCase
     {
         app()->setLocale('es');
 
-        Role::create([
-            'id' => 2,
-            'nombre' => 'Cliente',
-        ]);
+        Role::firstOrCreate(['nombre' => 'Cliente']);
 
         User::create([
             'role_id' => 2,

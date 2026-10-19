@@ -14,7 +14,7 @@ class EstadoTest extends TestCase
 
     public function test_cocinero_puede_activar_y_desactivar_su_estado(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Cocinero',
         ]);
 
@@ -43,7 +43,7 @@ class EstadoTest extends TestCase
 
     public function test_cocinero_inactivo_no_puede_acceder_a_la_parte_operativa(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Cocinero',
         ]);
 
@@ -62,11 +62,11 @@ class EstadoTest extends TestCase
 
     public function test_cocinero_no_puede_desactivarse_con_una_preparacion_activa(): void
     {
-        $cocineroRole = Role::create([
+        $cocineroRole = Role::firstOrCreate([
             'nombre' => 'Cocinero',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -91,6 +91,7 @@ class EstadoTest extends TestCase
             'total' => 40,
             'estado' => 'preparando',
             'cocinero_id' => $cocinero->id,
+            'direccion_entrega' => 'Dirección de prueba',
         ]);
 
         $this->from('/cocinero/perfil')
