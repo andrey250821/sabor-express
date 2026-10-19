@@ -41,7 +41,18 @@ jobs:
           extensions: mbstring, pdo_mysql, fileinfo
           coverage: none
 
-      - name: Instalar dependencias
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Instalar dependencias frontend y compilar Vite
+        run: |
+          npm ci
+          npm run build
+
+      - name: Instalar dependencias PHP
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Preparar el entorno
