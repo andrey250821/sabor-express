@@ -87,7 +87,6 @@
                 <span>Recordarme</span>
             </label>
 
-
         </div>
 
         <button type="submit" class="sx-auth-submit">
