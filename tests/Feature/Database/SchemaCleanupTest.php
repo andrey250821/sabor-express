@@ -30,7 +30,7 @@ class SchemaCleanupTest extends TestCase
 
     public function test_notificaciones_vigentes_solo_consideran_los_ultimos_tres_dias(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
@@ -74,7 +74,7 @@ class SchemaCleanupTest extends TestCase
 
     public function test_comando_elimina_notificaciones_con_mas_de_tres_dias(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 

@@ -5,46 +5,53 @@ namespace Tests\Feature\Cocinero;
 use App\Models\Pedido;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PedidoTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_cocinero_puede_cambiar_el_estado_del_pedido(): void
     {
-        $role = Role::firstOrCreate(
-            ['nombre' => 'Cocinero'],
-        );
+        $cocineroRole = Role::firstOrCreate(['nombre' => 'Cocinero']);
+        $clienteRole = Role::firstOrCreate(['nombre' => 'Cliente']);
 
-        $cocinero = User::where('email', 'testcocinero@saborexpress.com')->first();
+        $cocinero = User::create([
+            'role_id' => $cocineroRole->id,
+            'name' => 'Cocinero de prueba',
+            'email' => 'testcocinero@example.com',
+            'telefono' => '71234568',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
 
-        if (!$cocinero) {
-            $cocinero = User::create([
-                'role_id' => $role->id,
-                'name' => 'Cocinero de Prueba',
-                'email' => 'testcocinero@saborexpress.com',
-                'password' => 'password',
-                'estado' => 1,
-            ]);
-        }
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente de prueba',
+            'email' => 'cliente-cocinero@example.com',
+            'telefono' => '71234569',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
 
-        $pedido = Pedido::where('estado', 'pagado')->firstOrFail();
+        $pedido = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 50.00,
+            'estado' => 'pagado',
+            'direccion_entrega' => 'Dirección de prueba',
+        ]);
 
         $response = $this->actingAs($cocinero)
             ->put('/cocinero/pedidos/' . $pedido->id . '/preparar');
 
         $response->assertRedirect();
-
-        $pedido->refresh();
-
-        $this->assertEquals('preparando', $pedido->estado);
+        $this->assertSame('preparando', $pedido->fresh()->estado);
 
         $response = $this->actingAs($cocinero)
             ->put('/cocinero/pedidos/' . $pedido->id . '/listo');
 
         $response->assertRedirect();
-
-        $pedido->refresh();
-
-        $this->assertEquals('listo', $pedido->estado);
+        $this->assertSame('listo', $pedido->fresh()->estado);
     }
 }

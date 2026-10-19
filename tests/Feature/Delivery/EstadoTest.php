@@ -14,7 +14,7 @@ class EstadoTest extends TestCase
 
     public function test_delivery_puede_activar_y_desactivar_su_estado(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
@@ -43,7 +43,7 @@ class EstadoTest extends TestCase
 
     public function test_delivery_inactivo_no_puede_acceder_a_la_parte_operativa(): void
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
@@ -62,11 +62,11 @@ class EstadoTest extends TestCase
 
     public function test_delivery_no_puede_desactivarse_con_un_pedido_activo(): void
     {
-        $deliveryRole = Role::create([
+        $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
 
-        $clienteRole = Role::create([
+        $clienteRole = Role::firstOrCreate([
             'nombre' => 'Cliente',
         ]);
 
