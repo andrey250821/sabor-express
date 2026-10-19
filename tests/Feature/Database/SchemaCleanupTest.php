@@ -28,6 +28,11 @@ class SchemaCleanupTest extends TestCase
         $this->assertFalse(Schema::hasColumn('asignaciones_delivery', 'estado'));
     }
 
+    public function test_schema_no_contiene_tabla_de_recuperacion_de_contrasena(): void
+    {
+        $this->assertFalse(Schema::hasTable('password_reset_tokens'));
+    }
+
     public function test_notificaciones_vigentes_solo_consideran_los_ultimos_tres_dias(): void
     {
         $role = Role::firstOrCreate([
