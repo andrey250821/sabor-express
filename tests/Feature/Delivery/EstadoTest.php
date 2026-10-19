@@ -90,6 +90,7 @@ class EstadoTest extends TestCase
             'user_id' => $cliente->id,
             'total' => 50,
             'estado' => 'asignado',
+            'direccion_entrega' => 'Dirección de prueba',
         ]);
 
         AsignacionDelivery::create([

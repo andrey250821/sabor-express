@@ -62,6 +62,6 @@ OCR;
         $this->assertSame(15.0, $datos['monto']);
         $this->assertSame('98450004', $datos['referencia']);
         $this->assertSame('21/09/2026', $datos['fecha']);
-        $this->assertSame('Banco Banco Unión', $datos['banco']);
+        $this->assertSame('Banco Unión', $datos['banco']);
     }
 }

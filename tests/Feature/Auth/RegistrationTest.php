@@ -31,11 +31,11 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        $this->assertAuthenticated();
-
         $response->assertRedirect(
             route('cliente.dashboard.index', absolute: false)
         );
+
+        $this->assertAuthenticated();
 
         $this->assertDatabaseHas('users', [
             'name' => 'Test User',

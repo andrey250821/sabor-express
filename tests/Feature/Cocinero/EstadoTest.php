@@ -91,6 +91,7 @@ class EstadoTest extends TestCase
             'total' => 40,
             'estado' => 'preparando',
             'cocinero_id' => $cocinero->id,
+            'direccion_entrega' => 'Dirección de prueba',
         ]);
 
         $this->from('/cocinero/perfil')

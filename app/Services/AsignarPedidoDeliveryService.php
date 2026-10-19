@@ -52,6 +52,32 @@ class AsignarPedidoDeliveryService
                 return;
             }
 
+            // Balancear por los kilómetros entregados hoy en Bolivia.
+            // La cola de pedidos se mantiene FIFO; solo se ordenan los
+            // repartidores disponibles por su carga acumulada del día.
+            $fechaFiltro = app(FechaFiltroService::class);
+            [$inicioDia, $finDia] = $fechaFiltro->rangoUtc($fechaFiltro->hoy());
+
+            $distanciasAcumuladas = AsignacionDelivery::query()
+                ->join('pedidos', 'pedidos.id', '=', 'asignaciones_delivery.pedido_id')
+                ->where('pedidos.estado', 'entregado')
+                ->whereBetween('asignaciones_delivery.created_at', [$inicioDia, $finDia])
+                ->selectRaw(
+                    'asignaciones_delivery.delivery_id, COALESCE(SUM(pedidos.distancia_delivery_km), 0) AS distancia_acumulada'
+                )
+                ->groupBy('asignaciones_delivery.delivery_id')
+                ->pluck('distancia_acumulada', 'asignaciones_delivery.delivery_id');
+
+            $deliverysLibres = $deliverysLibres
+                ->sort(function (User $a, User $b) use ($distanciasAcumuladas): int {
+                    $distanciaA = (float) ($distanciasAcumuladas[$a->id] ?? 0);
+                    $distanciaB = (float) ($distanciasAcumuladas[$b->id] ?? 0);
+
+                    return ($distanciaA <=> $distanciaB)
+                        ?: ($a->id <=> $b->id);
+                })
+                ->values();
+
             foreach ($deliverysLibres as $delivery) {
                 /*
                  * Se obtiene la cola estrictamente por fecha de creación.
