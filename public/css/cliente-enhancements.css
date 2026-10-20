@@ -3225,3 +3225,25 @@
         font-size: 1.5rem !important;
     }
 }
+
+/* ==========================================================================
+   FIX: FILTRO DE CATEGORÍAS DEL CATÁLOGO DEL CLIENTE
+   Mantiene el control y las opciones legibles en el tema oscuro.
+   ========================================================================== */
+.cliente-app .cliente-productos-filtros select.cliente-categoria-select,
+.cliente-app .cliente-productos-filtros select.cliente-categoria-select:hover,
+.cliente-app .cliente-productos-filtros select.cliente-categoria-select:focus {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc;
+    background-color: #17181d !important;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(0, 0, 0, .24)) !important;
+    border: 1px solid rgba(255, 255, 255, .16) !important;
+    color-scheme: dark;
+}
+
+.cliente-app .cliente-productos-filtros select.cliente-categoria-select option,
+.cliente-app .cliente-productos-filtros select.cliente-categoria-select option:checked {
+    color: #f8fafc !important;
+    background-color: #17181d !important;
+}
+
