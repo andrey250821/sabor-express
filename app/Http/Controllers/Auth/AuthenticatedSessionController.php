@@ -32,21 +32,32 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
+        $user->loadMissing('role');
 
         /*
-         * Una cuenta inactiva no puede iniciar sesión.
-         * Esto mantiene coherente el estado administrado desde el panel.
+         * Delivery es el único rol que puede iniciar sesión con estado
+         * inactivo, únicamente para acceder al perfil y volver a activarse.
+         * Los demás roles deben ser reactivados por la administración.
          */
         if ($user->estado !== 'activo') {
+            if ($user->role && $user->role->nombre === 'Delivery') {
+                return redirect()
+                    ->route('delivery.perfil.edit')
+                    ->with(
+                        'error',
+                        'Tu cuenta de Delivery está inactiva. Usa el botón Activar de tu perfil para volver a recibir entregas.'
+                    );
+            }
+
             Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return redirect('/login')
                 ->withErrors([
-                    'email' => 'Tu cuenta está inactiva. Contacta con el administrador.',
+                    'email' => 'Tu cuenta está inactiva. Contacta con el Administrador para reactivarla.',
                 ]);
         }
-
-        $user->loadMissing('role');
 
         if ($user->role && $user->role->nombre === 'Administrador') {
             return redirect()->route('admin.dashboard');
