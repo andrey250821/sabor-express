@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Services\AsignarPedidoDeliveryService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Request as HttpRequest;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class PedidoTest extends TestCase
@@ -94,6 +96,10 @@ class PedidoTest extends TestCase
 
     public function test_delivery_recibe_obligatoriamente_el_siguiente_pedido_al_entregar(): void
     {
+        // Evita que la prueba haga solicitudes reales a Firebase.
+        config(['services.firebase.database_url' => 'https://firebase.test.example']);
+        Http::fake(['*' => Http::response([], 200)]);
+
         $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
         ]);
@@ -170,6 +176,16 @@ class PedidoTest extends TestCase
         $this->assertDatabaseMissing('asignaciones_delivery', [
             'pedido_id' => $pedidos[3]->id,
         ]);
+
+        // La finalización debe solicitar la eliminación de la ubicación
+        // temporal del pedido en Firebase sin tocar el servicio real.
+        Http::assertSent(function (HttpRequest $request) use ($pedido2): bool {
+            return $request->method() === 'DELETE'
+                && $request->url()
+                    === 'https://firebase.test.example/delivery_locations/'
+                        . $pedido2->id
+                        . '.json';
+        });
     }
 
     public function test_balancea_por_distancia_acumulada_de_hoy_entre_deliverys_libres(): void
