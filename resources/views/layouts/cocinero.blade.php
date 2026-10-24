@@ -134,50 +134,6 @@
 
         <div class="cocinero-sidebar-footer">
 
-            <div class="cocinero-status {{ Auth::user()->estado === 'activo' ? 'activo' : 'inactivo' }}">
-
-                <div class="cocinero-status-info">
-
-                    <span class="cocinero-status-dot"></span>
-
-                    <div>
-                        <strong>
-                            {{ Auth::user()->estado === 'activo' ? 'Activo' : 'Inactivo' }}
-                        </strong>
-
-                        <small>
-                            {{ Auth::user()->estado === 'activo'
-                                ? 'Puedes recibir y preparar pedidos'
-                                : 'No recibirás nuevos pedidos' }}
-                        </small>
-                    </div>
-                </div>
-
-                <form
-                    method="POST"
-                    action="{{ route('cocinero.estado.alternar') }}"
-                    class="cocinero-status-form"
-                    data-confirm="{{ Auth::user()->estado === 'activo'
-                        ? '¿Quieres ponerte inactivo?'
-                        : '¿Quieres volver a estar activo?' }}"
-                    data-loading-text="Actualizando...">
-
-                    @csrf
-                    @method('PATCH')
-
-                    <button
-                        type="submit"
-                        class="cocinero-status-toggle {{ Auth::user()->estado === 'activo' ? 'desactivar' : 'activar' }}">
-
-                        <i class="bi {{ Auth::user()->estado === 'activo'
-                            ? 'bi-pause-circle-fill'
-                            : 'bi-play-circle-fill' }}"></i>
-
-                        {{ Auth::user()->estado === 'activo' ? 'Inactivo' : 'Activo' }}
-                    </button>
-                </form>
-            </div>
-
             <form
                 method="POST"
                 action="{{ route('logout') }}"
