@@ -263,12 +263,10 @@
 
                     <div class="cocinero-account-item">
 
-                        <small>Estado de trabajo</small>
+                        <small>Estado de la cuenta</small>
 
                         <strong>
-                            {{ $user->estado === 'activo'
-                                ? 'Activo · puedes gestionar pedidos'
-                                : 'Inactivo · no recibirás nuevos pedidos' }}
+                            {{ $user->estado === 'activo' ? 'Activo' : 'Inactivo' }}
                         </strong>
                     </div>
 
@@ -285,8 +283,8 @@
 
                         <i class="bi bi-info-circle-fill me-1"></i>
 
-                        El correo, el rol y el estado operativo están controlados
-                        desde la administración del restaurante.
+                        El correo, el rol y el estado de la cuenta son administrados
+                        desde el panel del restaurante.
 
                     </div>
                 </div>
