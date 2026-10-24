@@ -1,5 +1,96 @@
 @extends('layouts.admin')
 
+@push('styles')
+<style>
+    /*
+     * Acciones de revisión: estilos explícitos para que los botones
+     * destaquen y permanezcan visibles dentro de cada comprobante pendiente.
+     */
+    .admin-content .comprobantes-page .comprobante-acciones {
+        display: flex !important;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+        margin: 14px 0 18px;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .admin-content .comprobantes-page .comprobante-acciones form {
+        display: flex !important;
+        flex: 1 1 0;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .admin-content .comprobantes-page .comprobante-acciones .btn-aprobar-comprobante,
+    .admin-content .comprobantes-page .comprobante-acciones .btn-rechazar-comprobante {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100% !important;
+        min-height: 46px;
+        padding: 11px 14px;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        color: #fff !important;
+        font-size: .9rem;
+        font-weight: 750;
+        line-height: 1.2;
+        text-align: center;
+        white-space: normal;
+        visibility: visible !important;
+        opacity: 1 !important;
+        box-shadow: 0 5px 14px rgba(0, 0, 0, .22);
+        transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+
+    .admin-content .comprobantes-page .comprobante-acciones .btn-aprobar-comprobante {
+        background: linear-gradient(135deg, #147d46, #22a45d) !important;
+        border-color: #31bf73 !important;
+    }
+
+    .admin-content .comprobantes-page .comprobante-acciones .btn-aprobar-comprobante:hover {
+        background: linear-gradient(135deg, #168b4f, #29b86b) !important;
+        border-color: #55d98e !important;
+        color: #fff !important;
+        filter: brightness(1.04);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(22, 139, 79, .25);
+    }
+
+    .admin-content .comprobantes-page .comprobante-acciones .btn-rechazar-comprobante {
+        background: linear-gradient(135deg, #b42338, #df354b) !important;
+        border-color: #f05b6e !important;
+    }
+
+    .admin-content .comprobantes-page .comprobante-acciones .btn-rechazar-comprobante:hover {
+        background: linear-gradient(135deg, #c82b41, #f04458) !important;
+        border-color: #ff8794 !important;
+        color: #fff !important;
+        filter: brightness(1.04);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(196, 35, 56, .25);
+    }
+
+    .admin-content .comprobantes-page .comprobante-acciones .btn:focus-visible {
+        outline: 3px solid rgba(255, 255, 255, .9);
+        outline-offset: 3px;
+    }
+
+    @media (max-width: 575.98px) {
+        .admin-content .comprobantes-page .comprobante-acciones {
+            flex-direction: column !important;
+        }
+
+        .admin-content .comprobantes-page .comprobante-acciones form {
+            width: 100%;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
 
 <div class="container-fluid px-0 comprobantes-page">
@@ -226,6 +317,44 @@
                         Este comprobante requiere revisión manual.
                     </div>
 
+                    <div class="comprobante-acciones" role="group" aria-label="Acciones de revisión del comprobante">
+
+                        <form
+                            action="{{ route('admin.comprobantes.aprobar', $comprobante->id) }}"
+                            method="POST"
+                            class="form-aprobar-comprobante"
+                            onsubmit="return confirm('¿Confirmas que deseas aprobar el comprobante del pedido #{{ $comprobante->pedido->id }}?');">
+                            @csrf
+                            @method('PUT')
+
+                            <button
+                                type="submit"
+                                class="btn btn-aprobar-comprobante"
+                                aria-label="Aprobar comprobante del pedido {{ $comprobante->pedido->id }}">
+                                <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                                <span>Aprobar comprobante</span>
+                            </button>
+                        </form>
+
+                        <form
+                            action="{{ route('admin.comprobantes.rechazar', $comprobante->id) }}"
+                            method="POST"
+                            class="form-rechazar-comprobante"
+                            onsubmit="return confirm('¿Confirmas que deseas rechazar el comprobante del pedido #{{ $comprobante->pedido->id }}? El pedido se cancelará y se devolverá el stock.');">
+                            @csrf
+                            @method('PUT')
+
+                            <button
+                                type="submit"
+                                class="btn btn-rechazar-comprobante"
+                                aria-label="Rechazar comprobante del pedido {{ $comprobante->pedido->id }}">
+                                <i class="bi bi-x-circle-fill" aria-hidden="true"></i>
+                                <span>Rechazar comprobante</span>
+                            </button>
+                        </form>
+
+                    </div>
+
                     @if($comprobante->motivo_revision)
                     <div class="mb-3">
                         <small class="text-secondary d-block mb-1">Motivo detectado</small>
@@ -266,30 +395,6 @@
                         </div>
                     </div>
                     @endif
-
-                    <div class="comprobante-acciones mt-3">
-
-                        <form action="{{ route('admin.comprobantes.aprobar', $comprobante->id) }}" method="POST" class="flex-fill">
-                            @csrf
-                            @method('PUT')
-
-                            <button type="submit" class="btn btn-success w-100">
-                                <i class="bi bi-check-lg"></i>
-                                Aprobar
-                            </button>
-                        </form>
-
-                        <form action="{{ route('admin.comprobantes.rechazar', $comprobante->id) }}" method="POST" class="flex-fill">
-                            @csrf
-                            @method('PUT')
-
-                            <button type="submit" class="btn btn-danger w-100">
-                                <i class="bi bi-x-lg"></i>
-                                Rechazar
-                            </button>
-                        </form>
-
-                    </div>
 
                     @elseif($comprobante->estado === 'aprobado')
 
