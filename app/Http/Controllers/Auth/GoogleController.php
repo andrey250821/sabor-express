@@ -97,17 +97,33 @@ class GoogleController extends Controller
                 ]);
             }
 
+            $user->loadMissing('role');
+
             /*
-             * Comprobar que la cuenta esté activa.
+             * Solo Delivery puede iniciar sesión con estado inactivo.
+             * En ese caso, la sesión queda limitada al perfil para permitir
+             * que vuelva a activar su disponibilidad.
              */
             if ($user->estado !== 'activo') {
+                if ($user->role && $user->role->nombre === 'Delivery') {
+                    Auth::login($user);
+                    request()->session()->regenerate();
+
+                    return redirect()
+                        ->route('delivery.perfil.edit')
+                        ->with(
+                            'error',
+                            'Tu cuenta de Delivery está inactiva. Usa el botón Activar de tu perfil para volver a recibir entregas.'
+                        );
+                }
+
                 return redirect('/login')->withErrors([
-                    'email' => 'Tu cuenta está inactiva. Contacta con el administrador.',
+                    'email' => 'Tu cuenta está inactiva. Contacta con el Administrador para reactivarla.',
                 ]);
             }
 
             /*
-             * Iniciar sesión.
+             * Iniciar sesión para cuentas activas.
              */
             Auth::login($user);
 
