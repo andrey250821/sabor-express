@@ -160,6 +160,7 @@ class ComprobantePagoTest extends TestCase
             'evento' => 'comprobante_rechazado',
         ]);
     }
+
     public function test_comprobantes_en_revision_muestran_acciones_visibles_de_aprobar_y_rechazar(): void
     {
         $administrador = $this->crearUsuario(
@@ -182,5 +183,4 @@ class ComprobantePagoTest extends TestCase
             ->assertSee('btn-aprobar-comprobante')
             ->assertSee('btn-rechazar-comprobante');
     }
-
 }
