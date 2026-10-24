@@ -439,14 +439,12 @@ Route::middleware(['auth', 'role:Cocinero'])
     ->prefix('cocinero')
     ->group(function () {
 
-        // El perfil y el cambio de estado siguen disponibles
-        // para que un Cocinero inactivo pueda volver a activarse.
-        Route::get('/perfil', [CocineroPerfilController::class, 'edit'])->name('cocinero.perfil.edit');
-        Route::patch('/perfil', [CocineroPerfilController::class, 'update'])->name('cocinero.perfil.update');
-        Route::patch('/estado', [CocineroPerfilController::class, 'alternarEstado'])->name('cocinero.estado.alternar');
-
-        // Solo Cocineros activos pueden acceder al trabajo operativo.
+        // Solo el personal activo puede entrar al perfil y a las funciones operativas.
+        // El estado del Cocinero se administra desde el panel administrativo.
         Route::middleware('personal.activo')->group(function () {
+            Route::get('/perfil', [CocineroPerfilController::class, 'edit'])->name('cocinero.perfil.edit');
+            Route::patch('/perfil', [CocineroPerfilController::class, 'update'])->name('cocinero.perfil.update');
+
             Route::get('/dashboard', [CocineroDashboardController::class, 'index'])->name('cocinero.dashboard');
             Route::get('/pedidos', [CocineroPedidoController::class, 'index'])->name('cocinero.pedidos.index');
             Route::get('/pedidos/{id}', [CocineroPedidoController::class, 'show'])->name('cocinero.pedidos.show');
