@@ -27,6 +27,21 @@ class LoginTest extends TestCase
         ], $overrides));
     }
 
+    private function crearUsuarioConRol(string $nombreRol, array $overrides = []): User
+    {
+        $role = Role::firstOrCreate([
+            'nombre' => $nombreRol,
+        ]);
+
+        return User::create(array_merge([
+            'role_id' => $role->id,
+            'name' => 'Usuario de prueba',
+            'email' => strtolower($nombreRol) . '.test@saborexpress.com',
+            'password' => Hash::make('password'),
+            'estado' => 'activo',
+        ], $overrides));
+    }
+
     public function test_cliente_puede_iniciar_sesion_con_credenciales_validas(): void
     {
         $user = $this->crearCliente();
@@ -71,4 +86,48 @@ class LoginTest extends TestCase
         $response->assertSessionHasErrors('email');
         $this->assertGuest();
     }
+
+    public function test_delivery_inactivo_puede_iniciar_sesion_para_activarse_desde_su_perfil(): void
+    {
+        $delivery = $this->crearUsuarioConRol('Delivery', [
+            'email' => 'delivery.inactivo@saborexpress.com',
+            'estado' => 'inactivo',
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => $delivery->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertRedirect(
+            route('delivery.perfil.edit', absolute: false)
+        );
+
+        $this->assertAuthenticatedAs($delivery);
+
+        $this->get(route('delivery.perfil.edit', absolute: false))
+            ->assertOk()
+            ->assertSee('Activar')
+            ->assertSee('delivery.estado.alternar');
+    }
+
+    public function test_cocinero_inactivo_no_puede_iniciar_sesion(): void
+    {
+        $cocinero = $this->crearUsuarioConRol('Cocinero', [
+            'email' => 'cocinero.inactivo@saborexpress.com',
+            'estado' => 'inactivo',
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => $cocinero->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertRedirect('/login')
+            ->assertSessionHasErrors('email');
+
+        $this->assertGuest();
+    }
+
+
 }
