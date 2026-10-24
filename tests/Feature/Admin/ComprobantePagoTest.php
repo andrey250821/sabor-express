@@ -160,4 +160,27 @@ class ComprobantePagoTest extends TestCase
             'evento' => 'comprobante_rechazado',
         ]);
     }
+    public function test_comprobantes_en_revision_muestran_acciones_visibles_de_aprobar_y_rechazar(): void
+    {
+        $administrador = $this->crearUsuario(
+            'Administrador',
+            'admin-listado-comprobantes@example.com'
+        );
+
+        $this->crearPedidoConComprobante(
+            'cliente-listado-comprobantes@example.com'
+        );
+
+        $fecha = now('America/La_Paz')->toDateString();
+
+        $respuesta = $this->actingAs($administrador)
+            ->get('/admin/comprobantes/en_revision?fecha=' . $fecha);
+
+        $respuesta->assertOk()
+            ->assertSee('Aprobar comprobante')
+            ->assertSee('Rechazar comprobante')
+            ->assertSee('btn-aprobar-comprobante')
+            ->assertSee('btn-rechazar-comprobante');
+    }
+
 }
