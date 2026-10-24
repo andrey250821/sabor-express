@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 class PersonalActivoMiddleware
 {
     /**
-     * Solo permite el acceso operativo a Delivery y Cocinero
-     * cuando su estado de trabajo es activo.
+     * Protege las funciones operativas de Cocina y Delivery.
      *
-     * Los usuarios inactivos conservan acceso a su perfil para
-     * poder volver a activarse desde el botón de estado.
+     * Delivery puede conservar una sesión limitada a su perfil para volver
+     * a activarse. Un Cocinero inactivo no puede reactivarse por cuenta propia:
+     * su estado debe ser cambiado por la administración.
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -29,16 +29,25 @@ class PersonalActivoMiddleware
         }
 
         if ($usuario->estado !== 'activo') {
-            $rutaPerfil = (int) $usuario->role_id === 3
-                ? 'delivery.perfil.edit'
-                : 'cocinero.perfil.edit';
+            if ((int) $usuario->role_id === 3) {
+                return redirect()
+                    ->route('delivery.perfil.edit')
+                    ->with(
+                        'error',
+                        'Tu cuenta de Delivery está inactiva. Actívala desde tu perfil para volver a recibir entregas.'
+                    );
+            }
+
+            // Un Cocinero inactivo no conserva acceso al panel ni al perfil.
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return redirect()
-                ->route($rutaPerfil)
-                ->with(
-                    'error',
-                    'Tu estado de trabajo está inactivo. Actívate para volver a recibir y gestionar pedidos.'
-                );
+                ->route('login')
+                ->withErrors([
+                    'email' => 'Tu cuenta de Cocinero está inactiva. Contacta al Administrador para reactivarla.',
+                ]);
         }
 
         return $next($request);
