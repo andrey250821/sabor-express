@@ -280,100 +280,20 @@ body.cocinero-layout.sidebar-open {
     border-top: 1px solid var(--cocinero-border);
 }
 
-.cocinero-status {
-    margin-bottom: 10px;
-    padding: 11px;
-    border: 1px solid var(--cocinero-border);
-    border-radius: 14px;
-}
 
-.cocinero-status.activo {
-    background: rgba(53, 208, 127, 0.06);
-}
 
-.cocinero-status.inactivo {
-    background: rgba(255, 101, 116, 0.055);
-}
 
-.cocinero-status-info {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    min-width: 0;
-}
 
-.cocinero-status-info > div {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-}
 
-.cocinero-status-dot {
-    width: 9px;
-    height: 9px;
-    flex: 0 0 9px;
-    border-radius: 50%;
-}
 
-.cocinero-status.activo .cocinero-status-dot {
-    background: var(--cocinero-green);
-    box-shadow: 0 0 0 4px rgba(53, 208, 127, 0.10);
-    animation: cocinero-pulse 1.8s infinite;
-}
 
-.cocinero-status.inactivo .cocinero-status-dot {
-    background: var(--cocinero-danger);
-}
 
-.cocinero-status strong {
-    color: #fff;
-    font-size: 11px;
-}
 
-.cocinero-status small {
-    margin-top: 2px;
-    color: var(--cocinero-muted);
-    font-size: 9px;
-    line-height: 1.35;
-}
 
-.cocinero-status-form {
-    margin-top: 9px;
-}
 
-.cocinero-status-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    width: 100%;
-    min-height: 40px;
-    border: 1px solid transparent;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    transition: var(--cocinero-transition);
-}
 
-.cocinero-status-toggle.desactivar {
-    background: rgba(255, 101, 116, 0.12);
-    border-color: rgba(255, 101, 116, 0.25);
-    color: #ffbec5;
-}
 
-.cocinero-status-toggle.activar {
-    background: rgba(53, 208, 127, 0.12);
-    border-color: rgba(53, 208, 127, 0.25);
-    color: #a8ffd0;
-}
 
-.cocinero-status-toggle:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.1);
-}
 
 .cocinero-logout {
     width: 100%;
@@ -2309,7 +2229,6 @@ body.cocinero-layout.sidebar-open {
         min-height: 46px;
     }
 
-    .cocinero-status-toggle,
     .cocinero-logout {
         min-height: 46px;
     }
@@ -3058,7 +2977,6 @@ body.cocinero-layout.sidebar-open {
 /* Botones generales del layout: hover + click + foco táctil/teclado. */
 .cocinero-btn-primary,
 .cocinero-btn-secondary,
-.cocinero-status-toggle,
 .cocinero-logout,
 .cocinero-action-btn,
 .cocinero-menu-button {
@@ -3069,7 +2987,6 @@ body.cocinero-layout.sidebar-open {
 
 .cocinero-btn-primary::before,
 .cocinero-btn-secondary::before,
-.cocinero-status-toggle::before,
 .cocinero-logout::before,
 .cocinero-action-btn::before,
 .cocinero-menu-button::before {
@@ -3087,7 +3004,6 @@ body.cocinero-layout.sidebar-open {
 
 .cocinero-btn-primary:hover::before,
 .cocinero-btn-secondary:hover::before,
-.cocinero-status-toggle:hover::before,
 .cocinero-logout:hover::before,
 .cocinero-action-btn:hover::before,
 .cocinero-menu-button:hover::before {
@@ -3096,7 +3012,6 @@ body.cocinero-layout.sidebar-open {
 
 .cocinero-btn-primary:active,
 .cocinero-btn-secondary:active,
-.cocinero-status-toggle:active,
 .cocinero-logout:active,
 .cocinero-action-btn:active,
 .cocinero-menu-button:active {
@@ -3105,7 +3020,6 @@ body.cocinero-layout.sidebar-open {
 
 .cocinero-btn-primary:focus-visible,
 .cocinero-btn-secondary:focus-visible,
-.cocinero-status-toggle:focus-visible,
 .cocinero-logout:focus-visible,
 .cocinero-action-btn:focus-visible,
 .cocinero-menu-button:focus-visible,
@@ -3369,72 +3283,15 @@ body.cocinero-layout {
     background: linear-gradient(180deg, rgba(255,255,255,0.005), rgba(0,0,0,0.08));
 }
 
-.cocinero-status {
-    position: relative;
-    overflow: hidden;
-}
 
-.cocinero-status::after {
-    position: absolute;
-    inset: 0;
-    content: "";
-    background: linear-gradient(105deg, transparent 28%, rgba(255,255,255,0.07) 48%, transparent 68%);
-    transform: translateX(-120%);
-    pointer-events: none;
-    animation: cocinero-status-sweep 5.2s ease-in-out infinite;
-}
 
-.cocinero-status.activo {
-    border-color: rgba(53,208,127,0.18);
-    background:
-        radial-gradient(circle at 100% 0%, rgba(53,208,127,0.11), transparent 11rem),
-        rgba(53,208,127,0.055);
-}
 
-.cocinero-status.inactivo {
-    border-color: rgba(255,101,116,0.18);
-    background:
-        radial-gradient(circle at 100% 0%, rgba(255,101,116,0.09), transparent 11rem),
-        rgba(255,101,116,0.045);
-}
 
-.cocinero-status-toggle {
-    border-width: 1px;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.14);
-    transition:
-        transform 0.22s ease,
-        filter 0.22s ease,
-        box-shadow 0.22s ease,
-        border-color 0.22s ease;
-}
 
-.cocinero-status-toggle.desactivar {
-    background:
-        linear-gradient(135deg, rgba(255,101,116,0.20), rgba(255,101,116,0.075));
-    border-color: rgba(255,101,116,0.36);
-    color: #ffd2d7;
-}
 
-.cocinero-status-toggle.activar {
-    background:
-        linear-gradient(135deg, rgba(53,208,127,0.22), rgba(53,208,127,0.075));
-    border-color: rgba(53,208,127,0.36);
-    color: #c8ffdf;
-}
 
-.cocinero-status-toggle:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.22);
-    filter: brightness(1.08) saturate(1.08);
-}
 
-.cocinero-status-toggle.desactivar:hover {
-    box-shadow: 0 12px 25px rgba(255,101,116,0.13);
-}
 
-.cocinero-status-toggle.activar:hover {
-    box-shadow: 0 12px 25px rgba(53,208,127,0.13);
-}
 
 .cocinero-logout {
     background:
@@ -3849,7 +3706,6 @@ body.cocinero-layout {
 @media (prefers-reduced-motion: reduce) {
     .cocinero-brand-icon,
     .cocinero-brand-icon::after,
-    .cocinero-status::after,
     .cocinero-hero::before,
     .cocinero-btn-preparar::after,
     .cocinero-btn-listo::after,
