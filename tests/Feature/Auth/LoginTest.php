@@ -108,7 +108,7 @@ class LoginTest extends TestCase
         $this->get(route('delivery.perfil.edit', absolute: false))
             ->assertOk()
             ->assertSee('Activar')
-            ->assertSee('delivery.estado.alternar');
+            ->assertSee('delivery-status-toggle');
     }
 
     public function test_cocinero_inactivo_no_puede_iniciar_sesion(): void
@@ -128,6 +128,4 @@ class LoginTest extends TestCase
 
         $this->assertGuest();
     }
-
-
 }
