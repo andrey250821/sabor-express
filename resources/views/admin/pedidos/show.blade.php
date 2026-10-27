@@ -448,7 +448,8 @@
 
                     data-longitud="{{ $pedido->longitud }}"
 
-                    data-estado="{{ $pedido->estado }}">
+                    data-estado="{{ $pedido->estado }}"
+                    data-firebase-token-url="{{ route('firebase.location-token', ['pedidoId' => $pedido->id]) }}">
                 </div>
 
 
