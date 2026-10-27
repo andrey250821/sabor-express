@@ -58,6 +58,10 @@ return [
             'FIREBASE_DATABASE_URL',
             'https://sabor-express-3e291-default-rtdb.firebaseio.com'
         ),
+        'credentials' => env(
+            'FIREBASE_CREDENTIALS',
+            storage_path('app/firebase/sabor-express-service-account.json')
+        ),
     ],
     
     'google' => [
