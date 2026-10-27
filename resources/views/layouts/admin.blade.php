@@ -147,6 +147,22 @@
                 </a>
 
 
+                {{-- Reportes --}}
+                <a
+                    href="{{ route('admin.reportes.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.reportes.*') ? 'active' : '' }}">
+
+                    <span class="sidebar-icon">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                    </span>
+
+                    <span>
+                        Reportes
+                    </span>
+
+                </a>
+
+
                 {{-- Comprobantes --}}
                 <a
                     href="{{ route('admin.comprobantes.index') }}"
