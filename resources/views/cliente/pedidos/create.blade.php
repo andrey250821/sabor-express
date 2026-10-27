@@ -2487,11 +2487,16 @@
                 |--------------------------------------------------------------------------
                 */
 
+                const mapaPedidoElemento = document.getElementById('mapa-pedido');
+
+                // Retirar el indicador inicial antes de dibujar Leaflet.
+                mapaPedidoElemento
+                    ?.querySelector('.cliente-pedido-mapa-cargando')
+                    ?.remove();
+
                 mapaPedido =
                     L.map(
-                        document.getElementById(
-                            'mapa-pedido'
-                        ), {
+                        mapaPedidoElemento, {
                             zoomControl: true
                         }
                     ).setView(
@@ -2506,18 +2511,19 @@
                 |--------------------------------------------------------------------------
                 */
 
-                L.tileLayer(
+                const capaOpenStreetMap = L.tileLayer(
                     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-
                         maxZoom: 19,
-
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">' +
-                            'OpenStreetMap</a> contributors'
-
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
                     }
-                ).addTo(
-                    mapaPedido
-                );
+                ).addTo(mapaPedido);
+
+                capaOpenStreetMap.on('tileerror', function () {
+                    mostrarEstado(
+                        'No se pudieron cargar los mapas de OpenStreetMap. Comprueba tu conexión a Internet o selecciona la ubicación directamente en el mapa si las teselas vuelven a responder.',
+                        true
+                    );
+                });
 
 
                 /*
