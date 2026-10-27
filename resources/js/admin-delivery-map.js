@@ -1,7 +1,8 @@
 import { ref, onValue } from 'firebase/database';
 import { database } from './firebase';
+import { autenticarFirebaseParaPedido } from './firebase-auth';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
     const contenedor = document.getElementById('admin-delivery-map');
 
@@ -546,6 +547,16 @@ document.addEventListener('DOMContentLoaded', () => {
     | FIREBASE
     |--------------------------------------------------------------------------
     */
+
+    try {
+        await autenticarFirebaseParaPedido(contenedor.dataset.firebaseTokenUrl);
+    } catch (error) {
+        console.error('Administrador: no se pudo autenticar la lectura de Firebase.', error);
+        actualizarEstado(
+            error?.message || 'No se pudo autenticar el seguimiento de Firebase.'
+        );
+        return;
+    }
 
     const ubicacionRef =
         ref(
