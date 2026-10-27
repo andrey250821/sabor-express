@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Pedido;
 use App\Services\FirebaseCustomTokenService;
-use IlluminateHttpJsonResponse;
-use IlluminateHttpRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Throwable;
 
 class FirebaseLocationTokenController extends Controller
