@@ -73,38 +73,44 @@ class PedidoController extends Controller
         $cacheKey = 'nominatim_reverse_' . md5($latitud . ',' . $longitud);
 
         $direccion = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($latitud, $longitud) {
-            $respuesta = Http::timeout(10)
-                ->withHeaders([
-                    'User-Agent' => 'SaborExpress/1.0 (aplicacion web de pedidos)',
-                    'Accept-Language' => 'es',
-                ])
-                ->get('https://nominatim.openstreetmap.org/reverse', [
-                    'format' => 'jsonv2',
-                    'lat' => $latitud,
-                    'lon' => $longitud,
-                    'addressdetails' => 1,
-                    'zoom' => 18,
+            try {
+                $respuesta = Http::timeout(10)
+                    ->withHeaders([
+                        'User-Agent' => 'SaborExpress/1.0 (aplicacion web de pedidos)',
+                        'Accept-Language' => 'es',
+                    ])
+                    ->get('https://nominatim.openstreetmap.org/reverse', [
+                        'format' => 'jsonv2',
+                        'lat' => $latitud,
+                        'lon' => $longitud,
+                        'addressdetails' => 1,
+                        'zoom' => 18,
+                    ]);
+
+                if (!$respuesta->successful()) {
+                    return null;
+                }
+
+                $resultado = $respuesta->json();
+                $address = $resultado['address'] ?? [];
+
+                $partes = array_filter([
+                    $address['house_number'] ?? null,
+                    $address['road'] ?? null,
+                    $address['neighbourhood'] ?? ($address['suburb'] ?? null),
+                    $address['city'] ?? ($address['town'] ?? ($address['municipality'] ?? null)),
+                    $address['state'] ?? null,
+                    $address['country'] ?? null,
                 ]);
 
-            if (!$respuesta->successful()) {
+                return !empty($partes)
+                    ? implode(', ', $partes)
+                    : ($resultado['display_name'] ?? null);
+            } catch (\Throwable $error) {
+                report($error);
+
                 return null;
             }
-
-            $resultado = $respuesta->json();
-            $address = $resultado['address'] ?? [];
-
-            $partes = array_filter([
-                $address['house_number'] ?? null,
-                $address['road'] ?? null,
-                $address['neighbourhood'] ?? ($address['suburb'] ?? null),
-                $address['city'] ?? ($address['town'] ?? ($address['municipality'] ?? null)),
-                $address['state'] ?? null,
-                $address['country'] ?? null,
-            ]);
-
-            return !empty($partes)
-                ? implode(', ', $partes)
-                : ($resultado['display_name'] ?? null);
         });
 
         if (!$direccion) {
