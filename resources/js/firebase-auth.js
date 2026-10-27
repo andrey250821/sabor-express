@@ -1,4 +1,9 @@
-import { getAuth, signInWithCustomToken } from 'firebase/auth';
+import {
+    getAuth,
+    inMemoryPersistence,
+    setPersistence,
+    signInWithCustomToken,
+} from 'firebase/auth';
 
 import app from './firebase';
 
@@ -61,6 +66,9 @@ export function autenticarFirebaseParaPedido(tokenUrl) {
             throw new Error('Laravel no devolvió el token de autenticación de Firebase.');
         }
 
+        // El token lleva el ID de un solo pedido. Mantener la sesión solo
+        // en memoria evita que otra pestaña cambie los permisos de esta.
+        await setPersistence(auth, inMemoryPersistence);
         await signInWithCustomToken(auth, data.token);
 
         return auth;
