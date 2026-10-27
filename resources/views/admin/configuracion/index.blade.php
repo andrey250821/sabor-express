@@ -737,16 +737,28 @@
         const estadoDireccion = document.getElementById('estado-direccion-restaurante');
         const btnUbicacion = document.getElementById('btn-ubicacion-actual-restaurante');
 
-        if (!mapaContenedor || typeof L === 'undefined') {
+        if (!mapaContenedor) {
             return;
         }
 
-        const latGuardada = Number(@json($configuracion?->latitud_restaurante));
-        const lngGuardada = Number(@json($configuracion?->longitud_restaurante));
+        if (typeof L === 'undefined') {
+            mapaContenedor.innerHTML = '<div class="configuracion-mapa-cargando">No se pudo cargar Leaflet. Recarga la página y comprueba tu conexión.</div>';
+            console.error('Configuración: Leaflet no está disponible.');
+            return;
+        }
+
+        const latGuardadaRaw = @json($configuracion?->latitud_restaurante);
+        const lngGuardadaRaw = @json($configuracion?->longitud_restaurante);
+        const latGuardada = Number(latGuardadaRaw);
+        const lngGuardada = Number(lngGuardadaRaw);
 
         const tieneUbicacion =
+            latGuardadaRaw !== null && latGuardadaRaw !== '' &&
+            lngGuardadaRaw !== null && lngGuardadaRaw !== '' &&
             Number.isFinite(latGuardada) &&
-            Number.isFinite(lngGuardada);
+            Number.isFinite(lngGuardada) &&
+            latGuardada >= -90 && latGuardada <= 90 &&
+            lngGuardada >= -180 && lngGuardada <= 180;
 
         const centroInicial = tieneUbicacion
             ? [latGuardada, lngGuardada]
@@ -759,14 +771,21 @@
             tieneUbicacion ? 17 : 13
         );
 
-        L.tileLayer(
+        const capaOpenStreetMap = L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
                 maxZoom: 19,
-                attribution:
-                    '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
             }
         ).addTo(mapa);
+
+        capaOpenStreetMap.on('tileerror', function () {
+            if (estadoDireccion) {
+                estadoDireccion.textContent = 'No se pudieron cargar los mapas de OpenStreetMap. Comprueba tu conexión a Internet.';
+                estadoDireccion.classList.remove('text-muted', 'text-success');
+                estadoDireccion.classList.add('text-danger');
+            }
+        });
 
         let marcador = null;
         let temporizadorDireccion = null;
@@ -933,6 +952,18 @@
         if (btnUbicacion && navigator.geolocation) {
 
             btnUbicacion.addEventListener('click', function () {
+
+                const esContextoSeguro = window.isSecureContext === true
+                    || ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+
+                if (!esContextoSeguro) {
+                    if (estadoDireccion) {
+                        estadoDireccion.textContent = 'La ubicación automática requiere HTTPS. Abre Sabor Express mediante una URL segura o selecciona el punto manualmente en el mapa.';
+                        estadoDireccion.classList.remove('text-muted', 'text-success');
+                        estadoDireccion.classList.add('text-danger');
+                    }
+                    return;
+                }
 
                 btnUbicacion.disabled = true;
 
