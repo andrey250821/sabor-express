@@ -2531,11 +2531,11 @@
 
                 L.Icon.Default.mergeOptions({
 
-                    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+                    iconRetinaUrl: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/images/marker-icon-2x.png',
 
-                    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                    iconUrl: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/images/marker-icon.png',
 
-                    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+                    shadowUrl: 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/images/marker-shadow.png'
 
                 });
 
@@ -2891,7 +2891,12 @@
                 }
 
 
-                if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
+                if (!esContextoSeguro()) {
+                    mostrarEstado(
+                        '<strong>La ubicación automática está bloqueada por el navegador porque esta página no usa HTTPS.</strong> Puedes seleccionar el punto en el mapa; para usar el GPS desde un celular, abre Sabor Express mediante una URL HTTPS.',
+                        true
+                    );
+                } else if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
                     if (btnMiUbicacion) {
                         btnMiUbicacion.disabled = true;
                         btnMiUbicacion.title = 'Este navegador no permite geolocalización';
@@ -2900,10 +2905,9 @@
                         'Este navegador no permite obtener la ubicación actual. Puedes seleccionar el punto directamente en el mapa.',
                         true
                     );
-                } else if (!esContextoSeguro()) {
+                } else {
                     mostrarEstado(
-                        '<strong>La ubicación automática está bloqueada por el navegador porque esta página no usa HTTPS.</strong> Puedes seleccionar el punto en el mapa; para usar el GPS desde un celular, abre Sabor Express mediante una URL HTTPS.',
-                        true
+                        'Pulsa “Usar mi ubicación” y permite el acceso cuando el navegador lo solicite. También puedes seleccionar el punto directamente en el mapa.'
                     );
                 }
 
