@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof L === 'undefined') {
         console.error('Sabor Express: Leaflet no está disponible.');
+        const estado = document.getElementById('admin-delivery-map-status');
+        if (estado) {
+            estado.textContent = 'No se pudo cargar el mapa. Recarga la página; si el problema continúa, revisa tu conexión a Internet.';
+        }
         return;
     }
 
@@ -70,15 +74,17 @@ document.addEventListener('DOMContentLoaded', () => {
     |--------------------------------------------------------------------------
     */
 
-    L.tileLayer(
+    const capaOpenStreetMap = L.tileLayer(
         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
             maxZoom: 19,
-
-            attribution:
-                '&copy; OpenStreetMap contributors'
+            attribution: '&copy; OpenStreetMap contributors'
         }
     ).addTo(mapa);
+
+    capaOpenStreetMap.on('tileerror', () => {
+        actualizarEstado('El mapa base de OpenStreetMap no pudo cargar. Comprueba la conexión a Internet.');
+    });
 
 
     /*
@@ -735,6 +741,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 deliveryLongitud
             );
 
+        },
+        error => {
+            console.error('Firebase Admin: no se pudo leer la ubicación del pedido.', error);
+            actualizarEstado('No se puede consultar la ubicación en tiempo real. Comprueba los permisos de Firebase y vuelve a cargar la página.');
         }
     );
 
