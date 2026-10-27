@@ -42,11 +42,7 @@
     <table class="header">
         <tr>
             <td style="width:80px;">
-                @if($logoDataUri)
-                    <img class="brand-logo" src="{{ $logoDataUri }}" alt="Logo">
-                @else
-                    <div class="brand-fallback">SE</div>
-                @endif
+                <div class="brand-fallback">SE</div>
             </td>
             <td>
                 <h1 class="restaurant-name">{{ $restaurante->nombre_restaurante ?? 'Sabor Express' }}</h1>
