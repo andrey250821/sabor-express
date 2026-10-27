@@ -995,7 +995,8 @@
                     data-pedido-id="{{ $pedido->id }}"
                     data-estado="{{ $pedido->estado }}"
                     data-latitud="{{ $pedido->latitud }}"
-                    data-longitud="{{ $pedido->longitud }}">
+                    data-longitud="{{ $pedido->longitud }}"
+                    data-firebase-token-url="{{ route('firebase.location-token', ['pedidoId' => $pedido->id]) }}">
 
                     <div class="cliente-delivery-tracking-header">
 
