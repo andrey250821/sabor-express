@@ -949,12 +949,17 @@
 
         });
 
-        if (btnUbicacion && navigator.geolocation) {
+        const esContextoSeguro = window.isSecureContext === true
+            || ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 
+        if (!esContextoSeguro && estadoDireccion) {
+            estadoDireccion.textContent = 'La ubicación automática requiere HTTPS. Puedes seleccionar el punto manualmente en el mapa.';
+            estadoDireccion.classList.remove('text-muted', 'text-success');
+            estadoDireccion.classList.add('text-danger');
+        }
+
+        if (btnUbicacion) {
             btnUbicacion.addEventListener('click', function () {
-
-                const esContextoSeguro = window.isSecureContext === true
-                    || ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 
                 if (!esContextoSeguro) {
                     if (estadoDireccion) {
@@ -997,12 +1002,19 @@
                 );
 
             });
+        }
 
+        if (btnUbicacion && !navigator.geolocation) {
+            btnUbicacion.disabled = true;
+            btnUbicacion.title = 'Este navegador no permite geolocalización';
         }
 
         setTimeout(function () {
-            mapa.invalidateSize();
+            mapa.invalidateSize(true);
         }, 250);
+        setTimeout(function () {
+            mapa.invalidateSize(true);
+        }, 800);
 
     });
 </script>
