@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class ReportesController extends Controller
 {
@@ -84,6 +85,15 @@ class ReportesController extends Controller
             'hasta.date_format' => 'La fecha final no es válida.',
             'hasta.after_or_equal' => 'La fecha final debe ser igual o posterior a la fecha inicial.',
         ]);
+
+        // La validación del navegador no es suficiente: rechazamos también fechas futuras.
+        $hoyLocal = Carbon::now(self::TIMEZONE)->toDateString();
+
+        if ($datos['desde'] > $hoyLocal || $datos['hasta'] > $hoyLocal) {
+            throw ValidationException::withMessages([
+                'hasta' => 'El periodo del reporte no puede incluir fechas futuras.',
+            ]);
+        }
 
         $desde = Carbon::createFromFormat(
             '!Y-m-d',
@@ -283,14 +293,11 @@ class ReportesController extends Controller
                 'delivery',
                 'pedido.user',
             ])
-            ->whereHas('pedido', function ($query) {
-                $query->where('estado', 'entregado');
+            ->whereHas('pedido', function ($query) use ($inicioUtc, $finUtc) {
+                $query->where('estado', 'entregado')
+                    ->whereBetween('updated_at', [$inicioUtc, $finUtc]);
             })
-            ->whereRaw(
-                'COALESCE(asignaciones_delivery.fecha_entrega, asignaciones_delivery.updated_at) BETWEEN ? AND ?',
-                [$inicioUtc, $finUtc]
-            )
-            ->orderByRaw('COALESCE(asignaciones_delivery.fecha_entrega, asignaciones_delivery.updated_at) ASC')
+            ->orderBy('created_at')
             ->get();
 
         $totalDistancia = $asignaciones->sum(
@@ -311,7 +318,7 @@ class ReportesController extends Controller
 
             return [
                 'pedido' => '#' . ($pedido?->id ?? $asignacion->pedido_id),
-                'fecha' => $this->fechaTexto($asignacion->fecha_entrega ?? $asignacion->updated_at),
+                'fecha' => $this->fechaTexto($pedido?->updated_at ?? $asignacion->updated_at),
                 'cliente' => $pedido?->user?->name ?? 'Cliente no disponible',
                 'delivery' => $asignacion->delivery?->name ?? 'Delivery no disponible',
                 'distancia' => (float) ($pedido?->distancia_delivery_km ?? 0),
@@ -333,12 +340,19 @@ class ReportesController extends Controller
             'ventasPorDia' => [],
             'cocineros' => [],
             'deliverys' => [],
-            'notaReporte' => 'La fecha de entrega usa fecha_entrega cuando existe. Para entregas anteriores a la incorporación de ese campo se utiliza la última actualización de la asignación.',
+            'notaReporte' => 'La base actual no tiene una fecha de entrega independiente. Para identificar entregas dentro del periodo se utiliza updated_at del pedido entregado; este dato permite informar actividad, pero no calcular una duración exacta de reparto.',
         ];
     }
 
     private function reportePersonal(Carbon $desde, Carbon $hasta): array
     {
+        /*
+         * Este reporte no agrega ni depende de columnas nuevas.
+         * Cocina se resume con created_at/updated_at del pedido y el cocinero
+         * asociado. Delivery se resume con created_at de la asignación y
+         * updated_at del pedido entregado. Estos datos miden actividad registrada,
+         * no la duración exacta de cada tarea.
+         */
         $pedidosCocina = Pedido::query()
             ->whereNotNull('cocinero_id')
             ->get();
@@ -350,39 +364,27 @@ class ReportesController extends Controller
             ->map(function (User $cocinero) use ($pedidosCocina, $desde, $hasta): array {
                 $pedidos = $pedidosCocina->where('cocinero_id', $cocinero->id);
 
-                $iniciados = $pedidos->filter(function (Pedido $pedido) use ($desde, $hasta): bool {
-                    return $this->enRango(
-                        $pedido->fecha_inicio_preparacion ?? $pedido->created_at,
-                        $desde,
-                        $hasta
-                    );
-                })->count();
+                $pedidosRegistrados = $pedidos->filter(
+                    fn (Pedido $pedido) => $this->enRango($pedido->created_at, $desde, $hasta)
+                )->count();
 
-                $listos = $pedidos->filter(function (Pedido $pedido) use ($desde, $hasta): bool {
-                    $fechaListo = $pedido->fecha_listo;
-
-                    if (!$fechaListo && in_array($pedido->estado, [
-                        'listo',
-                        'asignado',
-                        'en_camino',
-                        'entregado',
-                    ], true)) {
-                        // Compatibilidad con pedidos históricos sin marca de fecha_listo.
-                        $fechaListo = $pedido->created_at;
-                    }
-
-                    return $this->enRango($fechaListo, $desde, $hasta);
-                })->count();
-
-                $preparandoActual = $pedidos->where('estado', 'preparando')->count();
+                $pedidosActualizados = $pedidos->filter(
+                    fn (Pedido $pedido) => $this->enRango($pedido->updated_at ?? $pedido->created_at, $desde, $hasta)
+                )->count();
 
                 return [
                     'nombre' => $cocinero->name,
                     'correo' => $cocinero->email,
                     'estado' => $cocinero->estado,
-                    'iniciados' => $iniciados,
-                    'listos' => $listos,
-                    'preparando' => $preparandoActual,
+                    'pedidosRegistrados' => $pedidosRegistrados,
+                    'pedidosActualizados' => $pedidosActualizados,
+                    'preparando' => $pedidos->where('estado', 'preparando')->count(),
+                    'listosOPosteriores' => $pedidos->whereIn('estado', [
+                        'listo',
+                        'asignado',
+                        'en_camino',
+                        'entregado',
+                    ])->count(),
                 ];
             })
             ->all();
@@ -406,27 +408,13 @@ class ReportesController extends Controller
                     )
                 )->count();
 
-                $iniciados = $asignacionesUsuario->filter(function (AsignacionDelivery $asignacion) use ($desde, $hasta): bool {
-                    $fechaInicio = $asignacion->fecha_inicio;
-
-                    // Fallback para entregas antiguas que no guardaban fecha_inicio.
-                    if (
-                        !$fechaInicio &&
-                        $asignacion->pedido?->estado === 'en_camino'
-                    ) {
-                        $fechaInicio = $asignacion->updated_at;
-                    }
-
-                    return $this->enRango($fechaInicio, $desde, $hasta);
-                })->count();
-
                 $entregados = $asignacionesUsuario->filter(function (AsignacionDelivery $asignacion) use ($desde, $hasta): bool {
                     if ($asignacion->pedido?->estado !== 'entregado') {
                         return false;
                     }
 
                     return $this->enRango(
-                        $asignacion->fecha_entrega ?? $asignacion->updated_at,
+                        $asignacion->pedido?->updated_at ?? $asignacion->updated_at,
                         $desde,
                         $hasta
                     );
@@ -445,7 +433,6 @@ class ReportesController extends Controller
                     'correo' => $delivery->email,
                     'estado' => $delivery->estado,
                     'asignados' => $asignados,
-                    'iniciados' => $iniciados,
                     'entregados' => $entregados->count(),
                     'activos' => $activos,
                     'distancia' => $entregados->sum(
@@ -458,8 +445,8 @@ class ReportesController extends Controller
             })
             ->all();
 
-        $totalIniciadosCocina = array_sum(array_column($cocineros, 'iniciados'));
-        $totalListosCocina = array_sum(array_column($cocineros, 'listos'));
+        $totalPedidosRegistradosCocina = array_sum(array_column($cocineros, 'pedidosRegistrados'));
+        $totalPedidosActualizadosCocina = array_sum(array_column($cocineros, 'pedidosActualizados'));
         $totalAsignadosDelivery = array_sum(array_column($deliverys, 'asignados'));
         $totalEntregados = array_sum(array_column($deliverys, 'entregados'));
         $totalComision = array_sum(array_column($deliverys, 'comision'));
@@ -467,18 +454,18 @@ class ReportesController extends Controller
         return [
             'resumen' => [
                 $this->indicador('Cocineros registrados', count($cocineros)),
-                $this->indicador('Preparaciones iniciadas', $totalIniciadosCocina),
-                $this->indicador('Pedidos listos', $totalListosCocina),
+                $this->indicador('Pedidos de cocina creados en el periodo', $totalPedidosRegistradosCocina),
+                $this->indicador('Pedidos de cocina actualizados en el periodo', $totalPedidosActualizadosCocina),
                 $this->indicador('Delivery registrados', count($deliverys)),
-                $this->indicador('Asignaciones realizadas', $totalAsignadosDelivery),
+                $this->indicador('Asignaciones creadas', $totalAsignadosDelivery),
                 $this->indicador('Entregas completadas', $totalEntregados),
-                $this->indicador('Comisiones Delivery', $this->dinero($totalComision)),
+                $this->indicador('Comisiones de Delivery', $this->dinero($totalComision)),
             ],
             'filas' => [],
             'ventasPorDia' => [],
             'cocineros' => $cocineros,
             'deliverys' => $deliverys,
-            'notaReporte' => 'Para pedidos antiguos sin marcas de tiempo de cocina se usa la fecha de creación del pedido; para asignaciones antiguas, la fecha de asignación y la última actualización disponibles.',
+            'notaReporte' => 'Sin modificar la base de datos, el trabajo de cocina se resume por los pedidos asociados a cada cocinero y las fechas created_at/updated_at del pedido. Para Delivery se usan created_at de la asignación y updated_at del pedido entregado. No se presentan duraciones exactas de preparación o reparto porque la base actual no almacena marcas de tiempo separadas para esas etapas.',
         ];
     }
 

@@ -221,10 +221,6 @@ class PedidoController extends Controller
                     'estado' => 'en_camino',
                 ]);
 
-                $asignacion->update([
-                    'fecha_inicio' => now(),
-                ]);
-
                 Notificacion::create([
                     'user_id' => $pedido->user_id,
                     'pedido_id' => $pedido->id,
@@ -364,11 +360,6 @@ class PedidoController extends Controller
 
                 $pedido->update([
                     'estado' => 'entregado',
-                ]);
-
-                // Guardar el momento de entrega para informes históricos fiables.
-                $asignacion->update([
-                    'fecha_entrega' => now(),
                 ]);
 
                 Notificacion::create([

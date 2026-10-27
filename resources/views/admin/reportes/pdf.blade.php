@@ -174,12 +174,12 @@
         <h3>Actividad de cocina</h3>
         @if(count($cocineros))
             <table class="data">
-                <thead><tr><th>Cocinero</th><th>Correo</th><th>Estado de cuenta</th><th class="text-center">Preparaciones iniciadas</th><th class="text-center">Pedidos listos</th><th class="text-center">En preparación al generar</th></tr></thead>
+                <thead><tr><th>Cocinero</th><th>Correo</th><th>Estado de cuenta</th><th class="text-center">Pedidos creados en el periodo</th><th class="text-center">Pedidos actualizados en el periodo</th><th class="text-center">En preparación ahora</th><th class="text-center">Listos o en etapas posteriores</th></tr></thead>
                 <tbody>
                     @foreach($cocineros as $fila)
                         <tr>
                             <td>{{ $fila['nombre'] }}</td><td>{{ $fila['correo'] }}</td><td>{{ ucfirst($fila['estado'] ?? 'sin estado') }}</td>
-                            <td class="text-center">{{ $fila['iniciados'] }}</td><td class="text-center">{{ $fila['listos'] }}</td><td class="text-center">{{ $fila['preparando'] }}</td>
+                            <td class="text-center">{{ $fila['pedidosRegistrados'] }}</td><td class="text-center">{{ $fila['pedidosActualizados'] }}</td><td class="text-center">{{ $fila['preparando'] }}</td><td class="text-center">{{ $fila['listosOPosteriores'] }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -191,12 +191,12 @@
         <h3>Actividad de Delivery</h3>
         @if(count($deliverys))
             <table class="data">
-                <thead><tr><th>Delivery</th><th>Correo</th><th>Estado de cuenta</th><th class="text-center">Asignados en el periodo</th><th class="text-center">Entregas iniciadas</th><th class="text-center">Entregas completadas</th><th class="text-center">Pedidos activos ahora</th><th class="text-right">Distancia completada</th><th class="text-right">Comisión generada</th></tr></thead>
+                <thead><tr><th>Delivery</th><th>Correo</th><th>Estado de cuenta</th><th class="text-center">Asignaciones creadas en el periodo</th><th class="text-center">Entregas completadas en el periodo</th><th class="text-center">Pedidos activos ahora</th><th class="text-right">Distancia entregada</th><th class="text-right">Comisión generada</th></tr></thead>
                 <tbody>
                     @foreach($deliverys as $fila)
                         <tr>
                             <td>{{ $fila['nombre'] }}</td><td>{{ $fila['correo'] }}</td><td>{{ ucfirst($fila['estado'] ?? 'sin estado') }}</td>
-                            <td class="text-center">{{ $fila['asignados'] }}</td><td class="text-center">{{ $fila['iniciados'] }}</td><td class="text-center">{{ $fila['entregados'] }}</td><td class="text-center">{{ $fila['activos'] }}</td>
+                            <td class="text-center">{{ $fila['asignados'] }}</td><td class="text-center">{{ $fila['entregados'] }}</td><td class="text-center">{{ $fila['activos'] }}</td>
                             <td class="text-right">{{ number_format($fila['distancia'], 2, ',', '.') }} km</td><td class="text-right">Bs {{ number_format($fila['comision'], 2, ',', '.') }}</td>
                         </tr>
                     @endforeach
