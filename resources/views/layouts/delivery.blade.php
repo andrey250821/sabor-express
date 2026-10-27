@@ -13,6 +13,10 @@
         name="theme-color"
         content="#111318">
 
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}">
+
     <title>
         @yield('title', 'Delivery')
         -
