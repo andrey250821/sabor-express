@@ -346,7 +346,7 @@
                                 required>{{ old('direccion_entrega') }}</textarea>
 
                             <small>
-                                Esta dirección se obtiene automáticamente a partir de la ubicación seleccionada en el mapa y no puede editarse manualmente.
+                                La dirección se obtiene automáticamente desde el mapa. Si el servicio no logra reconocerla, podrás escribirla manualmente.
                             </small>
 
                         </div>
@@ -2231,9 +2231,8 @@
                 }
 
 
-                direccionInput.value =
-                    datos.direccion;
-
+                direccionInput.value = datos.direccion;
+                direccionInput.readOnly = true;
 
                 mostrarEstado(
                     'Ubicación y dirección actualizadas correctamente.'
@@ -2248,8 +2247,14 @@
                 );
 
 
+                if (direccionInput) {
+                    direccionInput.readOnly = false;
+                    direccionInput.placeholder = 'Escribe la dirección de entrega';
+                    direccionInput.focus({ preventScroll: true });
+                }
+
                 mostrarEstado(
-                    'No se pudo obtener la dirección automáticamente. Puedes escribirla manualmente.',
+                    'No se pudo obtener la dirección automáticamente. Escribe la dirección de entrega manualmente o selecciona otro punto en el mapa.',
                     true
                 );
 
@@ -2885,6 +2890,22 @@
 
                 }
 
+
+                if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
+                    if (btnMiUbicacion) {
+                        btnMiUbicacion.disabled = true;
+                        btnMiUbicacion.title = 'Este navegador no permite geolocalización';
+                    }
+                    mostrarEstado(
+                        'Este navegador no permite obtener la ubicación actual. Puedes seleccionar el punto directamente en el mapa.',
+                        true
+                    );
+                } else if (!esContextoSeguro()) {
+                    mostrarEstado(
+                        '<strong>La ubicación automática está bloqueada por el navegador porque esta página no usa HTTPS.</strong> Puedes seleccionar el punto en el mapa; para usar el GPS desde un celular, abre Sabor Express mediante una URL HTTPS.',
+                        true
+                    );
+                }
 
                 /*
                 |--------------------------------------------------------------------------
