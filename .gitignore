@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Firebase service-account credentials (never commit private keys)
+/storage/app/firebase/
