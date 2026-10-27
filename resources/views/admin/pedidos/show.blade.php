@@ -1,4 +1,8 @@
 @extends('layouts.admin')
+
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';">
+@endpush
 @section('content')
 <div class="container-fluid px-0 pedido-detalle">
 
