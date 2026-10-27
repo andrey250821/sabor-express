@@ -228,6 +228,7 @@ class PedidoController extends Controller
                 $pedido->update([
                     'cocinero_id' => Auth::id(),
                     'estado' => 'preparando',
+                    'fecha_inicio_preparacion' => now(),
                 ]);
             });
         } catch (\RuntimeException $e) {
@@ -266,6 +267,7 @@ class PedidoController extends Controller
 
                 $pedido->update([
                     'estado' => 'listo',
+                    'fecha_listo' => now(),
                 ]);
             });
 
