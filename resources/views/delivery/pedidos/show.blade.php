@@ -646,7 +646,8 @@ $estadoPedido === 'en_camino'
         data-pedido-id="{{ $pedido->id }}"
         data-latitud="{{ $latitud }}"
         data-longitud="{{ $longitud }}"
-        data-estado="{{ $estadoPedido }}">
+        data-estado="{{ $estadoPedido }}"
+        data-firebase-token-url="{{ route('firebase.location-token', ['pedidoId' => $pedido->id]) }}">
     </div>
 
     <div
@@ -654,6 +655,7 @@ $estadoPedido === 'en_camino'
         data-pedido-id="{{ $pedido->id }}"
         data-delivery-id="{{ auth()->id() }}"
         data-gps-activo="{{ $estadoPedido === 'en_camino' && $esMiAsignacion ? '1' : '0' }}"
+        data-firebase-token-url="{{ route('firebase.location-token', ['pedidoId' => $pedido->id]) }}"
         class="delivery-gps-status-wrapper">
 
         <i class="bi bi-geo-alt-fill"></i>
