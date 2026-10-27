@@ -24,6 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!pedidoId || !mapaElemento) {
         console.error('Cliente Delivery: faltan datos necesarios.');
+        if (estadoElemento) {
+            estadoElemento.textContent = 'No se pudo iniciar el seguimiento porque faltan datos del pedido.';
+        }
+        return;
+    }
+
+    if (typeof L === 'undefined') {
+        console.error('Cliente Delivery: Leaflet no está disponible.');
+        if (estadoElemento) {
+            estadoElemento.textContent = 'No se pudo cargar el mapa. Recarga la página y comprueba tu conexión a Internet.';
+        }
         return;
     }
 
@@ -141,13 +152,22 @@ document.addEventListener('DOMContentLoaded', () => {
         15
     );
 
-    L.tileLayer(
+    const capaOpenStreetMap = L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
             attribution: '&copy; OpenStreetMap contributors',
             maxZoom: 19,
         }
     ).addTo(mapa);
+
+    capaOpenStreetMap.on('tileerror', () => {
+        if (estadoElemento) {
+            estadoElemento.textContent = 'El mapa base no pudo cargar. Comprueba la conexión a Internet.';
+        }
+    });
+
+    requestAnimationFrame(() => mapa.invalidateSize(true));
+    setTimeout(() => mapa.invalidateSize(true), 400);
 
     /*
     |--------------------------------------------------------------------------
@@ -581,58 +601,24 @@ document.addEventListener('DOMContentLoaded', () => {
             | ESTADO VISUAL
             |--------------------------------------------------------------------------
             */
-
-            if (estadoElemento) {
-
+            if (estadoElemento && !rutaDelivery) {
                 const fecha = ubicacion.actualizado_en
-                    ? new Date(
-                        ubicacion.actualizado_en
-                    )
+                    ? new Date(ubicacion.actualizado_en)
                     : null;
 
                 const hora = fecha
-                    ? fecha.toLocaleTimeString(
-                        'es-BO',
-                        {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                        }
-                    )
+                    ? fecha.toLocaleTimeString('es-BO', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                    })
                     : '';
 
-                if (!rutaDelivery) {
+                const mensajeDistancia = obtenerMensajeDistancia(distanciaMetros);
 
-    if (estadoElemento) {
-
-        const fecha = ubicacion.actualizado_en
-            ? new Date(
-                ubicacion.actualizado_en
-            )
-            : null;
-
-        const hora = fecha
-            ? fecha.toLocaleTimeString(
-                'es-BO',
-                {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                }
-            )
-            : '';
-
-        const mensajeDistancia =
-            obtenerMensajeDistancia(
-                distanciaMetros
-            );
-
-        estadoElemento.textContent =
-            hora
-                ? `${mensajeDistancia} · Actualizado ${hora}`
-                : mensajeDistancia;
-    }
-}
+                estadoElemento.textContent = hora
+                    ? `${mensajeDistancia} · Actualizado ${hora}`
+                    : mensajeDistancia;
             }
 
             console.log(
@@ -656,8 +642,10 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
             if (estadoElemento) {
-                estadoElemento.textContent =
-                    'No se pudo obtener la ubicación del repartidor.';
+                const mensaje = String(error?.message || '').toLowerCase();
+                estadoElemento.textContent = mensaje.includes('permission_denied') || mensaje.includes('permission denied')
+                    ? 'Firebase denegó el acceso a la ubicación. Revisa las reglas de lectura de la base de datos.'
+                    : 'No se pudo obtener la ubicación en tiempo real. Revisa la conexión e inténtalo nuevamente.';
             }
         }
     );
