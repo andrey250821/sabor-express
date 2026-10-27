@@ -221,6 +221,10 @@ class PedidoController extends Controller
                     'estado' => 'en_camino',
                 ]);
 
+                // Registrar la fecha de inicio para que el filtro de Mis pedidos
+                // incluya las entregas que cambiaron de estado en este día.
+                $asignacion->touch();
+
                 Notificacion::create([
                     'user_id' => $pedido->user_id,
                     'pedido_id' => $pedido->id,
@@ -361,6 +365,9 @@ class PedidoController extends Controller
                 $pedido->update([
                     'estado' => 'entregado',
                 ]);
+
+                // Registrar la finalización de la asignación para los filtros por fecha.
+                $asignacion->touch();
 
                 Notificacion::create([
                     'user_id' => $pedido->user_id,
