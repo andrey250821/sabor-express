@@ -1410,7 +1410,8 @@
 
 
 <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"
+    onerror="this.onerror=null;this.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';">
 </script>
 
 <script>
