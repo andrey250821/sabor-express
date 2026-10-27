@@ -6,9 +6,10 @@ import {
 } from 'firebase/database';
 
 import { database } from './firebase';
+import { autenticarFirebaseParaPedido } from './firebase-auth';
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
     const contenedor = document.getElementById('delivery-gps');
 
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pedidoId = contenedor.dataset.pedidoId;
     const deliveryId = contenedor.dataset.deliveryId;
     const gpsActivo = contenedor.dataset.gpsActivo === '1';
+    const firebaseTokenUrl = contenedor.dataset.firebaseTokenUrl;
 
     if (!pedidoId || !deliveryId) {
         console.error(
@@ -74,6 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
         estado.textContent = mensaje;
 
         estado.dataset.tipo = tipo;
+    }
+
+    // Firebase exige una identidad autenticada; Laravel emite un token
+    // limitado a este pedido después de verificar la sesión y la asignación.
+    try {
+        await autenticarFirebaseParaPedido(firebaseTokenUrl);
+    } catch (error) {
+        console.error('GPS Delivery: no se pudo autenticar con Firebase.', error);
+        mostrarEstado(
+            error?.message || 'No se pudo autenticar el seguimiento de Firebase.',
+            'error'
+        );
+        return;
     }
 
 
