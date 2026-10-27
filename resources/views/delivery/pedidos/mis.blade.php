@@ -151,7 +151,7 @@
                 <i class="bi bi-bicycle"></i>
 
                 <span>
-                    En proceso
+                    Asignados
                 </span>
 
                 <strong>
