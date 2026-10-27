@@ -1,0 +1,34 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "delivery_locations": {
+      "$pedidoId": {
+        ".read": "auth != null && auth.token.pedido_id === $pedidoId",
+        ".write": "auth != null && auth.token.role === 'Delivery' && auth.token.pedido_id === $pedidoId && ((!newData.exists() && (!data.exists() || data.child('delivery_id').val() === auth.token.laravel_user_id)) || (newData.exists() && newData.child('delivery_id').val() === auth.token.laravel_user_id && (newData.child('pedido_id').val() + '') === $pedidoId))",
+        ".validate": "newData.hasChildren(['delivery_id', 'pedido_id', 'latitud', 'longitud', 'precision', 'actualizado_en'])",
+        "delivery_id": {
+          ".validate": "newData.isNumber() && newData.val() === auth.token.laravel_user_id"
+        },
+        "pedido_id": {
+          ".validate": "newData.isNumber() && (newData.val() + '') === $pedidoId"
+        },
+        "latitud": {
+          ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
+        },
+        "longitud": {
+          ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+        },
+        "precision": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "actualizado_en": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
