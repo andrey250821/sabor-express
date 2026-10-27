@@ -17,6 +17,8 @@ class Pedido extends Model
     protected $fillable = [
         'user_id',
         'cocinero_id',
+        'fecha_inicio_preparacion',
+        'fecha_listo',
         'total',
         'subtotal_productos',
         'tarifa_delivery',
@@ -44,6 +46,8 @@ class Pedido extends Model
             'porcentaje_restaurante_delivery' => 'decimal:2',
             'monto_restaurante_delivery' => 'decimal:2',
             'total' => 'decimal:2',
+            'fecha_inicio_preparacion' => 'datetime',
+            'fecha_listo' => 'datetime',
         ];
     }
 
