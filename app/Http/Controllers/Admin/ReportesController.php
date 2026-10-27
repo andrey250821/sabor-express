@@ -10,7 +10,6 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Validation\ValidationException;
 
@@ -126,7 +125,7 @@ class ReportesController extends Controller
             'tituloReporte' => $meta['titulo'],
             'descripcionReporte' => $meta['descripcion'],
             'restaurante' => $configuracion,
-            'logoDataUri' => $this->logoDataUri($configuracion),
+            // Se usa un distintivo vectorial/textual para no depender de GD al generar el PDF.
             'periodoDesde' => $desde,
             'periodoHasta' => $hasta,
             'generadoEn' => Carbon::now(self::TIMEZONE),
@@ -527,26 +526,4 @@ class ReportesController extends Controller
         return 'Bs ' . number_format((float) $cantidad, 2, ',', '.');
     }
 
-    private function logoDataUri(?Configuracion $configuracion): ?string
-    {
-        $ruta = $configuracion?->logo;
-
-        if (!$ruta || preg_match('/^https?:\/\//i', $ruta)) {
-            return null;
-        }
-
-        $disk = Storage::disk('public');
-
-        if (!$disk->exists($ruta)) {
-            return null;
-        }
-
-        $mime = $disk->mimeType($ruta) ?: 'image/png';
-
-        if (!in_array($mime, ['image/png', 'image/jpeg', 'image/gif'], true)) {
-            return null;
-        }
-
-        return 'data:' . $mime . ';base64,' . base64_encode($disk->get($ruta));
-    }
 }
