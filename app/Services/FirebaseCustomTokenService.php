@@ -68,16 +68,12 @@ class FirebaseCustomTokenService
             throw new RuntimeException('La clave privada de las credenciales de Firebase no es válida.');
         }
 
-        try {
-            $signatureCreated = openssl_sign(
-                $unsignedToken,
-                $signature,
-                $privateKey,
-                OPENSSL_ALGO_SHA256
-            );
-        } finally {
-            openssl_free_key($privateKey);
-        }
+        $signatureCreated = openssl_sign(
+            $unsignedToken,
+            $signature,
+            $privateKey,
+            OPENSSL_ALGO_SHA256
+        );
 
         if (!$signatureCreated) {
             throw new RuntimeException('No se pudo firmar el token de autenticación de Firebase.');
