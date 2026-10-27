@@ -60,6 +60,7 @@ use App\Http\Controllers\Delivery\PerfilController as DeliveryPerfilController;
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePhotoController;
+use App\Http\Controllers\FirebaseLocationTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,24 @@ use App\Http\Controllers\ProfilePhotoController;
 Route::get('/', function () {
     return redirect()->route('cliente.dashboard.index');
 });
+
+/*
+|--------------------------------------------------------------------------
+| AUTENTICACIÓN LIMITADA PARA SEGUIMIENTO FIREBASE
+|--------------------------------------------------------------------------
+|
+| Laravel valida la sesión y la relación del usuario con el pedido antes
+| de emitir un token de Firebase de corta duración y limitado a ese pedido.
+|
+|--------------------------------------------------------------------------
+*/
+
+Route::post(
+    '/firebase/location-token/{pedidoId}',
+    [FirebaseLocationTokenController::class, 'issue']
+)->middleware(['auth', 'throttle:60,1'])
+    ->whereNumber('pedidoId')
+    ->name('firebase.location-token');
 
 
 /*
