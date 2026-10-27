@@ -152,8 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 error
             );
 
+            const detalle = String(error?.code || error?.message || '').toLowerCase();
+
             mostrarEstado(
-                'No se pudo actualizar la ubicación',
+                detalle.includes('permission_denied') || detalle.includes('permission denied')
+                    ? 'Firebase rechazó el envío de la ubicación. Revisa las reglas de escritura de Realtime Database.'
+                    : 'No se pudo actualizar la ubicación. Comprueba la conexión e inténtalo nuevamente.',
                 'error'
             );
         }
@@ -264,17 +268,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
     |--------------------------------------------------------------------------
-    | Verificar navegador
+    | Verificar contexto seguro y compatibilidad del navegador
     |--------------------------------------------------------------------------
+    |
+    | Los navegadores solo permiten GPS en HTTPS o en orígenes locales
+    | confiables. En una IP local servida por HTTP no aparecerá el permiso.
+    |
     */
+    const esContextoSeguro = window.isSecureContext === true
+        || ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 
-    if (!navigator.geolocation) {
+    if (!esContextoSeguro) {
+        mostrarEstado(
+            'Para compartir tu ubicación, abre Sabor Express mediante HTTPS. En una dirección HTTP de red local el navegador bloquea el GPS.',
+            'error'
+        );
+        return;
+    }
 
+    if (
+        !navigator.geolocation
+        || typeof navigator.geolocation.watchPosition !== 'function'
+    ) {
         mostrarEstado(
             'Este navegador no permite ubicación GPS',
             'error'
         );
-
         return;
     }
 
