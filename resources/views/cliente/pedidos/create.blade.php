@@ -1,5 +1,9 @@
 @extends('layouts.cliente')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';">
+@endpush
+
 @section('title', 'Confirmar pedido')
 
 @section('content')
@@ -1197,9 +1201,7 @@
      LEAFLET
 ========================================================== --}}
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 
 
 <script
