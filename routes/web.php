@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\CocineroController;
 use App\Http\Controllers\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\NotificacionController;
+use App\Http\Controllers\Admin\ReportesController;
 /*
 |--------------------------------------------------------------------------
 | CONTROLADORES CLIENTE
@@ -143,6 +144,12 @@ Route::middleware(['auth', 'role:Administrador'])
             '/dashboard',
             [DashboardController::class, 'index']
         )->name('admin.dashboard');
+
+        // Reportes administrativos descargables en PDF.
+        Route::get('/reportes', [ReportesController::class, 'index'])
+            ->name('admin.reportes.index');
+        Route::get('/reportes/pdf', [ReportesController::class, 'descargar'])
+            ->name('admin.reportes.pdf');
 
         Route::get('/clientes', [ClienteController::class, 'index'])->name('admin.clientes.index');
         Route::get('/clientes/{id}', [ClienteController::class, 'show'])->name('admin.clientes.show');
