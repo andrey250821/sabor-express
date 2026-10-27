@@ -221,7 +221,9 @@ class PedidoController extends Controller
                     'estado' => 'en_camino',
                 ]);
 
-                $asignacion->touch();
+                $asignacion->update([
+                    'fecha_inicio' => now(),
+                ]);
 
                 Notificacion::create([
                     'user_id' => $pedido->user_id,
@@ -364,8 +366,10 @@ class PedidoController extends Controller
                     'estado' => 'entregado',
                 ]);
 
-                // updated_at de la asignación representa la finalización.
-                $asignacion->touch();
+                // Guardar el momento de entrega para informes históricos fiables.
+                $asignacion->update([
+                    'fecha_entrega' => now(),
+                ]);
 
                 Notificacion::create([
                     'user_id' => $pedido->user_id,
