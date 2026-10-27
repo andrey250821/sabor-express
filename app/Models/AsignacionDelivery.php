@@ -15,7 +15,19 @@ class AsignacionDelivery extends Model
 
         'delivery_id',
 
+        'fecha_inicio',
+
+        'fecha_entrega',
+
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'fecha_inicio' => 'datetime',
+            'fecha_entrega' => 'datetime',
+        ];
+    }
 
 
     public function pedido(): BelongsTo
