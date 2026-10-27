@@ -2697,20 +2697,6 @@
                         'click',
                         async function() {
 
-                            if (
-                                !navigator.geolocation ||
-                                typeof navigator.geolocation.getCurrentPosition !== 'function'
-                            ) {
-
-                                mostrarEstado(
-                                    'Este navegador no permite obtener la ubicación.',
-                                    true
-                                );
-
-                                return;
-                            }
-
-
                             /*
                             |--------------------------------------------------------------------------
                             | CONTEXTO SEGURO
@@ -2724,6 +2710,19 @@
                                     'Si abriste Sabor Express desde una dirección como ' +
                                     '<strong>http://192.168.x.x:8000</strong>, Chrome no mostrará ' +
                                     'el permiso de ubicación. Abre la aplicación mediante una URL HTTPS.',
+                                    true
+                                );
+
+                                return;
+                            }
+
+                            if (
+                                !navigator.geolocation ||
+                                typeof navigator.geolocation.getCurrentPosition !== 'function'
+                            ) {
+
+                                mostrarEstado(
+                                    'Este navegador no permite obtener la ubicación. Puedes seleccionar el punto directamente en el mapa.',
                                     true
                                 );
 
