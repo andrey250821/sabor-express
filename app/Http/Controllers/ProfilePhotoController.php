@@ -10,8 +10,11 @@ use Illuminate\Support\Str;
 class ProfilePhotoController extends Controller
 {
     /**
-     * Servir la foto de perfil almacenada localmente o descargarla
-     * desde Google y guardar una copia en el almacenamiento de Sabor Express.
+     * Servir una foto local o mostrar la foto de Google mediante Laravel.
+     *
+     * Las fotos de Google se guardan temporalmente en el disco público
+     * para evitar depender de la carga directa desde el navegador.
+     * La caché no modifica ningún dato de la base de datos.
      */
     public function show(User $user)
     {
@@ -23,7 +26,7 @@ class ProfilePhotoController extends Controller
 
         $disk = Storage::disk('public');
 
-        // Las fotos de Google se descargan la primera vez que se solicitan.
+        // Las fotos de Google se descargan y almacenan como caché local.
         if (Str::startsWith($foto, ['http://', 'https://'])) {
             $host = strtolower((string) parse_url($foto, PHP_URL_HOST));
             $scheme = strtolower((string) parse_url($foto, PHP_URL_SCHEME));
@@ -40,6 +43,37 @@ class ProfilePhotoController extends Controller
                 abort(404);
             }
 
+            $extensiones = [
+                'jpg' => 'image/jpeg',
+                'png' => 'image/png',
+                'webp' => 'image/webp',
+                'gif' => 'image/gif',
+            ];
+
+            $prefijoCache = 'perfiles/google/' . $user->getKey();
+            $fotoEnCache = null;
+
+            // Buscar una copia previamente descargada.
+            foreach (array_keys($extensiones) as $extension) {
+                $candidata = $prefijoCache . '.' . $extension;
+
+                if ($disk->exists($candidata)) {
+                    $fotoEnCache = $candidata;
+                    break;
+                }
+            }
+
+            // Reutilizar la copia durante 24 horas.
+            if (
+                $fotoEnCache &&
+                (time() - $disk->lastModified($fotoEnCache)) < 86400
+            ) {
+                return response()->file($disk->path($fotoEnCache), [
+                    'Cache-Control' => 'public, max-age=3600',
+                    'X-Content-Type-Options' => 'nosniff',
+                ]);
+            }
+
             try {
                 $respuesta = Http::timeout(15)
                     ->withHeaders([
@@ -47,6 +81,14 @@ class ProfilePhotoController extends Controller
                     ])
                     ->get($foto);
             } catch (\Throwable $e) {
+                // Si Google no responde, conservar la última copia disponible.
+                if ($fotoEnCache) {
+                    return response()->file($disk->path($fotoEnCache), [
+                        'Cache-Control' => 'public, max-age=3600',
+                        'X-Content-Type-Options' => 'nosniff',
+                    ]);
+                }
+
                 abort(404);
             }
 
@@ -54,14 +96,7 @@ class ProfilePhotoController extends Controller
                 trim(explode(';', $respuesta->header('Content-Type', ''))[0])
             );
 
-            $extensiones = [
-                'image/jpeg' => 'jpg',
-                'image/png' => 'png',
-                'image/webp' => 'webp',
-                'image/gif' => 'gif',
-            ];
-
-            $extension = $extensiones[$tipo] ?? null;
+            $extension = array_search($tipo, $extensiones, true);
             $contenido = $respuesta->body();
 
             if (
@@ -70,23 +105,30 @@ class ProfilePhotoController extends Controller
                 $contenido === '' ||
                 strlen($contenido) > 5 * 1024 * 1024
             ) {
+                if ($fotoEnCache) {
+                    return response()->file($disk->path($fotoEnCache), [
+                        'Cache-Control' => 'public, max-age=3600',
+                        'X-Content-Type-Options' => 'nosniff',
+                    ]);
+                }
+
                 abort(404);
             }
 
-            // Guardar una copia local para que las siguientes visitas
-            // ya no dependan del servidor de imágenes de Google.
+            // Guardar la imagen en storage sin modificar la base de datos.
             $disk->makeDirectory('perfiles/google');
 
-            $rutaLocal = 'perfiles/google/'
-                . $user->getKey()
-                . '.'
-                . $extension;
+            $rutaLocal = $prefijoCache . '.' . $extension;
 
-            if ($disk->put($rutaLocal, $contenido)) {
-                $user->forceFill([
-                    'foto_perfil' => $rutaLocal,
-                ])->save();
+            foreach (array_keys($extensiones) as $extensionAnterior) {
+                $rutaAnterior = $prefijoCache . '.' . $extensionAnterior;
+
+                if ($rutaAnterior !== $rutaLocal && $disk->exists($rutaAnterior)) {
+                    $disk->delete($rutaAnterior);
+                }
             }
+
+            $disk->put($rutaLocal, $contenido);
 
             return response($contenido, 200, [
                 'Content-Type' => $tipo,
