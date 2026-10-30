@@ -37,8 +37,8 @@ class User extends Authenticatable
     /**
      * URL pública de la foto de perfil.
      *
-     * Puede contener una ruta local almacenada en el disco público
-     * o una URL externa, por ejemplo la foto proporcionada por Google.
+     * Tanto las fotos de Google como las fotos locales se sirven
+     * mediante Laravel para evitar bloqueos de imágenes externas.
      */
     public function getFotoPerfilUrlAttribute(): ?string
     {
@@ -46,9 +46,9 @@ class User extends Authenticatable
             return null;
         }
 
-        // Las fotos de Google se muestran directamente desde su URL.
+        // Las fotos de Google se obtienen y almacenan mediante ProfilePhotoController.
         if (Str::startsWith($this->foto_perfil, ['http://', 'https://'])) {
-            return $this->foto_perfil;
+            return route('perfil.foto', ['user' => $this->getKey()]);
         }
 
         // Las fotos subidas por el usuario se sirven mediante una ruta de
