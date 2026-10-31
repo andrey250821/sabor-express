@@ -12,7 +12,23 @@ use App\Services\FechaFiltroService;
 
 class ProductoController extends Controller
 {
+    /**
+     * Comprobar nombres duplicados en todo el catálogo, sin importar
+     * mayúsculas/minúsculas ni espacios al inicio o al final.
+     */
+    private function nombreYaExiste(string $nombre, ?int $excluirId = null): bool
+    {
+        $consulta = Producto::query()
+            ->whereRaw('LOWER(TRIM(nombre)) = ?', [
+                mb_strtolower(trim($nombre), 'UTF-8'),
+            ]);
 
+        if ($excluirId !== null) {
+            $consulta->where('id', '!=', $excluirId);
+        }
+
+        return $consulta->exists();
+    }
 
     public function index(Request $request)
     {
@@ -23,11 +39,7 @@ class ProductoController extends Controller
             ->withAvg('calificaciones', 'puntuacion');
 
         if ($request->filled('categoria_id')) {
-
-            $query->where(
-                'categoria_id',
-                $request->categoria_id
-            );
+            $query->where('categoria_id', $request->categoria_id);
         }
 
         $productos = $query
@@ -40,14 +52,9 @@ class ProductoController extends Controller
         );
     }
 
-
-
-
     public function create()
     {
-
         $categorias = Categoria::all();
-
 
         return view(
             'admin.productos.create',
@@ -55,141 +62,127 @@ class ProductoController extends Controller
         );
     }
 
-
-
-
-
-
     public function store(Request $request)
     {
-        $request->validate([
-
-            'categoria_id' => 'required|exists:categorias,id',
-
-            'nombre' => 'required|string|max:255',
-
-            'descripcion' => 'nullable|string',
-
-            'precio' => 'required|numeric|min:0',
-
-            'stock' => 'required|integer|min:0',
-
-            'imagen' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-
+        // Normalizar espacios antes de validar y guardar.
+        $request->merge([
+            'nombre' => trim((string) $request->input('nombre', '')),
         ]);
 
+        $datosValidados = $request->validate(
+            [
+                'categoria_id' => 'required|exists:categorias,id',
+                'nombre' => 'required|string|max:255',
+                'descripcion' => 'nullable|string',
+                'precio' => 'required|numeric|min:0',
+                'stock' => 'required|integer|min:0',
+                'imagen' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            ],
+            [
+                'nombre.required' => 'El nombre del producto es obligatorio.',
+                'nombre.max' => 'El nombre del producto no puede superar los 255 caracteres.',
+            ]
+        );
 
-        $datos = $request->only([
-
-            'categoria_id',
-            'nombre',
-            'descripcion',
-            'precio',
-            'stock'
-
-        ]);
-
-
-        $datos['estado'] = 'disponible';
-
-
-        if ($request->hasFile('imagen')) {
-
-            $datos['imagen'] =
-                $request->file('imagen')->store(
-                    'productos',
-                    'public'
-                );
+        // Los nombres de productos deben ser únicos en todo el catálogo,
+        // incluso cuando pertenecen a categorías diferentes.
+        if ($this->nombreYaExiste($datosValidados['nombre'])) {
+            return back()
+                ->withErrors([
+                    'nombre' => 'Ya existe un producto con ese nombre. Elige un nombre diferente.',
+                ])
+                ->withInput();
         }
 
-
-        Producto::create($datos);
-
-
-        return redirect()
-            ->route('admin.productos.index')
-            ->with(
-                'success',
-                'Producto creado correctamente.'
-            );
-    }
-
-
-
-
-
-
-    public function edit($id)
-    {
-
-
-        $producto = Producto::findOrFail($id);
-
-
-        $categorias = Categoria::all();
-
-
-
-        return view(
-            'admin.productos.edit',
-            compact(
-                'producto',
-                'categorias'
-            )
-        );
-    }
-
-
-
-
-
-
-
-    public function update(Request $request, $id)
-    {
-        $producto = Producto::findOrFail($id);
-
-        // Validación
-        $request->validate([
-            'categoria_id' => 'required|exists:categorias,id',
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'estado' => 'required|in:disponible,agotado',
-            'imagen' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-        ]);
-
-        // Datos del producto
         $datos = $request->only([
             'categoria_id',
             'nombre',
             'descripcion',
             'precio',
             'stock',
-            'estado'
         ]);
 
-        // ==========================================
-        // CAMBIO DE IMAGEN
-        // ==========================================
+        $datos['estado'] = 'disponible';
 
         if ($request->hasFile('imagen')) {
+            $datos['imagen'] = $request->file('imagen')->store(
+                'productos',
+                'public'
+            );
+        }
 
-            // Guardar la imagen anterior
+        Producto::create($datos);
+
+        return redirect()
+            ->route('admin.productos.index')
+            ->with('success', 'Producto creado correctamente.');
+    }
+
+    public function edit($id)
+    {
+        $producto = Producto::findOrFail($id);
+        $categorias = Categoria::all();
+
+        return view(
+            'admin.productos.edit',
+            compact('producto', 'categorias')
+        );
+    }
+
+    public function update(Request $request, $id)
+    {
+        $producto = Producto::findOrFail($id);
+
+        $request->merge([
+            'nombre' => trim((string) $request->input('nombre', '')),
+        ]);
+
+        $datosValidados = $request->validate(
+            [
+                'categoria_id' => 'required|exists:categorias,id',
+                'nombre' => 'required|string|max:255',
+                'descripcion' => 'nullable|string',
+                'precio' => 'required|numeric|min:0',
+                'stock' => 'required|integer|min:0',
+                'estado' => 'required|in:disponible,agotado',
+                'imagen' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            ],
+            [
+                'nombre.required' => 'El nombre del producto es obligatorio.',
+                'nombre.max' => 'El nombre del producto no puede superar los 255 caracteres.',
+            ]
+        );
+
+        // Al editar se excluye el producto actual para permitir conservar
+        // su propio nombre, pero no utilizar el de otro producto existente.
+        if ($this->nombreYaExiste($datosValidados['nombre'], (int) $producto->id)) {
+            return back()
+                ->withErrors([
+                    'nombre' => 'Ya existe otro producto con ese nombre. Elige un nombre diferente.',
+                ])
+                ->withInput();
+        }
+
+        $datos = $request->only([
+            'categoria_id',
+            'nombre',
+            'descripcion',
+            'precio',
+            'stock',
+            'estado',
+        ]);
+
+        // Guardar y sustituir la imagen solo cuando se selecciona una nueva.
+        if ($request->hasFile('imagen')) {
             $imagenAnterior = $producto->imagen;
 
-            // Guardar la nueva imagen
             $nuevaImagen = $request->file('imagen')
                 ->store('productos', 'public');
 
-            // Asignar la nueva ruta
             $datos['imagen'] = $nuevaImagen;
 
-            // Actualizar producto
             $producto->update($datos);
 
-            // Eliminar imagen anterior
             if (
                 $imagenAnterior &&
                 Storage::disk('public')->exists($imagenAnterior)
@@ -197,18 +190,12 @@ class ProductoController extends Controller
                 Storage::disk('public')->delete($imagenAnterior);
             }
         } else {
-
-            // No se seleccionó una imagen nueva.
-            // Se conserva la imagen actual.
             $producto->update($datos);
         }
 
         return redirect()
             ->route('admin.productos.index')
-            ->with(
-                'success',
-                'Producto actualizado correctamente.'
-            );
+            ->with('success', 'Producto actualizado correctamente.');
     }
 
     /**
@@ -238,7 +225,6 @@ class ProductoController extends Controller
             ->get();
 
         $promedio = $calificaciones->avg('puntuacion');
-
         $totalCalificaciones = $calificaciones->count();
 
         $cantidadEstrellas = [
@@ -264,28 +250,17 @@ class ProductoController extends Controller
 
     public function destroy($id)
     {
-
-
         $producto = Producto::findOrFail($id);
 
-
-
         if ($producto->imagen) {
-
-            Storage::disk('public')
-                ->delete($producto->imagen);
+            Storage::disk('public')->delete($producto->imagen);
         }
-
-
 
         $producto->delete();
 
-
-
-        return back()
-            ->with(
-                'success',
-                'Producto eliminado correctamente'
-            );
+        return back()->with(
+            'success',
+            'Producto eliminado correctamente'
+        );
     }
 }
