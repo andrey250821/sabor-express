@@ -73,4 +73,70 @@ class AdministracionTest extends TestCase
             'estado' => 'disponible',
         ]);
     }
+
+    public function test_administrador_no_puede_crear_categorias_con_nombres_duplicados(): void
+    {
+        $administrador = $this->crearUsuario(
+            'Administrador',
+            'admin-categoria-duplicada-test@example.com'
+        );
+
+        Categoria::create([
+            'nombre' => 'Hamburguesas',
+            'estado' => 'activo',
+        ]);
+
+        $respuesta = $this->actingAs($administrador)
+            ->from(route('admin.categorias.create'))
+            ->post(route('admin.categorias.store'), [
+                'nombre' => '  hamburguesas  ',
+            ]);
+
+        $respuesta->assertRedirect(route('admin.categorias.create'));
+        $respuesta->assertSessionHasErrors('nombre');
+
+        $this->assertDatabaseCount('categorias', 1);
+    }
+
+    public function test_administrador_no_puede_crear_productos_con_nombres_duplicados_en_otra_categoria(): void
+    {
+        $administrador = $this->crearUsuario(
+            'Administrador',
+            'admin-producto-duplicado-test@example.com'
+        );
+
+        $categoriaOriginal = Categoria::create([
+            'nombre' => 'Categoría original de prueba',
+            'estado' => 'activo',
+        ]);
+
+        $segundaCategoria = Categoria::create([
+            'nombre' => 'Segunda categoría de prueba',
+            'estado' => 'activo',
+        ]);
+
+        Producto::create([
+            'categoria_id' => $categoriaOriginal->id,
+            'nombre' => 'Hamburguesa Clasica',
+            'descripcion' => 'Producto existente para prueba.',
+            'precio' => '25.00',
+            'stock' => 10,
+            'estado' => 'disponible',
+        ]);
+
+        $respuesta = $this->actingAs($administrador)
+            ->from(route('admin.productos.create'))
+            ->post(route('admin.productos.store'), [
+                'categoria_id' => $segundaCategoria->id,
+                'nombre' => '  hamburguesa clasica  ',
+                'descripcion' => 'Intento de duplicado.',
+                'precio' => '30.00',
+                'stock' => 5,
+            ]);
+
+        $respuesta->assertRedirect(route('admin.productos.create'));
+        $respuesta->assertSessionHasErrors('nombre');
+
+        $this->assertDatabaseCount('productos', 1);
+    }
 }
