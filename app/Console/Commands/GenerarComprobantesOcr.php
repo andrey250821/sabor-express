@@ -841,6 +841,17 @@ HTML;
             return $finder->find('chrome.exe');
         }
 
+        // Instalación privada utilizada en Alwaysdata (sin permisos root).
+        $home = getenv('HOME') ?: ($_SERVER['HOME'] ?? dirname(base_path()));
+        $chromePrivado = rtrim($home, DIRECTORY_SEPARATOR)
+            . DIRECTORY_SEPARATOR . '.local'
+            . DIRECTORY_SEPARATOR . 'bin'
+            . DIRECTORY_SEPARATOR . 'chrome-headless-shell';
+
+        if (is_file($chromePrivado) && is_executable($chromePrivado)) {
+            return $chromePrivado;
+        }
+
         foreach (['chrome-headless-shell', 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'] as $nombre) {
             $ejecutable = $finder->find($nombre);
 
