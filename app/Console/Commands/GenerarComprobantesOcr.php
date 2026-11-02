@@ -7,13 +7,16 @@ use App\Models\ComprobantePago;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Process;
+use Symfony\Component\Process\ExecutableFinder;
 
 class GenerarComprobantesOcr extends Command
 {
     protected $signature = 'ocr:generar-comprobantes
                             {--pedido= : Número del pedido}
                             {--total= : Total del pedido. Se usa si el pedido aún no existe en la BD}
-                            {--cliente= : Nombre del cliente. Se usa si el pedido aún no existe en la BD}';
+                            {--cliente= : Nombre del cliente. Se usa si el pedido aún no existe en la BD}
+                            {--chrome= : Ruta del ejecutable Chrome o Chromium}';
 
     protected $description = 'Genera comprobantes de prueba OCR a partir de un pedido real o de datos de checkout';
 
@@ -77,12 +80,13 @@ class GenerarComprobantesOcr extends Command
             $clienteNombre = $pedido->user?->name ?? 'Cliente Sabor Express';
         }
 
-        // Comprobar Chrome
-        $chrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+        // Localizar Chrome/Chromium según el sistema operativo.
+        $chrome = $this->localizarChrome();
 
-        if (!File::exists($chrome)) {
-            $this->error('No se encontró Google Chrome en:');
-            $this->line($chrome);
+        if (!$chrome) {
+            $this->error('No se encontró Google Chrome o Chromium en el servidor.');
+            $this->line('En Linux se buscan: google-chrome, google-chrome-stable, chromium y chromium-browser.');
+            $this->line('También puedes indicar su ruta directamente con --chrome=/ruta/al/chrome.');
 
             return self::FAILURE;
         }
@@ -761,44 +765,35 @@ HTML;
         |--------------------------------------------------------------------------
         */
 
-        $htmlUri = 'file:///' . str_replace(
-            '\\',
-            '/',
-            $htmlPath
-        );
+        // Chrome recibe una URL file:// compatible con Windows y Linux.
+        $htmlUri = PHP_OS_FAMILY === 'Windows'
+            ? 'file:///' . str_replace('\\', '/', $htmlPath)
+            : 'file://' . $htmlPath;
 
-        $command =
-            '"' . $chrome . '"'
-            . ' --headless=new'
-            . ' --disable-gpu'
-            . ' --no-sandbox'
-            . ' --hide-scrollbars'
-            . ' --window-size=900,1200'
-            . ' --screenshot="'
-            . $outputPath
-            . '"'
-            . ' "'
-            . $htmlUri
-            . '"';
+        $perfilChrome = $htmlDirectory . DIRECTORY_SEPARATOR . 'chrome-profile';
 
-        $output = [];
-        $resultCode = 0;
+        // Ejecutar Chrome sin shell para manejar correctamente espacios y rutas.
+        $resultado = Process::timeout(90)->run([
+            $chrome,
+            '--headless',
+            '--disable-gpu',
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+            '--no-first-run',
+            '--no-default-browser-check',
+            '--hide-scrollbars',
+            '--window-size=900,1200',
+            '--user-data-dir=' . $perfilChrome,
+            '--screenshot=' . $outputPath,
+            $htmlUri,
+        ]);
 
-        exec(
-            $command . ' 2>&1',
-            $output,
-            $resultCode
-        );
-
-        if (
-            $resultCode !== 0 ||
-            !File::exists($outputPath)
-        ) {
-            $detalle = trim(implode(PHP_EOL, $output));
+        if ($resultado->failed() || !File::exists($outputPath) || filesize($outputPath) === 0) {
+            $detalle = trim($resultado->errorOutput() . PHP_EOL . $resultado->output());
 
             throw new \RuntimeException(
-                "No se pudo generar {$nombreArchivo}."
-                . ($detalle !== '' ? " Detalle de Chrome: {$detalle}" : '')
+                "No se pudo generar {$nombreArchivo} con Chrome."
+                . ($detalle !== '' ? " Detalle: {$detalle}" : '')
             );
         }
 
@@ -807,4 +802,54 @@ HTML;
         );
 
     }
+
+    /**
+     * Encuentra Chrome o Chromium sin asumir una ruta propia de Windows.
+     * La opción --chrome permite indicar una instalación no incluida en PATH.
+     */
+    private function localizarChrome(): ?string
+    {
+        $finder = new ExecutableFinder();
+        $rutaIndicada = trim((string) $this->option('chrome'));
+
+        if ($rutaIndicada !== '') {
+            if (
+                is_file($rutaIndicada)
+                && (PHP_OS_FAMILY === 'Windows' || is_executable($rutaIndicada))
+            ) {
+                return realpath($rutaIndicada) ?: $rutaIndicada;
+            }
+
+            $ejecutable = $finder->find($rutaIndicada);
+
+            return $ejecutable ?: null;
+        }
+
+        if (PHP_OS_FAMILY === 'Windows') {
+            $rutas = [
+                getenv('PROGRAMFILES') . '\\Google\\Chrome\\Application\\chrome.exe',
+                getenv('PROGRAMFILES(X86)') . '\\Google\\Chrome\\Application\\chrome.exe',
+                getenv('LOCALAPPDATA') . '\\Google\\Chrome\\Application\\chrome.exe',
+            ];
+
+            foreach ($rutas as $ruta) {
+                if (is_file($ruta)) {
+                    return $ruta;
+                }
+            }
+
+            return $finder->find('chrome.exe');
+        }
+
+        foreach (['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'] as $nombre) {
+            $ejecutable = $finder->find($nombre);
+
+            if ($ejecutable) {
+                return $ejecutable;
+            }
+        }
+
+        return null;
+    }
+
 }
