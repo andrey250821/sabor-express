@@ -114,7 +114,7 @@ class OcrComprobanteService
              * Si la misma línea contiene un número, intentamos usarlo.
              * No tomamos fechas largas ni montos con decimales.
              */
-            if (preg_match('/(?:#|N\\s*[°º?oO0]|No\\.?|Nro\\.?)?\\s*(\\d{1,12})(?![.,]\\d)/iu', $lineaNormalizada, $matches)) {
+            if (preg_match('/(?:#|N\\s*[°º?oO0]|No\\.?|Nro\\.?)?\\s*(\\d{1,12})(?![\\d.,])/iu', $lineaNormalizada, $matches)) {
                 return (int) $matches[1];
             }
 
