@@ -841,7 +841,7 @@ HTML;
             return $finder->find('chrome.exe');
         }
 
-        foreach (['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'] as $nombre) {
+        foreach (['chrome-headless-shell', 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'] as $nombre) {
             $ejecutable = $finder->find($nombre);
 
             if ($ejecutable) {
