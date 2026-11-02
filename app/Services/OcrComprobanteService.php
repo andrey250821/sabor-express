@@ -63,12 +63,12 @@ class OcrComprobanteService
          * después de la etiqueta o de una identificación de pedido.
          */
         $patrones = [
-            '/\\bNUMERO\\s+DE\\s+PEDIDO\\b\\s*[:\\-#]?\\s*(\\d{1,8})\\b/iu',
-            '/\\bNUMERO\\s+DE\\s+PEDIDO\\b[^\\d\\r\\n]{0,20}(\\d{1,8})\\b/iu',
-            '/\\bID\\s+DEL\\s+PEDIDO\\b\\s*[:\\-#]?\\s*(\\d{1,8})\\b/iu',
-            '/\\bPEDIDO\\s+ID\\b\\s*[:\\-#]?\\s*(\\d{1,8})\\b/iu',
-            '/\\bPEDIDO\\b\\s*(?:N\\s*[°º?oO0]\\s*|Nro\\.?\\s*|No\\.?\\s*|#\\s*)?[:\\-]?\\s*(\\d{1,8})\\b/iu',
-            '/\\bPEDIDO\\b[^\\d\\r\\n]{0,20}(\\d{1,8})\\b/iu',
+            '/\\bNUMERO\\s+DE\\s+PEDIDO\\b\\s*[:\\-#]?\\s*(\\d{1,12})\\b/iu',
+            '/\\bNUMERO\\s+DE\\s+PEDIDO\\b[^\\d\\r\\n]{0,20}(\\d{1,12})\\b/iu',
+            '/\\bID\\s+DEL\\s+PEDIDO\\b\\s*[:\\-#]?\\s*(\\d{1,12})\\b/iu',
+            '/\\bPEDIDO\\s+ID\\b\\s*[:\\-#]?\\s*(\\d{1,12})\\b/iu',
+            '/\\bPEDIDO\\b\\s*(?:N\\s*[°º?oO0]\\s*|Nro\\.?\\s*|No\\.?\\s*|#\\s*)?[:\\-]?\\s*(\\d{1,12})\\b/iu',
+            '/\\bPEDIDO\\b[^\\d\\r\\n]{0,20}(\\d{1,12})\\b/iu',
         ];
 
         foreach ($patrones as $patron) {
@@ -114,7 +114,7 @@ class OcrComprobanteService
              * Si la misma línea contiene un número, intentamos usarlo.
              * No tomamos fechas largas ni montos con decimales.
              */
-            if (preg_match('/(?:#|N\\s*[°º?oO0]|No\\.?|Nro\\.?)?\\s*(\\d{1,8})(?![.,]\\d)/iu', $lineaNormalizada, $matches)) {
+            if (preg_match('/(?:#|N\\s*[°º?oO0]|No\\.?|Nro\\.?)?\\s*(\\d{1,12})(?![.,]\\d)/iu', $lineaNormalizada, $matches)) {
                 return (int) $matches[1];
             }
 
@@ -130,14 +130,14 @@ class OcrComprobanteService
                 /*
                  * Línea simple: 16
                  */
-                if (preg_match('/^(\\d{1,8})$/u', $siguiente, $matches)) {
+                if (preg_match('/^(\\d{1,12})$/u', $siguiente, $matches)) {
                     return (int) $matches[1];
                 }
 
                 /*
                  * Línea: # 16
                  */
-                if (preg_match('/^#?\\s*(\\d{1,8})$/u', $siguiente, $matches)) {
+                if (preg_match('/^#?\\s*(\\d{1,12})$/u', $siguiente, $matches)) {
                     return (int) $matches[1];
                 }
 
@@ -145,7 +145,7 @@ class OcrComprobanteService
                  * Línea: 4 16, una confusión frecuente al leer '# 16'.
                  * Aceptamos solo si termina en un único número válido.
                  */
-                if (preg_match('/^4\\s+(\\d{1,8})$/u', $siguiente, $matches)) {
+                if (preg_match('/^4\\s+(\\d{1,12})$/u', $siguiente, $matches)) {
                     return (int) $matches[1];
                 }
             }
