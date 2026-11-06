@@ -153,12 +153,6 @@ class CarritoController extends Controller
             ], 404);
         }
 
-        $sincronizacion = $reservas->sincronizarCarrito($carrito);
-
-        if (!$sincronizacion['success']) {
-            return response()->json($sincronizacion, 422);
-        }
-
         $resultado = $reservas->reservar($id, -1);
 
         if (!$resultado['success']) {
@@ -213,12 +207,6 @@ class CarritoController extends Controller
                 'success' => false,
                 'message' => 'El producto no está en el carrito.',
             ], 404);
-        }
-
-        $sincronizacion = $reservas->sincronizarCarrito($carrito);
-
-        if (!$sincronizacion['success']) {
-            return response()->json($sincronizacion, 422);
         }
 
         $cantidad = (int) $carrito[$id]['cantidad'];
