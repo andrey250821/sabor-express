@@ -385,6 +385,15 @@ class PedidoController extends Controller
             ], 422);
         }
 
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
+
+        if (!$sincronizacion['success']) {
+            return response()->json([
+                'ok' => false,
+                'message' => $sincronizacion['message'],
+            ], 422);
+        }
+
         try {
             $subtotal = 0;
 
