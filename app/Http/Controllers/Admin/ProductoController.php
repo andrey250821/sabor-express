@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Calificacion;
+use App\Models\ReservaCarrito;
 use App\Services\FechaFiltroService;
 
 class ProductoController extends Controller
@@ -159,6 +160,33 @@ class ProductoController extends Controller
             return back()
                 ->withErrors([
                     'nombre' => 'Ya existe otro producto con ese nombre. Elige un nombre diferente.',
+                ])
+                ->withInput();
+        }
+
+        // No permitir que una edición administrativa invalide unidades
+        // que los clientes ya tienen reservadas en sus carritos.
+        $unidadesReservadas = (int) ReservaCarrito::where('producto_id', $producto->id)
+            ->where('expires_at', '>', now())
+            ->sum('cantidad');
+
+        if ((int) $datosValidados['stock'] < $unidadesReservadas) {
+            return back()
+                ->withErrors([
+                    'stock' => 'No puedes establecer un stock inferior a las '
+                        . $unidadesReservadas
+                        . ' unidades que actualmente están reservadas en carritos.',
+                ])
+                ->withInput();
+        }
+
+        if (
+            $unidadesReservadas > 0
+            && $datosValidados['estado'] !== 'disponible'
+        ) {
+            return back()
+                ->withErrors([
+                    'estado' => 'No puedes marcar este producto como agotado mientras tenga unidades reservadas por clientes.',
                 ])
                 ->withInput();
         }
