@@ -183,6 +183,93 @@ class CarritoTest extends TestCase
         ]);
     }
 
+
+    public function test_dos_carritos_no_pueden_reservar_la_misma_ultima_unidad(): void
+    {
+        $role = Role::firstOrCreate(['nombre' => 'Cliente']);
+
+        $primerCliente = User::create([
+            'role_id' => $role->id,
+            'name' => 'Primer Cliente',
+            'email' => 'primer-cliente@example.com',
+            'telefono' => '71111111',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $segundoCliente = User::create([
+            'role_id' => $role->id,
+            'name' => 'Segundo Cliente',
+            'email' => 'segundo-cliente@example.com',
+            'telefono' => '72222222',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $categoria = Categoria::create([
+            'nombre' => 'Categoría de última unidad',
+            'estado' => 'activo',
+        ]);
+
+        $producto = Producto::create([
+            'categoria_id' => $categoria->id,
+            'nombre' => 'Última hamburguesa',
+            'descripcion' => 'Prueba de reserva compartida.',
+            'precio' => 20.00,
+            'stock' => 1,
+            'estado' => 'disponible',
+        ]);
+
+        $this->withSession(['carrito_token' => 'token-primer-cliente'])
+            ->actingAs($primerCliente)
+            ->postJson('/carrito/agregar/' . $producto->id)
+            ->assertOk()
+            ->assertJson([
+                'success' => true,
+                'stockDisponible' => 0,
+            ]);
+
+        $this->withSession(['carrito_token' => 'token-segundo-cliente'])
+            ->actingAs($segundoCliente)
+            ->postJson('/carrito/agregar/' . $producto->id)
+            ->assertStatus(422)
+            ->assertJson([
+                'success' => false,
+                'stockDisponible' => 0,
+            ]);
+
+        $this->assertDatabaseHas('productos', [
+            'id' => $producto->id,
+            'stock' => 1,
+        ]);
+    }
+
+    public function test_endpoint_de_stock_devuelve_existencias_libres_sin_modificar_inventario(): void
+    {
+        [$user, $producto] = $this->crearDatosCarrito();
+
+        $this->actingAs($user)
+            ->postJson('/carrito/agregar/' . $producto->id)
+            ->assertOk();
+
+        $this->getJson('/productos/stock')
+            ->assertOk()
+            ->assertJson([
+                'success' => true,
+                'stocks' => [
+                    [
+                        'id' => $producto->id,
+                        'stockDisponible' => 4,
+                    ],
+                ],
+            ]);
+
+        $this->assertDatabaseHas('productos', [
+            'id' => $producto->id,
+            'stock' => 5,
+        ]);
+    }
+
     public function test_formulario_normal_redirige_y_muestra_mensaje_en_vez_de_json(): void
     {
         [$user, $producto] = $this->crearDatosCarrito();
