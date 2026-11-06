@@ -209,6 +209,15 @@
 
                             </p>
 
+                            <p class="cliente-carrito-stock-libre">
+                                <span>Stock libre</span>
+                                <strong
+                                    class="cliente-item-stock"
+                                    data-id="{{ $item['id'] }}">
+                                    {{ (int) ($item['stock_disponible'] ?? 0) }}
+                                </strong>
+                            </p>
+
                         </div>
 
 
@@ -677,6 +686,7 @@
                 if (datos.eliminado) {
 
                     eliminarElementoProducto(id);
+                    actualizarStockDisponible(id, datos.stockDisponible);
 
                     actualizarTotal(datos.total);
 
@@ -742,6 +752,8 @@
                         `Bs. ${datos.subtotal}`;
 
                 }
+
+                actualizarStockDisponible(id, datos.stockDisponible);
 
 
                 /*
@@ -854,6 +866,7 @@
 
 
                 eliminarElementoProducto(id);
+                actualizarStockDisponible(id, datos.stockDisponible);
 
 
                 actualizarTotal(
@@ -975,12 +988,12 @@
                     'success'
                 );
 
+                actualizarContador(0);
+                actualizarCantidadProductos();
 
                 setTimeout(function() {
-
                     mostrarCarritoVacio();
-
-                }, 400);
+                }, 250);
 
 
             } catch (error) {
@@ -1040,6 +1053,27 @@
 
             }, 250);
 
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTUALIZAR STOCK DISPONIBLE
+        |--------------------------------------------------------------------------
+        */
+
+        function actualizarStockDisponible(id, disponible) {
+            if (disponible === undefined) {
+                return;
+            }
+
+            const elemento = document.querySelector(
+                `.cliente-item-stock[data-id="${id}"]`
+            );
+
+            if (elemento) {
+                elemento.textContent = Math.max(0, Number(disponible));
+            }
         }
 
 
@@ -1156,9 +1190,30 @@
         */
 
         function mostrarCarritoVacio() {
+            const pagina = document.querySelector('.cliente-carrito-page');
 
-            window.location.reload();
+            if (!pagina || pagina.querySelector('.cliente-carrito-vacio')) {
+                return;
+            }
 
+            pagina.querySelector('.row.g-4')?.remove();
+            document.getElementById('btn-vaciar-carrito')?.remove();
+
+            const vacio = document.createElement('div');
+            vacio.className = 'cliente-carrito-vacio';
+            vacio.innerHTML = `
+                <div class="cliente-carrito-vacio-icono">
+                    <i class="bi bi-cart-x"></i>
+                </div>
+                <h2>Tu carrito está vacío</h2>
+                <p>Todavía no has agregado productos a tu carrito.</p>
+                <a href="{{ route('cliente.productos.index') }}" class="cliente-carrito-btn-principal">
+                    <i class="bi bi-shop"></i>
+                    Ver productos
+                </a>
+            `;
+
+            pagina.appendChild(vacio);
         }
 
 
