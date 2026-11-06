@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Configuracion;
 use App\Models\User;
+use App\Rules\TelefonoBoliviano;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,9 +34,15 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->merge([
+            'name' => trim((string) $request->input('name', '')),
+            'email' => mb_strtolower(trim((string) $request->input('email', '')), 'UTF-8'),
+            'telefono' => TelefonoBoliviano::normalizar($request->input('telefono')),
+        ]);
+
         $datos = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'telefono' => ['required', 'string', 'max:50'],
+            'telefono' => ['required', 'string', 'max:20', new TelefonoBoliviano()],
             'email' => [
                 'required',
                 'string',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Delivery;
 
 use App\Http\Controllers\Controller;
+use App\Rules\TelefonoBoliviano;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -100,6 +101,11 @@ class PerfilController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
+        $request->merge([
+            'name' => trim((string) $request->input('name', '')),
+            'telefono' => TelefonoBoliviano::normalizar($request->input('telefono')),
+        ]);
+
         $datos = $request->validate([
             'name' => [
                 'required',
@@ -110,6 +116,7 @@ class PerfilController extends Controller
                 'nullable',
                 'string',
                 'max:20',
+                new TelefonoBoliviano(),
             ],
             'foto_perfil' => [
                 'nullable',
