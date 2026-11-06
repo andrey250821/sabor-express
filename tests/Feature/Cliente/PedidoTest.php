@@ -218,12 +218,13 @@ class PedidoTest extends TestCase
 
         Storage::fake('public');
 
+        // No se debe consultar OSRM cuando el carrito no puede reservar
+        // las unidades solicitadas. La validación de inventario ocurre antes
+        // del cálculo de Delivery para evitar llamadas externas innecesarias.
         $this->mock(
             CalcularDeliveryService::class,
             function (MockInterface $mock): void {
-                $mock->shouldReceive('cotizar')
-                    ->once()
-                    ->andReturn($this->cotizacionPrueba());
+                $mock->shouldNotReceive('cotizar');
             }
         );
 
