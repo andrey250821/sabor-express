@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (estadoElemento) {
                     estadoElemento.textContent =
-                        'Esperando la ubicación del repartidor...';
+                        'Esperando la ubicación GPS de tu Delivery...';
                 }
 
                 if (marcadorDelivery) {

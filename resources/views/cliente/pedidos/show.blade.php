@@ -1031,7 +1031,7 @@
                         id="cliente-delivery-status"
                         class="cliente-delivery-status">
 
-                        Esperando la ubicación del repartidor...
+                        Esperando la ubicación GPS de tu Delivery...
 
                     </div>
                     <div class="cliente-delivery-legend">
