@@ -288,6 +288,15 @@
 
                             @endif
 
+                            @php
+                                $stockReservado = (int) ($producto->stock_reservado ?? 0);
+                                $stockLibre = max(0, (int) $producto->stock - $stockReservado);
+                            @endphp
+
+                            <small class="d-block text-muted mt-1">
+                                Libre: {{ $stockLibre }} · Reservado: {{ $stockReservado }}
+                            </small>
+
                         </td>
 
 
