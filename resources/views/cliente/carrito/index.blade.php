@@ -530,6 +530,50 @@
 
         /*
         |--------------------------------------------------------------------------
+        | ACTUALIZAR STOCK COMPARTIDO SIN RECARGAR
+        |--------------------------------------------------------------------------
+        */
+
+        const urlStock = @json(route('cliente.productos.stock'));
+
+        async function consultarStockCarrito() {
+            if (document.hidden) {
+                return;
+            }
+
+            try {
+                const respuesta = await fetch(urlStock, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    cache: 'no-store'
+                });
+
+                if (!respuesta.ok) {
+                    return;
+                }
+
+                const datos = await respuesta.json();
+
+                if (datos.success && datos.stocks) {
+                    Object.entries(datos.stocks).forEach(function([id, stock]) {
+                        actualizarStockDisponible(id, stock);
+                    });
+                }
+            } catch (error) {
+                // El carrito sigue operando aunque falle una actualización periódica.
+                console.warn('No se pudo actualizar el stock del carrito.', error);
+            }
+        }
+
+        consultarStockCarrito();
+        window.setInterval(consultarStockCarrito, 6000);
+
+
+        /*
+        |--------------------------------------------------------------------------
         | AUMENTAR
         |--------------------------------------------------------------------------
         */
