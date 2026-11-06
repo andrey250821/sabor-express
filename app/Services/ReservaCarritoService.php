@@ -79,14 +79,24 @@ class ReservaCarritoService
                 ->where('expires_at', '>', $ahora)
                 ->sum('cantidad');
 
-            $nuevaCantidadPropia = $cantidadPropia + $delta;
+            // Liberar una unidad también es válido cuando la reserva ya venció.
+            // El cliente debe poder quitar del carrito un producto que dejó de reservar.
+            if ($delta < 0 && $cantidadPropia === 0) {
+                if ($reservaPropia) {
+                    $reservaPropia->delete();
+                }
 
-            if ($nuevaCantidadPropia < 0) {
                 return [
-                    'success' => false,
-                    'message' => 'La reserva del carrito ya no está vigente. Actualiza el carrito e inténtalo nuevamente.',
+                    'success' => true,
+                    'stockDisponible' => max(
+                        0,
+                        (int) $producto->stock - $reservadoPorOtros
+                    ),
+                    'cantidadReservada' => 0,
                 ];
             }
+
+            $nuevaCantidadPropia = max(0, $cantidadPropia + $delta);
 
             if ($delta > 0) {
                 if ($producto->estado !== 'disponible') {
