@@ -53,7 +53,11 @@
                 value="{{ old('telefono') }}"
                 required
                 autocomplete="tel"
-                placeholder="Ej. 7 1234567">
+                inputmode="tel"
+                pattern="[0-9+(). -]{8,20}"
+                maxlength="20"
+                title="Ingresa un teléfono boliviano válido de 8 dígitos. Puedes incluir el prefijo +591."
+                placeholder="Ej. 71234567">
 
             @error('telefono')
                 <p class="sx-auth-error">{{ $message }}</p>

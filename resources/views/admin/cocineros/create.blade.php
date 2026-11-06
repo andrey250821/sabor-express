@@ -106,11 +106,15 @@
                         </label>
 
                         <input
-                            type="text"
+                            type="tel"
                             name="telefono"
                             class="form-control delivery-input"
                             value="{{ old('telefono') }}"
-                            placeholder="Ej. 77777777">
+                            maxlength="20"
+                            inputmode="tel"
+                            pattern="[0-9+(). -]{8,20}"
+                            title="Ingresa un teléfono boliviano válido de 8 dígitos. Puedes incluir el prefijo +591."
+                            placeholder="Ej. 71234567">
 
                     </div>
 
@@ -157,7 +161,7 @@
                             type="password"
                             name="password"
                             class="form-control delivery-input"
-                            placeholder="Mínimo 6 caracteres"
+                            placeholder="Mínimo 8 caracteres" minlength="8"
                             required>
 
                     </div>
@@ -175,6 +179,7 @@
                             type="password"
                             name="password_confirmation"
                             class="form-control delivery-input"
+                            minlength="8"
                             placeholder="Repite la contraseña"
                             required>
 

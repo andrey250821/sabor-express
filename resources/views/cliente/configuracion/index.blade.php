@@ -102,11 +102,14 @@
                             <input
                                 id="telefono"
                                 name="telefono"
-                                type="text"
+                                type="tel"
                                 class="form-control"
                                 value="{{ old('telefono', $user->telefono) }}"
                                 maxlength="20"
-                                placeholder="Ej. 77777777">
+                                inputmode="tel"
+                                pattern="[0-9+(). -]{8,20}"
+                                title="Ingresa un teléfono boliviano válido de 8 dígitos. Puedes incluir el prefijo +591."
+                                placeholder="Ej. 71234567">
                         </div>
 
                         <div class="mb-4">
