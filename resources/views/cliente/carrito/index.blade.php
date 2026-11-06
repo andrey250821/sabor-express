@@ -557,9 +557,9 @@
 
                 const datos = await respuesta.json();
 
-                if (datos.success && datos.stocks) {
-                    Object.entries(datos.stocks).forEach(function([id, stock]) {
-                        actualizarStockDisponible(id, stock);
+                if (datos.success && Array.isArray(datos.stocks)) {
+                    datos.stocks.forEach(function(item) {
+                        actualizarStockDisponible(item.id, item.stockDisponible);
                     });
                 }
             } catch (error) {
