@@ -344,7 +344,8 @@
 
                         <div
                             class="cliente-producto-stock cliente-producto-stock--{{ $stockClase }}"
-                            data-producto-stock-container="{{ $producto->id }}">
+                            data-producto-stock-container="{{ $producto->id }}"
+                            data-stock-disponible="{{ $stockDisponible }}">
 
                             <span class="cliente-producto-stock-icono">
                                 <i class="bi bi-box-seam-fill"></i>
@@ -556,8 +557,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
 
                         setTimeout(function() {
-                            boton.innerHTML = textoOriginal;
-                            boton.disabled = false;
+                            const contenedorStock = document.querySelector(
+                                `[data-producto-stock-container="${boton.dataset.productoAgregar}"]`
+                            );
+                            const stockActual = Number(
+                                contenedorStock?.dataset.stockDisponible ?? datos.stockDisponible
+                            );
+
+                            if (stockActual > 0) {
+                                boton.innerHTML = textoOriginal;
+                                boton.disabled = false;
+                            }
                         }, 1200);
                     }
 
@@ -569,6 +579,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         'error'
                     );
 
+                    if (datos.stockDisponible !== undefined) {
+                        actualizarStockProducto(
+                            boton.dataset.productoAgregar,
+                            datos.stockDisponible
+                        );
+                    }
 
                     boton.innerHTML =
                         textoOriginal;
@@ -651,6 +667,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         contenedor.classList.add('cliente-producto-stock--' + clase);
+        contenedor.dataset.stockDisponible = String(cantidad);
         texto.textContent = etiqueta;
         boton.disabled = cantidad <= 0;
 
