@@ -21,10 +21,11 @@ use Illuminate\Support\Str;
 use App\Services\ValidarComprobantePagoService;
 use App\Services\CalcularDeliveryService;
 use App\Services\FechaFiltroService;
+use App\Services\ReservaCarritoService;
 
 class PedidoController extends Controller
 {
-    public function create()
+    public function create(ReservaCarritoService $reservas)
     {
         $carrito = session()->get('carrito', []);
 
@@ -33,6 +34,16 @@ class PedidoController extends Controller
                 ->route('cliente.productos.index')
                 ->with('error', 'El carrito está vacío');
         }
+
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
+
+        if (!$sincronizacion['success']) {
+            return redirect()
+                ->route('cliente.carrito.index')
+                ->with('error', $sincronizacion['message']);
+        }
+
+        $reservas->renovar();
 
         $total = 0;
 
@@ -205,6 +216,15 @@ class PedidoController extends Controller
             ], 422);
         }
 
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
+
+        if (!$sincronizacion['success']) {
+            return response()->json([
+                'ok' => false,
+                'message' => $sincronizacion['message'],
+            ], 422);
+        }
+
         try {
             $subtotal = 0;
 
@@ -348,7 +368,8 @@ class PedidoController extends Controller
      */
     public function cotizarDelivery(
         Request $request,
-        CalcularDeliveryService $calculador
+        CalcularDeliveryService $calculador,
+        ReservaCarritoService $reservas
     ) {
         $datos = $request->validate([
             'latitud' => 'required|numeric|between:-90,90',
@@ -442,7 +463,8 @@ class PedidoController extends Controller
     public function store(
         Request $request,
         ValidarComprobantePagoService $validador,
-        CalcularDeliveryService $calculador
+        CalcularDeliveryService $calculador,
+        ReservaCarritoService $reservas
     )
     {
         $request->validate([
@@ -460,6 +482,14 @@ class PedidoController extends Controller
             return redirect()
                 ->route('cliente.productos.index')
                 ->with('error', 'El carrito está vacío');
+        }
+
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
+
+        if (!$sincronizacion['success']) {
+            return redirect()
+                ->route('cliente.carrito.index')
+                ->with('error', $sincronizacion['message']);
         }
 
         try {
@@ -504,52 +534,17 @@ class PedidoController extends Controller
             ]);
 
             foreach ($carrito as $item) {
-                /*
-                 * Volvemos a consultar el producto dentro de la transacción
-                 * y bloqueamos su fila para comprobar el stock real justo
-                 * antes de confirmar el pedido.
-                 */
-                $producto = Producto::where('id', $item['id'])
-                    ->lockForUpdate()
-                    ->first();
-
-                if (!$producto) {
-                    throw new \RuntimeException(
-                        'El producto seleccionado ya no existe: ' . ($item['nombre'] ?? 'producto')
-                    );
-                }
-
-                if (
-                    $producto->estado !== 'disponible'
-                    || (int) $producto->stock <= 0
-                ) {
-                    throw new \RuntimeException(
-                        'El producto "' . $producto->nombre . '" ya no está disponible.'
-                    );
-                }
-
                 $cantidadSolicitada = (int) $item['cantidad'];
 
-                if ((int) $producto->stock < $cantidadSolicitada) {
-                    throw new \RuntimeException(
-                        'No hay stock suficiente de "' . $producto->nombre
-                        . '". Disponible: ' . $producto->stock
-                        . ' unidad(es); solicitadas: ' . $cantidadSolicitada . '.'
-                    );
-                }
-
                 /*
-                 * Reservar el stock como parte de la misma transacción
-                 * que crea el detalle del pedido.
+                 * Convertir la reserva temporal en una salida definitiva.
+                 * El servicio bloquea el producto, comprueba que la reserva
+                 * pertenece a esta sesión y descuenta el inventario una sola vez.
                  */
-                $producto->stock -= $cantidadSolicitada;
-
-                if ($producto->stock <= 0) {
-                    $producto->stock = 0;
-                    $producto->estado = 'agotado';
-                }
-
-                $producto->save();
+                $producto = $reservas->consumirProducto(
+                    (int) $item['id'],
+                    $cantidadSolicitada
+                );
 
                 $subtotal += round(
                     $cantidadSolicitada * (float) $producto->precio,
@@ -643,6 +638,7 @@ class PedidoController extends Controller
             }
 
             session()->forget('carrito');
+            session()->forget('carrito_token');
 
             return redirect()
                 ->route('cliente.pedidos.show', $pedido->id)
