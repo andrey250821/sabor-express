@@ -579,17 +579,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         'error'
                     );
 
+                    boton.innerHTML = textoOriginal;
+                    boton.disabled = false;
+
                     if (datos.stockDisponible !== undefined) {
                         actualizarStockProducto(
                             boton.dataset.productoAgregar,
                             datos.stockDisponible
                         );
                     }
-
-                    boton.innerHTML =
-                        textoOriginal;
-
-                    boton.disabled = false;
 
                 }
 
