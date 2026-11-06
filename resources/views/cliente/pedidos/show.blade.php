@@ -1042,7 +1042,7 @@
                             </span>
 
                             <span>
-                                Repartidor
+                                Delivery
                             </span>
                         </div>
 
@@ -1081,7 +1081,7 @@
                     </div>
 
                     <p>
-                        Tu pedido ya tiene un repartidor asignado.
+                        Tu pedido ya tiene un Delivery asignado.
                         El seguimiento en tiempo real estará disponible
                         cuando inicie el recorrido.
                     </p>

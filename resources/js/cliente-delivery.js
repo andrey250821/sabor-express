@@ -376,60 +376,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         |--------------------------------------------------------------------------
         */
 
-        const minutos =
-            Math.ceil(
-                duracionRutaSegundos / 60
-            );
+        const minutos = Math.ceil(duracionRutaSegundos / 60);
 
-        let textoTiempo;
+        const textoTiempo = minutos <= 1
+            ? 'Menos de 1 min'
+            : `${minutos} min`;
 
-        if (minutos <= 1) {
+        const mensajeRuta = obtenerMensajeDistancia(distanciaRutaMetros);
 
-            textoTiempo =
-                'menos de 1 min';
+        const fecha = new Date();
+        const hora = fecha.toLocaleTimeString('es-BO', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
 
-        } else {
-
-            textoTiempo =
-                `${minutos} min`;
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | MENSAJE PRINCIPAL
-        |--------------------------------------------------------------------------
-        */
-
-        const mensajeRuta =
-            obtenerMensajeDistancia(
-                distanciaRutaMetros
-            );
-
-        /*
-        |--------------------------------------------------------------------------
-        | MOSTRAR DISTANCIA + ETA
-        |--------------------------------------------------------------------------
-        */
+        const fechaLlegada = new Date(
+            fecha.getTime() + (Number(duracionRutaSegundos) * 1000)
+        );
+        const horaLlegada = fechaLlegada.toLocaleTimeString('es-BO', {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
 
         if (estadoElemento) {
+            estadoElemento.innerHTML = `
+                <div class="cliente-delivery-status-mensaje">
+                    <i class="bi bi-signpost-split-fill" aria-hidden="true"></i>
+                    <span>${mensajeRuta}</span>
+                </div>
 
-            const fecha =
-                new Date();
+                <div class="cliente-delivery-status-grid">
+                    <div class="cliente-delivery-status-item">
+                        <span>Distancia restante por ruta</span>
+                        <strong>${formatearDistancia(distanciaRutaMetros)}</strong>
+                    </div>
 
-            const hora =
-                fecha.toLocaleTimeString(
-                    'es-BO',
-                    {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                    }
-                );
+                    <div class="cliente-delivery-status-item cliente-delivery-status-item-eta">
+                        <span>Tiempo estimado de llegada</span>
+                        <strong>${textoTiempo}</strong>
+                        <small>Llegada aproximada: ${horaLlegada}</small>
+                    </div>
+                </div>
 
-            estadoElemento.innerHTML =
-            `${mensajeRuta}<br>` +
-            `⏱️ Tiempo estimado de llegada: <strong>${textoTiempo}</strong>` +
-            ` · Actualizado ${hora}`;
+                <div class="cliente-delivery-status-actualizado">
+                    <i class="bi bi-clock-history" aria-hidden="true"></i>
+                    Última actualización GPS: <strong>${ultimaActualizacionGPS || hora}</strong>
+                </div>
+            `;
         }
 
         console.log(
@@ -456,6 +450,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             'Cliente Delivery: error al obtener la ruta OSRM.',
             error
         );
+
+        if (!rutaDelivery && estadoElemento && ultimaDistanciaGpsMetros !== null) {
+            estadoElemento.innerHTML = `
+                <div class="cliente-delivery-status-mensaje">
+                    <i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i>
+                    <span>No se pudo calcular la ruta exacta. Se muestra la distancia aproximada por GPS.</span>
+                </div>
+
+                <div class="cliente-delivery-status-grid">
+                    <div class="cliente-delivery-status-item">
+                        <span>Distancia aproximada</span>
+                        <strong>${formatearDistancia(ultimaDistanciaGpsMetros)}</strong>
+                    </div>
+
+                    <div class="cliente-delivery-status-item cliente-delivery-status-item-eta">
+                        <span>Tiempo estimado de llegada</span>
+                        <strong>No disponible</strong>
+                        <small>El servicio de rutas no respondió.</small>
+                    </div>
+                </div>
+
+                <div class="cliente-delivery-status-actualizado">
+                    <i class="bi bi-clock-history" aria-hidden="true"></i>
+                    Última actualización GPS: <strong>${ultimaActualizacionGPS || 'Ubicación recibida'}</strong>
+                </div>
+            `;
+        }
 
     } finally {
 
@@ -549,7 +570,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     icon: iconoDelivery
                 })
                     .addTo(mapa)
-                    .bindPopup('Repartidor');
+                    .bindPopup('Delivery');
 
                 /*
                  * Ajustar el mapa solamente
@@ -589,13 +610,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             |--------------------------------------------------------------------------
             */
 
-            const distanciaMetros =
-                calcularDistanciaMetros(
-                    deliveryLatitud,
-                    deliveryLongitud,
-                    latitud,
-                    longitud
-                );
+            const distanciaMetros = calcularDistanciaMetros(
+                deliveryLatitud,
+                deliveryLongitud,
+                latitud,
+                longitud
+            );
+
+            ultimaDistanciaGpsMetros = distanciaMetros;
+
+            const fechaGPS = ubicacion.actualizado_en
+                ? new Date(ubicacion.actualizado_en)
+                : new Date();
+
+            ultimaActualizacionGPS = fechaGPS.toLocaleTimeString('es-BO', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
 
             /*
             |--------------------------------------------------------------------------
@@ -627,10 +659,32 @@ document.addEventListener('DOMContentLoaded', async () => {
                     : '';
 
                 const mensajeDistancia = obtenerMensajeDistancia(distanciaMetros);
+                const horaActualizacion = hora || 'hace unos instantes';
 
-                estadoElemento.textContent = hora
-                    ? `${mensajeDistancia} · Actualizado ${hora}`
-                    : mensajeDistancia;
+                estadoElemento.innerHTML = `
+                    <div class="cliente-delivery-status-mensaje">
+                        <i class="bi bi-signpost-split-fill" aria-hidden="true"></i>
+                        <span>${mensajeDistancia}</span>
+                    </div>
+
+                    <div class="cliente-delivery-status-grid">
+                        <div class="cliente-delivery-status-item">
+                            <span>Distancia aproximada</span>
+                            <strong>${formatearDistancia(distanciaMetros)}</strong>
+                        </div>
+
+                        <div class="cliente-delivery-status-item cliente-delivery-status-item-eta">
+                            <span>Tiempo estimado de llegada</span>
+                            <strong>Calculando ruta...</strong>
+                            <small>Esperando respuesta del servicio de rutas</small>
+                        </div>
+                    </div>
+
+                    <div class="cliente-delivery-status-actualizado">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i>
+                        Última actualización GPS: <strong>${horaActualizacion}</strong>
+                    </div>
+                `;
             }
 
             console.log(

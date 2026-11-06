@@ -10294,32 +10294,113 @@ a.cliente-mis-pedidos-card {
     height: 100%;
 }
 
-.cliente-delivery-status {
-    margin-top: 12px;
+/* =========================================================
+   ESTADO, DISTANCIA Y TIEMPO ESTIMADO DE LLEGADA
+========================================================= */
 
-    padding: 10px 13px;
-
-    border-radius: 10px;
-
-    background: #f3f4f6;
-
-    color: #555;
-
+#cliente-delivery-status.cliente-delivery-status {
+    display: block;
+    margin-top: 14px;
+    padding: 16px;
+    border: 1px solid #d8dee8;
+    border-radius: 13px;
+    background: #f8fafc !important;
+    color: #1f2937 !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, .07);
     font-size: 13px;
     font-weight: 600;
 }
 
+#cliente-delivery-status .cliente-delivery-status-mensaje {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #263445 !important;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.45;
+}
+
+#cliente-delivery-status .cliente-delivery-status-mensaje i {
+    color: #8b1e45 !important;
+    font-size: 17px;
+}
+
+.cliente-delivery-status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 13px;
+}
+
+#cliente-delivery-status .cliente-delivery-status-item {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 13px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 11px;
+    background: #ffffff;
+}
+
+#cliente-delivery-status .cliente-delivery-status-item > span {
+    color: #64748b !important;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .55px;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+#cliente-delivery-status .cliente-delivery-status-item > strong {
+    color: #263445 !important;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+#cliente-delivery-status .cliente-delivery-status-item-eta {
+    border-color: #f2c5d5;
+    background: #fff5f8;
+}
+
+#cliente-delivery-status .cliente-delivery-status-item-eta > strong {
+    color: #8b1e45 !important;
+    font-size: 25px;
+}
+
+#cliente-delivery-status .cliente-delivery-status-item-eta > small {
+    color: #765064 !important;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#cliente-delivery-status .cliente-delivery-status-actualizado {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 12px 0 0;
+    color: #64748b !important;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+#cliente-delivery-status .cliente-delivery-status-actualizado i {
+    color: #8b1e45 !important;
+}
+
 .cliente-delivery-tracking-pendiente p {
     margin: 8px 0 0;
-
     color: #666;
-
     font-size: 14px;
     line-height: 1.6;
 }
 
 @media (max-width: 576px) {
-
     .cliente-delivery-tracking {
         padding: 15px;
     }
@@ -10333,6 +10414,18 @@ a.cliente-mis-pedidos-card {
         height: 300px;
     }
 
+    .cliente-delivery-status-grid {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    #cliente-delivery-status .cliente-delivery-status-item {
+        padding: 12px;
+    }
+
+    #cliente-delivery-status .cliente-delivery-status-item > strong {
+        font-size: 21px;
+    }
 }
 /* =========================================================
    MARCADORES MAPA DELIVERY
