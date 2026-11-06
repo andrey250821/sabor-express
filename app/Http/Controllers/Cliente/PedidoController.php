@@ -590,12 +590,38 @@ class PedidoController extends Controller
 
             DB::commit();
 
+            /*
+             * El inventario ya fue descontado y el pedido quedó registrado.
+             * Se limpia el carrito inmediatamente para impedir duplicados
+             * aunque el proceso OCR tenga un problema posterior.
+             */
+            session()->forget('carrito');
+            session()->forget('carrito_token');
+
             // Ejecutar OCR después del commit para no mantener abierta
             // la transacción mientras se ejecuta el proceso externo.
-            $validacion = $validador->validar(
-                $pedido,
-                storage_path('app/public/' . $imagen)
-            );
+            try {
+                $validacion = $validador->validar(
+                    $pedido,
+                    storage_path('app/public/' . $imagen)
+                );
+            } catch (\Throwable $ocrError) {
+                report($ocrError);
+
+                // El pedido no se pierde: queda pendiente de revisión manual.
+                $validacion = [
+                    'estado' => 'en_revision',
+                    'motivo_revision' => 'No fue posible completar la lectura OCR. El comprobante requiere revisión manual.',
+                    'datos' => [
+                        'pedido' => null,
+                        'monto' => null,
+                        'referencia' => null,
+                        'fecha' => null,
+                        'banco' => null,
+                        'completo' => false,
+                    ],
+                ];
+            }
 
             $comprobante->update([
                 'estado' => $validacion['estado'],
@@ -646,9 +672,6 @@ class PedidoController extends Controller
                 }
             }
 
-            session()->forget('carrito');
-            session()->forget('carrito_token');
-
             return redirect()
                 ->route('cliente.pedidos.show', $pedido->id)
                 ->with(
@@ -658,7 +681,10 @@ class PedidoController extends Controller
                         : 'Pedido enviado. El comprobante requiere revisión manual.'
                 );
         } catch (\Throwable $e) {
-            DB::rollBack();
+            if (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
+
             report($e);
 
             return back()
