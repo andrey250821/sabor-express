@@ -37,7 +37,12 @@ class ProductoController extends Controller
 
         $query = Producto::with('categoria')
             ->withCount('calificaciones')
-            ->withAvg('calificaciones', 'puntuacion');
+            ->withAvg('calificaciones', 'puntuacion')
+            ->withSum([
+                'reservasCarrito as stock_reservado' => function ($consulta) {
+                    $consulta->where('expires_at', '>', now());
+                },
+            ], 'cantidad');
 
         if ($request->filled('categoria_id')) {
             $query->where('categoria_id', $request->categoria_id);
