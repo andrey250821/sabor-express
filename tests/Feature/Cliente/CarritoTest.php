@@ -6,6 +6,8 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\ReservaCarritoService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -146,6 +148,35 @@ class CarritoTest extends TestCase
                 'stockDisponible' => 5,
                 'carritoVacio' => true,
             ]);
+
+        $this->assertDatabaseMissing('reservas_carrito', [
+            'producto_id' => $producto->id,
+        ]);
+    }
+
+
+    public function test_consumir_la_reserva_descuenta_el_stock_fisico_una_sola_vez(): void
+    {
+        [$user, $producto] = $this->crearDatosCarrito();
+
+        $this->actingAs($user)
+            ->postJson('/carrito/agregar/' . $producto->id)
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->postJson('/carrito/agregar/' . $producto->id)
+            ->assertOk();
+
+        DB::transaction(function () use ($producto) {
+            app(ReservaCarritoService::class)
+                ->consumirProducto($producto->id, 2);
+        });
+
+        $this->assertDatabaseHas('productos', [
+            'id' => $producto->id,
+            'stock' => 3,
+            'estado' => 'disponible',
+        ]);
 
         $this->assertDatabaseMissing('reservas_carrito', [
             'producto_id' => $producto->id,
