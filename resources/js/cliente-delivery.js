@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mapaElemento = document.getElementById('cliente-delivery-map');
     const estadoElemento = document.getElementById('cliente-delivery-status');
 
+    // Últimos datos recibidos del GPS; sirven como respaldo mientras OSRM calcula la ruta.
+    let ultimaActualizacionGPS = null;
+    let ultimaDistanciaGpsMetros = null;
+
     if (!pedidoId || !mapaElemento) {
         console.error('Cliente Delivery: faltan datos necesarios.');
         if (estadoElemento) {
