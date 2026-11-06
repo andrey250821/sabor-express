@@ -708,9 +708,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const datos = await respuesta.json();
 
-            if (datos.success && datos.stocks) {
-                Object.entries(datos.stocks).forEach(function([id, stock]) {
-                    actualizarStockProducto(id, stock);
+            if (datos.success && Array.isArray(datos.stocks)) {
+                datos.stocks.forEach(function(item) {
+                    actualizarStockProducto(item.id, item.stockDisponible);
                 });
             }
         } catch (error) {
