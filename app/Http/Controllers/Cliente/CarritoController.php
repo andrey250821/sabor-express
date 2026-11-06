@@ -4,86 +4,66 @@ namespace App\Http\Controllers\Cliente;
 
 use App\Http\Controllers\Controller;
 use App\Models\Producto;
+use App\Services\ReservaCarritoService;
 use Illuminate\Http\Request;
 
 class CarritoController extends Controller
 {
     /**
-     * Mostrar carrito.
+     * Mostrar el carrito y mantener vigentes sus reservas.
      */
-    public function index()
+    public function index(ReservaCarritoService $reservas)
     {
         $carrito = session()->get('carrito', []);
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
+
+        if (!$sincronizacion['success']) {
+            session()->flash('error', $sincronizacion['message']);
+        }
 
         $total = 0;
 
         foreach ($carrito as $id => &$item) {
-
-            // Recalcular siempre el subtotal
-            $item['subtotal'] =
-                $item['cantidad'] * $item['precio'];
-
+            $item['subtotal'] = (int) $item['cantidad'] * (float) $item['precio'];
+            $item['stock_disponible'] = $reservas->stockDisponible((int) $id);
             $total += $item['subtotal'];
         }
 
         unset($item);
 
-        // Guardar los subtotales corregidos en la sesión
         session()->put('carrito', $carrito);
 
-        return view(
-            'cliente.carrito.index',
-            compact('carrito', 'total')
-        );
+        return view('cliente.carrito.index', compact('carrito', 'total'));
     }
 
     /**
-     * Agregar producto al carrito.
+     * Agregar una unidad y reservarla de forma atómica.
      */
-    public function agregar(Request $request, $id)
-    {
-        $producto = Producto::findOrFail($id);
+    public function agregar(
+        Request $request,
+        int $id,
+        ReservaCarritoService $reservas
+    ) {
+        $carrito = session()->get('carrito', []);
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
 
-        if (
-            $producto->estado !== 'disponible' ||
-            $producto->stock <= 0
-        ) {
-            $mensaje = 'El producto no está disponible.';
-
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $mensaje,
-                ], 422);
-            }
-
-            return back()->with('error', $mensaje);
+        if (!$sincronizacion['success']) {
+            return $this->respuestaError($request, $sincronizacion['message']);
         }
 
-        $carrito = session()->get('carrito', []);
+        $resultado = $reservas->reservar($id, 1);
+
+        if (!$resultado['success']) {
+            return $this->respuestaError($request, $resultado['message']);
+        }
+
+        $producto = Producto::findOrFail($id);
 
         if (isset($carrito[$id])) {
-
-            if ($carrito[$id]['cantidad'] >= $producto->stock) {
-                $mensaje = 'No hay más unidades disponibles de este producto.';
-
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => $mensaje,
-                    ], 422);
-                }
-
-                return back()->with('error', $mensaje);
-            }
-
             $carrito[$id]['cantidad']++;
-
             $carrito[$id]['subtotal'] =
-                $carrito[$id]['cantidad'] *
-                $carrito[$id]['precio'];
+                $carrito[$id]['cantidad'] * $carrito[$id]['precio'];
         } else {
-
             $carrito[$id] = [
                 'id' => $producto->id,
                 'nombre' => $producto->nombre,
@@ -95,113 +75,101 @@ class CarritoController extends Controller
             ];
         }
 
+        $carrito[$id]['stock_disponible'] = $resultado['stockDisponible'];
         session()->put('carrito', $carrito);
 
         $mensaje = 'Producto agregado al carrito.';
-        $cantidadCarrito = $this->cantidadTotal($carrito);
 
-        // AJAX/fetch: conservar la respuesta JSON que usa la interfaz de PC.
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => $mensaje,
-                'cantidadCarrito' => $cantidadCarrito,
+                'productoId' => $id,
+                'cantidad' => $carrito[$id]['cantidad'],
+                'stockDisponible' => $resultado['stockDisponible'],
+                'cantidadCarrito' => $this->cantidadTotal($carrito),
             ]);
         }
 
-        // Formulario HTML normal: evitar mostrar JSON en navegadores móviles.
         return back()->with('success', $mensaje);
     }
 
     /**
-     * Aumentar cantidad.
+     * Aumentar una unidad del producto reservado.
      */
-    public function aumentar($id)
+    public function aumentar(int $id, ReservaCarritoService $reservas)
     {
         $carrito = session()->get('carrito', []);
 
         if (!isset($carrito[$id])) {
             return response()->json([
                 'success' => false,
-                'message' => 'El producto no está en el carrito.'
+                'message' => 'El producto no está en el carrito.',
             ], 404);
         }
 
-        $producto = Producto::find($id);
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
 
-        if (!$producto) {
-            return response()->json([
-                'success' => false,
-                'message' => 'El producto ya no existe.'
-            ], 404);
+        if (!$sincronizacion['success']) {
+            return response()->json($sincronizacion, 422);
         }
 
-        if (
-            $producto->estado !== 'disponible' ||
-            $producto->stock <= 0
-        ) {
-            return response()->json([
-                'success' => false,
-                'message' => 'El producto ya no está disponible.'
-            ], 422);
-        }
+        $resultado = $reservas->reservar($id, 1);
 
-        if ($carrito[$id]['cantidad'] >= $producto->stock) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No puedes agregar más unidades. Stock máximo alcanzado.'
-            ], 422);
+        if (!$resultado['success']) {
+            return response()->json($resultado, 422);
         }
 
         $carrito[$id]['cantidad']++;
-
         $carrito[$id]['subtotal'] =
-            $carrito[$id]['cantidad'] *
-            $carrito[$id]['precio'];
+            $carrito[$id]['cantidad'] * $carrito[$id]['precio'];
+        $carrito[$id]['stock_disponible'] = $resultado['stockDisponible'];
 
         session()->put('carrito', $carrito);
 
         return response()->json([
             'success' => true,
             'message' => 'Cantidad actualizada.',
+            'productoId' => $id,
             'cantidad' => $carrito[$id]['cantidad'],
-            'subtotal' => number_format(
-                $carrito[$id]['subtotal'],
-                2,
-                '.',
-                ''
-            ),
-            'total' => number_format(
-                $this->calcularTotal($carrito),
-                2,
-                '.',
-                ''
-            ),
-            'cantidadCarrito' => $this->cantidadTotal($carrito)
+            'stockDisponible' => $resultado['stockDisponible'],
+            'subtotal' => number_format($carrito[$id]['subtotal'], 2, '.', ''),
+            'total' => number_format($this->calcularTotal($carrito), 2, '.', ''),
+            'cantidadCarrito' => $this->cantidadTotal($carrito),
         ]);
     }
 
     /**
-     * Disminuir cantidad.
+     * Disminuir una unidad y liberar su reserva.
      */
-    public function disminuir($id)
+    public function disminuir(int $id, ReservaCarritoService $reservas)
     {
         $carrito = session()->get('carrito', []);
 
         if (!isset($carrito[$id])) {
             return response()->json([
                 'success' => false,
-                'message' => 'El producto no está en el carrito.'
+                'message' => 'El producto no está en el carrito.',
             ], 404);
         }
 
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
+
+        if (!$sincronizacion['success']) {
+            return response()->json($sincronizacion, 422);
+        }
+
+        $resultado = $reservas->reservar($id, -1);
+
+        if (!$resultado['success']) {
+            return response()->json($resultado, 422);
+        }
+
         if ($carrito[$id]['cantidad'] > 1) {
-
             $carrito[$id]['cantidad']--;
-
             $carrito[$id]['subtotal'] =
-                $carrito[$id]['cantidad'] *
-                $carrito[$id]['precio'];
+                $carrito[$id]['cantidad'] * $carrito[$id]['precio'];
+            $carrito[$id]['stock_disponible'] = $resultado['stockDisponible'];
 
             session()->put('carrito', $carrito);
 
@@ -209,79 +177,77 @@ class CarritoController extends Controller
                 'success' => true,
                 'eliminado' => false,
                 'message' => 'Cantidad actualizada.',
+                'productoId' => $id,
                 'cantidad' => $carrito[$id]['cantidad'],
-                'subtotal' => number_format(
-                    $carrito[$id]['subtotal'],
-                    2,
-                    '.',
-                    ''
-                ),
-                'total' => number_format(
-                    $this->calcularTotal($carrito),
-                    2,
-                    '.',
-                    ''
-                ),
-                'cantidadCarrito' => $this->cantidadTotal($carrito)
+                'stockDisponible' => $resultado['stockDisponible'],
+                'subtotal' => number_format($carrito[$id]['subtotal'], 2, '.', ''),
+                'total' => number_format($this->calcularTotal($carrito), 2, '.', ''),
+                'cantidadCarrito' => $this->cantidadTotal($carrito),
             ]);
         }
 
         unset($carrito[$id]);
-
         session()->put('carrito', $carrito);
 
         return response()->json([
             'success' => true,
             'eliminado' => true,
+            'productoId' => $id,
+            'stockDisponible' => $resultado['stockDisponible'],
             'message' => 'Producto eliminado del carrito.',
-            'total' => number_format(
-                $this->calcularTotal($carrito),
-                2,
-                '.',
-                ''
-            ),
+            'total' => number_format($this->calcularTotal($carrito), 2, '.', ''),
             'cantidadCarrito' => $this->cantidadTotal($carrito),
-            'carritoVacio' => empty($carrito)
+            'carritoVacio' => empty($carrito),
         ]);
     }
 
     /**
-     * Eliminar producto.
+     * Eliminar todas las unidades de un producto y liberar su reserva.
      */
-    public function eliminar($id)
+    public function eliminar(int $id, ReservaCarritoService $reservas)
     {
         $carrito = session()->get('carrito', []);
 
         if (!isset($carrito[$id])) {
             return response()->json([
                 'success' => false,
-                'message' => 'El producto no está en el carrito.'
+                'message' => 'El producto no está en el carrito.',
             ], 404);
         }
 
-        unset($carrito[$id]);
+        $sincronizacion = $reservas->sincronizarCarrito($carrito);
 
+        if (!$sincronizacion['success']) {
+            return response()->json($sincronizacion, 422);
+        }
+
+        $cantidad = (int) $carrito[$id]['cantidad'];
+        $resultado = $reservas->reservar($id, -$cantidad);
+
+        if (!$resultado['success']) {
+            return response()->json($resultado, 422);
+        }
+
+        unset($carrito[$id]);
         session()->put('carrito', $carrito);
 
         return response()->json([
             'success' => true,
             'message' => 'Producto eliminado del carrito.',
-            'total' => number_format(
-                $this->calcularTotal($carrito),
-                2,
-                '.',
-                ''
-            ),
+            'productoId' => $id,
+            'stockDisponible' => $resultado['stockDisponible'],
+            'total' => number_format($this->calcularTotal($carrito), 2, '.', ''),
             'cantidadCarrito' => $this->cantidadTotal($carrito),
-            'carritoVacio' => empty($carrito)
+            'carritoVacio' => empty($carrito),
         ]);
     }
 
     /**
-     * Vaciar carrito.
+     * Vaciar carrito y liberar todas las unidades reservadas.
      */
-    public function vaciar()
+    public function vaciar(ReservaCarritoService $reservas)
     {
+        $reservas->liberarCarrito();
         session()->forget('carrito');
 
         return response()->json([
@@ -289,39 +255,38 @@ class CarritoController extends Controller
             'message' => 'Carrito vaciado correctamente.',
             'total' => '0.00',
             'cantidadCarrito' => 0,
-            'carritoVacio' => true
+            'carritoVacio' => true,
         ]);
     }
 
-    /**
-     * Calcular total.
-     */
-    private function calcularTotal($carrito)
+    private function respuestaError(Request $request, string $mensaje)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => $mensaje,
+            ], 422);
+        }
+
+        return back()->with('error', $mensaje);
+    }
+
+    private function calcularTotal(array $carrito): float
     {
         $total = 0;
 
         foreach ($carrito as $item) {
-
-            $subtotal =
-                $item['cantidad'] * $item['precio'];
-
-            $total += $subtotal;
+            $total += (int) $item['cantidad'] * (float) $item['precio'];
         }
 
         return $total;
     }
 
-    /**
-     * Calcular cantidad total de productos.
-     */
-    private function cantidadTotal($carrito)
+    private function cantidadTotal(array $carrito): int
     {
-        $cantidad = 0;
-
-        foreach ($carrito as $item) {
-            $cantidad += $item['cantidad'];
-        }
-
-        return $cantidad;
+        return array_sum(array_map(
+            fn ($item) => (int) $item['cantidad'],
+            $carrito
+        ));
     }
 }
