@@ -243,6 +243,13 @@ Route::get(
     [ClienteDashboardController::class, 'index']
 )->name('cliente.dashboard.index');
 
+// Stock disponible para actualizar el catálogo sin recargar la página.
+Route::get(
+    '/productos/stock',
+    [ClienteProductoController::class, 'stock']
+)->middleware('throttle:60,1')
+ ->name('cliente.productos.stock');
+
 Route::get(
     '/productos',
     [ClienteProductoController::class, 'index']
