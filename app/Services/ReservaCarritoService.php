@@ -59,7 +59,9 @@ class ReservaCarritoService
             $ahora = now();
 
             // Las reservas vencidas dejan de bloquear unidades.
-            ReservaCarrito::where('expires_at', '<=', $ahora)->delete();
+            ReservaCarrito::where('producto_id', $productoId)
+                ->where('expires_at', '<=', $ahora)
+                ->delete();
 
             $reservaPropia = ReservaCarrito::where('token', $token)
                 ->where('producto_id', $productoId)
