@@ -78,7 +78,7 @@ class ProductoController extends Controller
             ], 'cantidad')
             ->get();
 
-        $stocks = $productos->mapWithKeys(function ($producto) {
+        $stocks = $productos->map(function ($producto) {
             $disponible = $producto->estado === 'disponible'
                 ? max(
                     0,
@@ -86,8 +86,11 @@ class ProductoController extends Controller
                 )
                 : 0;
 
-            return [$producto->id => $disponible];
-        });
+            return [
+                'id' => (int) $producto->id,
+                'stockDisponible' => $disponible,
+            ];
+        })->values();
 
         return response()->json([
             'success' => true,
