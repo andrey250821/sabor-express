@@ -74,6 +74,84 @@ class CarritoTest extends TestCase
         );
     }
 
+
+    public function test_stock_disponible_se_reserva_al_agregar_y_no_permite_superar_el_stock(): void
+    {
+        [$user, $producto] = $this->crearDatosCarrito();
+
+        for ($i = 1; $i <= 5; $i++) {
+            $response = $this->actingAs($user)
+                ->postJson('/carrito/agregar/' . $producto->id);
+
+            $response->assertOk()
+                ->assertJson([
+                    'success' => true,
+                    'stockDisponible' => 5 - $i,
+                    'cantidad' => $i,
+                ]);
+        }
+
+        $sinStock = $this->actingAs($user)
+            ->postJson('/carrito/agregar/' . $producto->id);
+
+        $sinStock->assertStatus(422)
+            ->assertJson([
+                'success' => false,
+                'stockDisponible' => 0,
+            ]);
+
+        // El stock físico se descuenta al confirmar el pedido, no al reservar.
+        $this->assertDatabaseHas('productos', [
+            'id' => $producto->id,
+            'stock' => 5,
+        ]);
+
+        $this->assertDatabaseHas('reservas_carrito', [
+            'producto_id' => $producto->id,
+            'cantidad' => 5,
+        ]);
+
+        $this->assertSame(
+            5,
+            (int) session('carrito.' . $producto->id . '.cantidad')
+        );
+    }
+
+    public function test_disminuir_y_eliminar_del_carrito_liberan_stock_en_tiempo_real(): void
+    {
+        [$user, $producto] = $this->crearDatosCarrito();
+
+        $this->actingAs($user)
+            ->postJson('/carrito/agregar/' . $producto->id)
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->postJson('/carrito/agregar/' . $producto->id)
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->putJson('/carrito/disminuir/' . $producto->id)
+            ->assertOk()
+            ->assertJson([
+                'success' => true,
+                'cantidad' => 1,
+                'stockDisponible' => 4,
+            ]);
+
+        $this->actingAs($user)
+            ->deleteJson('/carrito/eliminar/' . $producto->id)
+            ->assertOk()
+            ->assertJson([
+                'success' => true,
+                'stockDisponible' => 5,
+                'carritoVacio' => true,
+            ]);
+
+        $this->assertDatabaseMissing('reservas_carrito', [
+            'producto_id' => $producto->id,
+        ]);
+    }
+
     public function test_formulario_normal_redirige_y_muestra_mensaje_en_vez_de_json(): void
     {
         [$user, $producto] = $this->crearDatosCarrito();
