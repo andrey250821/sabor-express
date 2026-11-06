@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Configuracion;
+use App\Rules\TelefonoBoliviano;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -36,9 +37,13 @@ class ConfiguracionController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
+        $request->merge([
+            'telefono' => TelefonoBoliviano::normalizar($request->input('telefono')),
+        ]);
+
         $datos = $request->validate([
             'nombre_restaurante' => 'required|string|max:255',
-            'telefono' => 'nullable|string|max:50',
+            'telefono' => ['nullable', 'string', 'max:20', new TelefonoBoliviano()],
             'qr_pago' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);

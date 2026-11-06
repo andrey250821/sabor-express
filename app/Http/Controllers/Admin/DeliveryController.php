@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Rules\TelefonoBoliviano;
 use App\Models\AsignacionDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -143,6 +144,12 @@ class DeliveryController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'name' => trim((string) $request->input('name', '')),
+            'email' => mb_strtolower(trim((string) $request->input('email', '')), 'UTF-8'),
+            'telefono' => TelefonoBoliviano::normalizar($request->input('telefono')),
+        ]);
+
         $request->validate([
 
             'name' => [
@@ -161,12 +168,13 @@ class DeliveryController extends Controller
             'telefono' => [
                 'nullable',
                 'string',
-                'max:20'
+                'max:20',
+                new TelefonoBoliviano(),
             ],
 'password' => [
                 'required',
                 'string',
-                'min:6',
+                'min:8',
                 'confirmed'
             ],
 
@@ -222,6 +230,12 @@ class DeliveryController extends Controller
         $delivery = User::where('role_id', 3)
             ->findOrFail($id);
 
+        $request->merge([
+            'name' => trim((string) $request->input('name', '')),
+            'email' => mb_strtolower(trim((string) $request->input('email', '')), 'UTF-8'),
+            'telefono' => TelefonoBoliviano::normalizar($request->input('telefono')),
+        ]);
+
         $request->validate([
 
             'name' => [
@@ -240,12 +254,13 @@ class DeliveryController extends Controller
             'telefono' => [
                 'nullable',
                 'string',
-                'max:20'
+                'max:20',
+                new TelefonoBoliviano(),
             ],
 'password' => [
                 'nullable',
                 'string',
-                'min:6',
+                'min:8',
                 'confirmed'
             ],
 
