@@ -328,30 +328,39 @@
                         </div>
 
 
-                        {{-- STOCK --}}
+                        {{-- STOCK DISPONIBLE EN TIEMPO REAL --}}
                         @php
-                            $stockClase = $producto->stock <= 0
+                            $stockDisponible = max(
+                                0,
+                                (int) $producto->stock - (int) ($producto->stock_reservado ?? 0)
+                            );
+
+                            $stockClase = $stockDisponible <= 0
                                 ? 'agotado'
-                                : ($producto->stock <= 5
+                                : ($stockDisponible <= 5
                                     ? 'bajo'
-                                    : ($producto->stock <= 15 ? 'medio' : 'alto'));
+                                    : ($stockDisponible <= 15 ? 'medio' : 'alto'));
                         @endphp
 
-                        <div class="cliente-producto-stock cliente-producto-stock--{{ $stockClase }}">
+                        <div
+                            class="cliente-producto-stock cliente-producto-stock--{{ $stockClase }}"
+                            data-producto-stock-container="{{ $producto->id }}">
 
                             <span class="cliente-producto-stock-icono">
                                 <i class="bi bi-box-seam-fill"></i>
                             </span>
 
-                            <span class="cliente-producto-stock-texto">
-                                @if($producto->stock <= 0)
+                            <span
+                                class="cliente-producto-stock-texto"
+                                data-producto-stock-texto="{{ $producto->id }}">
+                                @if($stockDisponible <= 0)
                                     Sin stock
-                                @elseif($producto->stock <= 5)
-                                    Últimas {{ $producto->stock }}
-                                    {{ $producto->stock == 1 ? 'unidad' : 'unidades' }}
+                                @elseif($stockDisponible <= 5)
+                                    Últimas {{ $stockDisponible }}
+                                    {{ $stockDisponible == 1 ? 'unidad' : 'unidades' }}
                                 @else
-                                    {{ $producto->stock }}
-                                    {{ $producto->stock == 1 ? 'unidad disponible' : 'unidades disponibles' }}
+                                    {{ $stockDisponible }}
+                                    {{ $stockDisponible == 1 ? 'unidad disponible' : 'unidades disponibles' }}
                                 @endif
                             </span>
 
@@ -394,7 +403,9 @@
 
                             <button
                                 type="submit"
-                                class="cliente-btn-agregar w-100">
+                                class="cliente-btn-agregar w-100"
+                                data-producto-agregar="{{ $producto->id }}"
+                                @disabled($stockDisponible <= 0)>
 
                                 <span class="cliente-btn-agregar-icono">
                                     <i class="bi bi-cart-plus"></i>
@@ -530,26 +541,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     );
 
 
-                    // Actualizar contador del carrito
-                    actualizarContadorCarrito(
-                        datos.cantidadCarrito
+                    // Actualizar contador y stock libre sin recargar.
+                    actualizarContadorCarrito(datos.cantidadCarrito);
+
+                    actualizarStockProducto(
+                        datos.productoId,
+                        datos.stockDisponible
                     );
 
+                    if (Number(datos.stockDisponible) > 0) {
+                        boton.innerHTML = `
+                            <i class="bi bi-check-lg"></i>
+                            <span>Agregado</span>
+                        `;
 
-                    boton.innerHTML = `
-                        <i class="bi bi-check-lg"></i>
-                        <span>Agregado</span>
-                    `;
-
-
-                    setTimeout(function() {
-
-                        boton.innerHTML =
-                            textoOriginal;
-
-                        boton.disabled = false;
-
-                    }, 1500);
+                        setTimeout(function() {
+                            boton.innerHTML = textoOriginal;
+                            boton.disabled = false;
+                        }, 1200);
+                    }
 
 
                 } else {
@@ -588,6 +598,114 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     });
+
+
+    // =====================================================
+    // STOCK COMPARTIDO EN TIEMPO REAL
+    // =====================================================
+
+    const urlStock = @json(route('cliente.productos.stock'));
+
+    function actualizarStockProducto(productoId, stock) {
+        if (productoId === undefined || stock === undefined) {
+            return;
+        }
+
+        const id = String(productoId);
+        const cantidad = Math.max(0, Number(stock));
+        const contenedor = document.querySelector(
+            `[data-producto-stock-container="${id}"]`
+        );
+        const texto = document.querySelector(
+            `[data-producto-stock-texto="${id}"]`
+        );
+        const boton = document.querySelector(
+            `[data-producto-agregar="${id}"]`
+        );
+
+        if (!contenedor || !texto || !boton) {
+            return;
+        }
+
+        contenedor.classList.remove(
+            'cliente-producto-stock--agotado',
+            'cliente-producto-stock--bajo',
+            'cliente-producto-stock--medio',
+            'cliente-producto-stock--alto'
+        );
+
+        let clase = 'alto';
+        let etiqueta = cantidad === 1
+            ? '1 unidad disponible'
+            : cantidad + ' unidades disponibles';
+
+        if (cantidad <= 0) {
+            clase = 'agotado';
+            etiqueta = 'Sin stock';
+        } else if (cantidad <= 5) {
+            clase = 'bajo';
+            etiqueta = 'Últimas ' + cantidad
+                + (cantidad === 1 ? ' unidad' : ' unidades');
+        } else if (cantidad <= 15) {
+            clase = 'medio';
+        }
+
+        contenedor.classList.add('cliente-producto-stock--' + clase);
+        texto.textContent = etiqueta;
+        boton.disabled = cantidad <= 0;
+
+        if (cantidad <= 0) {
+            boton.innerHTML = `
+                <span class="cliente-btn-agregar-icono">
+                    <i class="bi bi-x-circle"></i>
+                </span>
+                <span>Sin stock</span>
+            `;
+        } else if (boton.textContent.includes('Sin stock')) {
+            boton.innerHTML = `
+                <span class="cliente-btn-agregar-icono">
+                    <i class="bi bi-cart-plus"></i>
+                </span>
+                <span>Agregar al carrito</span>
+                <i class="bi bi-arrow-right cliente-btn-agregar-flecha"></i>
+            `;
+        }
+    }
+
+    async function consultarStockDisponible() {
+        if (document.hidden) {
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(urlStock, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                cache: 'no-store'
+            });
+
+            if (!respuesta.ok) {
+                return;
+            }
+
+            const datos = await respuesta.json();
+
+            if (datos.success && datos.stocks) {
+                Object.entries(datos.stocks).forEach(function([id, stock]) {
+                    actualizarStockProducto(id, stock);
+                });
+            }
+        } catch (error) {
+            // Si falla una consulta de actualización, el catálogo sigue funcionando.
+            console.warn('No se pudo actualizar el stock en este momento.', error);
+        }
+    }
+
+    consultarStockDisponible();
+    window.setInterval(consultarStockDisponible, 6000);
 
 
     // =====================================================
