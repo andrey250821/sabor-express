@@ -66,7 +66,13 @@ class ReservaCarritoService
                 ->lockForUpdate()
                 ->first();
 
-            $cantidadPropia = (int) ($reservaPropia?->cantidad ?? 0);
+            $reservaPropiaActiva = $reservaPropia
+                && $reservaPropia->expires_at
+                && $reservaPropia->expires_at->isFuture();
+
+            $cantidadPropia = $reservaPropiaActiva
+                ? (int) $reservaPropia->cantidad
+                : 0;
 
             $reservadoPorOtros = (int) ReservaCarrito::where('producto_id', $productoId)
                 ->where('token', '!=', $token)
