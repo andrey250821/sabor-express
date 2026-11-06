@@ -200,7 +200,8 @@ class PedidoController extends Controller
      */
     public function generarComprobantesPrueba(
         Request $request,
-        CalcularDeliveryService $calculador
+        CalcularDeliveryService $calculador,
+        ReservaCarritoService $reservas
     ) {
         $datos = $request->validate([
             'latitud' => 'required|numeric|between:-90,90',
@@ -222,8 +223,11 @@ class PedidoController extends Controller
             return response()->json([
                 'ok' => false,
                 'message' => $sincronizacion['message'],
+                'stockDisponible' => $sincronizacion['stockDisponible'] ?? null,
             ], 422);
         }
+
+        $reservas->renovar();
 
         try {
             $subtotal = 0;

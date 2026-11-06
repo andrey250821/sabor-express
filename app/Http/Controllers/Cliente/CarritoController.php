@@ -48,13 +48,25 @@ class CarritoController extends Controller
         $sincronizacion = $reservas->sincronizarCarrito($carrito);
 
         if (!$sincronizacion['success']) {
-            return $this->respuestaError($request, $sincronizacion['message']);
+            return $this->respuestaError(
+                $request,
+                $sincronizacion['message'],
+                isset($sincronizacion['stockDisponible'])
+                    ? (int) $sincronizacion['stockDisponible']
+                    : null
+            );
         }
 
         $resultado = $reservas->reservar($id, 1);
 
         if (!$resultado['success']) {
-            return $this->respuestaError($request, $resultado['message']);
+            return $this->respuestaError(
+                $request,
+                $resultado['message'],
+                isset($resultado['stockDisponible'])
+                    ? (int) $resultado['stockDisponible']
+                    : null
+            );
         }
 
         $producto = Producto::findOrFail($id);
@@ -153,17 +165,41 @@ class CarritoController extends Controller
             ], 404);
         }
 
-        $resultado = $reservas->reservar($id, -1);
+        $cantidadActual = (int) $carrito[$id]['cantidad'];
 
-        if (!$resultado['success']) {
-            return response()->json($resultado, 422);
-        }
+        if ($cantidadActual > 1) {
+            /*
+             * Ajustar primero la reserva a la cantidad que quedará en el carrito.
+             * Esto también recupera una reserva que haya vencido o no esté
+             * sincronizada, evitando que el stock mostrado quede desactualizado.
+             */
+            $carritoObjetivo = [
+                $id => array_merge($carrito[$id], [
+                    'cantidad' => $cantidadActual - 1,
+                ]),
+            ];
 
-        if ($carrito[$id]['cantidad'] > 1) {
-            $carrito[$id]['cantidad']--;
+            $sincronizacion = $reservas->sincronizarCarrito($carritoObjetivo);
+
+            if (!$sincronizacion['success']) {
+                $respuesta = [
+                    'success' => false,
+                    'message' => $sincronizacion['message'],
+                ];
+
+                if (isset($sincronizacion['stockDisponible'])) {
+                    $respuesta['stockDisponible'] =
+                        (int) $sincronizacion['stockDisponible'];
+                }
+
+                return response()->json($respuesta, 422);
+            }
+
+            $carrito[$id]['cantidad'] = $cantidadActual - 1;
             $carrito[$id]['subtotal'] =
                 $carrito[$id]['cantidad'] * $carrito[$id]['precio'];
-            $carrito[$id]['stock_disponible'] = $resultado['stockDisponible'];
+            $carrito[$id]['stock_disponible'] =
+                $reservas->stockDisponible($id);
 
             session()->put('carrito', $carrito);
 
@@ -173,11 +209,18 @@ class CarritoController extends Controller
                 'message' => 'Cantidad actualizada.',
                 'productoId' => $id,
                 'cantidad' => $carrito[$id]['cantidad'],
-                'stockDisponible' => $resultado['stockDisponible'],
+                'stockDisponible' => $carrito[$id]['stock_disponible'],
                 'subtotal' => number_format($carrito[$id]['subtotal'], 2, '.', ''),
                 'total' => number_format($this->calcularTotal($carrito), 2, '.', ''),
                 'cantidadCarrito' => $this->cantidadTotal($carrito),
             ]);
+        }
+
+        // Si queda una sola unidad, se libera su reserva y se quita el producto.
+        $resultado = $reservas->reservar($id, -$cantidadActual);
+
+        if (!$resultado['success']) {
+            return response()->json($resultado, 422);
         }
 
         unset($carrito[$id]);
@@ -247,13 +290,22 @@ class CarritoController extends Controller
         ]);
     }
 
-    private function respuestaError(Request $request, string $mensaje)
-    {
+    private function respuestaError(
+        Request $request,
+        string $mensaje,
+        ?int $stockDisponible = null
+    ) {
         if ($request->expectsJson()) {
-            return response()->json([
+            $respuesta = [
                 'success' => false,
                 'message' => $mensaje,
-            ], 422);
+            ];
+
+            if ($stockDisponible !== null) {
+                $respuesta['stockDisponible'] = $stockDisponible;
+            }
+
+            return response()->json($respuesta, 422);
         }
 
         return back()->with('error', $mensaje);

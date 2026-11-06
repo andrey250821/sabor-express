@@ -4,6 +4,7 @@ namespace Tests\Feature\Cliente;
 
 use App\Models\Categoria;
 use App\Models\Producto;
+use App\Models\ReservaCarrito;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\ReservaCarritoService;
@@ -157,15 +158,20 @@ class CarritoTest extends TestCase
 
     public function test_consumir_la_reserva_descuenta_el_stock_fisico_una_sola_vez(): void
     {
-        [$user, $producto] = $this->crearDatosCarrito();
+        [, $producto] = $this->crearDatosCarrito();
 
-        $this->actingAs($user)
-            ->postJson('/carrito/agregar/' . $producto->id)
-            ->assertOk();
+        // Este test comprueba el consumo de una reserva ya creada.
+        // Se establece explícitamente el token porque el servicio se invoca
+        // directamente, fuera de una petición HTTP del carrito.
+        $token = 'token-consumo-carrito-prueba';
+        session()->put('carrito_token', $token);
 
-        $this->actingAs($user)
-            ->postJson('/carrito/agregar/' . $producto->id)
-            ->assertOk();
+        ReservaCarrito::create([
+            'token' => $token,
+            'producto_id' => $producto->id,
+            'cantidad' => 2,
+            'expires_at' => now()->addMinutes(30),
+        ]);
 
         DB::transaction(function () use ($producto) {
             app(ReservaCarritoService::class)

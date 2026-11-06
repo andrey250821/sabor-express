@@ -250,7 +250,9 @@ class PedidoTest extends TestCase
                 'observacion_cliente' => null,
                 'comprobante' => $this->crearComprobantePrueba(),
             ])
-            ->assertRedirect(route('cliente.pedidos.create'))
+            // Si las reservas no pueden cubrir las cantidades del carrito,
+            // el cliente vuelve al carrito para corregirlas antes de confirmar.
+            ->assertRedirect(route('cliente.carrito.index'))
             ->assertSessionHas('error');
 
         $this->assertDatabaseCount('pedidos', 0);
