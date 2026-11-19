@@ -3247,3 +3247,46 @@
     background-color: #17181d !important;
 }
 
+
+/* ==========================================================================
+   MENÚ CLIENTE — MAYOR LEGIBILIDAD Y ÁREA DE INTERACCIÓN
+   ========================================================================== */
+
+.cliente-app .cliente-nav-link {
+    min-height: 46px;
+    padding: 12px 14px !important;
+    gap: 9px;
+    font-size: 15px;
+    font-weight: 650;
+}
+
+.cliente-app .cliente-nav-link i {
+    font-size: 19px;
+}
+
+/* En escritorio estrecho, conservar espacio para el perfil y el logotipo. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .cliente-app .cliente-nav-link {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        font-size: 14.5px;
+        gap: 7px;
+    }
+
+    .cliente-app .cliente-nav-link i {
+        font-size: 18px;
+    }
+}
+
+/* En tabletas y celulares, aumentar la altura y separación de cada opción. */
+@media (max-width: 991.98px) {
+    .cliente-app .cliente-navbar-links {
+        gap: 7px;
+    }
+
+    .cliente-app .cliente-nav-link {
+        min-height: 49px;
+        padding: 13px 16px !important;
+        font-size: 15.5px;
+    }
+}
