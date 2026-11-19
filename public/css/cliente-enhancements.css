@@ -3497,3 +3497,72 @@
     outline: 2px solid rgba(255, 110, 160, .9);
     outline-offset: 3px;
 }
+
+
+/* ==========================================================================
+   MENÚ CLIENTE — BOTONES MÁS GRANDES EN ESCRITORIO
+   ========================================================================== */
+
+@media (min-width: 1400px) {
+    .cliente-app .cliente-navbar-container {
+        min-height: 88px;
+    }
+
+    .cliente-app .cliente-navbar-links {
+        gap: clamp(5px, .48vw, 10px);
+    }
+
+    .cliente-app .cliente-nav-link {
+        min-height: 54px;
+        padding: 14px clamp(13px, 1vw, 18px) !important;
+        gap: 9px;
+        border-radius: 13px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.15;
+    }
+
+    .cliente-app .cliente-nav-link i {
+        font-size: 21px;
+    }
+
+    .cliente-app .cliente-navbar-profile-avatar {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+    }
+
+    .cliente-app .cliente-user-name {
+        font-size: 14.5px;
+    }
+
+    .cliente-app .cliente-btn-logout {
+        min-width: 154px;
+        min-height: 52px;
+        padding: 12px 16px;
+        border-radius: 13px;
+        font-size: 13.5px;
+    }
+
+    .cliente-app .cliente-btn-logout i {
+        font-size: 15px;
+    }
+}
+
+/* En pantallas anchas, conservar botones cómodos sin perder espacio. */
+@media (min-width: 1400px) and (max-width: 1550px) {
+    .cliente-app .cliente-nav-link {
+        padding-left: 11px !important;
+        padding-right: 11px !important;
+        font-size: 15px;
+        gap: 7px;
+    }
+
+    .cliente-app .cliente-nav-link i {
+        font-size: 20px;
+    }
+
+    .cliente-app .cliente-navbar-links {
+        gap: 4px;
+    }
+}
