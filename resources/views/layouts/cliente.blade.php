@@ -47,7 +47,7 @@
          NAVBAR CLIENTE
     ====================================================== --}}
 
-    <nav class="cliente-navbar navbar navbar-expand-lg">
+    <nav class="cliente-navbar navbar navbar-expand-xxl">
 
         <div class="container-fluid cliente-navbar-container">
 

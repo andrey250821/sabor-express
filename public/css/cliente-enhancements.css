@@ -3249,44 +3249,251 @@
 
 
 /* ==========================================================================
-   MENÚ CLIENTE — MAYOR LEGIBILIDAD Y ÁREA DE INTERACCIÓN
+   MENÚ CLIENTE — DISTRIBUCIÓN, LEGIBILIDAD Y DISEÑO RESPONSIVE
    ========================================================================== */
 
-.cliente-app .cliente-nav-link {
-    min-height: 46px;
-    padding: 12px 14px !important;
-    gap: 9px;
-    font-size: 15px;
-    font-weight: 650;
-}
+@media (min-width: 1400px) {
+    .cliente-app .cliente-navbar-container {
+        width: 100%;
+        max-width: 1820px;
+        min-height: 82px;
+        padding-left: clamp(22px, 2.7vw, 48px);
+        padding-right: clamp(22px, 2.7vw, 48px);
+        gap: clamp(14px, 1.4vw, 26px);
+    }
 
-.cliente-app .cliente-nav-link i {
-    font-size: 19px;
-}
+    .cliente-app .cliente-logo {
+        flex: 0 0 auto;
+        gap: 10px;
+        white-space: nowrap;
+        font-size: 21px;
+    }
 
-/* En escritorio estrecho, conservar espacio para el perfil y el logotipo. */
-@media (min-width: 992px) and (max-width: 1199.98px) {
+    .cliente-app #clienteNavbar {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: clamp(10px, 1.1vw, 20px);
+    }
+
+    .cliente-app .cliente-navbar-links {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0;
+        gap: clamp(2px, .35vw, 7px);
+    }
+
     .cliente-app .cliente-nav-link {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-        font-size: 14.5px;
+        flex: 0 0 auto;
+        min-height: 46px;
+        padding: 11px clamp(9px, .78vw, 14px) !important;
         gap: 7px;
+        font-size: 14.5px;
+        line-height: 1.15;
+        white-space: nowrap;
+        word-break: keep-all;
     }
 
     .cliente-app .cliente-nav-link i {
+        flex: 0 0 auto;
         font-size: 18px;
+    }
+
+    .cliente-app .cliente-navbar-user {
+        flex: 0 0 auto;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .cliente-app .cliente-user-info {
+        flex-wrap: nowrap;
+        gap: clamp(8px, .7vw, 13px);
+        white-space: nowrap;
+    }
+
+    .cliente-app .cliente-profile-link {
+        flex: 0 1 auto;
+        min-width: 0;
+        gap: 8px;
+        white-space: nowrap;
+    }
+
+    .cliente-app .cliente-user-name {
+        display: block;
+        max-width: clamp(118px, 9vw, 165px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13.5px;
+    }
+
+    .cliente-app .cliente-btn-logout {
+        min-width: 142px;
+        min-height: 46px;
+        padding: 10px 13px;
+        gap: 7px;
+        white-space: nowrap;
+        flex: 0 0 auto;
+        font-size: 12.5px;
+    }
+
+    .cliente-app .cliente-user-info form {
+        flex: 0 0 auto;
+        margin: 0;
     }
 }
 
-/* En tabletas y celulares, aumentar la altura y separación de cada opción. */
-@media (max-width: 991.98px) {
+@media (max-width: 1399.98px) {
+    .cliente-app .cliente-navbar-container {
+        width: 100%;
+        max-width: 100%;
+        min-height: 74px;
+        padding: 12px clamp(16px, 3vw, 32px);
+        flex-wrap: wrap;
+    }
+
+    .cliente-app .cliente-logo {
+        flex: 0 1 auto;
+        min-width: 0;
+        font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .cliente-app .cliente-logo span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .cliente-app .cliente-navbar-toggler {
+        display: flex;
+        flex: 0 0 44px;
+        margin-left: auto;
+    }
+
+    .cliente-app #clienteNavbar {
+        flex: 0 0 100%;
+        width: 100%;
+        min-width: 0;
+        padding-top: 8px;
+    }
+
     .cliente-app .cliente-navbar-links {
-        gap: 7px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        margin: 10px 0 0;
+        padding: 12px 0 8px;
+        gap: 6px;
+        border-top: 1px solid rgba(255,255,255,.09);
     }
 
     .cliente-app .cliente-nav-link {
-        min-height: 49px;
-        padding: 13px 16px !important;
-        font-size: 15.5px;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 15px !important;
+        gap: 11px;
+        font-size: 15px;
+        line-height: 1.2;
+        white-space: nowrap;
     }
+
+    .cliente-app .cliente-nav-link i {
+        flex: 0 0 21px;
+        width: 21px;
+        text-align: center;
+        font-size: 19px;
+    }
+
+    .cliente-app .cliente-navbar-user {
+        width: 100%;
+        margin: 8px 0 0;
+        padding: 14px 0 4px;
+        border-top: 1px solid rgba(255,255,255,.09);
+    }
+
+    .cliente-app .cliente-user-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .cliente-app .cliente-profile-link {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .cliente-app .cliente-user-name {
+        max-width: min(58vw, 260px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .cliente-app .cliente-user-info form {
+        flex: 0 0 auto;
+        margin: 0;
+    }
+
+    .cliente-app .cliente-btn-logout {
+        min-height: 44px;
+        padding: 10px 14px;
+        white-space: nowrap;
+    }
+
+    .cliente-app .cliente-login-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cliente-app .cliente-navbar-container {
+        padding: 10px 14px;
+    }
+
+    .cliente-app .cliente-logo-image {
+        width: 38px;
+        height: 38px;
+    }
+
+    .cliente-app .cliente-user-info {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cliente-app .cliente-profile-link {
+        align-self: center;
+    }
+
+    .cliente-app .cliente-btn-logout {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cliente-app .cliente-user-info form {
+        width: 100%;
+    }
+}
+
+.cliente-app .cliente-nav-link:focus-visible,
+.cliente-app .cliente-navbar-toggler:focus-visible,
+.cliente-app .cliente-btn-logout:focus-visible {
+    outline: 2px solid rgba(255, 110, 160, .9);
+    outline-offset: 3px;
 }
