@@ -3779,3 +3779,186 @@ body.cocinero-layout {
         font-size: 10px;
     }
 }
+
+
+/* ==========================================================================
+   AVISOS DINÁMICOS DE COCINA
+   Cola de preparación: movimiento intenso.
+   Pedidos en preparación: movimiento moderado.
+   ========================================================================== */
+
+.cocinero-nav-link { position: relative; }
+.cocinero-nav-text { min-width: 0; }
+
+.cocinero-nav-counters {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+}
+
+.cocinero-nav-count {
+    min-width: 25px;
+    height: 23px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 950;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .24);
+}
+
+.cocinero-nav-count[hidden] { display: none !important; }
+
+.cocinero-nav-count--pending {
+    border: 1px solid rgba(255, 138, 61, .55);
+    background: linear-gradient(135deg, #ff8a3d, #f04468);
+}
+
+.cocinero-nav-count--preparing {
+    border: 1px solid rgba(255, 114, 170, .48);
+    background: linear-gradient(135deg, #b52c76, #e34d91);
+}
+
+.cocinero-nav-link--pending {
+    animation: cocinero-nav-pending-motion .62s ease-in-out infinite;
+    filter: brightness(1.13);
+    box-shadow: 0 0 0 2px rgba(255, 138, 61, .16), 0 10px 27px rgba(255, 93, 75, .30), inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+.cocinero-nav-link--pending::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    z-index: -1;
+    border: 2px solid rgba(255, 138, 61, .72);
+    border-radius: 15px;
+    pointer-events: none;
+    animation: cocinero-pending-ring .9s ease-out infinite;
+}
+
+.cocinero-nav-link--pending .cocinero-nav-icon {
+    animation: cocinero-pending-icon .52s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(255, 93, 75, .42);
+}
+
+.cocinero-nav-link--preparing {
+    animation: cocinero-nav-preparing-motion 1.45s ease-in-out infinite;
+    box-shadow: 0 0 0 1px rgba(255, 114, 170, .13), 0 7px 20px rgba(214, 51, 132, .17);
+}
+
+.cocinero-nav-link--preparing .cocinero-nav-icon {
+    animation: cocinero-preparing-icon 1.35s ease-in-out infinite;
+}
+
+.cocinero-nav-count--pending:not([hidden]) { animation: cocinero-pending-count .58s ease-in-out infinite; }
+.cocinero-nav-count--preparing:not([hidden]) { animation: cocinero-preparing-count 1.35s ease-in-out infinite; }
+
+.cocinero-state-link--pending-alert {
+    position: relative;
+    border-color: rgba(255, 138, 61, .78) !important;
+    box-shadow: 0 0 0 2px rgba(255, 138, 61, .12), 0 9px 25px rgba(255, 93, 75, .20);
+    animation: cocinero-state-pending-motion .62s ease-in-out infinite;
+}
+
+.cocinero-state-link--pending-alert .cocinero-state-link-icon {
+    animation: cocinero-pending-icon .52s ease-in-out infinite;
+    box-shadow: 0 0 18px rgba(255, 138, 61, .38);
+}
+
+.cocinero-state-link--pending-alert .cocinero-state-link-count {
+    animation: cocinero-pending-count .58s ease-in-out infinite;
+    color: #fff !important;
+    background: linear-gradient(135deg, #ff8a3d, #f04468) !important;
+    box-shadow: 0 5px 15px rgba(255, 93, 75, .36);
+}
+
+.cocinero-state-link--preparing-alert {
+    position: relative;
+    border-color: rgba(255, 114, 170, .55) !important;
+    box-shadow: 0 0 0 1px rgba(255, 114, 170, .09), 0 7px 20px rgba(214, 51, 132, .13);
+    animation: cocinero-state-preparing-motion 1.45s ease-in-out infinite;
+}
+
+.cocinero-state-link--preparing-alert .cocinero-state-link-icon {
+    animation: cocinero-preparing-icon 1.35s ease-in-out infinite;
+}
+
+.cocinero-state-link--preparing-alert .cocinero-state-link-count {
+    animation: cocinero-preparing-count 1.35s ease-in-out infinite;
+    color: #fff !important;
+    background: linear-gradient(135deg, #b52c76, #e34d91) !important;
+}
+
+@keyframes cocinero-nav-pending-motion {
+    0%, 100% { transform: translateX(0) scale(1); filter: brightness(1); }
+    16% { transform: translateX(6px) scale(1.035) rotate(.5deg); filter: brightness(1.16); }
+    32% { transform: translateX(-3px) scale(1.012); }
+    50% { transform: translateX(5px) scale(1.03); filter: brightness(1.2); }
+    68% { transform: translateX(-2px) scale(1.008); }
+    84% { transform: translateX(3px) scale(1.02); }
+}
+
+@keyframes cocinero-state-pending-motion {
+    0%, 100% { transform: translateX(0) scale(1); }
+    18% { transform: translateX(4px) scale(1.012); }
+    36% { transform: translateX(-2px) scale(1.004); }
+    54% { transform: translateX(3px) scale(1.01); }
+    72% { transform: translateX(-1px) scale(1.002); }
+}
+
+@keyframes cocinero-nav-preparing-motion {
+    0%, 100% { transform: translateX(0); box-shadow: 0 7px 20px rgba(214, 51, 132, .12); }
+    50% { transform: translateX(2px); box-shadow: 0 9px 24px rgba(214, 51, 132, .25); }
+}
+
+@keyframes cocinero-state-preparing-motion {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(1.5px); }
+}
+
+@keyframes cocinero-pending-icon {
+    0%, 100% { transform: scale(1) rotate(0); }
+    50% { transform: scale(1.2) rotate(-7deg); }
+}
+
+@keyframes cocinero-preparing-icon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes cocinero-pending-count {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.16); filter: brightness(1.28); }
+}
+
+@keyframes cocinero-preparing-count {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.09); filter: brightness(1.16); }
+}
+
+@keyframes cocinero-pending-ring {
+    0% { opacity: .88; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cocinero-nav-link--pending,
+    .cocinero-nav-link--pending::after,
+    .cocinero-nav-link--pending .cocinero-nav-icon,
+    .cocinero-nav-link--preparing,
+    .cocinero-nav-link--preparing .cocinero-nav-icon,
+    .cocinero-nav-count,
+    .cocinero-state-link--pending-alert,
+    .cocinero-state-link--pending-alert .cocinero-state-link-icon,
+    .cocinero-state-link--pending-alert .cocinero-state-link-count,
+    .cocinero-state-link--preparing-alert,
+    .cocinero-state-link--preparing-alert .cocinero-state-link-icon,
+    .cocinero-state-link--preparing-alert .cocinero-state-link-count {
+        animation: none !important;
+    }
+}

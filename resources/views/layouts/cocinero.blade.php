@@ -27,7 +27,21 @@
     @stack('styles')
 </head>
 
-<body class="cocinero-layout">
+<body class="cocinero-layout" data-cocinero-live-state-url="{{ route('cocinero.estado-en-vivo') }}">
+
+    @php
+        $cocineroPedidosEnCola = \App\Models\Pedido::query()
+            ->where('estado', 'pagado')
+            ->whereNull('cocinero_id')
+            ->count();
+
+        $cocineroPedidosPreparando = \App\Models\Pedido::query()
+            ->where('estado', 'preparando')
+            ->where('cocinero_id', Auth::id())
+            ->count();
+
+        $cocineroViendoPedidos = request()->routeIs('cocinero.pedidos.*');
+    @endphp
 
     <aside class="cocinero-sidebar" id="cocineroSidebar">
 
@@ -107,13 +121,32 @@
 
             <a
                 href="{{ route('cocinero.pedidos.index') }}"
-                class="cocinero-nav-link {{ request()->routeIs('cocinero.pedidos.*') ? 'active' : '' }}">
+                id="cocinero-nav-pedidos"
+                data-is-viewing-pedidos="{{ $cocineroViendoPedidos ? '1' : '0' }}"
+                class="cocinero-nav-link {{ request()->routeIs('cocinero.pedidos.*') ? 'active' : '' }} {{ !$cocineroViendoPedidos && $cocineroPedidosEnCola > 0 ? 'cocinero-nav-link--pending' : '' }} {{ !$cocineroViendoPedidos && $cocineroPedidosEnCola === 0 && $cocineroPedidosPreparando > 0 ? 'cocinero-nav-link--preparing' : '' }}">
 
                 <span class="cocinero-nav-icon">
                     <i class="bi bi-bag-fill"></i>
                 </span>
 
-                <span>Pedidos</span>
+                <span class="cocinero-nav-text">Pedidos</span>
+
+                <span class="cocinero-nav-counters" aria-label="Cantidad de pedidos en cola y en preparación">
+                    <span
+                        id="cocinero-nav-pending-count"
+                        class="cocinero-nav-count cocinero-nav-count--pending"
+                        title="Pedidos que esperan preparación"
+                        {{ $cocineroPedidosEnCola > 0 ? '' : 'hidden' }}>
+                        {{ $cocineroPedidosEnCola > 99 ? '99+' : $cocineroPedidosEnCola }}
+                    </span>
+                    <span
+                        id="cocinero-nav-preparing-count"
+                        class="cocinero-nav-count cocinero-nav-count--preparing"
+                        title="Pedidos que aún debes terminar"
+                        {{ $cocineroPedidosPreparando > 0 ? '' : 'hidden' }}>
+                        {{ $cocineroPedidosPreparando > 99 ? '99+' : $cocineroPedidosPreparando }}
+                    </span>
+                </span>
             </a>
 
             <div class="cocinero-nav-title mt-4">

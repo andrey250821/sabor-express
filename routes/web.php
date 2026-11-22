@@ -476,6 +476,7 @@ Route::middleware(['auth', 'role:Cocinero'])
 
             Route::get('/dashboard', [CocineroDashboardController::class, 'index'])->name('cocinero.dashboard');
             Route::get('/pedidos', [CocineroPedidoController::class, 'index'])->name('cocinero.pedidos.index');
+            Route::get('/estado-en-vivo', [CocineroPedidoController::class, 'estadoEnVivo'])->name('cocinero.estado-en-vivo');
             Route::get('/pedidos/{id}', [CocineroPedidoController::class, 'show'])->name('cocinero.pedidos.show');
             Route::put('/pedidos/{id}/preparar', [CocineroPedidoController::class, 'preparar'])->name('cocinero.pedidos.preparar');
             Route::put('/pedidos/{id}/listo', [CocineroPedidoController::class, 'listo'])->name('cocinero.pedidos.listo');

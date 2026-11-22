@@ -280,4 +280,29 @@ class PedidoController extends Controller
                 'success',
                 'Pedido #' . $id . ' listo. Se procesó automáticamente la cola de Delivery.'
             );
-    }}
+    }
+
+
+    /**
+     * Estado resumido de Cocina para actualizar los avisos sin recargar la página.
+     * La cola es compartida; las preparaciones corresponden solo al cocinero autenticado.
+     */
+    public function estadoEnVivo(): \Illuminate\Http\JsonResponse
+    {
+        $cantidadPendientes = Pedido::query()
+            ->where('estado', 'pagado')
+            ->whereNull('cocinero_id')
+            ->count();
+
+        $cantidadPreparando = Pedido::query()
+            ->where('estado', 'preparando')
+            ->where('cocinero_id', Auth::id())
+            ->count();
+
+        return response()->json([
+            'pendientes' => $cantidadPendientes,
+            'preparando' => $cantidadPreparando,
+        ]);
+    }
+
+}

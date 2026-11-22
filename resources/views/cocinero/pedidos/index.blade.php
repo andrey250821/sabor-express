@@ -16,7 +16,7 @@
     $cantidadListos = $listos->count();
 @endphp
 
-<div class="container-fluid px-0 cocinero-pedidos">
+<div class="container-fluid px-0 cocinero-pedidos" data-cocinero-live-orders data-current-section="{{ $seccion }}">
 
     {{-- CABECERA --}}
     <section class="cocinero-page-intro cocinero-reveal mb-4">
@@ -76,7 +76,8 @@
 
             <a
                 href="{{ route('cocinero.pedidos.index', ['seccion' => 'pendientes']) }}"
-                class="cocinero-state-link {{ $seccion === 'pendientes' ? 'active pendiente' : '' }}">
+                data-cocinero-state-alert="pendientes"
+                class="cocinero-state-link {{ $seccion === 'pendientes' ? 'active pendiente' : '' }} {{ $cantidadPendientes > 0 && $seccion !== 'pendientes' ? 'cocinero-state-link--pending-alert' : '' }}">
 
                 <span class="cocinero-state-link-icon">
                     <i class="bi bi-hourglass-split"></i>
@@ -87,7 +88,7 @@
                     <small>Pedidos pagados que esperan entrar a cocina</small>
                 </span>
 
-                <span class="cocinero-state-link-count">
+                <span class="cocinero-state-link-count" id="cocinero-state-pending-count">
                     {{ $cantidadPendientes }}
                 </span>
 
@@ -97,7 +98,8 @@
 
             <a
                 href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
-                class="cocinero-state-link {{ $seccion === 'preparando' ? 'active preparando' : '' }}">
+                data-cocinero-state-alert="preparando"
+                class="cocinero-state-link {{ $seccion === 'preparando' ? 'active preparando' : '' }} {{ $cantidadPreparando > 0 && $seccion !== 'preparando' ? 'cocinero-state-link--preparing-alert' : '' }}">
 
                 <span class="cocinero-state-link-icon">
                     <i class="bi bi-fire"></i>
@@ -108,7 +110,7 @@
                     <small>Pedidos que estás preparando en este momento</small>
                 </span>
 
-                <span class="cocinero-state-link-count">
+                <span class="cocinero-state-link-count" id="cocinero-state-preparing-count">
                     {{ $cantidadPreparando }}
                 </span>
 

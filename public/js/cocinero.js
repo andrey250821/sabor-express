@@ -135,6 +135,87 @@ document.addEventListener('DOMContentLoaded', () => {
         revealItems.forEach((item) => item.classList.add('is-visible'));
     }
 
+    // Avisos vivos de Cocina: cola intensa y preparaciones con movimiento moderado.
+    const liveStateUrl = document.body.dataset.cocineroLiveStateUrl;
+
+    if (liveStateUrl) {
+        const ordersNav = document.getElementById('cocinero-nav-pedidos');
+        const pendingNavCount = document.getElementById('cocinero-nav-pending-count');
+        const preparingNavCount = document.getElementById('cocinero-nav-preparing-count');
+        const liveOrdersPanel = document.querySelector('[data-cocinero-live-orders]');
+        const viewingOrders = ordersNav?.dataset.isViewingPedidos === '1';
+        const currentSection = liveOrdersPanel?.dataset.currentSection || '';
+
+        const formatCount = (count) => count > 99 ? '99+' : String(count);
+
+        const updateCount = (element, count) => {
+            if (!element) return;
+            element.textContent = formatCount(count);
+            element.hidden = count <= 0;
+        };
+
+        const updateCookingAlerts = (pendingValue, preparingValue) => {
+            const pending = Math.max(0, Number.parseInt(pendingValue, 10) || 0);
+            const preparing = Math.max(0, Number.parseInt(preparingValue, 10) || 0);
+
+            updateCount(pendingNavCount, pending);
+            updateCount(preparingNavCount, preparing);
+
+            ordersNav?.classList.toggle(
+                'cocinero-nav-link--pending',
+                pending > 0 && !viewingOrders
+            );
+            ordersNav?.classList.toggle(
+                'cocinero-nav-link--preparing',
+                pending === 0 && preparing > 0 && !viewingOrders
+            );
+
+            const pendingStateLink = document.querySelector('[data-cocinero-state-alert="pendientes"]');
+            const preparingStateLink = document.querySelector('[data-cocinero-state-alert="preparando"]');
+            const pendingStateCount = document.getElementById('cocinero-state-pending-count');
+            const preparingStateCount = document.getElementById('cocinero-state-preparing-count');
+
+            updateCount(pendingStateCount, pending);
+            updateCount(preparingStateCount, preparing);
+
+            pendingStateLink?.classList.toggle(
+                'cocinero-state-link--pending-alert',
+                pending > 0 && currentSection !== 'pendientes'
+            );
+            preparingStateLink?.classList.toggle(
+                'cocinero-state-link--preparing-alert',
+                preparing > 0 && currentSection !== 'preparando'
+            );
+        };
+
+        const refreshCookingState = async () => {
+            if (document.hidden) return;
+
+            try {
+                const response = await fetch(liveStateUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'same-origin',
+                    cache: 'no-store'
+                });
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+                updateCookingAlerts(data.pendientes, data.preparando);
+            } catch (error) {
+                // El sondeo es auxiliar: no debe interrumpir las acciones de cocina.
+                console.warn('No se pudo actualizar el estado de Cocina.', error);
+            }
+        };
+
+        refreshCookingState();
+        window.setInterval(refreshCookingState, 5000);
+    }
+
     // Reloj de cocina actualizado en el cliente.
     const clock = document.getElementById('cocineroClock');
 
