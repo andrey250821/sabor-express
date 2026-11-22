@@ -127,6 +127,30 @@ class PedidoController extends Controller
      * Procesa la cola solo cuando hay pedidos listos y devuelve contadores
      * para actualizar el panel sin recargar el documento.
      */
+    /**
+     * Contar las entregas activas del Delivery autenticado.
+     * Se mantienen visibles mientras estén asignadas o en camino.
+     */
+    public function pedidosPendientesCount(): JsonResponse|RedirectResponse
+    {
+        $delivery = $this->verificarDelivery();
+
+        if ($delivery instanceof RedirectResponse) {
+            return $delivery;
+        }
+
+        $cantidad = AsignacionDelivery::query()
+            ->where('delivery_id', $delivery->id)
+            ->whereHas('pedido', function ($query) {
+                $query->whereIn('estado', ['asignado', 'en_camino']);
+            })
+            ->count();
+
+        return response()
+            ->json(['cantidad' => $cantidad])
+            ->header('Cache-Control', 'private, no-store, max-age=0');
+    }
+
     public function estadoEnVivo(
         FechaFiltroService $fechas,
         AsignarPedidoDeliveryService $asignador
@@ -153,7 +177,7 @@ class PedidoController extends Controller
         $cantidadPendientes = AsignacionDelivery::query()
             ->where('delivery_id', $delivery->id)
             ->whereHas('pedido', function ($query) {
-                $query->where('estado', 'asignado');
+                $query->whereIn('estado', ['asignado', 'en_camino']);
             })
             ->count();
 
