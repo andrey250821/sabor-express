@@ -3963,3 +3963,139 @@ body.cocinero-layout {
         animation: none !important;
     }
 }
+
+
+/* ==========================================================================
+   PEDIDOS EN PREPARACIÓN — PULSO REFORZADO Y CONTADORES CON ONDAS
+   Mantiene una intensidad intermedia respecto a la cola de preparación.
+   ========================================================================== */
+
+/* El enlace se mueve un poco más y el icono responde con mayor claridad. */
+.cocinero-nav-link--preparing {
+    animation: cocinero-nav-preparing-motion-plus 1.08s ease-in-out infinite;
+    box-shadow:
+        0 0 0 1px rgba(255, 114, 170, .20),
+        0 9px 25px rgba(214, 51, 132, .24);
+}
+
+.cocinero-nav-link--preparing .cocinero-nav-icon,
+.cocinero-state-link--preparing-alert .cocinero-state-link-icon {
+    animation: cocinero-preparing-icon-plus 1.02s ease-in-out infinite;
+}
+
+/* Contador lateral: el número pulsa y lanza dos ondas alternadas. */
+.cocinero-nav-link .cocinero-nav-count--preparing:not([hidden]) {
+    position: relative;
+    isolation: isolate;
+    z-index: 0;
+    animation: cocinero-preparing-count-plus 1.05s ease-in-out infinite;
+}
+
+.cocinero-nav-link .cocinero-nav-count--preparing:not([hidden])::before,
+.cocinero-nav-link .cocinero-nav-count--preparing:not([hidden])::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    z-index: -1;
+    border: 1.5px solid rgba(255, 114, 170, .82);
+    border-radius: inherit;
+    pointer-events: none;
+    animation: cocinero-preparing-wave 1.35s ease-out infinite;
+}
+
+.cocinero-nav-link .cocinero-nav-count--preparing:not([hidden])::after {
+    animation-delay: .675s;
+    border-color: rgba(255, 180, 211, .68);
+}
+
+/* Contador de la tarjeta "Pedidos en preparación": mismas ondas visibles. */
+.cocinero-state-link--preparing-alert .cocinero-state-link-count {
+    position: relative;
+    isolation: isolate;
+    z-index: 0;
+    animation: cocinero-preparing-count-plus 1.05s ease-in-out infinite;
+    color: #fff !important;
+    background: linear-gradient(135deg, #b52c76, #e34d91) !important;
+    box-shadow:
+        0 0 0 1px rgba(255, 114, 170, .26),
+        0 5px 17px rgba(214, 51, 132, .34);
+}
+
+.cocinero-state-link--preparing-alert .cocinero-state-link-count::before,
+.cocinero-state-link--preparing-alert .cocinero-state-link-count::after {
+    content: "";
+    position: absolute;
+    inset: -7px;
+    z-index: -1;
+    border: 1.5px solid rgba(255, 114, 170, .82);
+    border-radius: inherit;
+    pointer-events: none;
+    animation: cocinero-preparing-wave 1.35s ease-out infinite;
+}
+
+.cocinero-state-link--preparing-alert .cocinero-state-link-count::after {
+    animation-delay: .675s;
+    border-color: rgba(255, 180, 211, .68);
+}
+
+/* Un movimiento suave, pero más perceptible que el pulso anterior. */
+@keyframes cocinero-nav-preparing-motion-plus {
+    0%, 100% {
+        transform: translateX(0) scale(1);
+        filter: brightness(1);
+    }
+    25% {
+        transform: translateX(2.5px) scale(1.012);
+        filter: brightness(1.08);
+    }
+    50% {
+        transform: translateX(-1px) scale(1.004);
+        filter: brightness(1.13);
+    }
+    75% {
+        transform: translateX(2px) scale(1.01);
+    }
+}
+
+@keyframes cocinero-preparing-icon-plus {
+    0%, 100% { transform: scale(1) rotate(0); }
+    50% { transform: scale(1.14) rotate(-4deg); }
+}
+
+@keyframes cocinero-preparing-count-plus {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.13);
+        filter: brightness(1.22);
+    }
+}
+
+/* Dos ondas expansivas alrededor del número. */
+@keyframes cocinero-preparing-wave {
+    0% {
+        opacity: .9;
+        transform: scale(.78);
+    }
+    75%, 100% {
+        opacity: 0;
+        transform: scale(1.75);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cocinero-nav-link--preparing,
+    .cocinero-nav-link--preparing .cocinero-nav-icon,
+    .cocinero-nav-link .cocinero-nav-count--preparing:not([hidden]),
+    .cocinero-nav-link .cocinero-nav-count--preparing:not([hidden])::before,
+    .cocinero-nav-link .cocinero-nav-count--preparing:not([hidden])::after,
+    .cocinero-state-link--preparing-alert,
+    .cocinero-state-link--preparing-alert .cocinero-state-link-icon,
+    .cocinero-state-link--preparing-alert .cocinero-state-link-count,
+    .cocinero-state-link--preparing-alert .cocinero-state-link-count::before,
+    .cocinero-state-link--preparing-alert .cocinero-state-link-count::after {
+        animation: none !important;
+    }
+}

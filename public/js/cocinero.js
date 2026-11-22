@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             preparingStateLink?.classList.toggle(
                 'cocinero-state-link--preparing-alert',
-                preparing > 0 && currentSection !== 'preparando'
+                preparing > 0
             );
         };
 

@@ -99,7 +99,7 @@
             <a
                 href="{{ route('cocinero.pedidos.index', ['seccion' => 'preparando']) }}"
                 data-cocinero-state-alert="preparando"
-                class="cocinero-state-link {{ $seccion === 'preparando' ? 'active preparando' : '' }} {{ $cantidadPreparando > 0 && $seccion !== 'preparando' ? 'cocinero-state-link--preparing-alert' : '' }}">
+                class="cocinero-state-link {{ $seccion === 'preparando' ? 'active preparando' : '' }} {{ $cantidadPreparando > 0 ? 'cocinero-state-link--preparing-alert' : '' }}">
 
                 <span class="cocinero-state-link-icon">
                     <i class="bi bi-fire"></i>
