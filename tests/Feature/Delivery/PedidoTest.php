@@ -655,9 +655,23 @@ class PedidoTest extends TestCase
         $response->assertSee('data-is-viewing-mis-pedidos="1"', false);
         $response->assertSee('delivery-nav-pending-badge--static', false);
         $response->assertDontSee('delivery-nav-link--pending', false);
-        $response->assertDontSee(
-            'href="/delivery/pedidos" class="delivery-nav-link active"',
-            false
+        $html = $response->getContent();
+
+        // Mis pedidos debe quedar activo y la cola no debe seleccionarse.
+        $this->assertSame(
+            1,
+            preg_match(
+                '/<a\\b(?=[^>]*id="delivery-nav-my-orders")(?=[^>]*class="[^"]*\\bactive\\b")[^>]*>/s',
+                $html
+            )
+        );
+
+        $this->assertSame(
+            0,
+            preg_match(
+                '/<a\\b(?=[^>]*href="\\/delivery\\/pedidos")(?=[^>]*class="[^"]*\\bactive\\b")[^>]*>/s',
+                $html
+            )
         );
     }
 
