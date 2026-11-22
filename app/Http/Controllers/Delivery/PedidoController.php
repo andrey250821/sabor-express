@@ -123,26 +123,143 @@ class PedidoController extends Controller
 
 
     /**
-     * Contar pedidos nuevos asignados al Delivery autenticado.
-     * Solo notifica mientras el pedido conserve el estado "asignado".
+     * Estado operativo en vivo del Delivery.
+     * Procesa la cola solo cuando hay pedidos listos y devuelve contadores
+     * para actualizar el panel sin recargar el documento.
      */
-    public function pedidosPendientesCount(): JsonResponse|RedirectResponse
-    {
+    public function estadoEnVivo(
+        FechaFiltroService $fechas,
+        AsignarPedidoDeliveryService $asignador
+    ): JsonResponse|RedirectResponse {
         $delivery = $this->verificarDelivery();
 
         if ($delivery instanceof RedirectResponse) {
             return $delivery;
         }
 
-        $cantidad = AsignacionDelivery::query()
+        $colaPendiente = Pedido::query()
+            ->where('estado', 'listo')
+            ->whereDoesntHave('asignacionDelivery', function ($query) {
+                $query->whereHas('pedido', function ($pedidoQuery) {
+                    $pedidoQuery->whereIn('estado', ['asignado', 'en_camino']);
+                });
+            })
+            ->exists();
+
+        if ($colaPendiente) {
+            $asignador->procesarCola();
+        }
+
+        $cantidadPendientes = AsignacionDelivery::query()
             ->where('delivery_id', $delivery->id)
             ->whereHas('pedido', function ($query) {
                 $query->where('estado', 'asignado');
             })
             ->count();
 
+        $misPedidos = AsignacionDelivery::query()
+            ->where('delivery_id', $delivery->id)
+            ->whereHas('pedido', function ($query) {
+                $query->whereIn('estado', ['asignado', 'en_camino']);
+            })
+            ->count();
+
+        $pedidosEnCola = Pedido::query()
+            ->where('estado', 'listo')
+            ->whereDoesntHave('asignacionDelivery', function ($query) {
+                $query->whereHas('pedido', function ($pedidoQuery) {
+                    $pedidoQuery->whereIn('estado', ['asignado', 'en_camino']);
+                });
+            })
+            ->count();
+
+        [$inicioHoyUtc, $finHoyUtc] = $fechas->rangoUtc($fechas->hoy());
+
+        $entregasDia = AsignacionDelivery::query()
+            ->where('delivery_id', $delivery->id)
+            ->whereBetween('updated_at', [$inicioHoyUtc, $finHoyUtc])
+            ->whereHas('pedido', function ($query) {
+                $query->where('estado', 'entregado');
+            })
+            ->count();
+
         return response()
-            ->json(['cantidad' => $cantidad])
+            ->json([
+                'cantidad' => $cantidadPendientes,
+                'pedidosEnCola' => $pedidosEnCola,
+                'misPedidos' => $misPedidos,
+                'entregasDia' => $entregasDia,
+            ])
+            ->header('Cache-Control', 'private, no-store, max-age=0');
+    }
+
+    /**
+     * Devolver únicamente el HTML de los paneles de Mis pedidos.
+     * La fecha seleccionada se conserva en cada consulta.
+     */
+    public function actualizarMisPedidos(
+        Request $request,
+        FechaFiltroService $fechas
+    ): JsonResponse|RedirectResponse {
+        $delivery = $this->verificarDelivery();
+
+        if ($delivery instanceof RedirectResponse) {
+            return $delivery;
+        }
+
+        $fechaSeleccionada = $fechas->resolver($request);
+        [$inicioUtc, $finUtc] = $fechas->rangoUtc($fechaSeleccionada);
+
+        $asignaciones = AsignacionDelivery::query()
+            ->with([
+                'pedido.user',
+                'pedido.detallePedidos.producto',
+            ])
+            ->where('delivery_id', $delivery->id)
+            ->whereHas('pedido', function ($query) {
+                $query->whereIn('estado', ['asignado', 'en_camino', 'entregado']);
+            })
+            ->where(function ($query) use ($inicioUtc, $finUtc) {
+                $query
+                    ->whereBetween('created_at', [$inicioUtc, $finUtc])
+                    ->orWhereBetween('updated_at', [$inicioUtc, $finUtc]);
+            })
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $pedidosAsignados = $asignaciones->filter(function ($asignacion) {
+            return in_array($asignacion->pedido?->estado, ['asignado', 'en_camino'], true);
+        });
+
+        $pedidosEntregados = $asignaciones->filter(function ($asignacion) {
+            return $asignacion->pedido?->estado === 'entregado';
+        });
+
+        $cantidadAsignados = $pedidosAsignados->count();
+        $cantidadEntregados = $pedidosEntregados->count();
+
+        $firma = $asignaciones->map(function ($asignacion) {
+            return implode(':', [
+                $asignacion->id,
+                $asignacion->pedido?->estado ?? 'sin-pedido',
+                $asignacion->updated_at?->timestamp ?? 0,
+            ]);
+        })->implode('|');
+
+        return response()
+            ->json([
+                'firma' => $firma,
+                'cantidadAsignados' => $cantidadAsignados,
+                'cantidadEntregados' => $cantidadEntregados,
+                'panelAsignados' => view(
+                    'delivery.pedidos.partials.panel-asignados',
+                    compact('pedidosAsignados', 'cantidadAsignados')
+                )->render(),
+                'panelEntregados' => view(
+                    'delivery.pedidos.partials.panel-entregados',
+                    compact('pedidosEntregados', 'cantidadEntregados')
+                )->render(),
+            ])
             ->header('Cache-Control', 'private, no-store, max-age=0');
     }
 
