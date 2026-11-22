@@ -51,7 +51,7 @@
             $deliveryPedidosPendientes = \App\Models\AsignacionDelivery::query()
                 ->where('delivery_id', Auth::id())
                 ->whereHas('pedido', function ($query) {
-                    $query->where('estado', 'asignado');
+                    $query->whereIn('estado', ['asignado', 'en_camino']);
                 })
                 ->count();
         }
@@ -243,7 +243,7 @@
                         class="delivery-nav-pending-badge {{ $deliveryEstaViendoMisPedidos ? 'delivery-nav-pending-badge--static' : '' }}"
                         aria-live="polite"
                         aria-atomic="true"
-                        title="{{ $deliveryPedidosPendientes }} pedidos asignados pendientes"
+                        title="{{ $deliveryPedidosPendientes }} entregas activas pendientes"
                         {{ $deliveryPedidosPendientes > 0 ? '' : 'hidden' }}>
                         <span class="delivery-nav-pending-dot" aria-hidden="true"></span>
                         <span id="delivery-nav-pending-count">{{ $deliveryPedidosPendientes > 99 ? '99+' : $deliveryPedidosPendientes }}</span>
