@@ -1,6 +1,94 @@
 document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
 
+
+    const pendingOrdersLink = document.getElementById('delivery-nav-my-orders');
+
+    if (pendingOrdersLink) {
+        const pendingBadge = document.getElementById('delivery-nav-pending-badge');
+        const pendingCount = document.getElementById('delivery-nav-pending-count');
+        const pendingCountUrl = pendingOrdersLink.dataset.pendingCountUrl;
+        const isViewingMyOrders = pendingOrdersLink.dataset.isViewingMisPedidos === '1';
+
+        const updatePendingOrdersIndicator = (value) => {
+            const count = Math.max(0, Number.parseInt(value, 10) || 0);
+            const hasPendingOrders = count > 0;
+
+            if (pendingBadge) {
+                pendingBadge.hidden = !hasPendingOrders;
+                pendingBadge.title = count + (
+                    count === 1
+                        ? ' pedido asignado pendiente'
+                        : ' pedidos asignados pendientes'
+                );
+            }
+
+            if (pendingCount) {
+                pendingCount.textContent = count > 99 ? '99+' : String(count);
+            }
+
+            pendingOrdersLink.classList.toggle(
+                'delivery-nav-link--pending',
+                hasPendingOrders && !isViewingMyOrders
+            );
+
+            pendingBadge?.classList.toggle(
+                'delivery-nav-pending-badge--static',
+                isViewingMyOrders
+            );
+
+            pendingOrdersLink.setAttribute(
+                'aria-label',
+                'Mis pedidos' + (
+                    hasPendingOrders
+                        ? ', ' + count + (count === 1 ? ' pedido nuevo asignado' : ' pedidos nuevos asignados')
+                        : ''
+                )
+            );
+        };
+
+        const refreshPendingOrdersIndicator = async () => {
+            if (!pendingCountUrl || document.visibilityState === 'hidden') {
+                return;
+            }
+
+            try {
+                const response = await fetch(pendingCountUrl, {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                    cache: 'no-store',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (Number.isFinite(Number(data.cantidad))) {
+                    updatePendingOrdersIndicator(data.cantidad);
+                }
+            } catch (error) {
+                console.warn('No se pudo actualizar el aviso de pedidos asignados.', error);
+            }
+        };
+
+        refreshPendingOrdersIndicator();
+        window.setInterval(refreshPendingOrdersIndicator, 8000);
+        window.addEventListener('focus', refreshPendingOrdersIndicator);
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                refreshPendingOrdersIndicator();
+            }
+        });
+    }
+
+
     /* =========================================================
        SIDEBAR RESPONSIVE
        ========================================================= */

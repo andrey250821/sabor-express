@@ -10861,3 +10861,145 @@ body.delivery-menu-open {
         line-height: 1.35;
     }
 }
+
+
+/* ==========================================================================
+   AVISO DE PEDIDOS NUEVOS — MENÚ DELIVERY
+   ========================================================================== */
+
+.delivery-nav-link--pending {
+    position: relative;
+    isolation: isolate;
+    border-color: rgba(255, 47, 118, .48) !important;
+    background:
+        linear-gradient(105deg, rgba(255, 47, 118, .24), rgba(139, 30, 69, .23)) !important;
+    color: #fff !important;
+    box-shadow:
+        0 0 0 1px rgba(255, 47, 118, .09),
+        0 8px 22px rgba(255, 47, 118, .16),
+        inset 0 1px 0 rgba(255,255,255,.06);
+    animation: delivery-pending-nav-motion 1.25s ease-in-out infinite;
+    will-change: transform, box-shadow;
+}
+
+.delivery-nav-link--pending .delivery-nav-icon {
+    background: rgba(255, 47, 118, .25) !important;
+    color: #fff !important;
+    box-shadow: 0 0 16px rgba(255, 47, 118, .25);
+    animation: delivery-pending-icon-pulse 1.05s ease-in-out infinite;
+}
+
+.delivery-nav-link--pending .delivery-nav-text {
+    color: #fff;
+    font-weight: 800;
+}
+
+.delivery-nav-pending-badge {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 34px;
+    height: 27px;
+    margin-left: auto;
+    padding: 0 8px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff4b82, #d7195d);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+    box-shadow:
+        0 4px 12px rgba(255, 47, 118, .35),
+        inset 0 1px 0 rgba(255,255,255,.20);
+    animation: delivery-pending-badge-pulse 1s ease-in-out infinite;
+}
+
+.delivery-nav-pending-badge[hidden] {
+    display: none !important;
+}
+
+.delivery-nav-pending-dot {
+    position: relative;
+    display: inline-block;
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.17);
+}
+
+.delivery-nav-pending-badge--static {
+    animation: none !important;
+    background: linear-gradient(135deg, #a92b55, #76203f);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.13);
+}
+
+.delivery-nav-pending-badge--static .delivery-nav-pending-dot {
+    background: #ffb7cd;
+    box-shadow: none;
+}
+
+@keyframes delivery-pending-nav-motion {
+    0%, 100% {
+        transform: translateX(0);
+        box-shadow:
+            0 0 0 1px rgba(255, 47, 118, .08),
+            0 6px 17px rgba(255, 47, 118, .13);
+    }
+    25% {
+        transform: translateX(3px);
+    }
+    50% {
+        transform: translateX(0);
+        box-shadow:
+            0 0 0 3px rgba(255, 47, 118, .10),
+            0 10px 24px rgba(255, 47, 118, .25);
+    }
+    75% {
+        transform: translateX(-2px);
+    }
+}
+
+@keyframes delivery-pending-icon-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+
+@keyframes delivery-pending-badge-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.09);
+        filter: brightness(1.18);
+    }
+}
+
+.delivery-nav-link--pending:hover {
+    color: #fff !important;
+    border-color: rgba(255, 82, 140, .78) !important;
+}
+
+.delivery-nav-link--pending:focus-visible {
+    outline: 2px solid #ff75a7;
+    outline-offset: 3px;
+}
+
+.delivery-nav-link.active .delivery-nav-pending-badge--static {
+    border-color: rgba(255,255,255,.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .delivery-nav-link--pending,
+    .delivery-nav-link--pending .delivery-nav-icon,
+    .delivery-nav-pending-badge {
+        animation: none !important;
+        will-change: auto;
+    }
+}

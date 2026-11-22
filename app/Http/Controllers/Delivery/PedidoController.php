@@ -9,6 +9,7 @@ use App\Models\Pedido;
 use App\Services\AsignarPedidoDeliveryService;
 use App\Services\FirebaseDeliveryLocationService;
 use App\Services\FechaFiltroService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,6 +119,31 @@ class PedidoController extends Controller
             'delivery.pedidos.show',
             compact('pedido')
         );
+    }
+
+
+    /**
+     * Contar pedidos nuevos asignados al Delivery autenticado.
+     * Solo notifica mientras el pedido conserve el estado "asignado".
+     */
+    public function pedidosPendientesCount(): JsonResponse|RedirectResponse
+    {
+        $delivery = $this->verificarDelivery();
+
+        if ($delivery instanceof RedirectResponse) {
+            return $delivery;
+        }
+
+        $cantidad = AsignacionDelivery::query()
+            ->where('delivery_id', $delivery->id)
+            ->whereHas('pedido', function ($query) {
+                $query->where('estado', 'asignado');
+            })
+            ->count();
+
+        return response()
+            ->json(['cantidad' => $cantidad])
+            ->header('Cache-Control', 'private, no-store, max-age=0');
     }
 
     /**

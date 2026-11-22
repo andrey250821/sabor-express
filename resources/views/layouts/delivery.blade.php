@@ -44,6 +44,22 @@
 
 <body>
 
+    @php
+        $deliveryPedidosPendientes = 0;
+
+        if (Auth::check() && Auth::user()->estado === 'activo') {
+            $deliveryPedidosPendientes = \App\Models\AsignacionDelivery::query()
+                ->where('delivery_id', Auth::id())
+                ->whereHas('pedido', function ($query) {
+                    $query->where('estado', 'asignado');
+                })
+                ->count();
+        }
+
+        $deliveryEstaViendoMisPedidos = request()->routeIs('delivery.pedidos.mis');
+    @endphp
+
+
     <div class="delivery-wrapper">
 
         {{-- =====================================================
@@ -202,10 +218,16 @@
 
                 {{-- MIS PEDIDOS --}}
 
+                
                 <a
                     href="{{ route('delivery.pedidos.mis') }}"
+                    id="delivery-nav-my-orders"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}
+                    {{ $deliveryPedidosPendientes > 0 && !$deliveryEstaViendoMisPedidos ? 'delivery-nav-link--pending' : '' }}"
+                    data-pending-count-url="{{ route('delivery.pedidos.pendientes-count') }}"
+                    data-is-viewing-mis-pedidos="{{ $deliveryEstaViendoMisPedidos ? '1' : '0' }}"
+                    data-delivery-interactive
                     {{ request()->routeIs('delivery.pedidos.mis') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
@@ -214,6 +236,17 @@
 
                     <span class="delivery-nav-text">
                         Mis pedidos
+                    </span>
+
+                    <span
+                        id="delivery-nav-pending-badge"
+                        class="delivery-nav-pending-badge {{ $deliveryEstaViendoMisPedidos ? 'delivery-nav-pending-badge--static' : '' }}"
+                        aria-live="polite"
+                        aria-atomic="true"
+                        title="{{ $deliveryPedidosPendientes }} pedidos asignados pendientes"
+                        {{ $deliveryPedidosPendientes > 0 ? '' : 'hidden' }}>
+                        <span class="delivery-nav-pending-dot" aria-hidden="true"></span>
+                        <span id="delivery-nav-pending-count">{{ $deliveryPedidosPendientes > 99 ? '99+' : $deliveryPedidosPendientes }}</span>
                     </span>
 
                 </a>

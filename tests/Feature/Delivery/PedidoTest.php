@@ -519,4 +519,81 @@ class PedidoTest extends TestCase
             ->get('/delivery/pedidos/' . $pedido->id)
             ->assertOk();
     }
+
+    public function test_delivery_recibe_el_conteo_de_sus_pedidos_nuevos_asignados(): void
+    {
+        $deliveryRole = Role::firstOrCreate([
+            'nombre' => 'Delivery',
+        ]);
+
+        $clienteRole = Role::firstOrCreate([
+            'nombre' => 'Cliente',
+        ]);
+
+        $delivery = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery contador',
+            'email' => 'delivery-contador@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $otroDelivery = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Otro Delivery',
+            'email' => 'otro-delivery-contador@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente contador',
+            'email' => 'cliente-contador@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $pedidoNuevo = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 35,
+            'estado' => 'asignado',
+            'direccion_entrega' => 'Pedido nuevo asignado',
+        ]);
+
+        AsignacionDelivery::create([
+            'pedido_id' => $pedidoNuevo->id,
+            'delivery_id' => $delivery->id,
+        ]);
+
+        $pedidoEnCamino = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 45,
+            'estado' => 'en_camino',
+            'direccion_entrega' => 'Pedido ya iniciado',
+        ]);
+
+        AsignacionDelivery::create([
+            'pedido_id' => $pedidoEnCamino->id,
+            'delivery_id' => $delivery->id,
+        ]);
+
+        $pedidoDeOtroDelivery = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 55,
+            'estado' => 'asignado',
+            'direccion_entrega' => 'Pedido de otro Delivery',
+        ]);
+
+        AsignacionDelivery::create([
+            'pedido_id' => $pedidoDeOtroDelivery->id,
+            'delivery_id' => $otroDelivery->id,
+        ]);
+
+        $this->actingAs($delivery)
+            ->getJson(route('delivery.pedidos.pendientes-count'))
+            ->assertOk()
+            ->assertJsonPath('cantidad', 1);
+    }
+
 }
