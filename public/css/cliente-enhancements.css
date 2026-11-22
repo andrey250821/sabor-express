@@ -3252,7 +3252,7 @@
    MENÚ CLIENTE — DISTRIBUCIÓN, LEGIBILIDAD Y DISEÑO RESPONSIVE
    ========================================================================== */
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
     .cliente-app .cliente-navbar-container {
         width: 100%;
         max-width: 1820px;
@@ -3350,7 +3350,7 @@
     }
 }
 
-@media (max-width: 1399.98px) {
+@media (max-width: 1199.98px) {
     .cliente-app .cliente-navbar-container {
         width: 100%;
         max-width: 100%;
@@ -3503,7 +3503,7 @@
    MENÚ CLIENTE — BOTONES MÁS GRANDES EN ESCRITORIO
    ========================================================================== */
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
     .cliente-app .cliente-navbar-container {
         min-height: 88px;
     }
@@ -3550,7 +3550,7 @@
 }
 
 /* En pantallas anchas, conservar botones cómodos sin perder espacio. */
-@media (min-width: 1400px) and (max-width: 1550px) {
+@media (min-width: 1200px) and (max-width: 1550px) {
     .cliente-app .cliente-nav-link {
         padding-left: 11px !important;
         padding-right: 11px !important;
@@ -5115,7 +5115,7 @@
     outline-offset: 3px;
 }
 
-@media (max-width: 1399.98px) {
+@media (max-width: 1199.98px) {
     .cliente-app .cliente-guest-actions {
         align-items: flex-start;
         width: 100%;
@@ -5176,7 +5176,7 @@
 }
 
 /* El nombre nunca se reduce ni se corta en escritorio. */
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
     .cliente-app .cliente-navbar-container {
         min-height: 98px;
     }
@@ -5193,7 +5193,7 @@
 }
 
 /* Tablet y móvil: marca reconocible sin desbordar la barra. */
-@media (max-width: 1399.98px) {
+@media (max-width: 1199.98px) {
     .cliente-app .cliente-logo {
         font-size: clamp(22px, 2.3vw, 26px) !important;
     }
@@ -5434,3 +5434,223 @@
     }
 }
 
+
+
+/* ==========================================================================
+   BARRA SUPERIOR EN LAPTOPS — menú horizontal desde 1200px
+   ========================================================================== */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+    .cliente-app .cliente-navbar-container {
+        min-height: 76px;
+        padding-left: 18px;
+        padding-right: 18px;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .cliente-app .cliente-logo {
+        flex: 0 1 auto;
+        min-width: 0;
+        gap: 8px;
+        font-size: 20px !important;
+    }
+
+    .cliente-app .cliente-logo-image {
+        width: 46px !important;
+        height: 46px !important;
+    }
+
+    .cliente-app #clienteNavbar {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 0;
+    }
+
+    .cliente-app .cliente-navbar-links {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        gap: 2px;
+        border: 0;
+    }
+
+    .cliente-app .cliente-nav-link {
+        flex: 0 1 auto;
+        width: auto;
+        min-height: 42px;
+        padding: 9px 8px !important;
+        gap: 6px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .cliente-app .cliente-nav-link i {
+        flex: 0 0 auto;
+        font-size: 16px;
+    }
+
+    .cliente-app .cliente-navbar-user {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    .cliente-app .cliente-user-info {
+        width: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        gap: 7px;
+    }
+
+    .cliente-app .cliente-profile-link {
+        min-width: 0;
+        gap: 6px;
+    }
+
+    .cliente-app .cliente-user-name {
+        max-width: 92px;
+        font-size: 12px;
+    }
+
+    .cliente-app .cliente-navbar-profile-avatar {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+    .cliente-app .cliente-btn-logout,
+    .cliente-app .cliente-login-link {
+        min-width: 0;
+        min-height: 40px;
+        padding: 8px 10px;
+        gap: 6px;
+        font-size: 11.5px;
+        white-space: nowrap;
+    }
+
+    .cliente-app .cliente-user-info form {
+        flex: 0 0 auto;
+        margin: 0;
+    }
+
+    .cliente-app .cliente-navbar-toggler {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   MARCA DE AGUA GLOBAL — presente en todas las vistas del Cliente
+   ========================================================================== */
+.cliente-app {
+    position: relative;
+    isolation: isolate;
+}
+
+.cliente-app .cliente-background-watermark {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 2vw, 30px);
+    overflow: hidden;
+    padding: 20px;
+    opacity: .075;
+    pointer-events: none;
+    user-select: none;
+}
+
+.cliente-app .cliente-background-watermark::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150vw;
+    height: clamp(110px, 15vw, 220px);
+    transform: translate(-50%, -50%) rotate(-8deg);
+    border-top: 1px solid rgba(255, 190, 213, .65);
+    border-bottom: 1px solid rgba(255, 190, 213, .55);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 63, 125, .11),
+        rgba(255, 255, 255, .035),
+        rgba(255, 63, 125, .11),
+        transparent
+    );
+}
+
+.cliente-app .cliente-background-watermark img,
+.cliente-app .cliente-background-watermark > i {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    width: clamp(86px, 10vw, 150px);
+    height: clamp(86px, 10vw, 150px);
+    object-fit: contain;
+    filter: grayscale(1) brightness(2.7) contrast(1.1);
+}
+
+.cliente-app .cliente-background-watermark > i {
+    display: grid;
+    place-items: center;
+    color: rgba(255, 225, 237, .95);
+    font-size: clamp(82px, 10vw, 142px);
+}
+
+.cliente-app .cliente-background-watermark span {
+    position: relative;
+    z-index: 1;
+    color: rgba(255, 235, 243, .9);
+    font-size: clamp(30px, 5.8vw, 88px);
+    font-weight: 950;
+    letter-spacing: -.055em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 2px 18px rgba(255, 255, 255, .14);
+}
+
+.cliente-app .cliente-navbar,
+.cliente-app .cliente-main,
+.cliente-app .cliente-footer {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 767.98px) {
+    .cliente-app .cliente-background-watermark {
+        gap: 9px;
+        opacity: .065;
+    }
+
+    .cliente-app .cliente-background-watermark img,
+    .cliente-app .cliente-background-watermark > i {
+        width: 66px;
+        height: 66px;
+        font-size: 66px;
+    }
+
+    .cliente-app .cliente-background-watermark span {
+        font-size: clamp(25px, 8vw, 48px);
+    }
+
+    .cliente-app .cliente-background-watermark::before {
+        height: 100px;
+    }
+}

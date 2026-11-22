@@ -43,11 +43,25 @@
 
 <body class="cliente-app">
 
+    {{-- MARCA DE AGUA GLOBAL DEL RESTAURANTE --}}
+    <div class="cliente-background-watermark" aria-hidden="true">
+        @if(!empty($configuracion?->logo))
+            <img
+                src="{{ asset('storage/' . ltrim($configuracion->logo, '/')) }}"
+                alt=""
+                loading="eager"
+                decoding="async">
+        @else
+            <i class="bi bi-shop-window"></i>
+        @endif
+        <span>{{ $configuracion?->nombre_restaurante ?: 'Sabor Express' }}</span>
+    </div>
+
     {{-- =====================================================
          NAVBAR CLIENTE
     ====================================================== --}}
 
-    <nav class="cliente-navbar navbar navbar-expand-xxl">
+    <nav class="cliente-navbar navbar navbar-expand-xl">
 
         <div class="container-fluid cliente-navbar-container">
 
