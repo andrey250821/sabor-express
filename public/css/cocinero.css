@@ -3855,8 +3855,9 @@ body.cocinero-layout {
     animation: cocinero-preparing-icon 1.35s ease-in-out infinite;
 }
 
-.cocinero-nav-count--pending:not([hidden]) { animation: cocinero-pending-count .58s ease-in-out infinite; }
-.cocinero-nav-count--preparing:not([hidden]) { animation: cocinero-preparing-count 1.35s ease-in-out infinite; }
+.cocinero-nav-link--pending .cocinero-nav-count--pending:not([hidden]) { animation: cocinero-pending-count .58s ease-in-out infinite; }
+.cocinero-nav-link--pending .cocinero-nav-count--preparing:not([hidden]),
+.cocinero-nav-link--preparing .cocinero-nav-count--preparing:not([hidden]) { animation: cocinero-preparing-count 1.35s ease-in-out infinite; }
 
 .cocinero-state-link--pending-alert {
     position: relative;

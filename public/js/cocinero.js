@@ -34,31 +34,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Tarjetas de pedido: permiten abrir el detalle haciendo clic en el cuerpo,
-    // sin interferir con botones, enlaces o formularios.
-    document.querySelectorAll('[data-order-url]').forEach((card) => {
-        const goToOrder = () => {
-            const url = card.dataset.orderUrl;
-            if (url) {
-                window.location.href = url;
-            }
-        };
+    // Delegación de eventos: continúa funcionando cuando las tarjetas se actualizan por AJAX.
+    document.addEventListener('click', (event) => {
+        const card = event.target.closest?.('[data-order-url]');
+        if (!card || event.target.closest?.('button, a, form, input, select, textarea')) {
+            return;
+        }
 
-        card.addEventListener('click', (event) => {
-            if (event.target.closest('button, a, form, input, select, textarea')) {
-                return;
-            }
+        if (card.dataset.orderUrl) {
+            window.location.href = card.dataset.orderUrl;
+        }
+    });
 
-            goToOrder();
-        });
+    document.addEventListener('keydown', (event) => {
+        const card = event.target.closest?.('[data-order-url]');
+        if (!card || (event.key !== 'Enter' && event.key !== ' ') ||
+            event.target.closest?.('button, a, form, input, select, textarea')) {
+            return;
+        }
 
-        card.addEventListener('keydown', (event) => {
-            if ((event.key === 'Enter' || event.key === ' ') &&
-                !event.target.closest('button, a, form, input, select, textarea')) {
-                event.preventDefault();
-                goToOrder();
-            }
-        });
+        event.preventDefault();
+        if (card.dataset.orderUrl) {
+            window.location.href = card.dataset.orderUrl;
+        }
     });
 
     // Filtros que deben enviar su formulario al cambiar.
@@ -68,20 +66,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Confirmaciones centralizadas.
-    document.querySelectorAll('form[data-confirm]').forEach((form) => {
-        form.addEventListener('submit', (event) => {
-            const message = form.dataset.confirm;
-            if (message && !window.confirm(message)) {
-                event.preventDefault();
-            }
-        });
-    });
+    // Confirmaciones y bloqueo de doble envío, también para tarjetas insertadas por AJAX.
+    document.addEventListener('submit', (event) => {
+        const form = event.target;
+        if (!(form instanceof HTMLFormElement)) {
+            return;
+        }
 
-    // Evitar dobles envíos mientras se procesa una acción.
-    document.querySelectorAll('form[data-loading-text]').forEach((form) => {
-        form.addEventListener('submit', () => {
+        const message = form.dataset.confirm;
+        if (message && !window.confirm(message)) {
+            event.preventDefault();
+            return;
+        }
+
+        if (form.dataset.loadingText) {
             if (form.dataset.submitted === 'true') {
+                event.preventDefault();
                 return;
             }
 
@@ -93,26 +93,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const original = button.innerHTML;
-            button.dataset.originalHtml = original;
+            button.dataset.originalHtml = button.innerHTML;
             button.innerHTML = '<span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>' +
                 (form.dataset.loadingText || 'Procesando...');
-        });
+        }
     });
 
-    // Pequeño efecto de pulsación en botones destacados.
-    document.querySelectorAll('.js-ripple').forEach((button) => {
-        button.addEventListener('click', (event) => {
-            const rect = button.getBoundingClientRect();
-            const ripple = document.createElement('span');
+    // Efecto ripple delegado para botones originales y actualizados.
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest?.('.js-ripple');
+        if (!button) return;
 
-            ripple.className = 'cocinero-ripple';
-            ripple.style.left = (event.clientX - rect.left) + 'px';
-            ripple.style.top = (event.clientY - rect.top) + 'px';
+        const rect = button.getBoundingClientRect();
+        const ripple = document.createElement('span');
 
-            button.appendChild(ripple);
-            ripple.addEventListener('animationend', () => ripple.remove());
-        });
+        ripple.className = 'cocinero-ripple';
+        ripple.style.left = (event.clientX - rect.left) + 'px';
+        ripple.style.top = (event.clientY - rect.top) + 'px';
+
+        button.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
     });
 
     // Animación de entrada ligera al aparecer cada bloque.
@@ -214,6 +214,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
         refreshCookingState();
         window.setInterval(refreshCookingState, 5000);
+
+        // Refrescar únicamente las tarjetas de la sección visible.
+        // El resto de la página, los filtros y la posición del scroll permanecen intactos.
+        if (liveOrdersPanel && ['pendientes', 'preparando'].includes(currentSection)) {
+            let refreshingOrdersPanel = false;
+
+            const refreshOrdersPanel = async () => {
+                if (document.hidden || refreshingOrdersPanel) return;
+
+                const currentCard = liveOrdersPanel.querySelector('.cocinero-orders-card');
+                if (!currentCard) return;
+
+                refreshingOrdersPanel = true;
+
+                try {
+                    const response = await fetch(window.location.href, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'text/html',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin',
+                        cache: 'no-store'
+                    });
+
+                    if (!response.ok) return;
+
+                    const html = await response.text();
+                    const parsedDocument = new DOMParser().parseFromString(html, 'text/html');
+                    const nextCard = parsedDocument.querySelector(
+                        '[data-cocinero-live-orders] .cocinero-orders-card'
+                    );
+
+                    if (!nextCard || nextCard.outerHTML === currentCard.outerHTML) {
+                        return;
+                    }
+
+                    nextCard.classList.add('is-visible');
+                    nextCard.querySelectorAll('.cocinero-reveal').forEach((element) => {
+                        element.classList.add('is-visible');
+                    });
+
+                    currentCard.replaceWith(nextCard);
+                } catch (error) {
+                    console.warn('No se pudo actualizar la lista de pedidos de Cocina.', error);
+                } finally {
+                    refreshingOrdersPanel = false;
+                }
+            };
+
+            refreshOrdersPanel();
+            window.setInterval(refreshOrdersPanel, 7000);
+        }
     }
 
     // Reloj de cocina actualizado en el cliente.
