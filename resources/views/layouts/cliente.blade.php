@@ -223,34 +223,10 @@
 
                     @else
 
-                    <div class="cliente-guest-actions">
-                        <a href="{{ route('login') }}" class="cliente-login-link">
-                            <i class="bi bi-box-arrow-in-right"></i>
-                            Iniciar sesión
-                        </a>
-
-                        @if(request()->routeIs('cliente.productos.index'))
-                            @php
-                                $carritoVisitante = session('carrito', []);
-                                $cantidadCarritoVisitante = collect($carritoVisitante)
-                                    ->sum(fn ($item) => (int) ($item['cantidad'] ?? 0));
-                            @endphp
-
-                            <a
-                                href="{{ route('cliente.carrito.index') }}"
-                                class="cliente-guest-cart-link"
-                                aria-label="Ver carrito de compras, {{ $cantidadCarritoVisitante }} productos"
-                                title="Ver mi carrito">
-                                <i class="bi bi-cart3"></i>
-                                <span
-                                    id="cliente-guest-cart-badge"
-                                    class="cliente-guest-cart-badge"
-                                    aria-live="polite"
-                                    aria-atomic="true"
-                                    {{ $cantidadCarritoVisitante > 0 ? '' : 'hidden' }}>{{ $cantidadCarritoVisitante > 99 ? '99+' : $cantidadCarritoVisitante }}</span>
-                            </a>
-                        @endif
-                    </div>
+                    <a href="{{ route('login') }}" class="cliente-login-link">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Iniciar sesión
+                    </a>
 
                     @endauth
 

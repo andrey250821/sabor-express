@@ -463,6 +463,31 @@
 
     </div>
 
+
+    {{-- CARRITO FLOTANTE PARA VISITANTES --}}
+    @guest
+        @php
+            $carritoVisitante = session('carrito', []);
+            $cantidadCarritoVisitante = collect($carritoVisitante)
+                ->sum(fn ($item) => (int) ($item['cantidad'] ?? 0));
+        @endphp
+
+        <a
+            href="{{ route('cliente.carrito.index') }}"
+            class="cliente-floating-cart-link"
+            aria-label="Ver carrito de compras, {{ $cantidadCarritoVisitante }} productos"
+            title="Ver carrito">
+            <i class="bi bi-cart3" aria-hidden="true"></i>
+            <span
+                id="cliente-guest-cart-badge"
+                class="cliente-guest-cart-badge"
+                aria-live="polite"
+                aria-atomic="true"
+                {{ $cantidadCarritoVisitante > 0 ? '' : 'hidden' }}>{{ $cantidadCarritoVisitante > 99 ? '99+' : $cantidadCarritoVisitante }}</span>
+            <span class="visually-hidden">Ver carrito de compras</span>
+        </a>
+    @endguest
+
 </div>
 
 @endsection
@@ -715,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function() {
             contadorVisitante.hidden = cantidadActual <= 0;
 
             const enlaceCarrito = contadorVisitante.closest(
-                '.cliente-guest-cart-link'
+                '.cliente-floating-cart-link'
             );
 
             if (enlaceCarrito) {
