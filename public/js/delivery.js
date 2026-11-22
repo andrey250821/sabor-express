@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pendingBadge) {
             pendingBadge.hidden = !hasPending;
             pendingBadge.title = count + (
-                count === 1 ? ' pedido asignado pendiente' : ' pedidos asignados pendientes'
+                count === 1 ? ' entrega activa pendiente' : ' entregas activas pendientes'
             );
         }
 
