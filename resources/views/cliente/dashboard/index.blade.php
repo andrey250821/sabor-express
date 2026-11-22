@@ -72,11 +72,7 @@
                 </a>
             </div>
 
-            <div class="sx-client-hero-benefits">
-                <span><i class="bi bi-check-circle-fill"></i> Pedido sencillo</span>
-                <span><i class="bi bi-geo-alt-fill"></i> Seguimiento de entrega</span>
-                <span><i class="bi bi-heart-fill"></i> Tus favoritos</span>
-            </div>
+
         </div>
 
         <div class="sx-client-hero-art" aria-hidden="true">
@@ -102,44 +98,6 @@
 
     </section>
 
-    {{-- ACCESOS RÁPIDOS --}}
-    <section class="sx-dashboard-shortcuts" aria-label="Accesos rápidos">
-
-        <a href="{{ route('cliente.productos.index') }}" class="sx-dashboard-shortcut">
-            <span class="sx-dashboard-shortcut-icon sx-shortcut-pink">
-                <i class="bi bi-egg-fried"></i>
-            </span>
-            <span>
-                <strong>Productos</strong>
-                <small>Explora el catálogo</small>
-            </span>
-            <i class="bi bi-arrow-up-right"></i>
-        </a>
-
-        <a href="{{ route('cliente.carrito.index') }}" class="sx-dashboard-shortcut">
-            <span class="sx-dashboard-shortcut-icon sx-shortcut-orange">
-                <i class="bi bi-cart3"></i>
-            </span>
-            <span>
-                <strong>Mi carrito</strong>
-                <small>Revisa tu selección</small>
-            </span>
-            <i class="bi bi-arrow-up-right"></i>
-        </a>
-
-        <a href="{{ route('cliente.pedidos.index') }}" class="sx-dashboard-shortcut">
-            <span class="sx-dashboard-shortcut-icon sx-shortcut-blue">
-                <i class="bi bi-receipt"></i>
-            </span>
-            <span>
-                <strong>Mis pedidos</strong>
-                <small>Consulta tus compras</small>
-            </span>
-            <i class="bi bi-arrow-up-right"></i>
-        </a>
-
-    </section>
-
     {{-- CATÁLOGO DESPLEGABLE CON TODOS LOS PRODUCTOS DISPONIBLES --}}
     <section id="sx-dashboard-catalogo" class="sx-dashboard-catalog-section">
 
@@ -151,9 +109,9 @@
                         <i class="bi bi-grid-3x3-gap-fill"></i>
                     </span>
                     <span>
-                        <small>ELIGE ALGO DELICIOSO</small>
-                        <strong>Menú de {{ $nombreRestaurante }}</strong>
-                        <em>Todos los productos disponibles en un solo lugar</em>
+                        <small>DESCUBRE LO QUE PREPARAMOS</small>
+                        <strong>Todos nuestros productos</strong>
+                        <em>Una vista rápida del menú. Desliza horizontalmente para descubrirlos.</em>
                     </span>
                 </span>
 
@@ -163,75 +121,53 @@
                 </span>
             </summary>
 
-            <div class="sx-dashboard-product-grid">
+            <div class="sx-dashboard-product-rail" aria-label="Vista rápida de todos los productos disponibles">
 
                 @forelse($productos as $producto)
 
-                    <article class="sx-dashboard-product-card">
+                    <a
+                        href="{{ route('cliente.productos.index', ['buscar' => $producto->nombre]) }}"
+                        class="sx-dashboard-product-chip"
+                        title="Ver {{ $producto->nombre }} en el menú">
 
-                        <div class="sx-dashboard-product-image">
+                        <span class="sx-dashboard-product-chip-image">
                             @if($producto->imagen)
                                 <img
                                     src="{{ asset('storage/' . $producto->imagen) }}"
                                     alt="{{ $producto->nombre }}"
                                     loading="lazy">
                             @else
-                                <div class="sx-dashboard-product-no-image">
-                                    <i class="bi bi-image"></i>
-                                    <span>Imagen no disponible</span>
-                                </div>
+                                <i class="bi bi-image"></i>
                             @endif
+                        </span>
 
-                            <span class="sx-dashboard-product-category">
-                                <i class="bi bi-tag-fill"></i>
-                                {{ $producto->categoria?->nombre ?? 'Sin categoría' }}
-                            </span>
-                        </div>
+                        <span class="sx-dashboard-product-chip-info">
+                            <small>{{ $producto->categoria?->nombre ?? 'Sabor Express' }}</small>
+                            <strong>{{ $producto->nombre }}</strong>
+                            <span>Bs. {{ number_format((float) $producto->precio, 2) }}</span>
+                        </span>
 
-                        <div class="sx-dashboard-product-body">
-                            <h3>{{ $producto->nombre }}</h3>
-
-                            <p>
-                                {{ $producto->descripcion ?: 'Disfruta este producto preparado para ti.' }}
-                            </p>
-
-                            <div class="sx-dashboard-product-footer">
-                                <div class="sx-dashboard-product-price">
-                                    <small>Precio</small>
-                                    <strong>Bs. {{ number_format((float) $producto->precio, 2) }}</strong>
-                                </div>
-
-                                <span class="sx-dashboard-stock">
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    Disponible
-                                </span>
-                            </div>
-
-                            <form
-                                action="{{ route('cliente.carrito.agregar', $producto->id) }}"
-                                method="POST">
-                                @csrf
-
-                                <button type="submit" class="sx-dashboard-add-button">
-                                    <i class="bi bi-cart-plus-fill"></i>
-                                    Agregar al carrito
-                                </button>
-                            </form>
-                        </div>
-
-                    </article>
+                        <i class="bi bi-arrow-up-right sx-dashboard-product-chip-arrow"></i>
+                    </a>
 
                 @empty
 
                     <div class="sx-dashboard-empty-products">
                         <i class="bi bi-basket"></i>
-                        <h3>Estamos preparando nuestro menú</h3>
-                        <p>Por el momento no hay productos disponibles. Vuelve a visitarnos pronto.</p>
+                        <strong>Pronto tendremos productos disponibles</strong>
+                        <span>Vuelve a visitarnos para descubrir nuestro menú.</span>
                     </div>
 
                 @endforelse
 
             </div>
+
+            @if($productos->count() > 1)
+                <div class="sx-dashboard-product-rail-hint">
+                    <i class="bi bi-arrow-left-right"></i>
+                    Desliza para ver todos los productos
+                </div>
+            @endif
 
         </details>
 
@@ -314,32 +250,7 @@
                     id="cliente-dashboard-route-status"
                     class="sx-dashboard-route-status"
                     role="status"
-                    aria-live="polite">
-                    @if(!$tieneUbicacionRestaurante)
-                        La ubicación del restaurante todavía no está configurada.
-                    @elseif($tieneUbicacionCliente)
-                        Se muestra tu última ubicación de entrega guardada. Pulsa «Cómo llegar» para usar tu GPS actual.
-                    @else
-                        Pulsa «Cómo llegar» para permitir que el navegador obtenga tu ubicación actual y trace la ruta.
-                    @endif
-                </p>
-
-                <div id="cliente-dashboard-route-summary" class="sx-dashboard-route-summary" hidden></div>
-
-                <div id="cliente-dashboard-route-details" class="sx-dashboard-route-details" hidden>
-                    <h4><i class="bi bi-signpost-split-fill"></i> Indicaciones del recorrido</h4>
-                    <ol id="cliente-dashboard-route-steps"></ol>
-                    <a
-                        id="cliente-dashboard-external-navigation"
-                        class="sx-dashboard-external-navigation"
-                        href="#"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        hidden>
-                        <i class="bi bi-navigation-fill"></i>
-                        Abrir navegación paso a paso
-                    </a>
-                </div>
+                    aria-live="polite"></p>
 
             </div>
 
@@ -422,47 +333,7 @@
 
                 </div>
 
-                <div class="sx-dashboard-saved-location-card">
 
-                    <div class="sx-dashboard-card-heading">
-                        <span class="sx-dashboard-card-heading-icon sx-saved-location-icon">
-                            <i class="bi bi-person-pin-map-fill"></i>
-                        </span>
-                        <div>
-                            <h3>Tu ubicación guardada</h3>
-                            <p>Última dirección registrada en tus pedidos.</p>
-                        </div>
-                    </div>
-
-                    @if($tieneUbicacionCliente)
-                        <div class="sx-dashboard-saved-address">
-                            <i class="bi bi-geo-alt-fill"></i>
-                            <p>{{ $ultimaUbicacion->direccion_entrega }}</p>
-                        </div>
-
-                        <small class="sx-dashboard-saved-date">
-                            Pedido #{{ $ultimaUbicacion->id }}
-                            · {{ $ultimaUbicacion->created_at?->format('d/m/Y H:i') }}
-                        </small>
-                    @elseif($esCliente)
-                        <div class="sx-dashboard-no-saved-location">
-                            <i class="bi bi-info-circle"></i>
-                            <p>
-                                Todavía no tienes una ubicación guardada en tus pedidos.
-                                Al confirmar tu primer pedido, el sistema registrará tu dirección y coordenadas.
-                            </p>
-                        </div>
-                    @else
-                        <div class="sx-dashboard-no-saved-location">
-                            <i class="bi bi-person-lock"></i>
-                            <p>
-                                Inicia sesión como Cliente y realiza un pedido para consultar aquí tu última dirección guardada.
-                            </p>
-                            <a href="{{ route('login') }}">Iniciar sesión</a>
-                        </div>
-                    @endif
-
-                </div>
 
             </aside>
 

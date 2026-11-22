@@ -10,10 +10,6 @@
 
         const estadoRuta = document.getElementById('cliente-dashboard-route-status');
         const botonRuta = document.getElementById('cliente-dashboard-como-llegar');
-        const resumenRuta = document.getElementById('cliente-dashboard-route-summary');
-        const panelIndicaciones = document.getElementById('cliente-dashboard-route-details');
-        const listaIndicaciones = document.getElementById('cliente-dashboard-route-steps');
-        const enlaceNavegacion = document.getElementById('cliente-dashboard-external-navigation');
 
         function mostrarEstado(mensaje, esError) {
             if (!estadoRuta) return;
@@ -156,123 +152,6 @@
             mapa.invalidateSize();
         }, 300);
 
-        function formatearDistancia(metros) {
-            if (metros >= 1000) {
-                return (metros / 1000).toLocaleString('es-BO', {
-                    maximumFractionDigits: 1
-                }) + ' km';
-            }
-
-            return Math.round(metros) + ' m';
-        }
-
-        function formatearDuracion(segundos) {
-            const minutos = Math.max(1, Math.round(segundos / 60));
-
-            if (minutos >= 60) {
-                const horas = Math.floor(minutos / 60);
-                const resto = minutos % 60;
-                return resto > 0 ? horas + ' h ' + resto + ' min' : horas + ' h';
-            }
-
-            return minutos + ' min';
-        }
-
-        function textoIndicacion(paso) {
-            const maniobra = paso.maneuver || {};
-            const tipos = {
-                depart: 'Inicia el recorrido',
-                arrive: 'Has llegado al restaurante',
-                turn: 'Gira',
-                'new name': 'Continúa por la nueva vía',
-                continue: 'Continúa',
-                merge: 'Incorpórate',
-                'on ramp': 'Toma la incorporación',
-                'off ramp': 'Sal de la vía',
-                fork: 'Toma la bifurcación',
-                'end of road': 'Al final de la vía, gira',
-                roundabout: 'En la rotonda, toma la salida',
-                rotary: 'En la rotonda, toma la salida'
-            };
-
-            const modificadores = {
-                left: 'a la izquierda',
-                right: 'a la derecha',
-                'slight left': 'ligeramente a la izquierda',
-                'slight right': 'ligeramente a la derecha',
-                'sharp left': 'pronunciadamente a la izquierda',
-                'sharp right': 'pronunciadamente a la derecha',
-                straight: 'de frente',
-                uturn: 'realiza un giro en U'
-            };
-
-            let texto = tipos[maniobra.type] || 'Continúa';
-            const direccion = modificadores[maniobra.modifier];
-
-            if (direccion && maniobra.type !== 'arrive' && maniobra.type !== 'depart') {
-                texto += ' ' + direccion;
-            }
-
-            if (paso.name) {
-                texto += ' por ' + paso.name;
-            }
-
-            return texto + ' · ' + formatearDistancia(paso.distance || 0);
-        }
-
-        function mostrarIndicaciones(pasos) {
-            if (!listaIndicaciones || !panelIndicaciones) return;
-
-            listaIndicaciones.replaceChildren();
-
-            const pasosVisibles = (pasos || []).slice(0, 10);
-
-            pasosVisibles.forEach(function (paso) {
-                const elemento = document.createElement('li');
-                elemento.textContent = textoIndicacion(paso);
-                listaIndicaciones.appendChild(elemento);
-            });
-
-            panelIndicaciones.hidden = pasosVisibles.length === 0;
-        }
-
-        function mostrarResumen(ruta, origen, origenTexto) {
-            if (!resumenRuta) return;
-
-            resumenRuta.replaceChildren();
-
-            const titulo = document.createElement('strong');
-            titulo.textContent = 'Ruta calculada correctamente';
-            resumenRuta.appendChild(titulo);
-
-            const datos = document.createElement('p');
-            datos.textContent =
-                formatearDistancia(ruta.distance || 0)
-                + ' · Aproximadamente '
-                + formatearDuracion(ruta.duration || 0)
-                + ' en vehículo';
-            resumenRuta.appendChild(datos);
-
-            const origenInfo = document.createElement('small');
-            origenInfo.textContent = 'Origen: ' + origenTexto;
-            resumenRuta.appendChild(origenInfo);
-
-            resumenRuta.hidden = false;
-
-            if (enlaceNavegacion && tieneRestaurante) {
-                const origenCoordenadas = origen.lat + ',' + origen.lng;
-                const destinoCoordenadas = restaurante.lat + ',' + restaurante.lng;
-
-                enlaceNavegacion.href =
-                    'https://www.google.com/maps/dir/?api=1'
-                    + '&origin=' + encodeURIComponent(origenCoordenadas)
-                    + '&destination=' + encodeURIComponent(destinoCoordenadas)
-                    + '&travelmode=driving';
-
-                enlaceNavegacion.hidden = false;
-            }
-        }
-
         async function trazarRuta(origen, origenTexto, avisoPrevio) {
             if (!tieneRestaurante) {
                 mostrarEstado(
@@ -291,7 +170,7 @@
                 baseOSRM + '/route/v1/driving/'
                 + origen.lng + ',' + origen.lat + ';'
                 + restaurante.lng + ',' + restaurante.lat
-                + '?overview=full&geometries=geojson&steps=true';
+                + '?overview=full&geometries=geojson';
 
             mostrarEstado(
                 avisoPrevio || 'Calculando la ruta hasta ' + restaurante.nombre + '...',
@@ -347,19 +226,7 @@
             mapa.fitBounds(capaRuta.getBounds().pad(0.16), {
                 maxZoom: 16
             });
-
-            const pasos = (ruta.legs || []).flatMap(function (tramo) {
-                return tramo.steps || [];
-            });
-
-            mostrarResumen(ruta, origen, origenTexto);
-            mostrarIndicaciones(pasos);
-
-            mostrarEstado(
-                (avisoPrevio ? avisoPrevio + ' ' : '')
-                + 'La ruta hasta ' + restaurante.nombre + ' ya está dibujada en el mapa.',
-                false
-            );
+            mostrarEstado('', false);
         }
 
         function obtenerMensajeErrorGPS(error) {
