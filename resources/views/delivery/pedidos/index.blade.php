@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="delivery-orders-page">
+<div class="delivery-orders-page" data-delivery-live-queue>
 
     <div class="delivery-orders-header" data-delivery-animate>
 
@@ -39,6 +39,7 @@
                 type="button"
                 class="delivery-queue-refresh"
                 id="deliveryQueueRefresh"
+                data-delivery-live-refresh
                 data-delivery-interactive
                 title="Actualizar la cola ahora">
                 <i class="bi bi-arrow-clockwise"></i>
@@ -51,7 +52,7 @@
 
             <div>
                 <span>Pedidos en cola</span>
-                <strong>{{ $pedidosEnCola }}</strong>
+                <strong id="delivery-queue-header-count">{{ $pedidosEnCola }}</strong>
             </div>
 
         </div>
@@ -89,7 +90,7 @@
                 ESTADO DE LA COLA
             </span>
 
-            <h2>
+            <h2 id="delivery-queue-summary">
                 {{ $pedidosEnCola > 0 ? 'Hay pedidos esperando asignación' : 'La cola está vacía' }}
             </h2>
         </div>
@@ -114,11 +115,11 @@
                     <i class="bi bi-box-seam"></i>
                 </div>
 
-                <div class="display-4 fw-bold mb-2">
+                <div class="display-4 fw-bold mb-2" id="delivery-queue-main-count">
                     {{ $pedidosEnCola }}
                 </div>
 
-                <h2 class="mb-3">
+                <h2 class="mb-3" id="delivery-queue-main-label">
                     {{ $pedidosEnCola === 1 ? 'pedido en cola' : 'pedidos en cola' }}
                 </h2>
 
@@ -127,22 +128,24 @@
                     Los detalles permanecen ocultos hasta que un pedido sea asignado a ti.
                 </p>
 
-                @if($pedidosEnCola > 0)
-
-                    <div class="alert alert-info mb-0">
-                        <i class="bi bi-info-circle-fill me-2"></i>
-                        Cuando termines tu entrega actual, el sistema te asignará automáticamente
-                        el siguiente pedido de la cola.
-                    </div>
-
-                @else
-
-                    <div class="alert alert-success mb-0">
-                        <i class="bi bi-check-circle-fill me-2"></i>
-                        No hay pedidos esperando asignación en este momento.
-                    </div>
-
-                @endif
+                <div id="delivery-queue-state-message">
+                    @if($pedidosEnCola > 0)
+    
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Cuando termines tu entrega actual, el sistema te asignará automáticamente
+                            el siguiente pedido de la cola.
+                        </div>
+    
+                    @else
+    
+                        <div class="alert alert-success mb-0">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            No hay pedidos esperando asignación en este momento.
+                        </div>
+    
+                    @endif
+                </div>
 
             </article>
 
@@ -151,29 +154,5 @@
     </div>
 
 </div>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const button = document.getElementById('deliveryQueueRefresh');
-
-    if (!button) {
-        return;
-    }
-
-    button.addEventListener('click', function () {
-        button.classList.add('delivery-refreshing');
-        button.disabled = true;
-
-        const icon = button.querySelector('i');
-        if (icon) {
-            icon.classList.add('delivery-refresh-spin');
-        }
-
-        window.setTimeout(() => window.location.reload(), 220);
-    });
-});
-</script>
-@endpush
 
 @endsection
