@@ -49,6 +49,35 @@ class CarritoTest extends TestCase
         return [$user, $producto];
     }
 
+    public function test_carrito_flotante_se_muestra_a_visitantes_y_clientes_autenticados(): void
+    {
+        [$user, $producto] = $this->crearDatosCarrito();
+
+        // El carrito conserva su cantidad aunque el usuario inicie sesión.
+        $this->withSession([
+            'carrito' => [
+                $producto->id => [
+                    'id' => $producto->id,
+                    'cantidad' => 2,
+                    'precio' => $producto->precio,
+                ],
+            ],
+        ]);
+
+        $this->get('/productos')
+            ->assertOk()
+            ->assertSee('cliente-floating-cart-link')
+            ->assertSee('cliente-floating-cart-badge')
+            ->assertSee('Ver carrito de compras, 2 productos', false);
+
+        $this->actingAs($user)
+            ->get('/productos')
+            ->assertOk()
+            ->assertSee('cliente-floating-cart-link')
+            ->assertSee('cliente-floating-cart-badge')
+            ->assertSee('Ver carrito de compras, 2 productos', false);
+    }
+
     public function test_cliente_puede_agregar_un_producto_al_carrito(): void
     {
         [$user, $producto] = $this->crearDatosCarrito();

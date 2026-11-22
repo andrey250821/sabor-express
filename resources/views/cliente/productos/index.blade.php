@@ -464,29 +464,27 @@
     </div>
 
 
-    {{-- CARRITO FLOTANTE PARA VISITANTES --}}
-    @guest
-        @php
-            $carritoVisitante = session('carrito', []);
-            $cantidadCarritoVisitante = collect($carritoVisitante)
-                ->sum(fn ($item) => (int) ($item['cantidad'] ?? 0));
-        @endphp
+    {{-- CARRITO FLOTANTE PARA VISITANTES Y CLIENTES AUTENTICADOS --}}
+    @php
+        $carritoActual = session('carrito', []);
+        $cantidadCarritoActual = collect($carritoActual)
+            ->sum(fn ($item) => (int) ($item['cantidad'] ?? 0));
+    @endphp
 
-        <a
-            href="{{ route('cliente.carrito.index') }}"
-            class="cliente-floating-cart-link"
-            aria-label="Ver carrito de compras, {{ $cantidadCarritoVisitante }} productos"
-            title="Ver carrito">
-            <i class="bi bi-cart3" aria-hidden="true"></i>
-            <span
-                id="cliente-guest-cart-badge"
-                class="cliente-guest-cart-badge"
-                aria-live="polite"
-                aria-atomic="true"
-                {{ $cantidadCarritoVisitante > 0 ? '' : 'hidden' }}>{{ $cantidadCarritoVisitante > 99 ? '99+' : $cantidadCarritoVisitante }}</span>
-            <span class="visually-hidden">Ver carrito de compras</span>
-        </a>
-    @endguest
+    <a
+        href="{{ route('cliente.carrito.index') }}"
+        class="cliente-floating-cart-link"
+        aria-label="Ver carrito de compras, {{ $cantidadCarritoActual }} productos"
+        title="Ver carrito">
+        <i class="bi bi-cart3" aria-hidden="true"></i>
+        <span
+            id="cliente-floating-cart-badge"
+            class="cliente-floating-cart-badge"
+            aria-live="polite"
+            aria-atomic="true"
+            {{ $cantidadCarritoActual > 0 ? '' : 'hidden' }}>{{ $cantidadCarritoActual > 99 ? '99+' : $cantidadCarritoActual }}</span>
+        <span class="visually-hidden">Ver carrito de compras</span>
+    </a>
 
 </div>
 
@@ -730,9 +728,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 : 'none';
         });
 
-        // Contador del carrito flotante para visitantes en Productos.
+        // Contador del carrito flotante para visitantes y clientes en Productos.
         const contadorVisitante = document.getElementById(
-            'cliente-guest-cart-badge'
+            'cliente-floating-cart-badge'
         );
 
         if (contadorVisitante) {
