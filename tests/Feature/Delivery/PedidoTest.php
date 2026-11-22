@@ -608,4 +608,58 @@ class PedidoTest extends TestCase
             ->assertJsonPath('cantidad', 2);
     }
 
+
+    public function test_detalle_y_mapa_de_un_pedido_activo_se_consideran_parte_de_mis_pedidos(): void
+    {
+        $deliveryRole = Role::firstOrCreate([
+            'nombre' => 'Delivery',
+        ]);
+
+        $clienteRole = Role::firstOrCreate([
+            'nombre' => 'Cliente',
+        ]);
+
+        $delivery = User::create([
+            'role_id' => $deliveryRole->id,
+            'name' => 'Delivery mapa',
+            'email' => 'delivery-mapa@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $cliente = User::create([
+            'role_id' => $clienteRole->id,
+            'name' => 'Cliente mapa',
+            'email' => 'cliente-mapa@test.com',
+            'password' => 'password',
+            'estado' => 'activo',
+        ]);
+
+        $pedido = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 45,
+            'estado' => 'en_camino',
+            'direccion_entrega' => 'Dirección de entrega de prueba',
+        ]);
+
+        AsignacionDelivery::create([
+            'pedido_id' => $pedido->id,
+            'delivery_id' => $delivery->id,
+        ]);
+
+        $response = $this->actingAs($delivery)
+            ->get('/delivery/pedidos/' . $pedido->id);
+
+        $response->assertOk();
+        $response->assertSee('id="delivery-nav-my-orders"', false);
+        $response->assertSee('data-is-viewing-mis-pedidos="1"', false);
+        $response->assertSee('delivery-nav-pending-badge--static', false);
+        $response->assertDontSee('delivery-nav-link--pending', false);
+        $response->assertDontSee(
+            'href="/delivery/pedidos" class="delivery-nav-link active"',
+            false
+        );
+    }
+
+
 }

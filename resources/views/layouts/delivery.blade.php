@@ -56,7 +56,7 @@
                 ->count();
         }
 
-        $deliveryEstaViendoMisPedidos = request()->routeIs('delivery.pedidos.mis');
+        $deliveryEstaViendoMisPedidos = request()->routeIs('delivery.pedidos.mis', 'delivery.pedidos.show');
     @endphp
 
 
@@ -198,8 +198,8 @@
                 <a
                     href="{{ route('delivery.pedidos.index') }}"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'active' : '' }}" data-delivery-interactive
-                    {{ request()->routeIs('delivery.pedidos.index', 'delivery.pedidos.show') ? 'aria-current=page' : '' }}>
+                    {{ request()->routeIs('delivery.pedidos.index') ? 'active' : '' }}" data-delivery-interactive
+                    {{ request()->routeIs('delivery.pedidos.index') ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-box-seam-fill"></i>
@@ -223,12 +223,12 @@
                     href="{{ route('delivery.pedidos.mis') }}"
                     id="delivery-nav-my-orders"
                     class="delivery-nav-link
-                    {{ request()->routeIs('delivery.pedidos.mis') ? 'active' : '' }}
+                    {{ $deliveryEstaViendoMisPedidos ? 'active' : '' }}
                     {{ $deliveryPedidosPendientes > 0 && !$deliveryEstaViendoMisPedidos ? 'delivery-nav-link--pending' : '' }}"
                     data-pending-count-url="{{ route('delivery.pedidos.pendientes-count') }}"
                     data-is-viewing-mis-pedidos="{{ $deliveryEstaViendoMisPedidos ? '1' : '0' }}"
                     data-delivery-interactive
-                    {{ request()->routeIs('delivery.pedidos.mis') ? 'aria-current=page' : '' }}>
+                    {{ $deliveryEstaViendoMisPedidos ? 'aria-current=page' : '' }}>
 
                     <span class="delivery-nav-icon">
                         <i class="bi bi-bicycle"></i>
