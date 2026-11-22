@@ -42,7 +42,7 @@
 
 </head>
 
-<body>
+<body @if(Auth::user()?->estado === 'activo') data-delivery-live-state-url="{{ route('delivery.estado-en-vivo') }}" @endif>
 
     @php
         $deliveryPedidosPendientes = 0;
