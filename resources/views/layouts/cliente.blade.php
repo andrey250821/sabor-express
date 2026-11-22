@@ -242,7 +242,6 @@
                                 aria-label="Ver carrito de compras, {{ $cantidadCarritoVisitante }} productos"
                                 title="Ver mi carrito">
                                 <i class="bi bi-cart3"></i>
-                                <span class="cliente-guest-cart-label">Mi carrito</span>
                                 <span
                                     id="cliente-guest-cart-badge"
                                     class="cliente-guest-cart-badge"

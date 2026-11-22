@@ -161,6 +161,19 @@
     ====================================================== --}}
     <div class="cliente-productos-grid">
 
+        {{-- MARCA DE AGUA DEL RESTAURANTE --}}
+        <div class="cliente-productos-watermark" aria-hidden="true">
+            @if(!empty($configuracion?->logo))
+                <img
+                    src="{{ asset('storage/' . ltrim($configuracion->logo, '/')) }}"
+                    alt=""
+                    loading="lazy">
+            @else
+                <i class="bi bi-shop-window"></i>
+            @endif
+            <span>{{ $configuracion?->nombre_restaurante ?: 'Sabor Express' }}</span>
+        </div>
+
         @forelse($productos as $producto)
 
             <div class="cliente-producto-card">
