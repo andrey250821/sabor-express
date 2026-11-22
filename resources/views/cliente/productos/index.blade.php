@@ -675,28 +675,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function actualizarContadorCarrito(cantidad) {
 
-        const contador =
-            document.querySelector(
-                '.cliente-carrito-contador'
+        const cantidadActual = Math.max(0, Number(cantidad) || 0);
+        const cantidadVisible = cantidadActual > 99
+            ? '99+'
+            : String(cantidadActual);
+
+        // Contador del enlace existente para usuarios autenticados.
+        const contadoresExistentes = document.querySelectorAll(
+            '.cliente-carrito-contador'
+        );
+
+        contadoresExistentes.forEach(function (contador) {
+            contador.textContent = cantidadVisible;
+            contador.style.display = cantidadActual > 0
+                ? 'inline-flex'
+                : 'none';
+        });
+
+        // Contador del carrito flotante para visitantes en Productos.
+        const contadorVisitante = document.getElementById(
+            'cliente-guest-cart-badge'
+        );
+
+        if (contadorVisitante) {
+            contadorVisitante.textContent = cantidadVisible;
+            contadorVisitante.hidden = cantidadActual <= 0;
+
+            const enlaceCarrito = contadorVisitante.closest(
+                '.cliente-guest-cart-link'
             );
 
-
-        if (!contador) {
-
-            return;
-
-        }
-
-
-        contador.textContent =
-            cantidad;
-
-
-        if (cantidad > 0) {
-
-            contador.style.display =
-                'inline-flex';
-
+            if (enlaceCarrito) {
+                enlaceCarrito.setAttribute(
+                    'aria-label',
+                    'Ver carrito de compras, ' + cantidadActual +
+                    (cantidadActual === 1 ? ' producto' : ' productos')
+                );
+            }
         }
 
     }
