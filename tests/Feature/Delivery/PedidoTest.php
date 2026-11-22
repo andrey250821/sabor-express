@@ -520,7 +520,7 @@ class PedidoTest extends TestCase
             ->assertOk();
     }
 
-    public function test_delivery_recibe_el_conteo_de_sus_pedidos_nuevos_asignados(): void
+    public function test_aviso_delivery_se_mantiene_hasta_finalizar_todas_sus_entregas_activas(): void
     {
         $deliveryRole = Role::firstOrCreate([
             'nombre' => 'Delivery',
@@ -578,6 +578,18 @@ class PedidoTest extends TestCase
             'delivery_id' => $delivery->id,
         ]);
 
+        $pedidoEntregado = Pedido::create([
+            'user_id' => $cliente->id,
+            'total' => 60,
+            'estado' => 'entregado',
+            'direccion_entrega' => 'Pedido ya entregado',
+        ]);
+
+        AsignacionDelivery::create([
+            'pedido_id' => $pedidoEntregado->id,
+            'delivery_id' => $delivery->id,
+        ]);
+
         $pedidoDeOtroDelivery = Pedido::create([
             'user_id' => $cliente->id,
             'total' => 55,
@@ -593,7 +605,7 @@ class PedidoTest extends TestCase
         $this->actingAs($delivery)
             ->getJson(route('delivery.pedidos.pendientes-count'))
             ->assertOk()
-            ->assertJsonPath('cantidad', 1);
+            ->assertJsonPath('cantidad', 2);
     }
 
 }
