@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="container-fluid delivery-dashboard">
+<div class="container-fluid delivery-dashboard" data-delivery-live-dashboard data-live-today="{{ $fechaSeleccionada->isToday() ? '1' : '0' }}">
 
     {{-- =========================================================
          HERO
@@ -110,7 +110,7 @@
 
                         <div>
 
-                            <strong>
+                            <strong id="delivery-dashboard-queue-floating">
                                 {{ $pedidosEnCola }}
                             </strong>
 
@@ -134,7 +134,7 @@
 
                         <div>
 
-                            <strong>
+                            <strong id="delivery-dashboard-active-floating">
                                 {{ $misPedidos }}
                             </strong>
 
@@ -164,67 +164,30 @@
          ESTADO DEL DELIVERY
     ========================================================== --}}
     <section class="delivery-dashboard-status mb-4" data-delivery-animate>
-
         <div class="delivery-dashboard-status-left">
-
-            @if($pedidosEnCola > 0)
-
-            <div class="delivery-status-pulse warning">
+            <div id="delivery-dashboard-status-pulse"
+                class="delivery-status-pulse {{ $pedidosEnCola > 0 ? 'warning' : 'success' }}">
                 <span></span>
             </div>
-
             <div>
-
-                <strong>
-
-                    {{ $pedidosEnCola }}
-
-                    {{ $pedidosEnCola === 1
-                            ? 'pedido en cola'
-                            : 'pedidos en cola'
-                        }}
-
+                <strong id="delivery-dashboard-status-title">
+                    {{ $pedidosEnCola > 0
+                        ? $pedidosEnCola . ' ' . ($pedidosEnCola === 1 ? 'pedido en cola' : 'pedidos en cola')
+                        : 'No hay pedidos en cola'
+                    }}
                 </strong>
-
-                <small>
-
-                    Hay pedidos listos en cocina esperando asignación automática.
-
+                <small id="delivery-dashboard-status-description">
+                    {{ $pedidosEnCola > 0
+                        ? 'Hay pedidos listos en cocina esperando asignación automática.'
+                        : 'Actualmente no hay pedidos esperando asignación.'
+                    }}
                 </small>
-
             </div>
-
-            @else
-
-            <div class="delivery-status-pulse success">
-                <span></span>
-            </div>
-
-            <div>
-
-                <strong>
-                    No hay pedidos en cola
-                </strong>
-
-                <small>
-                    Actualmente no hay pedidos esperando asignación.
-                </small>
-
-            </div>
-
-            @endif
-
         </div>
-
-
         <div class="delivery-dashboard-status-badge">
-
             <i class="bi bi-activity"></i>
-
             Delivery activo
-
         </div>
-
     </section>
 
 
@@ -250,7 +213,7 @@
                                 En cola
                             </span>
 
-                            <strong class="delivery-stat-number">
+                            <strong class="delivery-stat-number" id="delivery-dashboard-queue-stat">
                                 {{ $pedidosEnCola }}
                             </strong>
 
@@ -297,7 +260,7 @@
                                 Mis pedidos
                             </span>
 
-                            <strong class="delivery-stat-number">
+                            <strong class="delivery-stat-number" id="delivery-dashboard-orders-stat">
                                 {{ $misPedidos }}
                             </strong>
 
@@ -341,7 +304,7 @@
                             Entregados
                         </span>
 
-                        <strong class="delivery-stat-number">
+                        <strong class="delivery-stat-number" id="delivery-dashboard-delivered-stat">
                             {{ $entregasDia }}
                         </strong>
 
@@ -604,14 +567,4 @@
 
 
 @endsection
-@push('scripts')
-@if($fechaSeleccionada->isToday())
-<script>
-    setInterval(() => {
-        if (document.visibilityState === 'visible') {
-            window.location.reload();
-        }
-    }, 10000);
-</script>
-@endif
-@endpush
+
