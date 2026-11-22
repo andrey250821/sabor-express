@@ -447,7 +447,9 @@ Route::middleware(['auth', 'role:Delivery'])
             Route::get('/dashboard', [DeliveryDashboardController::class, 'index'])->name('delivery.dashboard');
             Route::get('/pedidos', [DeliveryPedidoController::class, 'index'])->name('delivery.pedidos.index');
             Route::get('/pedidos/{id}', [DeliveryPedidoController::class, 'show'])->name('delivery.pedidos.show');
+            Route::get('/estado-en-vivo', [DeliveryPedidoController::class, 'estadoEnVivo'])->name('delivery.estado-en-vivo');
             Route::get('/mis-pedidos', [DeliveryPedidoController::class, 'misPedidos'])->name('delivery.pedidos.mis');
+            Route::get('/mis-pedidos/actualizar', [DeliveryPedidoController::class, 'actualizarMisPedidos'])->name('delivery.pedidos.actualizar');
             Route::get('/mis-pedidos/pendientes-count', [DeliveryPedidoController::class, 'pedidosPendientesCount'])->name('delivery.pedidos.pendientes-count');
             Route::put('/pedidos/{id}/iniciar', [DeliveryPedidoController::class, 'iniciar'])->name('delivery.pedidos.iniciar');
             Route::put('/pedidos/{id}/cancelar', [DeliveryPedidoController::class, 'cancelar'])->name('delivery.pedidos.cancelar');
