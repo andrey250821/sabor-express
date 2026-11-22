@@ -5228,8 +5228,8 @@
 .cliente-app .cliente-floating-cart-link {
     position: fixed;
     z-index: 1080;
+    top: 116px;
     right: 28px;
-    bottom: 28px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -5303,8 +5303,8 @@
 
 @media (max-width: 767.98px) {
     .cliente-app .cliente-floating-cart-link {
+        top: 104px;
         right: 18px;
-        bottom: 20px;
         width: 58px;
         height: 58px;
     }
